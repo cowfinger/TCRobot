@@ -293,9 +293,9 @@ namespace TC
             foreach (Match match in matches)
             {
                 string key = match.Groups[1].Value;
-                if (cityList.ContainsKey(key))
+                if (cityList.Contains(key))
                 {
-                    cityList.Add(cityList[key]);
+                    cityList.Add(key);
                 }
             }
 
@@ -412,7 +412,7 @@ namespace TC
             string url0 = string.Format("http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}", hostname, randGen.NextDouble());
             HTTPRequest(url0, account);
 
-            string fmt1 = "http://" + hostname + "/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={0}&r=" + randGen.NextDouble().Tostring();
+            string fmt1 = "http://" + hostname + "/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={0}&r=" + randGen.NextDouble().ToString();
             string url1 = string.Format(fmt1, srccityid);
             HTTPRequest(url1, account);
 
@@ -427,7 +427,7 @@ namespace TC
             string url0 = string.Format("http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}", hostname, randGen.NextDouble());
             HTTPRequest(url0, account);
 
-            string fmt1 = "http://" + hostname + "/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={0}&r=" + randGen.NextDouble().Tostring();
+            string fmt1 = "http://" + hostname + "/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={0}&r=" + randGen.NextDouble().ToString();
             string url1 = string.Format(fmt1, srccityid);
             HTTPRequest(url1, account);
 
@@ -498,14 +498,14 @@ namespace TC
 
         private string OpenAttackCityPage(string teamid, string cityid, string account)
         {
-            string pattern = "http://" + hostname + "/index.php?mod=military/world_war&op=show&func=attack_confirm&team_id={0}&to_city_id={1}&r=" + randGen.NextDouble().Tostring();
+            string pattern = "http://" + hostname + "/index.php?mod=military/world_war&op=show&func=attack_confirm&team_id={0}&to_city_id={1}&r=" + randGen.NextDouble().ToString();
             string url = string.Format(pattern, teamid, cityid);
             return HTTPRequest(url, account);
         }
 
         private void AttackTarget(string team_id, string city_id, string account)
         {
-            string url = "http://" + hostname + "/index.php?mod=military/world_war&op=do&func=attack&r=" + randGen.NextDouble().Tostring();
+            string url = "http://" + hostname + "/index.php?mod=military/world_war&op=do&func=attack&r=" + randGen.NextDouble().ToString();
             string bodyfmt = "team_id={0}&to_city_id={1}";
             string body = string.Format(bodyfmt, team_id, city_id);
             string ret = HTTPRequest(url, account, body);
@@ -670,7 +670,7 @@ namespace TC
                 TeamInfo team = new TeamInfo();
                 team.team_id = m.Value.Split('(', ',')[1];
                 team.isGroupTeam = false;
-                team.leader = team_no.Tostring(); //temporary solution
+                team.leader = team_no.ToString(); //temporary solution
                 string rsp = OpenAttackCityPage(team.team_id, dstcityid, account);
                 team.duration_str = ParseAttackDuration(rsp);
                 team.duration = TimeStr2Sec(team.duration_str);
@@ -1015,7 +1015,7 @@ namespace TC
                         {
                             this.remoteTimeSyncLastCheckPoint = now;
                             remoteTime = remoteTime.AddSeconds(diff.Seconds);
-                            this.Invoke(new DoSomething(() => { this.textBoxSysTime.Text = remoteTime.Tostring(); }));
+                            this.Invoke(new DoSomething(() => { this.textBoxSysTime.Text = remoteTime.ToString(); }));
                         }
                     }
                 });
@@ -1497,9 +1497,9 @@ namespace TC
 
             btnAutoAttack.Enabled = false;
 
-            m_srcCityName = listBoxSrcCities.SelectedItem.Tostring();
+            m_srcCityName = listBoxSrcCities.SelectedItem.ToString();
             m_srcCityID = cityList[m_srcCityName];
-            m_dstCityName = listBoxDstCities.SelectedItem.Tostring();
+            m_dstCityName = listBoxDstCities.SelectedItem.ToString();
 
             Thread oThread = new Thread(new ThreadStart(AutoAttackProc));
             oThread.Start();

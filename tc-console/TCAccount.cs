@@ -18,13 +18,12 @@ namespace TC
         public string UserName { get; private set; }
         public string Password { get; private set; }
         public string AccountType { get; private set; }
-        public CookieLite Cookie { get { return this.cookie; } private set; }
+        public CookieLite Cookie { get { return this.cookie; } }
         public AccountLoginStatus LoginStatus { get; set; }
 
         public IEnumerable<string> CityIDList
         {
             get { return cityIDList; }
-            private set;
         }
 
         public TCAccount(string userName, string password, string accountType, string cookie)
