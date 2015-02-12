@@ -1,0 +1,8 @@
+C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\bin\Debug\TC.exe
+C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\bin\Debug\TC.pdb
+C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.csprojResolveAssemblyReference.cache
+C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.FormMain.resources
+C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.Properties.Resources.resources
+C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.csproj.GenerateResource.Cache
+C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.exe
+C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.pdb
