@@ -43,7 +43,6 @@ namespace TC
             }
         }
 
-        #region helpers
         private string Time2Str(int timeval)
         {
             int secs = timeval % 60;
@@ -51,6 +50,21 @@ namespace TC
             int hours = timeval / 3600;
             string fmt = "{0:D2}:{1:D2}:{2:D2}";
             return string.Format(fmt, hours, mins, secs);
+        }
+
+        private string CalcGroupType(TeamInfo team)
+        {
+            if (team.isGroupTeam)
+            {
+                return "群组";
+            }
+
+            if (team.isDefendTeam)
+            {
+                return "防御";
+            }
+
+            return "攻击";
         }
 
         private void SyncTasksToTaskListView()
@@ -63,9 +77,11 @@ namespace TC
                 ListViewItem newli = new ListViewItem();
                 newli.SubItems[0].Text = team.AccountName;
                 newli.SubItems.Add(team.TeamId);
-                newli.SubItems.Add(team.Leader);
+                newli.SubItems.Add(team.PowerIndex.ToString());
                 newli.SubItems.Add(Time2Str(team.Duration));
                 newli.SubItems.Add(Time2Str(team.TimeLeft));
+                newli.SubItems.Add(team.GroupId);
+                newli.SubItems.Add(CalcGroupType(team));
                 newli.Tag = team;
                 listViewTasks.Items.Add(newli);
             }
@@ -525,25 +541,23 @@ namespace TC
                 DonateResource(account, resToContribute[0], resToContribute[1], resToContribute[2], resToContribute[3]);
             }
         }
-        // private List<AttackTask> CreateAttackTasks()
-        // {
-        //     TimeSpan diff = this.dateTimePickerArrival.Value - m_SysTime;
-        //     int maxDuration = diff.TotalSeconds <= 0 ? SortTeamList(0) : SortTeamList((int)diff.TotalSeconds);
 
-        //     SyncTasksToTaskListView();
-        //     if (m_teamlist.Count > 0)
-        //     {
-        //         StartUITimer();
-        //         StartSendTroopTimer();
-        //     }
+        private Dictionary<string, List<TeamInfo>> CategorizeTeams(IEnumerable<TeamInfo> teamList)
+        {
+            var result = new Dictionary<string, List<TeamInfo>>();
+            foreach (var team in teamList)
+            {
+                List<TeamInfo> accountTeams;
+                if (!result.TryGetValue(team.AccountName, out accountTeams))
+                {
+                    accountTeams = new List<TeamInfo>();
+                    result.Add(team.AccountName, accountTeams);
+                }
 
-        //     var task = new AttackTask();
-        //     task.StartTime = DateTime.Now;
-        //     task.EndTime = task.StartTime.AddSeconds(maxDuration);
-        //     return task;
-        // }
+                accountTeams.Add(team);
+            }
 
-        #endregion
-
+            return result;
+        }
     }
 }

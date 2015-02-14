@@ -15,13 +15,15 @@ namespace TC
         public string Name;
         public string AccountName;
         public string TeamId;
+        public string GroupId;
         public string Leader;
         public string DurationString;
-        public int TimeLeft;
-        public int Duration;
-        public bool IsTroopSent;
-        public bool isGroupTeam;
-        public bool isDefendTeam;
+        public int TimeLeft = 0;
+        public int Duration = 0;
+        public bool IsTroopSent = false;
+        public bool isGroupTeam = false;
+        public bool isDefendTeam = false;
+        public int PowerIndex = 0;
     }
 
     class AccountInfo

@@ -47,6 +47,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.btnLoginAll = new System.Windows.Forms.Button();
             this.listViewAccounts = new System.Windows.Forms.ListView();
+            this.columnHeaderAccountName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderLoginStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.webBrowserMain = new System.Windows.Forms.WebBrowser();
             this.checkBoxShowBrowers = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -75,14 +77,17 @@
             this.columnHeaderIron = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderFood = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label4 = new System.Windows.Forms.Label();
-            this.columnHeaderAccountName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderLoginStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label9 = new System.Windows.Forms.Label();
+            this.columnHeaderCountingDown = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnGroupTeam = new System.Windows.Forms.Button();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(632, 100);
+            this.label1.Location = new System.Drawing.Point(631, 135);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(0, 12);
             this.label1.TabIndex = 7;
@@ -116,7 +121,9 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
-            this.columnHeader5});
+            this.columnHeader5,
+            this.columnHeader6,
+            this.columnHeader7});
             this.listViewTasks.FullRowSelect = true;
             this.listViewTasks.GridLines = true;
             this.listViewTasks.Location = new System.Drawing.Point(14, 268);
@@ -134,22 +141,22 @@
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "ID";
+            this.columnHeader2.Text = "部队编号";
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "提示";
+            this.columnHeader3.Text = "攻击强度";
             this.columnHeader3.Width = 120;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "途中耗时";
-            this.columnHeader4.Width = 120;
+            this.columnHeader4.Width = 80;
             // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "出发倒计时";
-            this.columnHeader5.Width = 120;
+            this.columnHeader5.Width = 80;
             // 
             // btnConfirmMainTeams
             // 
@@ -249,12 +256,20 @@
             this.listViewAccounts.UseCompatibleStateImageBehavior = false;
             this.listViewAccounts.View = System.Windows.Forms.View.Details;
             // 
+            // columnHeaderAccountName
+            // 
+            this.columnHeaderAccountName.Text = "账号";
+            // 
+            // columnHeaderLoginStatus
+            // 
+            this.columnHeaderLoginStatus.Text = "状态";
+            // 
             // webBrowserMain
             // 
-            this.webBrowserMain.Location = new System.Drawing.Point(656, 22);
+            this.webBrowserMain.Location = new System.Drawing.Point(15, 720);
             this.webBrowserMain.MinimumSize = new System.Drawing.Size(20, 18);
             this.webBrowserMain.Name = "webBrowserMain";
-            this.webBrowserMain.Size = new System.Drawing.Size(534, 312);
+            this.webBrowserMain.Size = new System.Drawing.Size(1126, 48);
             this.webBrowserMain.TabIndex = 0;
             // 
             // checkBoxShowBrowers
@@ -342,7 +357,7 @@
             // btnQuickAttack
             // 
             this.btnQuickAttack.Enabled = false;
-            this.btnQuickAttack.Location = new System.Drawing.Point(476, 106);
+            this.btnQuickAttack.Location = new System.Drawing.Point(475, 141);
             this.btnQuickAttack.Name = "btnQuickAttack";
             this.btnQuickAttack.Size = new System.Drawing.Size(75, 23);
             this.btnQuickAttack.TabIndex = 38;
@@ -353,7 +368,7 @@
             // btnDismissTeam
             // 
             this.btnDismissTeam.Enabled = false;
-            this.btnDismissTeam.Location = new System.Drawing.Point(557, 106);
+            this.btnDismissTeam.Location = new System.Drawing.Point(556, 141);
             this.btnDismissTeam.Name = "btnDismissTeam";
             this.btnDismissTeam.Size = new System.Drawing.Size(75, 23);
             this.btnDismissTeam.TabIndex = 39;
@@ -370,12 +385,13 @@
             this.colHeaderSourceCity,
             this.colHeaderDestCity,
             this.colHeaderDuration,
-            this.colHeaderETA});
+            this.colHeaderETA,
+            this.columnHeaderCountingDown});
             this.listViewActiveTasks.FullRowSelect = true;
             this.listViewActiveTasks.GridLines = true;
-            this.listViewActiveTasks.Location = new System.Drawing.Point(656, 353);
+            this.listViewActiveTasks.Location = new System.Drawing.Point(653, 21);
             this.listViewActiveTasks.Name = "listViewActiveTasks";
-            this.listViewActiveTasks.Size = new System.Drawing.Size(439, 221);
+            this.listViewActiveTasks.Size = new System.Drawing.Size(578, 200);
             this.listViewActiveTasks.TabIndex = 40;
             this.listViewActiveTasks.UseCompatibleStateImageBehavior = false;
             this.listViewActiveTasks.View = System.Windows.Forms.View.Details;
@@ -418,7 +434,7 @@
             // checkBoxDefend
             // 
             this.checkBoxDefend.AutoSize = true;
-            this.checkBoxDefend.Location = new System.Drawing.Point(476, 136);
+            this.checkBoxDefend.Location = new System.Drawing.Point(475, 171);
             this.checkBoxDefend.Name = "checkBoxDefend";
             this.checkBoxDefend.Size = new System.Drawing.Size(96, 16);
             this.checkBoxDefend.TabIndex = 42;
@@ -486,19 +502,44 @@
             this.label4.TabIndex = 45;
             this.label4.Text = "势力资源";
             // 
-            // columnHeaderAccountName
+            // label9
             // 
-            this.columnHeaderAccountName.Text = "账号";
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(651, 6);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(53, 12);
+            this.label9.TabIndex = 46;
+            this.label9.Text = "任务列表";
             // 
-            // columnHeaderLoginStatus
+            // columnHeaderCountingDown
             // 
-            this.columnHeaderLoginStatus.Text = "状态";
+            this.columnHeaderCountingDown.Text = "倒计时";
+            // 
+            // btnGroupTeam
+            // 
+            this.btnGroupTeam.Location = new System.Drawing.Point(475, 104);
+            this.btnGroupTeam.Name = "btnGroupTeam";
+            this.btnGroupTeam.Size = new System.Drawing.Size(75, 23);
+            this.btnGroupTeam.TabIndex = 47;
+            this.btnGroupTeam.Text = "联合部队";
+            this.btnGroupTeam.UseVisualStyleBackColor = true;
+            this.btnGroupTeam.Click += new System.EventHandler(this.btnGroupTeam_Click);
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "组编号";
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "部队类型";
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(650, 726);
+            this.ClientSize = new System.Drawing.Size(645, 717);
+            this.Controls.Add(this.btnGroupTeam);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.listViewInfluence);
             this.Controls.Add(this.btnContribute);
@@ -591,6 +632,11 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeaderAccountName;
         private System.Windows.Forms.ColumnHeader columnHeaderLoginStatus;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ColumnHeader columnHeaderCountingDown;
+        private System.Windows.Forms.Button btnGroupTeam;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ColumnHeader columnHeader7;
     }
 }
 

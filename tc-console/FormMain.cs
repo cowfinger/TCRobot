@@ -225,9 +225,9 @@ namespace TC
                             targetCityNameList.AddRange(moveCityList);
                         }
 
-                        this.teamList.AddRange(GetTeamsInfo(cityId, account.Key));
+                        this.teamList.AddRange(GetActiveTeamInfo(cityId, "1", account.Key));
+                        this.teamList.AddRange(GetActiveTeamInfo(cityId, "2", account.Key));
                         this.teamList.AddRange(GetGroupTeamsInfo(cityId, account.Key));
-                        this.teamList.AddRange(GetDefendTeamInfo(cityId, account.Key));
                     }
                 }
 
@@ -443,6 +443,99 @@ namespace TC
                     this.txtInfo.Text = string.Format("Donate: Completed");
                 }));
             });
+        }
+
+        private void btnGroupTeam_Click(object sender, EventArgs e)
+        {
+            var candidateTeams = new List<TeamInfo>();
+            foreach (ListViewItem item in this.listViewTasks.CheckedItems)
+            {
+                candidateTeams.Add(item.Tag as TeamInfo);
+            }
+
+            string cityId = this.cityList[this.listBoxSrcCities.SelectedItem.ToString()];
+
+            this.btnGroupTeam.Enabled = false;
+            Task.Run(() =>
+                {
+
+                    var accountTeamTable = CategorizeTeams(candidateTeams);
+                    if (accountTable.Count < 2)
+                    {
+                        return;
+                    }
+
+                    TeamInfo headTeam = null;
+                    var teamGroup = new List<TeamInfo>();
+                    foreach (var accountTeams in accountTeamTable.Values)
+                    {
+                        foreach (var team in accountTeams)
+                        {
+                            if (team.isGroupTeam && headTeam == null)
+                            {
+                                headTeam = team;
+                                break;
+                            }
+
+                            if (!team.isGroupTeam && !team.isDefendTeam)
+                            {
+                                teamGroup.Add(team);
+                                break;
+                            }
+                        }
+                    }
+
+                    if (teamGroup.Count() + (headTeam == null ? 0 : 1) < 2)
+                    {
+                        return;
+                    }
+
+                    teamGroup.Sort((x, y) => x.PowerIndex.CompareTo(y.PowerIndex));
+                    teamGroup.Reverse();
+
+                    if (headTeam == null)
+                    {
+                        headTeam = teamGroup.First();
+                        teamGroup.RemoveAt(0);
+
+                        string groupName = CreateGroupHead(cityId, headTeam.TeamId, headTeam.AccountName);
+                        var groupTeams = GetGroupTeamsInfo(cityId, headTeam.AccountName);
+                        headTeam = groupTeams.Where(team => team.Name == groupName).FirstOrDefault();
+                        if (headTeam.Name != groupName)
+                        {
+                            return;
+                        }
+                    }
+
+                    foreach (var team in teamGroup)
+                    {
+                        JoinGroup(cityId, headTeam.GroupId, team.TeamId, team.AccountName);
+                    }
+
+                    var targetCityNameList = new List<string>();
+                    foreach (var account in this.accountTable)
+                    {
+                        if (account.Value.CityIDList.Contains(cityId))
+                        {
+                            if (targetCityNameList.Count == 0)
+                            {
+                                var attackCityList = OpenAttackPage(cityId, account.Key);
+                                targetCityNameList.AddRange(attackCityList);
+                                var moveCityList = GetMoveTargetCities(cityId, account.Key);
+                                targetCityNameList.AddRange(moveCityList);
+                            }
+
+                            this.teamList.AddRange(GetActiveTeamInfo(cityId, "1", account.Key));
+                            this.teamList.AddRange(GetActiveTeamInfo(cityId, "2", account.Key));
+                            this.teamList.AddRange(GetGroupTeamsInfo(cityId, account.Key));
+                        }
+                    }
+
+                    this.Invoke(new DoSomething(() =>
+                    {
+                        SyncTasksToTaskListView();
+                    }));
+                });
         }
     }
 }

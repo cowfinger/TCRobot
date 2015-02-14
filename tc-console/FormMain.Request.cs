@@ -35,6 +35,30 @@ namespace TC
             return ParseTargetCityID(response, dstcityname);
         }
 
+        private string CreateGroupHead(string cityId, string teamId, string account)
+        {
+            OpenCityPage(cityId, account);
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=do&func=create_group&r={1}",
+                this.hostname, this.randGen.NextDouble()
+                );
+
+            string name = randGen.Next(100000, 999999).ToString();
+            string body = string.Format("team_id={0}&group_name={1}", teamId, randGen.Next(100000, 999999));
+            HTTPRequest(url, account, body);
+            return name;
+        }
+
+        private void JoinGroup(string cityId, string groupTeamId, string subTeamId, string account)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=do&func=join_group&r={1}",
+                this.hostname, this.randGen.NextDouble()
+                );
+            string body = string.Format("team_id={0}&group_id={1}&from_address=1", subTeamId, groupTeamId);
+            HTTPRequest(url, account, body);
+        }
+
         private IEnumerable<TeamInfo> GetAttackTeamsInfo(string srccityid, string dstcityid, string account)
         {
             string response = OpenCityPage(srccityid, account);
@@ -47,7 +71,7 @@ namespace TC
             return ParseTeams(cityPage, account);
         }
 
-        private IEnumerable<TeamInfo> GetDefendTeamInfo(string cityId, string account)
+        private IEnumerable<TeamInfo> GetActiveTeamInfo(string cityId, string tabId, string account)
         {
             string url0 = string.Format("http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}", hostname, randGen.NextDouble());
             HTTPRequest(url0, account);
@@ -57,22 +81,28 @@ namespace TC
             HTTPRequest(url1, account);
 
             string url2 = string.Format(
-                "http://{0}//index.php?mod=military/world_war&op=show&func=team&tab_id=2&user_nickname=&r={1}",
-                this.hostname, this.randGen.NextDouble()
+                "http://{0}//index.php?mod=military/world_war&op=show&func=team&tab_id={1}&user_nickname=&r={2}",
+                this.hostname, tabId, this.randGen.NextDouble()
             );
             string data = HTTPRequest(url2, account);
 
-            const string pattern = @"worldWarClass\.showTeamDetail\((\d+),\d+\)";
-            var matches = Regex.Matches(data, pattern);
+            var attackPowerList = ParseAttribute(data, @"<td>部队\d+</td>", @"<td>(\d+)</td>", 2).ToList();
+
+            int i = 0;
+            const string teamIDPattern = @"worldWarClass\.showTeamDetail\((\d+),\d+\)";
+            var matches = Regex.Matches(data, teamIDPattern);
             foreach (Match match in matches)
             {
                 yield return new TeamInfo()
                 {
                     TeamId = match.Groups[1].Value,
                     AccountName = account,
+                    PowerIndex = int.Parse(attackPowerList[i]),
                     isGroupTeam = false,
-                    isDefendTeam = true,
+                    isDefendTeam = tabId == "2",
                 };
+
+                ++i;
             }
         }
 
@@ -222,34 +252,47 @@ namespace TC
             return HTTPRequest(url, account);
         }
 
-        private string ParseTeamAttribute(string content, string attributeName)
+        private IEnumerable<string> ParseAttribute(
+            string content,
+            string headPattern,
+            string attributePattern,
+            int attributeIndex
+            )
         {
-            var pattern = new Regex(@"<td>(.*)</td>");
-            var headName = string.Format("<td>{0}</td>", attributeName);
+            // var pattern = new Regex(@"<td>(.*)</td>");
+            // var headName = string.Format("<td>{0}</td>", attributeName);
             var lines = content.Split('\r', '\n');
             int status = 0;
+            int count = 0;
             foreach (var line in lines)
             {
                 switch (status)
                 {
                     case 0:
-                        if (line.Contains(headName))
+                        if (Regex.IsMatch(line, headPattern))
                         {
                             status = 1;
                         }
                         break;
 
                     case 1:
-                        Match match = pattern.Match(line);
+                        Match match = Regex.Match(line, attributePattern);
                         if (match.Success)
                         {
-                            return match.Groups[1].Value;
+                            if (count < attributeIndex)
+                            {
+                                ++count;
+                            }
+                            else
+                            {
+                                count = 0;
+                                status = 0;
+                                yield return match.Groups[1].Value;
+                            }
                         }
                         break;
                 }
             }
-
-            return "";
         }
 
         private List<string> OpenAttackPage(string cityId, string account)
@@ -343,13 +386,19 @@ namespace TC
 
         private IEnumerable<TeamInfo> ParseGroupTeams(string content, string account)
         {
-            const string pattern = "<a href='javascript:void\\(0\\)' onclick=\"worldWarClass\\.showGroupDetail\\((\\d+)\\)\" >(\\w+)</a>";
-            var matches = Regex.Matches(content, pattern);
+            const string teamIdPattern = "worldWarClass\\.showTeamDetail\\((\\d+),\\d+\\)";
+            const string groupIdPattern = "<a href='javascript:void\\(0\\)' onclick=\"worldWarClass\\.showGroupDetail\\((\\d+)\\)\" >(\\w+)</a>";
+            var matches = Regex.Matches(content, groupIdPattern);
             foreach (Match match in matches)
             {
+                string groupId = match.Groups[1].Value;
+                string detailPage = OpenGroupTeamDetailPage(groupId, account);
+                var teamIdMatch = Regex.Match(detailPage, teamIdPattern);
+
                 yield return new TeamInfo()
                 {
-                    TeamId = match.Groups[1].Value,
+                    GroupId = match.Groups[1].Value,
+                    TeamId = teamIdMatch.Success ? teamIdMatch.Groups[1].Value : "",
                     isGroupTeam = true,
                     isDefendTeam = false,
                     Name = match.Groups[2].Value,
@@ -360,9 +409,9 @@ namespace TC
 
         private IEnumerable<TeamInfo> ParseGroupAttackTeams(string content, string destCityId, string account)
         {
-            var pattern = new Regex("worldWarClass.showGroupDetail\\((\\d+)\\)");
+            var groupIdPattern = new Regex("worldWarClass\\.showGroupDetail\\((\\d+)\\)");
 
-            var matches = pattern.Matches(content);
+            var matches = groupIdPattern.Matches(content);
             foreach (Match match in matches)
             {
                 string teamId = match.Groups[1].Value;
@@ -370,13 +419,15 @@ namespace TC
                 string attackPage = OpenGroupTeamAttackPage(teamId, destCityId, account);
                 string durationString = ParseAttackDuration(attackPage);
 
+            // var pattern = new Regex(@"<td>(.*)</td>");
+            // var headName = string.Format("<td>{0}</td>", attributeName);
                 yield return new TeamInfo()
                 {
                     TeamId = match.Groups[1].Value,
                     isGroupTeam = true,
                     isDefendTeam = false,
-                    Name = ParseTeamAttribute(teamPageContent, "小队名称"),
-                    Leader = ParseTeamAttribute(teamPageContent, "本小队队长"),
+                    Name = ParseAttribute(teamPageContent, "<td>小队名称</td>", @"<td>(.*)</td>", 0).FirstOrDefault(),
+                    Leader = ParseAttribute(teamPageContent, "<td>本小队队长</td>", @"<td>(.*)</td>", 0).FirstOrDefault(),
                     DurationString = durationString,
                     Duration = TimeStr2Sec(durationString),
                     AccountName = account,
@@ -405,11 +456,7 @@ namespace TC
                     team.Leader = match.Groups[1].Value;
                 }
 
-                team.DurationString = "";
-                team.Duration = 0;
                 team.AccountName = account;
-                team.TimeLeft = 0;
-
                 yield return team;
             }
         }
