@@ -14,3 +14,4 @@ C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.Properties.Resourc
 C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.csproj.GenerateResource.Cache
 C:\Users\wingforce\Workplane\tc-robot\tc-console\bin\Debug\TC.exe
 C:\Users\wingforce\Workplane\tc-robot\tc-console\bin\Debug\TC.pdb
+C:\Users\wingforce\Workplane\tc-robot\tc-console\bin\Debug\TC.exe.config

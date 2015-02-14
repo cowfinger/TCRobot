@@ -32,6 +32,11 @@
             this.btnLoadProfile = new System.Windows.Forms.Button();
             this.btnAutoAttack = new System.Windows.Forms.Button();
             this.listViewTasks = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnConfirmMainTeams = new System.Windows.Forms.Button();
             this.listBoxSrcCities = new System.Windows.Forms.ListBox();
             this.listBoxDstCities = new System.Windows.Forms.ListBox();
@@ -51,7 +56,7 @@
             this.rbtnSyncAttack = new System.Windows.Forms.RadioButton();
             this.btnScanCity = new System.Windows.Forms.Button();
             this.txtInfo = new System.Windows.Forms.TextBox();
-            this.btnQuickArmy = new System.Windows.Forms.Button();
+            this.btnQuickAttack = new System.Windows.Forms.Button();
             this.btnDismissTeam = new System.Windows.Forms.Button();
             this.listViewActiveTasks = new System.Windows.Forms.ListView();
             this.colHeaderTaskType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -61,9 +66,17 @@
             this.colHeaderDuration = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHeaderETA = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.checkBoxSelectAllTasks = new System.Windows.Forms.CheckBox();
-            this.btnMoveTeam = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.btnImport = new System.Windows.Forms.Button();
+            this.checkBoxDefend = new System.Windows.Forms.CheckBox();
+            this.btnContribute = new System.Windows.Forms.Button();
+            this.listViewInfluence = new System.Windows.Forms.ListView();
+            this.columnHeaderAccount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderWood = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderMud = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderIron = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderFood = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label4 = new System.Windows.Forms.Label();
+            this.columnHeaderAccountName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderLoginStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // label1
@@ -98,7 +111,14 @@
             // listViewTasks
             // 
             this.listViewTasks.CheckBoxes = true;
+            this.listViewTasks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader5});
             this.listViewTasks.FullRowSelect = true;
+            this.listViewTasks.GridLines = true;
             this.listViewTasks.Location = new System.Drawing.Point(14, 268);
             this.listViewTasks.Name = "listViewTasks";
             this.listViewTasks.Size = new System.Drawing.Size(618, 200);
@@ -106,6 +126,30 @@
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
             this.listViewTasks.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listViewTasks_ItemChecked);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "账号";
+            this.columnHeader1.Width = 100;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "ID";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "提示";
+            this.columnHeader3.Width = 120;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "途中耗时";
+            this.columnHeader4.Width = 120;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "出发倒计时";
+            this.columnHeader5.Width = 120;
             // 
             // btnConfirmMainTeams
             // 
@@ -176,7 +220,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(145, 222);
+            this.label8.Location = new System.Drawing.Point(81, 247);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(101, 12);
             this.label8.TabIndex = 27;
@@ -194,6 +238,9 @@
             // 
             // listViewAccounts
             // 
+            this.listViewAccounts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderAccountName,
+            this.columnHeaderLoginStatus});
             this.listViewAccounts.FullRowSelect = true;
             this.listViewAccounts.Location = new System.Drawing.Point(15, 22);
             this.listViewAccounts.Name = "listViewAccounts";
@@ -214,7 +261,7 @@
             // 
             this.checkBoxShowBrowers.AutoSize = true;
             this.checkBoxShowBrowers.Enabled = false;
-            this.checkBoxShowBrowers.Location = new System.Drawing.Point(15, 479);
+            this.checkBoxShowBrowers.Location = new System.Drawing.Point(15, 698);
             this.checkBoxShowBrowers.Name = "checkBoxShowBrowers";
             this.checkBoxShowBrowers.Size = new System.Drawing.Size(108, 16);
             this.checkBoxShowBrowers.TabIndex = 30;
@@ -225,7 +272,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(412, 479);
+            this.label7.Location = new System.Drawing.Point(412, 698);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(53, 12);
             this.label7.TabIndex = 31;
@@ -233,7 +280,7 @@
             // 
             // textBoxSysTime
             // 
-            this.textBoxSysTime.Location = new System.Drawing.Point(471, 474);
+            this.textBoxSysTime.Location = new System.Drawing.Point(471, 693);
             this.textBoxSysTime.Name = "textBoxSysTime";
             this.textBoxSysTime.ReadOnly = true;
             this.textBoxSysTime.Size = new System.Drawing.Size(161, 21);
@@ -243,7 +290,7 @@
             // 
             this.dateTimePickerArrival.CustomFormat = "MM/dd/yyyy HH:mm:ss";
             this.dateTimePickerArrival.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerArrival.Location = new System.Drawing.Point(254, 220);
+            this.dateTimePickerArrival.Location = new System.Drawing.Point(188, 241);
             this.dateTimePickerArrival.Name = "dateTimePickerArrival";
             this.dateTimePickerArrival.ShowUpDown = true;
             this.dateTimePickerArrival.Size = new System.Drawing.Size(200, 21);
@@ -286,21 +333,22 @@
             // 
             this.txtInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtInfo.Enabled = false;
-            this.txtInfo.Location = new System.Drawing.Point(129, 480);
+            this.txtInfo.Location = new System.Drawing.Point(129, 699);
             this.txtInfo.Name = "txtInfo";
             this.txtInfo.ReadOnly = true;
             this.txtInfo.Size = new System.Drawing.Size(271, 14);
             this.txtInfo.TabIndex = 37;
             // 
-            // btnQuickArmy
+            // btnQuickAttack
             // 
-            this.btnQuickArmy.Location = new System.Drawing.Point(557, 76);
-            this.btnQuickArmy.Name = "btnQuickArmy";
-            this.btnQuickArmy.Size = new System.Drawing.Size(75, 23);
-            this.btnQuickArmy.TabIndex = 38;
-            this.btnQuickArmy.Text = "单将部队";
-            this.btnQuickArmy.UseVisualStyleBackColor = true;
-            this.btnQuickArmy.Click += new System.EventHandler(this.btnQuickArmy_Click);
+            this.btnQuickAttack.Enabled = false;
+            this.btnQuickAttack.Location = new System.Drawing.Point(476, 106);
+            this.btnQuickAttack.Name = "btnQuickAttack";
+            this.btnQuickAttack.Size = new System.Drawing.Size(75, 23);
+            this.btnQuickAttack.TabIndex = 38;
+            this.btnQuickAttack.Text = "快速部队";
+            this.btnQuickAttack.UseVisualStyleBackColor = true;
+            this.btnQuickAttack.Click += new System.EventHandler(this.btnQuickAttack_Click);
             // 
             // btnDismissTeam
             // 
@@ -367,45 +415,98 @@
             this.checkBoxSelectAllTasks.UseVisualStyleBackColor = true;
             this.checkBoxSelectAllTasks.CheckedChanged += new System.EventHandler(this.checkBoxSelectAllTasks_CheckedChanged);
             // 
-            // btnMoveTeam
+            // checkBoxDefend
             // 
-            this.btnMoveTeam.Location = new System.Drawing.Point(475, 106);
-            this.btnMoveTeam.Name = "btnMoveTeam";
-            this.btnMoveTeam.Size = new System.Drawing.Size(75, 23);
-            this.btnMoveTeam.TabIndex = 42;
-            this.btnMoveTeam.Text = "移动部队";
-            this.btnMoveTeam.UseVisualStyleBackColor = true;
+            this.checkBoxDefend.AutoSize = true;
+            this.checkBoxDefend.Location = new System.Drawing.Point(476, 136);
+            this.checkBoxDefend.Name = "checkBoxDefend";
+            this.checkBoxDefend.Size = new System.Drawing.Size(96, 16);
+            this.checkBoxDefend.TabIndex = 42;
+            this.checkBoxDefend.Text = "组建防御部队";
+            this.checkBoxDefend.UseVisualStyleBackColor = true;
             // 
-            // btnExport
+            // btnContribute
             // 
-            this.btnExport.Location = new System.Drawing.Point(475, 136);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(75, 23);
-            this.btnExport.TabIndex = 43;
-            this.btnExport.Text = "导出组队";
-            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnContribute.Location = new System.Drawing.Point(557, 76);
+            this.btnContribute.Name = "btnContribute";
+            this.btnContribute.Size = new System.Drawing.Size(75, 23);
+            this.btnContribute.TabIndex = 43;
+            this.btnContribute.Text = "捐粮";
+            this.btnContribute.UseVisualStyleBackColor = true;
+            this.btnContribute.Click += new System.EventHandler(this.btnContribute_Click);
             // 
-            // btnImport
+            // listViewInfluence
             // 
-            this.btnImport.Location = new System.Drawing.Point(557, 136);
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(75, 23);
-            this.btnImport.TabIndex = 44;
-            this.btnImport.Text = "导入组队";
-            this.btnImport.UseVisualStyleBackColor = true;
+            this.listViewInfluence.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderAccount,
+            this.columnHeaderWood,
+            this.columnHeaderMud,
+            this.columnHeaderIron,
+            this.columnHeaderFood});
+            this.listViewInfluence.FullRowSelect = true;
+            this.listViewInfluence.GridLines = true;
+            this.listViewInfluence.Location = new System.Drawing.Point(15, 486);
+            this.listViewInfluence.Name = "listViewInfluence";
+            this.listViewInfluence.Size = new System.Drawing.Size(617, 201);
+            this.listViewInfluence.TabIndex = 44;
+            this.listViewInfluence.UseCompatibleStateImageBehavior = false;
+            this.listViewInfluence.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderAccount
+            // 
+            this.columnHeaderAccount.Text = "账号";
+            this.columnHeaderAccount.Width = 80;
+            // 
+            // columnHeaderWood
+            // 
+            this.columnHeaderWood.Text = "木材";
+            this.columnHeaderWood.Width = 100;
+            // 
+            // columnHeaderMud
+            // 
+            this.columnHeaderMud.Text = "泥土";
+            this.columnHeaderMud.Width = 100;
+            // 
+            // columnHeaderIron
+            // 
+            this.columnHeaderIron.Text = "铁矿";
+            this.columnHeaderIron.Width = 100;
+            // 
+            // columnHeaderFood
+            // 
+            this.columnHeaderFood.Text = "粮食";
+            this.columnHeaderFood.Width = 100;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 471);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 12);
+            this.label4.TabIndex = 45;
+            this.label4.Text = "势力资源";
+            // 
+            // columnHeaderAccountName
+            // 
+            this.columnHeaderAccountName.Text = "账号";
+            // 
+            // columnHeaderLoginStatus
+            // 
+            this.columnHeaderLoginStatus.Text = "状态";
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1203, 618);
-            this.Controls.Add(this.btnImport);
-            this.Controls.Add(this.btnExport);
-            this.Controls.Add(this.btnMoveTeam);
+            this.ClientSize = new System.Drawing.Size(650, 726);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.listViewInfluence);
+            this.Controls.Add(this.btnContribute);
+            this.Controls.Add(this.checkBoxDefend);
             this.Controls.Add(this.checkBoxSelectAllTasks);
             this.Controls.Add(this.listViewActiveTasks);
             this.Controls.Add(this.btnDismissTeam);
-            this.Controls.Add(this.btnQuickArmy);
+            this.Controls.Add(this.btnQuickAttack);
             this.Controls.Add(this.txtInfo);
             this.Controls.Add(this.btnScanCity);
             this.Controls.Add(this.rbtnSyncAttack);
@@ -429,8 +530,10 @@
             this.Controls.Add(this.btnLoadProfile);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.webBrowserMain);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MaximizeBox = false;
             this.Name = "FormMain";
-            this.Text = "压秒(3.0)";
+            this.Text = "TC Console (1.0)";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -462,7 +565,7 @@
 		private System.Windows.Forms.RadioButton rbtnSyncAttack;
         private System.Windows.Forms.Button btnScanCity;
         private System.Windows.Forms.TextBox txtInfo;
-        private System.Windows.Forms.Button btnQuickArmy;
+        private System.Windows.Forms.Button btnQuickAttack;
         private System.Windows.Forms.Button btnDismissTeam;
         private System.Windows.Forms.ListView listViewActiveTasks;
         private System.Windows.Forms.ColumnHeader colHeaderTaskType;
@@ -472,9 +575,22 @@
         private System.Windows.Forms.ColumnHeader colHeaderDuration;
         private System.Windows.Forms.ColumnHeader colHeaderETA;
         private System.Windows.Forms.CheckBox checkBoxSelectAllTasks;
-        private System.Windows.Forms.Button btnMoveTeam;
-        private System.Windows.Forms.Button btnExport;
-        private System.Windows.Forms.Button btnImport;
+        private System.Windows.Forms.CheckBox checkBoxDefend;
+        private System.Windows.Forms.Button btnContribute;
+        private System.Windows.Forms.ListView listViewInfluence;
+        private System.Windows.Forms.ColumnHeader columnHeaderAccount;
+        private System.Windows.Forms.ColumnHeader columnHeaderWood;
+        private System.Windows.Forms.ColumnHeader columnHeaderMud;
+        private System.Windows.Forms.ColumnHeader columnHeaderIron;
+        private System.Windows.Forms.ColumnHeader columnHeaderFood;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.ColumnHeader columnHeaderAccountName;
+        private System.Windows.Forms.ColumnHeader columnHeaderLoginStatus;
     }
 }
 
