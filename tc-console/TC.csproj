@@ -112,6 +112,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Soldier.cs" />
+    <Compile Include="Task.cs" />
     <Compile Include="TCAccount.cs" />
     <Compile Include="TCResource.cs" />
   </ItemGroup>

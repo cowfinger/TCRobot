@@ -11,3 +11,12 @@ C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.Properties.Resourc
 C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.csproj.GenerateResource.Cache
 C:\Users\wingforce\Workplane\tc-robot\tc-console\bin\Debug\TC.exe.config
 C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
+C:\Users\jackyw\TCRobot\tc-console\bin\Debug\TC.exe.config
+C:\Users\jackyw\TCRobot\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
+C:\Users\jackyw\TCRobot\tc-console\obj\Debug\TC.FormMain.resources
+C:\Users\jackyw\TCRobot\tc-console\obj\Debug\TC.Properties.Resources.resources
+C:\Users\jackyw\TCRobot\tc-console\obj\Debug\TC.csproj.GenerateResource.Cache
+C:\Users\jackyw\TCRobot\tc-console\bin\Debug\TC.exe
+C:\Users\jackyw\TCRobot\tc-console\bin\Debug\TC.pdb
+C:\Users\jackyw\TCRobot\tc-console\obj\Debug\TC.exe
+C:\Users\jackyw\TCRobot\tc-console\obj\Debug\TC.pdb
