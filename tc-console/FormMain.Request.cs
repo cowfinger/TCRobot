@@ -43,7 +43,7 @@ namespace TC
                 );
 
             string name = randGen.Next(100000, 999999).ToString();
-            string body = string.Format("team_id={0}&group_name={1}", teamId, randGen.Next(100000, 999999));
+            string body = string.Format("team_id={0}&group_name={1}", teamId, name);
             HTTPRequest(url, account, body);
             return name;
         }
@@ -187,12 +187,12 @@ namespace TC
             return heroList;
         }
 
-        private void CreateTeam(string srcCityId, string heroId, string soldier, string teamType, string account)
+        private void CreateTeam(string srcCityId, string heroId, string subHeroes, string soldier, string teamType, string account)
         {
             string url = string.Format("http://{0}/index.php?mod=military/world_war&func=create_team&op=do&r={1}", hostname, randGen.NextDouble());
             string body = string.Format(
-                "team_type={0}&main_hero={1}&using_embattle_id=&sub_hero=&soldiers={2}&pk_hero_id=",
-                teamType, heroId, soldier
+                "team_type={0}&main_hero={1}&using_embattle_id=&sub_hero={2}&soldiers={3}&pk_hero_id=",
+                teamType, heroId,  subHeroes, soldier
                 );
 
             HTTPRequest(url, account, body);
@@ -654,6 +654,16 @@ namespace TC
             }
 
             return false;
+        }
+
+        private void DismissGroup(string groupId, string account)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=do&func=disband_group&r={1}",
+                this.hostname, this.randGen.NextDouble()
+                );
+            string body = string.Format("group_id={0}&from_address=1", groupId);
+            HTTPRequest(url, account, body);
         }
     }
 }

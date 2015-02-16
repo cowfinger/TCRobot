@@ -37,6 +37,8 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnConfirmMainTeams = new System.Windows.Forms.Button();
             this.listBoxSrcCities = new System.Windows.Forms.ListBox();
             this.listBoxDstCities = new System.Windows.Forms.ListBox();
@@ -54,8 +56,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxSysTime = new System.Windows.Forms.TextBox();
             this.dateTimePickerArrival = new System.Windows.Forms.DateTimePicker();
-            this.rbtnSeqAttack = new System.Windows.Forms.RadioButton();
-            this.rbtnSyncAttack = new System.Windows.Forms.RadioButton();
             this.btnScanCity = new System.Windows.Forms.Button();
             this.txtInfo = new System.Windows.Forms.TextBox();
             this.btnQuickAttack = new System.Windows.Forms.Button();
@@ -67,6 +67,7 @@
             this.colHeaderDestCity = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHeaderDuration = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHeaderETA = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderCountingDown = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.checkBoxSelectAllTasks = new System.Windows.Forms.CheckBox();
             this.checkBoxDefend = new System.Windows.Forms.CheckBox();
             this.btnContribute = new System.Windows.Forms.Button();
@@ -78,10 +79,10 @@
             this.columnHeaderFood = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label4 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.columnHeaderCountingDown = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnGroupTeam = new System.Windows.Forms.Button();
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.radioButtonCenturion = new System.Windows.Forms.RadioButton();
+            this.radioButtonSmallTroop = new System.Windows.Forms.RadioButton();
+            this.radioButtonFullTroop = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // label1
@@ -158,8 +159,17 @@
             this.columnHeader5.Text = "出发倒计时";
             this.columnHeader5.Width = 80;
             // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "组编号";
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "部队类型";
+            // 
             // btnConfirmMainTeams
             // 
+            this.btnConfirmMainTeams.Enabled = false;
             this.btnConfirmMainTeams.Location = new System.Drawing.Point(557, 49);
             this.btnConfirmMainTeams.Name = "btnConfirmMainTeams";
             this.btnConfirmMainTeams.Size = new System.Drawing.Size(75, 21);
@@ -235,6 +245,7 @@
             // 
             // btnLoginAll
             // 
+            this.btnLoginAll.Enabled = false;
             this.btnLoginAll.Location = new System.Drawing.Point(475, 49);
             this.btnLoginAll.Name = "btnLoginAll";
             this.btnLoginAll.Size = new System.Drawing.Size(75, 21);
@@ -311,28 +322,6 @@
             this.dateTimePickerArrival.Size = new System.Drawing.Size(200, 21);
             this.dateTimePickerArrival.TabIndex = 33;
             // 
-            // rbtnSeqAttack
-            // 
-            this.rbtnSeqAttack.AutoSize = true;
-            this.rbtnSeqAttack.Location = new System.Drawing.Point(475, 198);
-            this.rbtnSeqAttack.Name = "rbtnSeqAttack";
-            this.rbtnSeqAttack.Size = new System.Drawing.Size(71, 16);
-            this.rbtnSeqAttack.TabIndex = 34;
-            this.rbtnSeqAttack.TabStop = true;
-            this.rbtnSeqAttack.Text = "顺序出发";
-            this.rbtnSeqAttack.UseVisualStyleBackColor = true;
-            // 
-            // rbtnSyncAttack
-            // 
-            this.rbtnSyncAttack.AutoSize = true;
-            this.rbtnSyncAttack.Location = new System.Drawing.Point(475, 221);
-            this.rbtnSyncAttack.Name = "rbtnSyncAttack";
-            this.rbtnSyncAttack.Size = new System.Drawing.Size(71, 16);
-            this.rbtnSyncAttack.TabIndex = 35;
-            this.rbtnSyncAttack.TabStop = true;
-            this.rbtnSyncAttack.Text = "同时出发";
-            this.rbtnSyncAttack.UseVisualStyleBackColor = true;
-            // 
             // btnScanCity
             // 
             this.btnScanCity.Enabled = false;
@@ -357,7 +346,7 @@
             // btnQuickAttack
             // 
             this.btnQuickAttack.Enabled = false;
-            this.btnQuickAttack.Location = new System.Drawing.Point(475, 141);
+            this.btnQuickAttack.Location = new System.Drawing.Point(475, 133);
             this.btnQuickAttack.Name = "btnQuickAttack";
             this.btnQuickAttack.Size = new System.Drawing.Size(75, 23);
             this.btnQuickAttack.TabIndex = 38;
@@ -368,7 +357,7 @@
             // btnDismissTeam
             // 
             this.btnDismissTeam.Enabled = false;
-            this.btnDismissTeam.Location = new System.Drawing.Point(556, 141);
+            this.btnDismissTeam.Location = new System.Drawing.Point(557, 133);
             this.btnDismissTeam.Name = "btnDismissTeam";
             this.btnDismissTeam.Size = new System.Drawing.Size(75, 23);
             this.btnDismissTeam.TabIndex = 39;
@@ -420,6 +409,10 @@
             // 
             this.colHeaderETA.Text = "完成时间";
             // 
+            // columnHeaderCountingDown
+            // 
+            this.columnHeaderCountingDown.Text = "倒计时";
+            // 
             // checkBoxSelectAllTasks
             // 
             this.checkBoxSelectAllTasks.AutoSize = true;
@@ -434,7 +427,7 @@
             // checkBoxDefend
             // 
             this.checkBoxDefend.AutoSize = true;
-            this.checkBoxDefend.Location = new System.Drawing.Point(475, 171);
+            this.checkBoxDefend.Location = new System.Drawing.Point(475, 162);
             this.checkBoxDefend.Name = "checkBoxDefend";
             this.checkBoxDefend.Size = new System.Drawing.Size(96, 16);
             this.checkBoxDefend.TabIndex = 42;
@@ -443,6 +436,7 @@
             // 
             // btnContribute
             // 
+            this.btnContribute.Enabled = false;
             this.btnContribute.Location = new System.Drawing.Point(557, 76);
             this.btnContribute.Name = "btnContribute";
             this.btnContribute.Size = new System.Drawing.Size(75, 23);
@@ -511,12 +505,9 @@
             this.label9.TabIndex = 46;
             this.label9.Text = "任务列表";
             // 
-            // columnHeaderCountingDown
-            // 
-            this.columnHeaderCountingDown.Text = "倒计时";
-            // 
             // btnGroupTeam
             // 
+            this.btnGroupTeam.Enabled = false;
             this.btnGroupTeam.Location = new System.Drawing.Point(475, 104);
             this.btnGroupTeam.Name = "btnGroupTeam";
             this.btnGroupTeam.Size = new System.Drawing.Size(75, 23);
@@ -525,19 +516,47 @@
             this.btnGroupTeam.UseVisualStyleBackColor = true;
             this.btnGroupTeam.Click += new System.EventHandler(this.btnGroupTeam_Click);
             // 
-            // columnHeader6
+            // radioButtonCenturion
             // 
-            this.columnHeader6.Text = "组编号";
+            this.radioButtonCenturion.AutoSize = true;
+            this.radioButtonCenturion.Location = new System.Drawing.Point(475, 185);
+            this.radioButtonCenturion.Name = "radioButtonCenturion";
+            this.radioButtonCenturion.Size = new System.Drawing.Size(71, 16);
+            this.radioButtonCenturion.TabIndex = 48;
+            this.radioButtonCenturion.Text = "单将部队";
+            this.radioButtonCenturion.UseVisualStyleBackColor = true;
             // 
-            // columnHeader7
+            // radioButtonSmallTroop
             // 
-            this.columnHeader7.Text = "部队类型";
+            this.radioButtonSmallTroop.AutoSize = true;
+            this.radioButtonSmallTroop.Checked = true;
+            this.radioButtonSmallTroop.Location = new System.Drawing.Point(475, 207);
+            this.radioButtonSmallTroop.Name = "radioButtonSmallTroop";
+            this.radioButtonSmallTroop.Size = new System.Drawing.Size(71, 16);
+            this.radioButtonSmallTroop.TabIndex = 49;
+            this.radioButtonSmallTroop.TabStop = true;
+            this.radioButtonSmallTroop.Text = "千人部队";
+            this.radioButtonSmallTroop.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonFullTroop
+            // 
+            this.radioButtonFullTroop.AutoSize = true;
+            this.radioButtonFullTroop.Location = new System.Drawing.Point(475, 230);
+            this.radioButtonFullTroop.Name = "radioButtonFullTroop";
+            this.radioButtonFullTroop.Size = new System.Drawing.Size(71, 16);
+            this.radioButtonFullTroop.TabIndex = 50;
+            this.radioButtonFullTroop.TabStop = true;
+            this.radioButtonFullTroop.Text = "全力部队";
+            this.radioButtonFullTroop.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(645, 717);
+            this.Controls.Add(this.radioButtonFullTroop);
+            this.Controls.Add(this.radioButtonSmallTroop);
+            this.Controls.Add(this.radioButtonCenturion);
             this.Controls.Add(this.btnGroupTeam);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label4);
@@ -550,8 +569,6 @@
             this.Controls.Add(this.btnQuickAttack);
             this.Controls.Add(this.txtInfo);
             this.Controls.Add(this.btnScanCity);
-            this.Controls.Add(this.rbtnSyncAttack);
-            this.Controls.Add(this.rbtnSeqAttack);
             this.Controls.Add(this.dateTimePickerArrival);
             this.Controls.Add(this.textBoxSysTime);
             this.Controls.Add(this.label7);
@@ -601,9 +618,7 @@
 		private System.Windows.Forms.CheckBox checkBoxShowBrowers;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.TextBox textBoxSysTime;
-		private System.Windows.Forms.DateTimePicker dateTimePickerArrival;
-		private System.Windows.Forms.RadioButton rbtnSeqAttack;
-		private System.Windows.Forms.RadioButton rbtnSyncAttack;
+        private System.Windows.Forms.DateTimePicker dateTimePickerArrival;
         private System.Windows.Forms.Button btnScanCity;
         private System.Windows.Forms.TextBox txtInfo;
         private System.Windows.Forms.Button btnQuickAttack;
@@ -637,6 +652,9 @@
         private System.Windows.Forms.Button btnGroupTeam;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.RadioButton radioButtonCenturion;
+        private System.Windows.Forms.RadioButton radioButtonSmallTroop;
+        private System.Windows.Forms.RadioButton radioButtonFullTroop;
     }
 }
 

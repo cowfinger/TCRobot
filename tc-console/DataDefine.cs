@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace TC
 {
-    class TeamInfo
+    public class TeamInfo
     {
         public string Name;
         public string AccountName;

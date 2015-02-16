@@ -5,12 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.Threading;
 using System.Net;
 using System.Web;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Threading;
 
 namespace TC
 {
@@ -47,13 +47,6 @@ namespace TC
         {
             LoadMultiLoginConf();
             LoadCityList();
-
-            checkBoxShowBrowers.Checked = false;
-            btnLoginAll.Enabled = false;
-            btnAutoAttack.Enabled = false;
-            btnConfirmMainTeams.Enabled = false;
-            rbtnSyncAttack.Checked = true;
-            btnContribute.Enabled = false;
         }
 
         private void btnScanCity_Click(object sender, EventArgs e)
@@ -145,21 +138,36 @@ namespace TC
                     soldierList.Sort((x, y) => { return x.SoldierNumber.CompareTo(y.SoldierNumber); });
                     soldierList.Reverse();
 
-                    foreach (var hero in heroList)
+                    if (this.radioButtonFullTroop.Checked)
                     {
-                        string soldierString = BuildSoldierString(ref soldierList, 1000);
-                        this.Invoke(new DoSomething(() =>
-                        {
-                            this.txtInfo.Text = string.Format(
-                                "Create Team for Account: {0} at {1}, Hero={2}, Soldier={3}",
-                                account.Key,
-                                cityName,
-                                hero,
-                                soldierString
-                                );
-                        }));
+                        int totalSolderNumber = soldierList.Sum(x => x.SoldierNumber);
+                        string soldierString = BuildSoldierString(ref soldierList, totalSolderNumber);
 
-                        CreateTeam(cityId, hero, soldierString, this.checkBoxDefend.Checked ? "2" : "1", account.Key);
+                        var heroRawList = heroList.ToList();
+                        string headHero = heroRawList.First();
+                        heroRawList.RemoveAt(0);
+                        string subHeroes = BuildSubHeroesString(ref heroRawList);
+
+                        CreateTeam(cityId, headHero, subHeroes, soldierString, this.checkBoxDefend.Checked ? "2" : "1", account.Key);
+                    }
+                    else
+                    {
+                        foreach (var hero in heroList)
+                        {
+                            string soldierString = BuildSoldierString(ref soldierList, this.radioButtonSmallTroop.Checked ? 1000 : 0);
+                            this.Invoke(new DoSomething(() =>
+                            {
+                                this.txtInfo.Text = string.Format(
+                                    "Create Team for Account: {0} at {1}, Hero={2}, Soldier={3}",
+                                    account.Key,
+                                    cityName,
+                                    hero,
+                                    soldierString
+                                    );
+                            }));
+
+                            CreateTeam(cityId, hero, "", soldierString, this.checkBoxDefend.Checked ? "2" : "1", account.Key);
+                        }
                     }
                 }
 
@@ -280,11 +288,19 @@ namespace TC
             this.btnDismissTeam.Enabled = false;
             this.listViewTasks.Enabled = false;
 
-            new Thread(new ThreadStart(() =>
+            Task.Run(() =>
             {
                 foreach (var team in targetTeams)
                 {
-                    DismissTeam(team.TeamId, team.AccountName);
+                    if (team.isGroupTeam)
+                    {
+                        DismissGroup(team.GroupId, team.AccountName);
+                    }
+                    else
+                    {
+                        DismissTeam(team.TeamId, team.AccountName);
+                    }
+
                     this.Invoke(new DoSomething(() =>
                     {
                         foreach (ListViewItem item in this.listViewTasks.CheckedItems)
@@ -303,7 +319,7 @@ namespace TC
                     btnDismissTeam.Enabled = true;
                     this.listViewTasks.Enabled = true;
                 }));
-            })).Start();
+            });
         }
 
         private void listViewTasks_ItemChecked(object sender, ItemCheckedEventArgs e)
@@ -321,6 +337,7 @@ namespace TC
             }
 
             this.btnDismissTeam.Enabled = candidateTeamCount > 0;
+            this.btnGroupTeam.Enabled = candidateTeamCount >= 2;
         }
 
         private void checkBoxSelectAllTasks_CheckedChanged(object sender, EventArgs e)
@@ -346,8 +363,7 @@ namespace TC
             m_srcCityID = cityList[m_srcCityName];
             m_dstCityName = listBoxDstCities.SelectedItem.ToString();
 
-            Thread oThread = new Thread(new ThreadStart(AutoAttackProc));
-            oThread.Start();
+            Task.Run(() => AutoAttackProc());
         }
 
         private void btnConfirmMainTeams_Click(object sender, EventArgs e)
@@ -372,8 +388,6 @@ namespace TC
                 }
 
                 btnConfirmMainTeams.Text = "取消";
-                rbtnSeqAttack.Enabled = false;
-                rbtnSyncAttack.Enabled = false;
             }
             else
             {
@@ -381,8 +395,6 @@ namespace TC
                 StopSendTroopTimer();
 
                 btnConfirmMainTeams.Text = "确认攻击";
-                rbtnSeqAttack.Enabled = true;
-                rbtnSyncAttack.Enabled = true;
             }
         }
 
@@ -452,39 +464,23 @@ namespace TC
                 candidateTeams.Add(item.Tag as TeamInfo);
             }
 
+            var dialog = new FormChooseTeamHead(candidateTeams);
+            dialog.ShowDialog();
+            if (dialog.GroupHead == null)
+            {
+                return;
+            }
+
+            TeamInfo headTeam = dialog.GroupHead;
+            candidateTeams.Remove(headTeam);
+
             string cityId = this.cityList[this.listBoxSrcCities.SelectedItem.ToString()];
 
             this.btnGroupTeam.Enabled = false;
             Task.Run(() =>
                 {
-
-                    var accountTeamTable = CategorizeTeams(candidateTeams);
-                    if (accountTable.Count < 2)
-                    {
-                        return;
-                    }
-
-                    TeamInfo headTeam = null;
-                    var teamGroup = new List<TeamInfo>();
-                    foreach (var accountTeams in accountTeamTable.Values)
-                    {
-                        foreach (var team in accountTeams)
-                        {
-                            if (team.isGroupTeam && headTeam == null)
-                            {
-                                headTeam = team;
-                                break;
-                            }
-
-                            if (!team.isGroupTeam && !team.isDefendTeam)
-                            {
-                                teamGroup.Add(team);
-                                break;
-                            }
-                        }
-                    }
-
-                    if (teamGroup.Count() + (headTeam == null ? 0 : 1) < 2)
+                    var teamGroup = candidateTeams.GroupBy(team => team.AccountName).Select(teams => teams.First()).ToList();
+                    if (!teamGroup.Any())
                     {
                         return;
                     }
@@ -492,13 +488,10 @@ namespace TC
                     teamGroup.Sort((x, y) => x.PowerIndex.CompareTo(y.PowerIndex));
                     teamGroup.Reverse();
 
-                    if (headTeam == null)
+                    if (!headTeam.isGroupTeam)
                     {
-                        headTeam = teamGroup.First();
-                        teamGroup.RemoveAt(0);
-
                         string groupName = CreateGroupHead(cityId, headTeam.TeamId, headTeam.AccountName);
-                        var groupTeams = GetGroupTeamsInfo(cityId, headTeam.AccountName);
+                        var groupTeams = GetGroupTeamsInfo(cityId, headTeam.AccountName).ToList();
                         headTeam = groupTeams.Where(team => team.Name == groupName).FirstOrDefault();
                         if (headTeam.Name != groupName)
                         {

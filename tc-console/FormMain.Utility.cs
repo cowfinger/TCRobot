@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace TC
@@ -137,22 +136,17 @@ namespace TC
             }
         }
 
-        private void SendTroopProc(object obj)
-        {
-            TeamInfo team = (TeamInfo)obj;
-
-            m_sendTroopLock.WaitOne();
-            {
-                OpenAttackCityPage(team.TeamId, destCityID, team.AccountName);
-                AttackTarget(team.TeamId, destCityID, team.AccountName);
-            }
-            m_sendTroopLock.Set();
-        }
-
         private void SendTroop(TeamInfo team)
         {
-            Thread oThread = new Thread(new ParameterizedThreadStart(SendTroopProc));
-            oThread.Start(team);
+            Task.Run(() =>
+            {
+                m_sendTroopLock.WaitOne();
+                {
+                    OpenAttackCityPage(team.TeamId, destCityID, team.AccountName);
+                    AttackTarget(team.TeamId, destCityID, team.AccountName);
+                }
+                m_sendTroopLock.Set();
+            });
         }
 
         delegate void DoSomething();
@@ -177,7 +171,7 @@ namespace TC
         {
             //adjust priority and get max duration task
             int maxduration = predicttime;
-            int attack_diff = rbtnSeqAttack.Checked ? 1 : 0;
+            int attack_diff = 0;
             int attack_ajust = 0;
 
             //calculate time left to trigger
@@ -460,8 +454,19 @@ namespace TC
             return false;
         }
 
+        private string BuildSubHeroesString(ref List<string> heroList)
+        {
+            var validHeros = heroList.Where((hero, index) => index < 4);
+            return string.Join("%7C", validHeros.ToArray());
+        }
+
         private string BuildSoldierString(ref List<Soldier> soldierList, int number)
         {
+            if (number == 0)
+            {
+                return "";
+            }
+
             foreach (var item in soldierList)
             {
                 if (item.SoldierNumber >= number)

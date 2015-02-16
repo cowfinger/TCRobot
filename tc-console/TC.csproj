@@ -70,6 +70,12 @@
     <Compile Include="CookieLite.cs" />
     <Compile Include="DataDefine.cs" />
     <Compile Include="DepotItem.cs" />
+    <Compile Include="FormChooseTeamHead.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChooseTeamHead.Designer.cs">
+      <DependentUpon>FormChooseTeamHead.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +94,9 @@
     <Compile Include="LoginHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormChooseTeamHead.resx">
+      <DependentUpon>FormChooseTeamHead.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
