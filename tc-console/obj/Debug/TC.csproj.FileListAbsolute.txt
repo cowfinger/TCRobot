@@ -6,12 +6,8 @@ C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.
 C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.csproj.GenerateResource.Cache
 C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.exe
 C:\Users\wingforce\Desktop\tc-robot-read-only\trunk\TCMutliAccount\obj\Debug\TC.pdb
-C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.exe
-C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.pdb
-C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
 C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.FormMain.resources
 C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.Properties.Resources.resources
 C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.csproj.GenerateResource.Cache
-C:\Users\wingforce\Workplane\tc-robot\tc-console\bin\Debug\TC.exe
-C:\Users\wingforce\Workplane\tc-robot\tc-console\bin\Debug\TC.pdb
 C:\Users\wingforce\Workplane\tc-robot\tc-console\bin\Debug\TC.exe.config
+C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
