@@ -22,6 +22,7 @@ namespace TC
         public bool IsTroopSent = false;
         public bool isGroupTeam = false;
         public bool isDefendTeam = false;
+        public bool IsGroupHead = false;
         public int PowerIndex = 0;
     }
 

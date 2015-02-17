@@ -18,13 +18,13 @@ namespace TC
     {
         private static string UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2; .NET4.0C; .NET4.0E)";
 
-        private Dictionary<string, string> cityList = new Dictionary<string, string>();
         private List<TeamInfo> teamList = new List<TeamInfo>();
+
+        private Dictionary<string, string> cityList = new Dictionary<string, string>();
 
         private string hostname = "yw1.tc.9wee.com";
         private Dictionary<string, LoginParam> multiLoginConf = new Dictionary<string, LoginParam>();
 
-        private string m_strCookies = string.Empty;
         private string m_srcCityID = "";
         private string m_srcCityName = "";
         private string destCityID = "";
@@ -47,6 +47,7 @@ namespace TC
         {
             LoadMultiLoginConf();
             LoadCityList();
+            LoadCheckpoint();
         }
 
         private void btnScanCity_Click(object sender, EventArgs e)
@@ -183,6 +184,7 @@ namespace TC
                     this.teamList.AddRange(GetTeamsInfo(cityId, account));
                 }
 
+
                 this.Invoke(new DoSomething(SyncTasksToTaskListView));
             });
         }
@@ -219,26 +221,8 @@ namespace TC
             string cityId = cityList[cityname];
             Task.Run(() =>
             {
-                var targetCityNameList = new List<string>();
-                foreach (var account in this.accountTable)
-                {
-                    if (account.Value.CityIDList.Contains(cityId))
-                    {
-                        if (targetCityNameList.Count == 0)
-                        {
-                            var attackCityList = OpenAttackPage(cityId, account.Key);
-                            targetCityNameList.AddRange(attackCityList);
-                            var moveCityList = GetMoveTargetCities(cityId, account.Key);
-                            targetCityNameList.AddRange(moveCityList);
-                        }
-
-                        this.teamList.AddRange(GetActiveTeamInfo(cityId, "1", account.Key));
-                        this.teamList.AddRange(GetActiveTeamInfo(cityId, "2", account.Key));
-                        this.teamList.AddRange(GetGroupTeamsInfo(cityId, account.Key));
-                    }
-                }
-
-                targetCityNameList.Distinct();
+                var targetCityNameList = QueryTargetCityList(cityId);
+                this.teamList = QueryCityTroops(cityId).ToList();
 
                 this.Invoke(new DoSomething(() =>
                 {
@@ -294,7 +278,10 @@ namespace TC
                 {
                     if (team.isGroupTeam)
                     {
-                        DismissGroup(team.GroupId, team.AccountName);
+                        if (team.IsGroupHead)
+                        {
+                            DismissGroup(team.GroupId, team.AccountName);
+                        }
                     }
                     else
                     {
@@ -485,15 +472,12 @@ namespace TC
                         return;
                     }
 
-                    teamGroup.Sort((x, y) => x.PowerIndex.CompareTo(y.PowerIndex));
-                    teamGroup.Reverse();
-
                     if (!headTeam.isGroupTeam)
                     {
                         string groupName = CreateGroupHead(cityId, headTeam.TeamId, headTeam.AccountName);
-                        var groupTeams = GetGroupTeamsInfo(cityId, headTeam.AccountName).ToList();
+                        var groupTeams = GetGroupTeamsInfo(cityId, headTeam.AccountName);
                         headTeam = groupTeams.Where(team => team.Name == groupName).FirstOrDefault();
-                        if (headTeam.Name != groupName)
+                        if (headTeam == null || headTeam.Name != groupName)
                         {
                             return;
                         }
@@ -504,24 +488,7 @@ namespace TC
                         JoinGroup(cityId, headTeam.GroupId, team.TeamId, team.AccountName);
                     }
 
-                    var targetCityNameList = new List<string>();
-                    foreach (var account in this.accountTable)
-                    {
-                        if (account.Value.CityIDList.Contains(cityId))
-                        {
-                            if (targetCityNameList.Count == 0)
-                            {
-                                var attackCityList = OpenAttackPage(cityId, account.Key);
-                                targetCityNameList.AddRange(attackCityList);
-                                var moveCityList = GetMoveTargetCities(cityId, account.Key);
-                                targetCityNameList.AddRange(moveCityList);
-                            }
-
-                            this.teamList.AddRange(GetActiveTeamInfo(cityId, "1", account.Key));
-                            this.teamList.AddRange(GetActiveTeamInfo(cityId, "2", account.Key));
-                            this.teamList.AddRange(GetGroupTeamsInfo(cityId, account.Key));
-                        }
-                    }
+                    this.teamList = QueryCityTroops(cityId).ToList();
 
                     this.Invoke(new DoSomething(() =>
                     {

@@ -380,7 +380,7 @@
             this.listViewActiveTasks.GridLines = true;
             this.listViewActiveTasks.Location = new System.Drawing.Point(653, 21);
             this.listViewActiveTasks.Name = "listViewActiveTasks";
-            this.listViewActiveTasks.Size = new System.Drawing.Size(578, 200);
+            this.listViewActiveTasks.Size = new System.Drawing.Size(578, 666);
             this.listViewActiveTasks.TabIndex = 40;
             this.listViewActiveTasks.UseCompatibleStateImageBehavior = false;
             this.listViewActiveTasks.View = System.Windows.Forms.View.Details;
@@ -553,7 +553,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(645, 717);
+            this.ClientSize = new System.Drawing.Size(649, 717);
             this.Controls.Add(this.radioButtonFullTroop);
             this.Controls.Add(this.radioButtonSmallTroop);
             this.Controls.Add(this.radioButtonCenturion);

@@ -12,32 +12,39 @@ namespace TC
     {
         private string HTTPRequest(string url, string account, string body = null)
         {
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.UserAgent = UserAgent;
-            request.Headers.Add("Cookie", GetAccountCookie(account));
-
-            if (!string.IsNullOrEmpty(body))
+            try
             {
-                var codedBytes = new ASCIIEncoding().GetBytes(body);
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.ContentLength = codedBytes.Length;
-                request.GetRequestStream().Write(codedBytes, 0, codedBytes.Length);
-            }
+                var request = (HttpWebRequest)WebRequest.Create(url);
+                request.UserAgent = UserAgent;
+                request.Headers.Add("Cookie", GetAccountCookie(account));
 
-            // var response = (HttpWebResponse)request.GetResponse();
-            using (var response = (HttpWebResponse)request.GetResponse())
-            {
-                SetAccountCookie(account, response.Headers["Set-Cookie"]);
-
-                string content = string.Empty;
-                using (var reader = new StreamReader(response.GetResponseStream()))
+                if (!string.IsNullOrEmpty(body))
                 {
-                    content = reader.ReadToEnd();
+                    var codedBytes = new ASCIIEncoding().GetBytes(body);
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    request.ContentLength = codedBytes.Length;
+                    request.GetRequestStream().Write(codedBytes, 0, codedBytes.Length);
                 }
 
-                response.Close();
-                return content;
+                // var response = (HttpWebResponse)request.GetResponse();
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    SetAccountCookie(account, response.Headers["Set-Cookie"]);
+
+                    string content = string.Empty;
+                    using (var reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        content = reader.ReadToEnd();
+                    }
+
+                    response.Close();
+                    return content;
+                }
+            }
+            catch (Exception )
+            {
+                return "";
             }
         }
 
@@ -346,6 +353,30 @@ namespace TC
             remoteTimeSyncTimer.Stop();
         }
 
+        private IEnumerable<TeamInfo> QueryCityTroops(string cityId)
+        {
+            return this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId)).Select(
+                account =>
+                {
+                    var singleAttackTeams = GetActiveTeamInfo(cityId, "1", account.UserName);
+                    var singleDefendTeams = GetActiveTeamInfo(cityId, "2", account.UserName);
+                    var groupAttackteams = GetGroupTeamsInfo(cityId, account.UserName);
+                    return singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams);
+                }).SelectMany(teams => teams);
+        }
+
+        private IEnumerable<string> QueryTargetCityList(string cityId)
+        {
+            return this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId)).Select(
+                account =>
+                {
+                    var attackCityList = OpenAttackPage(cityId, account.UserName);
+                    var greoupAttackCityList = GetGroupAttackTargetCity(cityId, account.UserName);
+                    var moveCityList = GetMoveTargetCities(cityId, account.UserName);
+                    return attackCityList.Concat(moveCityList).Concat(greoupAttackCityList);
+                }).SelectMany(citylist => citylist).Distinct();
+        }
+
         /////////////////////////////////////////////////////////////////////
         private void AutoAttackProc()
         {
@@ -384,6 +415,11 @@ namespace TC
             SyncTasksToTaskListView();
             btnConfirmMainTeams.Enabled = true;
             dateTimePickerArrival.Value = remoteTime;
+        }
+
+        private void LoadCheckpoint()
+        {
+
         }
 
         private void LoadCityList()
@@ -544,24 +580,6 @@ namespace TC
 
                 DonateResource(account, resToContribute[0], resToContribute[1], resToContribute[2], resToContribute[3]);
             }
-        }
-
-        private Dictionary<string, List<TeamInfo>> CategorizeTeams(IEnumerable<TeamInfo> teamList)
-        {
-            var result = new Dictionary<string, List<TeamInfo>>();
-            foreach (var team in teamList)
-            {
-                List<TeamInfo> accountTeams;
-                if (!result.TryGetValue(team.AccountName, out accountTeams))
-                {
-                    accountTeams = new List<TeamInfo>();
-                    result.Add(team.AccountName, accountTeams);
-                }
-
-                accountTeams.Add(team);
-            }
-
-            return result;
         }
     }
 }

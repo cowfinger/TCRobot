@@ -75,8 +75,10 @@ namespace TC
             string url0 = string.Format("http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}", hostname, randGen.NextDouble());
             HTTPRequest(url0, account);
 
-            string fmt1 = "http://" + hostname + "/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={0}&r=" + randGen.NextDouble().ToString();
-            string url1 = string.Format(fmt1, cityId);
+            string url1 = string.Format(
+                "http://{0}/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={1}&r=",
+                cityId, this.randGen.NextDouble()
+                );
             HTTPRequest(url1, account);
 
             string url2 = string.Format(
@@ -88,7 +90,7 @@ namespace TC
             var attackPowerList = ParseAttribute(data, @"<td>部队\d+</td>", @"<td>(\d+)</td>", 2).ToList();
 
             int i = 0;
-            const string teamIDPattern = @"worldWarClass\.showTeamDetail\((\d+),\d+\)";
+            const string teamIDPattern = @"worldWarClass\.doDisbandTeam\((\d+),\d+,\d+\)";
             var matches = Regex.Matches(data, teamIDPattern);
             foreach (Match match in matches)
             {
@@ -114,7 +116,23 @@ namespace TC
         private IEnumerable<TeamInfo> GetGroupTeamsInfo(string srccityid, string account)
         {
             string response = OpenGroupTeamListPage(srccityid, account);
-            return ParseGroupTeams(response, account);
+            var splitPoint = new string[] { "<h4>我加入的队伍</h4>" };
+            var groupSplit = response.Split(splitPoint, StringSplitOptions.None);
+
+            if (groupSplit.Count() != 2)
+            {
+                return new List<TeamInfo>();
+            }
+            else
+            {
+                return ParseGroupTeams(groupSplit[0], account, true).Concat(ParseGroupTeams(groupSplit[1], account, false));
+            }
+        }
+
+        private IEnumerable<string> GetGroupAttackTargetCity(string cityId, string account)
+        {
+            string response = OpenGroupTeamListPage(cityId, account);
+            return ParseTargetCityList(response);
         }
 
         private bool IsTeamInCity(string srcCityId, string account)
@@ -215,14 +233,17 @@ namespace TC
 
         private string OpenGroupTeamListPage(string srccityid, string account)
         {
-            string url0 = string.Format("http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}", hostname, randGen.NextDouble());
+            string url0 = string.Format(
+                "http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}",
+                hostname, randGen.NextDouble());
             HTTPRequest(url0, account);
 
             string fmt1 = "http://" + hostname + "/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={0}&r=" + randGen.NextDouble().ToString();
             string url1 = string.Format(fmt1, srccityid);
             HTTPRequest(url1, account);
 
-            string url = string.Format("http://{0}/index.php?mod=military/world_war&op=show&func=join_attack&r={1}",
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=show&func=join_attack&r={1}",
                 hostname, randGen.NextDouble());
             return HTTPRequest(url, account);
         }
@@ -238,7 +259,8 @@ namespace TC
 
         private string OpenGroupTeamDetailPage(string teamId, string account)
         {
-            string url = string.Format("http://{0}/index.php?mod=military/world_war&op=show&func=group_detail&group_id={1}&r={2}",
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=show&func=group_detail&group_id={1}&r={2}",
                 hostname, teamId, randGen.NextDouble());
             return HTTPRequest(url, account);
         }
@@ -294,7 +316,7 @@ namespace TC
             }
         }
 
-        private List<string> OpenAttackPage(string cityId, string account)
+        private IEnumerable<string> OpenAttackPage(string cityId, string account)
         {
             string page = OpenCityPage(cityId, account);
             return ParseTargetCityList(page);
@@ -383,7 +405,7 @@ namespace TC
             return 0;
         }
 
-        private IEnumerable<TeamInfo> ParseGroupTeams(string content, string account)
+        private IEnumerable<TeamInfo> ParseGroupTeams(string content, string account, bool isHead)
         {
             const string teamIdPattern = "worldWarClass\\.showTeamDetail\\((\\d+),\\d+\\)";
             const string groupIdPattern = "<a href='javascript:void\\(0\\)' onclick=\"worldWarClass\\.showGroupDetail\\((\\d+)\\)\" >(\\w+)</a>";
@@ -391,14 +413,20 @@ namespace TC
             foreach (Match match in matches)
             {
                 string groupId = match.Groups[1].Value;
-                string detailPage = OpenGroupTeamDetailPage(groupId, account);
-                var teamIdMatch = Regex.Match(detailPage, teamIdPattern);
+                string teamId = "组成员";
+                if (isHead)
+                {
+                    string detailPage = OpenGroupTeamDetailPage(groupId, account);
+                    var teamIdMatch = Regex.Match(detailPage, teamIdPattern);
+                    teamId = teamIdMatch.Success ? teamIdMatch.Groups[1].Value : "";
+                }
 
                 yield return new TeamInfo()
                 {
                     GroupId = match.Groups[1].Value,
-                    TeamId = teamIdMatch.Success ? teamIdMatch.Groups[1].Value : "",
+                    TeamId = teamId,
                     isGroupTeam = true,
+                    IsGroupHead = isHead,
                     isDefendTeam = false,
                     Name = match.Groups[2].Value,
                     AccountName = account,
@@ -495,7 +523,7 @@ namespace TC
             HTTPRequest(url, account, body);
         }
 
-        private List<string> GetMoveTargetCities(string sourceCidyId, string account)
+        private IEnumerable<string> GetMoveTargetCities(string sourceCidyId, string account)
         {
             OpenCityPage(sourceCidyId, account);
             string url = string.Format("http://{0}/index.php?mod=military/world_war&op=show&func=move_army&r={1}", hostname, randGen);
@@ -504,13 +532,12 @@ namespace TC
             return ParseTargetCityList(content);
         }
 
-        private List<string> ParseTargetCityList(string content)
+        private IEnumerable<string> ParseTargetCityList(string content)
         {
             var targetBeginLine = "目的地";
             var targetPattern = new Regex("<option value=\"\\d+\">(.*)</option>");
             var lines = content.Split('\r');
             int status = 0;
-            var cityList = new List<string>();
             foreach (var line in lines)
             {
                 switch (status)
@@ -526,12 +553,11 @@ namespace TC
                         var match = targetPattern.Match(line);
                         if (match.Success)
                         {
-                            cityList.Add(match.Groups[1].Value);
+                            yield return match.Groups[1].Value;
                         }
                         break;
                 }
             }
-            return cityList;
         }
 
         private IEnumerable<KeyValuePair<long, long>> ParseInfluenceResource(string page)

@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace TC
 {
@@ -108,7 +109,6 @@ namespace TC
                 passNameElement.InnerText = account.Password;
 
                 Thread.Sleep(1000);
-
                 foreach (HtmlElement he in this.webBrowser.Document.GetElementsByTagName("input"))
                 {
                     if (he.GetAttribute("type") == "submit")
