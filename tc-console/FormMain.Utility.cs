@@ -363,14 +363,19 @@ namespace TC
 
         private IEnumerable<string> QueryTargetCityList(string cityId)
         {
-            return this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId)).Select(
-                account =>
-                {
-                    var attackCityList = OpenAttackPage(cityId, account.UserName);
-                    var greoupAttackCityList = GetGroupAttackTargetCity(cityId, account.UserName);
-                    // var moveCityList = GetMoveTargetCities(cityId, account.UserName);
-                     return attackCityList.Concat(greoupAttackCityList);
-                }).SelectMany(citylist => citylist).Distinct();
+            var relatedAccountList = this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId));
+            if (relatedAccountList.Any())
+            {
+                var account = relatedAccountList.First();
+                var attackCityList = OpenAttackPage(cityId, account.UserName);
+                var greoupAttackCityList = GetGroupAttackTargetCity(cityId, account.UserName);
+                // var moveCityList = GetMoveTargetCities(cityId, account.UserName);
+                return attackCityList.Concat(greoupAttackCityList);
+            }
+            else
+            {
+                return new List<string>();
+            }
         }
 
         /////////////////////////////////////////////////////////////////////

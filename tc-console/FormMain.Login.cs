@@ -109,25 +109,6 @@ namespace TC
             // this.Invoke(new DoSomething(SyncAccountsStatus));
             this.Invoke(new DoSomething(() =>
             {
-                // listViewAccounts.Items.Clear();
-                // int loginnum = 0;
-                // foreach (string accountkey in this.accountTable.Keys)
-                // {
-                //     ListViewItem newli = new ListViewItem();
-                //     {
-                //         newli.SubItems[0].Text = account.UserName;
-                //         newli.SubItems.Add(ConvertStatusStr(account.LoginStatus));
-                //     }
-                //     newli.Tag = account;
-                //     listViewAccounts.Items.Add(newli);
-
-                //     if (account.LoginStatus == "on-line")
-                //     {
-                //         loginnum++;
-                //         hostname = account.AccountType;
-                //     }
-                // }
-
                 foreach (ListViewItem lvItem in this.listViewAccounts.Items)
                 {
                     var tagAccount = lvItem.Tag as AccountInfo;
@@ -243,6 +224,10 @@ namespace TC
             }
 
             return output;
+        }
+
+        private void TrySaveCookies()
+        {
         }
     }
 }

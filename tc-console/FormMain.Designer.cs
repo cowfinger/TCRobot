@@ -52,7 +52,6 @@
             this.columnHeaderAccountName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderLoginStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.webBrowserMain = new System.Windows.Forms.WebBrowser();
-            this.checkBoxShowBrowers = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxSysTime = new System.Windows.Forms.TextBox();
             this.dateTimePickerArrival = new System.Windows.Forms.DateTimePicker();
@@ -281,18 +280,6 @@
             this.webBrowserMain.Size = new System.Drawing.Size(578, 244);
             this.webBrowserMain.TabIndex = 0;
             this.webBrowserMain.Visible = false;
-            // 
-            // checkBoxShowBrowers
-            // 
-            this.checkBoxShowBrowers.AutoSize = true;
-            this.checkBoxShowBrowers.Enabled = false;
-            this.checkBoxShowBrowers.Location = new System.Drawing.Point(15, 756);
-            this.checkBoxShowBrowers.Name = "checkBoxShowBrowers";
-            this.checkBoxShowBrowers.Size = new System.Drawing.Size(110, 17);
-            this.checkBoxShowBrowers.TabIndex = 30;
-            this.checkBoxShowBrowers.Text = "显示浏览器界面";
-            this.checkBoxShowBrowers.UseVisualStyleBackColor = true;
-            this.checkBoxShowBrowers.CheckedChanged += new System.EventHandler(this.checkBoxShowBrowers_CheckedChanged);
             // 
             // label7
             // 
@@ -571,7 +558,6 @@
             this.Controls.Add(this.dateTimePickerArrival);
             this.Controls.Add(this.textBoxSysTime);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.checkBoxShowBrowers);
             this.Controls.Add(this.listViewAccounts);
             this.Controls.Add(this.btnLoginAll);
             this.Controls.Add(this.label8);
@@ -613,8 +599,7 @@
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Button btnLoginAll;
 		private System.Windows.Forms.ListView listViewAccounts;
-		private System.Windows.Forms.WebBrowser webBrowserMain;
-		private System.Windows.Forms.CheckBox checkBoxShowBrowers;
+        private System.Windows.Forms.WebBrowser webBrowserMain;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.TextBox textBoxSysTime;
         private System.Windows.Forms.DateTimePicker dateTimePickerArrival;

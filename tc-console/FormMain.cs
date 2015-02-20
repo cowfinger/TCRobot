@@ -136,18 +136,6 @@ namespace TC
             Task.Run(() => { BatchLoginProc(); });
         }
 
-        private void checkBoxShowBrowers_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxShowBrowers.Checked)
-            {
-                this.Height = 760;
-            }
-            else
-            {
-                this.Height = 570;
-            }
-        }
-
         private void btnQuickCreateTroop_Click(object sender, EventArgs e)
         {
             var cityName = this.listBoxSrcCities.SelectedItem as string;
