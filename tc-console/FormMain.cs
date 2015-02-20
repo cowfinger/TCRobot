@@ -462,13 +462,17 @@ namespace TC
                     line = sr.ReadLine();
                 }
 
+                foreach (var account in this.accountTable.Values)
+                {
+                    TryLoadAccountCookie(account);
+                }
+
                 SyncAccountsStatus();
                 if (this.accountTable.Keys.Count > 0)
                 {
                     btnLoadProfile.Enabled = false;
                     btnLoginAll.Enabled = true;
                 }
-
             }
         }
 

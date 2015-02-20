@@ -274,12 +274,11 @@
             // 
             // webBrowserMain
             // 
-            this.webBrowserMain.Location = new System.Drawing.Point(653, 527);
+            this.webBrowserMain.Location = new System.Drawing.Point(1252, 666);
             this.webBrowserMain.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserMain.Name = "webBrowserMain";
-            this.webBrowserMain.Size = new System.Drawing.Size(578, 244);
+            this.webBrowserMain.Size = new System.Drawing.Size(110, 53);
             this.webBrowserMain.TabIndex = 0;
-            this.webBrowserMain.Visible = false;
             // 
             // label7
             // 
@@ -366,7 +365,7 @@
             this.listViewTasks.GridLines = true;
             this.listViewTasks.Location = new System.Drawing.Point(653, 23);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(578, 748);
+            this.listViewTasks.Size = new System.Drawing.Size(578, 746);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;

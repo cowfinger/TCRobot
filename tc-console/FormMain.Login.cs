@@ -1,20 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace TC
 {
     partial class FormMain
     {
+        const string cookieFolder = @".\Cookie";
+
         private void LoginAccount(string account)
         {
             loginLock.WaitOne();
             {
                 activeAccount = account;
                 AccountInfo account_info = this.accountTable[activeAccount];
+
+                if (!string.IsNullOrEmpty(account_info.CookieStr))
+                {
+                    if (QueryRemoteSysTime(account) != DateTime.MinValue)
+                    {
+                        account_info.LoginStatus = "on-line";
+                        OnLoginCompleted(account_info);
+                        loginLock.Set();
+                        return;
+                    }
+                }
 
                 account_info.LoginStatus = "in-login";
                 string loginurl = this.multiLoginConf[account_info.AccountType].LoginURL;
@@ -95,13 +110,18 @@ namespace TC
                 loginLock.Set();
             }
 
+            OnLoginCompleted(account);
+        }
+
+        private void OnLoginCompleted(AccountInfo account)
+        {
             int handledAccountNumber = this.accountTable.Values.Sum(
                 a => a.LoginStatus == "on-line" || a.LoginStatus == "login-failed" ? 1 : 0
                 );
 
             if (handledAccountNumber >= this.accountTable.Keys.Count)
             {
-                this.RemoteTime = QueryRemoteSysTime();
+                this.RemoteTime = QueryRemoteSysTime(this.accountTable.Keys.First());
                 StartRemoteTimeSyncTimer();
                 StartUITimeSyncTimer();
             }
@@ -132,9 +152,14 @@ namespace TC
 
         private void SetAccountCookie(string account, string val)
         {
+            AccountInfo accountInfo = null;
             lock (this.accountTable)
             {
-                var accountInfo = this.accountTable[account];
+                accountInfo = this.accountTable[account];
+            }
+
+            lock (accountInfo)
+            {
                 string oldcookiestr = accountInfo.CookieStr;
                 if (oldcookiestr.Length == 0)
                 {
@@ -152,6 +177,8 @@ namespace TC
 
                     accountInfo.CookieStr = ComposeCookieStr(oldcookies);
                 }
+
+                TrySaveAccountCookie(accountInfo);
             }
         }
 
@@ -226,8 +253,38 @@ namespace TC
             return output;
         }
 
-        private void TrySaveCookies()
+        private void TrySaveAccountCookie(AccountInfo account)
         {
+            if (!Directory.Exists(cookieFolder))
+            {
+                Directory.CreateDirectory(cookieFolder);
+            }
+
+            string accountCookieFileName = Path.Combine(cookieFolder, account.UserName);
+            if (File.Exists(accountCookieFileName))
+            {
+                File.Delete(accountCookieFileName);
+            }
+
+            using (var streamWriter = new StreamWriter(accountCookieFileName))
+            {
+                streamWriter.Write(account.CookieStr);
+                streamWriter.Flush();
+            }
+        }
+
+        private void TryLoadAccountCookie(AccountInfo account)
+        {
+            string accountCookieFileName = Path.Combine(cookieFolder, account.UserName);
+            if (!File.Exists(accountCookieFileName))
+            {
+                return;
+            }
+
+            using (var streamReader = new StreamReader(accountCookieFileName))
+            {
+                account.CookieStr = streamReader.ReadToEnd();
+            }
         }
     }
 }

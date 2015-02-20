@@ -24,9 +24,9 @@ namespace TC
             }
         }
 
-        private DateTime QueryRemoteSysTime()
+        private DateTime QueryRemoteSysTime(string accountName)
         {
-            string rsp = RefreshHomePage(this.accountTable.Keys.First());
+            string rsp = RefreshHomePage(accountName);
             return ParseSysTimeFromHomePage(rsp);
         }
 
@@ -387,7 +387,7 @@ namespace TC
                 ret = ret.AddSeconds(sec);
                 return ret.ToLocalTime();
             }
-            return new DateTime();
+            return DateTime.MinValue;
         }
 
         private string ParseTargetCityID(string content, string keyword)

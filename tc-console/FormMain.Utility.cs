@@ -314,7 +314,7 @@ namespace TC
             this.syncRemoteTimeTimer.Elapsed += new System.Timers.ElapsedEventHandler(
                 (obj, args) =>
                 {
-                    this.RemoteTime = QueryRemoteSysTime();
+                    this.RemoteTime = QueryRemoteSysTime(this.accountTable.Keys.First());
                 });
 
             this.syncRemoteTimeTimer.AutoReset = true;
@@ -370,7 +370,7 @@ namespace TC
                 var attackCityList = OpenAttackPage(cityId, account.UserName);
                 var greoupAttackCityList = GetGroupAttackTargetCity(cityId, account.UserName);
                 // var moveCityList = GetMoveTargetCities(cityId, account.UserName);
-                return attackCityList.Concat(greoupAttackCityList);
+                return attackCityList.Concat(greoupAttackCityList).Distinct();
             }
             else
             {
