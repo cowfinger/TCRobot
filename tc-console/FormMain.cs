@@ -18,7 +18,29 @@ namespace TC
     {
         private static string UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2; .NET4.0C; .NET4.0E)";
 
-        private List<TeamInfo> teamList = new List<TeamInfo>();
+        // private List<TroopInfo> troopList = new List<TroopInfo>();
+
+        private IEnumerable<TroopInfo> CityTroopList
+        {
+            get
+            {
+                foreach (ListViewItem lvItem in this.listViewTroops.Items)
+                {
+                    yield return lvItem.Tag as TroopInfo;
+                }
+            }
+        }
+
+        private IEnumerable<AttackTask> ActiveTaskList
+        {
+            get
+            {
+                foreach (ListViewItem lvItem in this.listViewTasks.Items)
+                {
+                    yield return lvItem.Tag as AttackTask;
+                }
+            }
+        }
 
         private Dictionary<string, string> cityList = new Dictionary<string, string>();
 
@@ -37,6 +59,30 @@ namespace TC
 
         private Dictionary<string, AccountInfo> accountTable = new Dictionary<string, AccountInfo>();
         private string activeAccount;
+
+        private object remoteTimeLock = new object();
+        private System.Timers.Timer syncTimeToUITimer = new System.Timers.Timer(500);
+        private System.Timers.Timer syncRemoteTimeTimer = new System.Timers.Timer(15 * 1000);
+        private DateTime remoteTime = DateTime.MinValue;
+
+        private DateTime RemoteTime
+        {
+            get
+            {
+                lock (this.remoteTimeLock)
+                {
+                    return this.remoteTime;
+                }
+            }
+
+            set
+            {
+                lock (this.remoteTimeLock)
+                {
+                    this.remoteTime = value;
+                }
+            }
+        }
 
         public FormMain()
         {
@@ -102,7 +148,7 @@ namespace TC
             }
         }
 
-        private void btnQuickAttack_Click(object sender, EventArgs e)
+        private void btnQuickCreateTroop_Click(object sender, EventArgs e)
         {
             var cityName = this.listBoxSrcCities.SelectedItem as string;
             if (string.IsNullOrEmpty(cityName))
@@ -116,7 +162,7 @@ namespace TC
             }
 
             var cityId = cityList[cityName];
-            this.btnQuickAttack.Enabled = false;
+            this.btnQuickCreateTroop.Enabled = false;
 
             Task.Run(() =>
             {
@@ -129,7 +175,7 @@ namespace TC
 
                     this.Invoke(new DoSomething(() =>
                     {
-                        this.txtInfo.Text = string.Format("Create Team for Account: {0} at {1}", account.Key, cityName);
+                        this.txtInfo.Text = string.Format("Create Troop for Account: {0} at {1}", account.Key, cityName);
                     }));
 
                     var page = OpenCreateTeamPage(cityId, account.Key);
@@ -159,7 +205,7 @@ namespace TC
                             this.Invoke(new DoSomething(() =>
                             {
                                 this.txtInfo.Text = string.Format(
-                                    "Create Team for Account: {0} at {1}, Hero={2}, Soldier={3}",
+                                    "Create Troop for Account: {0} at {1}, Hero={2}, Soldier={3}",
                                     account.Key,
                                     cityName,
                                     hero,
@@ -174,18 +220,13 @@ namespace TC
 
                 this.Invoke(new DoSomething(() =>
                 {
-                    this.txtInfo.Text = string.Format("Create Team Completed");
-                    this.btnQuickAttack.Enabled = true;
+                    this.txtInfo.Text = string.Format("Create Troop Completed");
+                    this.btnQuickCreateTroop.Enabled = true;
                 }));
 
-                this.teamList.Clear();
-                foreach (var account in this.accountTable.Keys)
-                {
-                    this.teamList.AddRange(GetTeamsInfo(cityId, account));
-                }
+                var troopList = QueryCityTroops(cityId);
 
-
-                this.Invoke(new DoSomething(SyncTasksToTaskListView));
+                this.Invoke(new DoSomething(() => { RefreshTroopInfoToUI(troopList); }));
             });
         }
 
@@ -193,7 +234,7 @@ namespace TC
         {
             if (this.listBoxSrcCities.SelectedItems.Count > 0 &&
                 this.listBoxDstCities.SelectedItems.Count > 0 &&
-                this.listViewTasks.CheckedItems.Count > 0)
+                this.listViewTroops.CheckedItems.Count > 0)
             {
                 btnAutoAttack.Enabled = true;
             }
@@ -212,90 +253,115 @@ namespace TC
                 return;
             }
 
-            this.teamList.Clear();
-            this.listViewTasks.Items.Clear();
-            this.listViewTasks.Enabled = false;
+            this.listViewTroops.Items.Clear();
+            this.listViewTroops.Enabled = false;
             this.listBoxDstCities.Enabled = false;
             this.listBoxSrcCities.Enabled = false;
 
             string cityId = cityList[cityname];
             Task.Run(() =>
             {
+                this.Invoke(new DoSomething(() =>
+                {
+                    this.listBoxDstCities.Items.Clear();
+                }));
+
                 var targetCityNameList = QueryTargetCityList(cityId);
-                this.teamList = QueryCityTroops(cityId).ToList();
+
+                foreach (var name in targetCityNameList)
+                {
+                    this.Invoke(new DoSomething(() =>
+                    {
+                        this.listBoxDstCities.Items.Add(name);
+                    }));
+                }
+
+                var troopList = QueryCityTroops(cityId);
+                foreach (var troop in troopList)
+                {
+                    this.Invoke(new DoSomething(() =>
+                    {
+                        if (troop.isGroupTroop)
+                        {
+                            var taskGroupIdList = this.ActiveTaskList.Where(task => task.Troop.isGroupTroop).Select(task => task.Troop.GroupId);
+                            if (taskGroupIdList.Contains(troop.GroupId))
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            var taskTroopIdList = this.ActiveTaskList.Where(task => !task.Troop.isGroupTroop).Select(task => task.Troop.TroopId);
+                            if (taskTroopIdList.Contains(troop.TroopId))
+                            {
+                                return;
+                            }
+                        }
+
+                        TrySyncTroopInfoToUI(troop);
+                    }));
+                }
 
                 this.Invoke(new DoSomething(() =>
                 {
-                    SyncTasksToTaskListView();
-                    this.listBoxDstCities.Items.Clear();
-                    foreach (var name in targetCityNameList)
-                    {
-                        this.listBoxDstCities.Items.Add(name);
-                    }
-
-                    if (this.listBoxDstCities.SelectedItems.Count > 0)
-                    {
-                        btnAutoAttack.Enabled = true;
-                    }
-
-                    this.listViewTasks.Enabled = true;
+                    this.listViewTroops.Enabled = true;
                     this.listBoxDstCities.Enabled = true;
                     this.listBoxSrcCities.Enabled = true;
                 }));
             });
         }
 
-        private void btnDismissTeam_Click(object sender, EventArgs e)
+        private void btnDismissTroop_Click(object sender, EventArgs e)
         {
-            if (this.listViewTasks.CheckedItems.Count <= 0)
+            if (this.listViewTroops.CheckedItems.Count <= 0)
             {
                 return;
             }
 
-            var targetTeams = new List<TeamInfo>();
-            foreach (ListViewItem item in this.listViewTasks.CheckedItems)
+            var targetTroops = new List<TroopInfo>();
+            foreach (ListViewItem item in this.listViewTroops.CheckedItems)
             {
-                var team = item.Tag as TeamInfo;
-                if (team == null || team.IsTroopSent)
+                var troop = item.Tag as TroopInfo;
+                if (troop == null)
                 {
                     continue;
                 }
 
-                targetTeams.Add(team);
+                targetTroops.Add(troop);
             }
 
-            if (targetTeams.Count == 0)
+            if (targetTroops.Count == 0)
             {
                 return;
             }
 
-            this.btnDismissTeam.Enabled = false;
-            this.listViewTasks.Enabled = false;
+            this.btnDismissTroop.Enabled = false;
+            this.listViewTroops.Enabled = false;
 
             Task.Run(() =>
             {
-                foreach (var team in targetTeams)
+                foreach (var troop in targetTroops)
                 {
-                    if (team.isGroupTeam)
+                    if (troop.isGroupTroop)
                     {
-                        if (team.IsGroupHead)
+                        if (troop.IsGroupHead)
                         {
-                            DismissGroup(team.GroupId, team.AccountName);
+                            DismissGroup(troop.GroupId, troop.AccountName);
                         }
                     }
                     else
                     {
-                        DismissTeam(team.TeamId, team.AccountName);
+                        DismissTeam(troop.TroopId, troop.AccountName);
                     }
 
                     this.Invoke(new DoSomething(() =>
                     {
-                        foreach (ListViewItem item in this.listViewTasks.CheckedItems)
+                        foreach (ListViewItem item in this.listViewTroops.CheckedItems)
                         {
-                            var teamInfo = item.Tag as TeamInfo;
-                            if (teamInfo == team)
+                            var troopInfo = item.Tag as TroopInfo;
+                            if (troopInfo == troop)
                             {
-                                this.listViewTasks.Items.Remove(item);
+                                this.listViewTroops.Items.Remove(item);
                             }
                         }
                     }));
@@ -303,33 +369,33 @@ namespace TC
 
                 this.Invoke(new DoSomething(() =>
                 {
-                    btnDismissTeam.Enabled = true;
-                    this.listViewTasks.Enabled = true;
+                    btnDismissTroop.Enabled = true;
+                    this.listViewTroops.Enabled = true;
                 }));
             });
         }
 
         private void listViewTasks_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            int candidateTeamCount = 0;
-            foreach (ListViewItem item in this.listViewTasks.CheckedItems)
+            int candidateTroopCount = 0;
+            foreach (ListViewItem item in this.listViewTroops.CheckedItems)
             {
-                var team = item.Tag as TeamInfo;
-                if (team == null || team.IsTroopSent)
+                var troop = item.Tag as TroopInfo;
+                if (troop == null)
                 {
                     continue;
                 }
 
-                ++candidateTeamCount;
+                ++candidateTroopCount;
             }
 
-            this.btnDismissTeam.Enabled = candidateTeamCount > 0;
-            this.btnGroupTeam.Enabled = candidateTeamCount >= 2;
+            this.btnDismissTroop.Enabled = candidateTroopCount > 0;
+            this.btnGroupTroop.Enabled = candidateTroopCount >= 2;
         }
 
         private void checkBoxSelectAllTasks_CheckedChanged(object sender, EventArgs e)
         {
-            foreach (ListViewItem item in this.listViewTasks.Items)
+            foreach (ListViewItem item in this.listViewTroops.Items)
             {
                 item.Checked = this.checkBoxSelectAllTasks.Checked;
             }
@@ -350,38 +416,31 @@ namespace TC
             m_srcCityID = cityList[m_srcCityName];
             m_dstCityName = listBoxDstCities.SelectedItem.ToString();
 
-            Task.Run(() => AutoAttackProc());
+            var troopList = this.CityTroopList.ToList();
+
+            Task.Run(() => AutoAttackProc(troopList));
         }
 
-        private void btnConfirmMainTeams_Click(object sender, EventArgs e)
+        private void btnConfirmMainTroops_Click(object sender, EventArgs e)
         {
-            if (btnConfirmMainTeams.Text != "取消")
+            if (btnConfirmMainTroops.Text != "取消")
             {
-                TimeSpan diff = this.dateTimePickerArrival.Value - remoteTime;
-                if (diff.TotalSeconds <= 0)
+                TimeSpan diff = this.dateTimePickerArrival.Value - this.RemoteTime;
+                int maxDuration = this.CityTroopList.Max(troop => troop.Duration);
+
+                if (maxDuration > diff.TotalSeconds)
                 {
-                    SortTeamList(0);
-                }
-                else
-                {
-                    SortTeamList((int)diff.TotalSeconds);
+                    MessageBox.Show(string.Format("到达时间必须晚于{0}", this.RemoteTime.AddSeconds(maxDuration)));
+                    return;
                 }
 
-                SyncTasksToTaskListView();
-                if (teamList.Count > 0)
-                {
-                    StartUITimer();
-                    StartSendTroopTimer();
-                }
-
-                btnConfirmMainTeams.Text = "取消";
+                btnConfirmMainTroops.Text = "取消";
+                StartSendTroopTasks();
             }
             else
             {
-                StopUITimer();
-                StopSendTroopTimer();
-
-                btnConfirmMainTeams.Text = "确认攻击";
+                StopSendTroopTasks();
+                btnConfirmMainTroops.Text = "确认攻击";
             }
         }
 
@@ -443,56 +502,56 @@ namespace TC
             });
         }
 
-        private void btnGroupTeam_Click(object sender, EventArgs e)
+        private void btnGroupTroop_Click(object sender, EventArgs e)
         {
-            var candidateTeams = new List<TeamInfo>();
-            foreach (ListViewItem item in this.listViewTasks.CheckedItems)
+            var candidateTroops = new List<TroopInfo>();
+            foreach (ListViewItem item in this.listViewTroops.CheckedItems)
             {
-                candidateTeams.Add(item.Tag as TeamInfo);
+                candidateTroops.Add(item.Tag as TroopInfo);
             }
 
-            var dialog = new FormChooseTeamHead(candidateTeams);
+            var dialog = new FormChooseTroopHead(candidateTroops);
             dialog.ShowDialog();
             if (dialog.GroupHead == null)
             {
                 return;
             }
 
-            TeamInfo headTeam = dialog.GroupHead;
-            candidateTeams.Remove(headTeam);
+            TroopInfo headTroop = dialog.GroupHead;
+            candidateTroops.Remove(headTroop);
 
             string cityId = this.cityList[this.listBoxSrcCities.SelectedItem.ToString()];
 
-            this.btnGroupTeam.Enabled = false;
+            this.btnGroupTroop.Enabled = false;
             Task.Run(() =>
                 {
-                    var teamGroup = candidateTeams.GroupBy(team => team.AccountName).Select(teams => teams.First()).ToList();
-                    if (!teamGroup.Any())
+                    var troopGroup = candidateTroops.GroupBy(troop => troop.AccountName).Select(troops => troops.First()).ToList();
+                    if (!troopGroup.Any())
                     {
                         return;
                     }
 
-                    if (!headTeam.isGroupTeam)
+                    if (!headTroop.isGroupTroop)
                     {
-                        string groupName = CreateGroupHead(cityId, headTeam.TeamId, headTeam.AccountName);
-                        var groupTeams = GetGroupTeamsInfo(cityId, headTeam.AccountName);
-                        headTeam = groupTeams.Where(team => team.Name == groupName).FirstOrDefault();
-                        if (headTeam == null || headTeam.Name != groupName)
+                        string groupName = CreateGroupHead(cityId, headTroop.TroopId, headTroop.AccountName);
+                        var groupTroops = GetGroupTeamList(cityId, headTroop.AccountName);
+                        headTroop = groupTroops.Where(troop => troop.Name == groupName).FirstOrDefault();
+                        if (headTroop == null || headTroop.Name != groupName)
                         {
                             return;
                         }
                     }
 
-                    foreach (var team in teamGroup)
+                    foreach (var troop in troopGroup)
                     {
-                        JoinGroup(cityId, headTeam.GroupId, team.TeamId, team.AccountName);
+                        JoinGroup(cityId, headTroop.GroupId, troop.TroopId, troop.AccountName);
                     }
 
-                    this.teamList = QueryCityTroops(cityId).ToList();
+                    var troopList = QueryCityTroops(cityId).ToList();
 
                     this.Invoke(new DoSomething(() =>
                     {
-                        SyncTasksToTaskListView();
+                        RefreshTroopInfoToUI(troopList);
                     }));
                 });
         }

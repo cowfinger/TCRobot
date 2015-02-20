@@ -95,8 +95,58 @@ namespace TC
                 loginLock.Set();
             }
 
-            this.Invoke(new DoSomething(SyncAccountsStatus));
-            return;
+            int handledAccountNumber = this.accountTable.Values.Sum(
+                a => a.LoginStatus == "on-line" || a.LoginStatus == "login-failed" ? 1 : 0
+                );
+
+            if (handledAccountNumber >= this.accountTable.Keys.Count)
+            {
+                this.RemoteTime = QueryRemoteSysTime();
+                StartRemoteTimeSyncTimer();
+                StartUITimeSyncTimer();
+            }
+
+            // this.Invoke(new DoSomething(SyncAccountsStatus));
+            this.Invoke(new DoSomething(() =>
+            {
+                // listViewAccounts.Items.Clear();
+                // int loginnum = 0;
+                // foreach (string accountkey in this.accountTable.Keys)
+                // {
+                //     ListViewItem newli = new ListViewItem();
+                //     {
+                //         newli.SubItems[0].Text = account.UserName;
+                //         newli.SubItems.Add(ConvertStatusStr(account.LoginStatus));
+                //     }
+                //     newli.Tag = account;
+                //     listViewAccounts.Items.Add(newli);
+
+                //     if (account.LoginStatus == "on-line")
+                //     {
+                //         loginnum++;
+                //         hostname = account.AccountType;
+                //     }
+                // }
+
+                foreach (ListViewItem lvItem in this.listViewAccounts.Items)
+                {
+                    var tagAccount = lvItem.Tag as AccountInfo;
+                    if (tagAccount == account)
+                    {
+                        lvItem.SubItems[1].Text = ConvertStatusStr(account.LoginStatus);
+                        break;
+                    }
+                }
+
+                if (handledAccountNumber >= this.accountTable.Keys.Count)
+                {
+                    btnLoginAll.Text = "登录所有";
+                    btnAutoAttack.Enabled = true;
+                    btnLoginAll.Enabled = false;
+                    btnScanCity.Enabled = true;
+                    btnQuickCreateTroop.Enabled = true;
+                }
+            }));
         }
 
         private void SetAccountCookie(string account, string val)

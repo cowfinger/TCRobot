@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace TC
 {
-    public partial class FormChooseTeamHead : Form
+    public partial class FormChooseTroopHead : Form
     {
-        public TeamInfo GroupHead { get; set; }
+        public TroopInfo GroupHead { get; set; }
 
-        public FormChooseTeamHead(IEnumerable<TeamInfo> teamList)
+        public FormChooseTroopHead(IEnumerable<TroopInfo> teamList)
         {
             InitializeComponent();
 
@@ -23,20 +23,20 @@ namespace TC
                 var lvItem = new ListViewItem();
                 lvItem.SubItems.Add(team.AccountName);
                 lvItem.SubItems.Add(team.PowerIndex.ToString());
-                lvItem.SubItems.Add(team.TeamId);
+                lvItem.SubItems.Add(team.TroopId);
                 lvItem.Tag = team;
-                this.listViewTeam.Items.Add(lvItem);
+                this.listViewTroop.Items.Add(lvItem);
             }
         }
 
-        private void listViewTeam_ItemChecked(object sender, ItemCheckedEventArgs e)
+        private void listViewTroop_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            this.btnOk.Enabled = this.listViewTeam.CheckedItems.Count == 1;
+            this.btnOk.Enabled = this.listViewTroop.CheckedItems.Count == 1;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            this.GroupHead = this.listViewTeam.CheckedItems[0].Tag as TeamInfo;
+            this.GroupHead = this.listViewTroop.CheckedItems[0].Tag as TroopInfo;
             this.Close();
         }
 

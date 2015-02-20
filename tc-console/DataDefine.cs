@@ -9,19 +9,17 @@ using System.Windows.Forms;
 
 namespace TC
 {
-    public class TeamInfo
+    public class TroopInfo
     {
-        public string Name;
-        public string AccountName;
-        public string TeamId;
-        public string GroupId;
-        public string Leader;
-        public string DurationString;
-        public int TimeLeft = 0;
+        public string Name = "";
+        public string AccountName = "";
+        public string TroopId = "";
+        public string GroupId = "";
+        public string Leader = "";
+        public string DurationString = "";
         public int Duration = 0;
-        public bool IsTroopSent = false;
-        public bool isGroupTeam = false;
-        public bool isDefendTeam = false;
+        public bool isGroupTroop = false;
+        public bool isDefendTroop = false;
         public bool IsGroupHead = false;
         public int PowerIndex = 0;
     }
@@ -49,12 +47,12 @@ namespace TC
 
     class AttackTask
     {
-        public AccountInfo Account;
-        public List<TeamInfo> TeamList = new List<TeamInfo>();
-        public Thread Worker;
+        public string AccountName;
         public string FromCity;
         public string ToCity;
         public DateTime StartTime;
         public DateTime EndTime;
+        public TroopInfo Troop = null;
+        public System.Timers.Timer TaskTimer = null;
     }
 }
