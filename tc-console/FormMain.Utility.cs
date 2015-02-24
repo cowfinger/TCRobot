@@ -10,6 +10,15 @@ namespace TC
 {
     partial class FormMain
     {
+        private object taskTimerLock = new object();
+        private DateTime lastTaskTimerWakeup = DateTime.MinValue;
+        private System.Timers.Timer taskTimer = null;
+
+        private DateTime lastOnlineTaskRefreshTimerWakeup = DateTime.MinValue;
+        private System.Timers.Timer onlineTaskRefreshTimer = null;
+
+        private System.Timers.Timer reliveHeroTimer = null;
+
         private string HTTPRequest(string url, string account, string body = null)
         {
             try
@@ -183,19 +192,6 @@ namespace TC
             }
         }
 
-        private void SendTroop(TroopInfo team)
-        {
-            Task.Run(() =>
-            {
-                m_sendTroopLock.WaitOne();
-                {
-                    OpenAttackCityPage(team.TroopId, destCityID, team.AccountName);
-                    AttackTarget(team.TroopId, destCityID, team.AccountName);
-                }
-                m_sendTroopLock.Set();
-            });
-        }
-
         delegate void DoSomething();
 
         private static int CompareTroopInfo(TroopInfo x, TroopInfo y)
@@ -214,10 +210,187 @@ namespace TC
             }
         }
 
+        private void StartOnlineTaskCheckTimer()
+        {
+            if (this.onlineTaskRefreshTimer != null)
+            {
+                return;
+            }
+
+            this.onlineTaskRefreshTimer = new System.Timers.Timer(17000);
+
+            this.onlineTaskRefreshTimer.AutoReset = true;
+            this.onlineTaskRefreshTimer.Elapsed += new System.Timers.ElapsedEventHandler((obj, evn) =>
+            {
+                Parallel.Dispatch(this.accountTable.Values, account =>
+                {
+                    var tasks2 = QueryOnlineTroopList("2", account.UserName);
+                    var tasks4 = QueryOnlineTroopList("4", account.UserName);
+
+                    var allTasks = tasks2.Concat(tasks4).ToList().ToList();
+
+                    this.Invoke(new DoSomething(() =>
+                    {
+                        var toRemoveTasks = new List<ListViewItem>();
+                        foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
+                        {
+                            var oldTask = lvItem.Tag as AttackTask;
+
+                            foreach (var task in allTasks)
+                            {
+                                if (oldTask.AccountName == account.UserName && oldTask.TaskId == task.TaskId)
+                                {
+                                    toRemoveTasks.Add(lvItem);
+                                    break;
+                                }
+                            }
+                        }
+
+                        foreach (var item in toRemoveTasks)
+                        {
+                            this.listViewCompletedTasks.Items.Remove(item);
+                        }
+
+                        foreach (var task in allTasks)
+                        {
+                            bool found = false;
+                            foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
+                            {
+                                var oldTask = lvItem.Tag as AttackTask;
+                                if (oldTask.AccountName == task.AccountName && oldTask.TaskId == task.TaskId)
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found)
+                            {
+                                var newLvItem = new ListViewItem();
+                                newLvItem.Tag = task;
+                                newLvItem.SubItems[0].Text = task.AccountName;
+                                newLvItem.SubItems.Add(task.FromCity);
+                                newLvItem.SubItems.Add(task.ToCity);
+                                newLvItem.SubItems.Add(task.EndTime.ToString());
+                                newLvItem.SubItems.Add(task.TaskId);
+                                newLvItem.SubItems.Add(task.TaskType);
+                                this.listViewCompletedTasks.Items.Add(newLvItem);
+                            }
+                        }
+
+                    }));
+                });
+            });
+
+            this.onlineTaskRefreshTimer.Start();
+        }
+
+        private void StartTaskTimer()
+        {
+            if (this.taskTimer != null)
+            {
+                return;
+            }
+
+            this.taskTimer = new System.Timers.Timer(500);
+
+            this.taskTimer.AutoReset = true;
+            this.taskTimer.Elapsed += new System.Timers.ElapsedEventHandler((obj, evn) =>
+            {
+                lock (this.taskTimerLock)
+                {
+                    var remoteTimeSnapshot = this.RemoteTime;
+
+                    var diff = remoteTimeSnapshot - this.lastTaskTimerWakeup;
+                    if (diff.TotalSeconds < 1.0)
+                    {
+                        return;
+                    }
+
+                    var taskLvItemList = new List<ListViewItem>();
+                    this.Invoke(new DoSomething(() =>
+                    {
+                        foreach (ListViewItem lvItem in this.listViewTasks.Items)
+                        {
+                            taskLvItemList.Add(lvItem);
+                        }
+                    }));
+
+                    var toExecuteTaskList = new List<AttackTask>();
+                    var toChangeTaskLvItems = new List<ListViewItem>();
+
+                    foreach (var lvItem in taskLvItemList)
+                    {
+                        var task = lvItem.Tag as AttackTask;
+
+                        if (remoteTimeSnapshot >= task.EndTime)
+                        {
+                            toExecuteTaskList.Add(task);
+                            this.Invoke(new DoSomething(() => { this.listViewTasks.Items.Remove(lvItem); }));
+                        }
+                        else
+                        {
+                            toChangeTaskLvItems.Add(lvItem);
+                        }
+                    }
+
+                    this.Invoke(new DoSomething(() =>
+                    {
+                        foreach (var lvItem in toChangeTaskLvItems)
+                        {
+                            var task = lvItem.Tag as AttackTask;
+                            int timeLeft = (int)((task.EndTime - remoteTimeSnapshot).TotalSeconds);
+                            lvItem.SubItems[6].Text = Time2Str(timeLeft);
+                        }
+                    }));
+
+                    var accountTaskGroups = toExecuteTaskList.GroupBy(task => task.AccountName).ToList();
+                    if (accountTaskGroups.Any())
+                    {
+                        Parallel.Dispatch(accountTaskGroups, taskGroup =>
+                        {
+                            DispatchSendTroopTasks(taskGroup.Key, taskGroup);
+                        });
+                    }
+                }
+            });
+
+            taskTimer.Start();
+        }
+
+        private void DispatchSendTroopTasks(string accountName, IEnumerable<AttackTask> accountTaskGroup)
+        {
+            var cityTaskGroups = accountTaskGroup.GroupBy(task => task.FromCity);
+
+            foreach (var taskGroup in cityTaskGroups)
+            {
+                var httpClient = new HttpClient(GetAccountCookie(accountName));
+
+                var fromCityId = this.cityList[taskGroup.Key];
+                OpenCityPage(fromCityId, ref httpClient); // Open City Page to refresh cookie.
+
+                Parallel.Dispatch(taskGroup, task =>
+                {
+                    var team = task.Troop;
+                    if (team.isGroupTroop)
+                    {
+                        // OpenGroupAttackPage(team.GroupId, team.ToCityNodeId, ref httpClient);
+                        GroupAttackTarget(team.GroupId, team.ToCityNodeId, ref httpClient);
+                    }
+                    else
+                    {
+                        // OpenTeamAttackPage(team.TroopId, team.ToCityNodeId, ref httpClient);
+                        TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref httpClient);
+                    }
+                });
+            }
+        }
+
         private void StartSendTroopTasks()
         {
             var timeSnapshot = this.RemoteTime;
-            foreach (ListViewItem lvItemTroop in this.listViewTroops.Items)
+            var arrivalTime = this.dateTimePickerArrival.Value;
+            foreach (ListViewItem lvItemTroop in this.listViewTroops.CheckedItems)
             {
                 var team = lvItemTroop.Tag as TroopInfo;
                 if (team == null)
@@ -232,8 +405,8 @@ namespace TC
                         AccountName = team.AccountName,
                         FromCity = this.listBoxSrcCities.SelectedItem.ToString(),
                         ToCity = this.listBoxDstCities.SelectedItem.ToString(),
-                        StartTime = this.RemoteTime,
-                        EndTime = this.dateTimePickerArrival.Value.AddSeconds(-team.Duration),
+                        StartTime = arrivalTime,
+                        EndTime = arrivalTime.AddSeconds(-team.Duration),
                         Troop = team,
                     };
 
@@ -248,62 +421,19 @@ namespace TC
                     lvItemTask.Tag = task;
                     this.listViewTasks.Items.Add(lvItemTask);
                     this.listViewTroops.Items.Remove(lvItemTroop);
-
-                    var taskTimer = new System.Timers.Timer(1000)
-                    {
-                        AutoReset = true,
-                    };
-
-                    taskTimer.Elapsed += new System.Timers.ElapsedEventHandler((obj, evn) =>
-                    {
-                        if (this.RemoteTime >= task.EndTime)
-                        {
-                            task.TaskTimer.Stop();
-                            task.TaskTimer = null;
-
-                            OpenAttackCityPage(team.TroopId, destCityID, team.AccountName);
-                            if (team.isGroupTroop)
-                            {
-                                GroupAttackTarget(team.GroupId, destCityID, team.AccountName);
-                            }
-                            else
-                            {
-                                AttackTarget(team.TroopId, destCityID, team.AccountName);
-                            }
-
-                            this.Invoke(new DoSomething(() =>
-                            {
-                                this.listViewTasks.Items.Remove(lvItemTask);
-                            }));
-                        }
-                        else
-                        {
-                            int timeLeft = (int)((task.EndTime - this.RemoteTime).TotalSeconds);
-                            this.Invoke(new DoSomething(() =>
-                            {
-                                lvItemTask.SubItems[6].Text = Time2Str(timeLeft);
-                            }));
-                        }
-                    });
-
-                    task.TaskTimer = taskTimer;
-                    taskTimer.Start();
                 }
             }
         }
 
         private void StopSendTroopTasks()
         {
-            foreach (ListViewItem lvItemTask in this.listViewTasks.Items)
+            foreach (ListViewItem lvItemTask in this.listViewTasks.CheckedItems)
             {
                 var task = lvItemTask.Tag as AttackTask;
                 if (task == null)
                 {
                     continue;
                 }
-
-                task.TaskTimer.Stop();
-                task.TaskTimer = null;
 
                 this.listViewTasks.Items.Remove(lvItemTask);
             }
@@ -327,17 +457,16 @@ namespace TC
                 (obj, args) =>
                 {
                     DateTime now = DateTime.Now;
+
+                    TimeSpan diff = now - this.remoteTimeLastSync;
                     DateTime remoteTimeSnapshot = this.RemoteTime;
 
-                    TimeSpan diff = now - remoteTimeSnapshot;
-                    if (diff.Seconds >= 1)
+                    this.RemoteTime = remoteTimeSnapshot + diff;
+                    this.remoteTimeLastSync = now;
+                    this.Invoke(new DoSomething(() =>
                     {
-                        this.RemoteTime = remoteTimeSnapshot.AddSeconds(diff.Seconds);
-                        this.Invoke(new DoSomething(() =>
-                        {
-                            this.textBoxSysTime.Text = this.RemoteTime.ToString();
-                        }));
-                    }
+                        this.textBoxSysTime.Text = this.RemoteTime.ToString();
+                    }));
                 });
 
             this.syncTimeToUITimer.AutoReset = true;
@@ -376,48 +505,6 @@ namespace TC
             {
                 return new List<string>();
             }
-        }
-
-        /////////////////////////////////////////////////////////////////////
-        private void AutoAttackProc(IEnumerable<TroopInfo> troopList)
-        {
-            foreach (var team in troopList)
-            {
-                if (string.IsNullOrEmpty(this.destCityID))
-                {
-                    this.destCityID = GetTargetCityID(m_srcCityID, m_dstCityName, team.AccountName);
-                }
-
-                OpenCityPage(m_srcCityID, team.AccountName);
-                if (team.isGroupTroop && team.IsGroupHead)
-                {
-                    string attackPage = OpenGroupTeamAttackPage(team.GroupId, this.destCityID, team.AccountName);
-                    team.DurationString = ParseAttackDuration(attackPage);
-                }
-                else if (!team.IsGroupHead)
-                {
-                    string attackPage = OpenAttackCityPage(team.TroopId, this.destCityID, team.AccountName);
-                    team.DurationString = ParseAttackDuration(attackPage);
-                }
-
-                team.Duration = TimeStr2Sec(team.DurationString);
-
-                this.Invoke(new DoSomething(() =>
-                {
-                    TrySyncTroopInfoToUI(team);
-                }));
-            }
-
-            // this.remoteTime = QueryRemoteSysTime();
-            // StartUITimeSyncTimer();
-
-            this.Invoke(new DoSomething(() =>
-            {
-                // SyncTroopInfoToUI(this.CityTroopList);
-                this.btnConfirmMainTroops.Enabled = true;
-                this.dateTimePickerArrival.Value = remoteTime;
-                this.btnAutoAttack.Enabled = true;
-            }));
         }
 
         private void LoadCheckpoint()
@@ -583,6 +670,73 @@ namespace TC
 
                 DonateResource(account, resToContribute[0], resToContribute[1], resToContribute[2], resToContribute[3]);
             }
+        }
+
+        private void QuickReliveAllHeroes()
+        {
+            Parallel.Dispatch(this.accountTable.Values, account =>
+            {
+                var heroPage = OpenHeroPage(account.UserName);
+                var deadHeroList = ParseHeroList(heroPage, account.UserName).Where(hero => hero.IsDead).ToList();
+                if (!deadHeroList.Any())
+                {
+                    return;
+                }
+
+                int status = 0;
+                foreach (var toReliveHero in deadHeroList)
+                {
+                    if (status == 0) // relive running now.
+                    {
+                        status = 1;
+                        if (!heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                        {
+                            ReliveHero(toReliveHero.HeroId, account.UserName);
+                        }
+                    }
+                    else
+                    {
+                        ReliveHero(toReliveHero.HeroId, account.UserName);
+                    }
+
+                    var tid = GetTid(account);
+                    var reliveQueueId = QueryReliveQueueId(tid, account);
+                    var reliveItem = QueryReliveItem(reliveQueueId, tid, account);
+                    UserReliveItem(reliveItem, toReliveHero.HeroId, reliveQueueId, tid, account);
+                }
+            });
+        }
+
+        private void StartReliveHeroTimer()
+        {
+            if (this.reliveHeroTimer != null)
+            {
+                this.reliveHeroTimer.Start();
+                return;
+            }
+
+            this.reliveHeroTimer = new System.Timers.Timer(60 * 1000);
+            this.reliveHeroTimer.AutoReset = true;
+            this.reliveHeroTimer.Elapsed += new System.Timers.ElapsedEventHandler((obj, evn) =>
+            {
+                Parallel.Dispatch(this.accountTable.Values, account =>
+                {
+                    var heroPage = OpenHeroPage(account.UserName);
+                    if (heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                    {
+                        return;
+                    }
+
+                    var deadHeroList = ParseHeroList(heroPage, account.UserName).Where(hero => hero.IsDead);
+                    if (!deadHeroList.Any())
+                    {
+                        return;
+                    }
+
+                    var toReliveHero = deadHeroList.First();
+                    ReliveHero(toReliveHero.HeroId, account.UserName);
+                });
+            });
         }
     }
 }

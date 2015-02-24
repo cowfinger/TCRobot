@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -7,35 +8,51 @@ namespace TC
 {
     class TCAccount
     {
+        private const string CookieFolder = @".\Cookie";
+
         public enum AccountLoginStatus
         {
             Offline, Submitting, Logining, Online, LoginFailed
         }
 
-        private List<string> cityIDList = new List<string>();
-        private CookieLite cookie = new CookieLite();
-
         public string UserName { get; private set; }
         public string Password { get; private set; }
         public string AccountType { get; private set; }
-        public CookieLite Cookie { get { return this.cookie; } }
+        public CookieLite Cookie { get; private set; }
         public AccountLoginStatus LoginStatus { get; set; }
+        public IEnumerable<string> CityIDList { get; private set; }
 
-        public IEnumerable<string> CityIDList
+        public TCAccount(string userName, string password, string accountType)
         {
-            get { return cityIDList; }
-        }
-
-        public TCAccount(string userName, string password, string accountType, string cookie)
-        {
+            this.CityIDList = new List<string>();
+            this.Cookie = new CookieLite();
             this.UserName = userName;
             this.Password = password;
             this.AccountType = accountType;
-            this.Cookie.CookieString = cookie;
+            this.LoginStatus = AccountLoginStatus.Offline;
+        }
+
+        public bool LoadCookie()
+        {
+            string accountCookieFileName = Path.Combine(CookieFolder, this.UserName);
+            return this.Cookie.Load(accountCookieFileName);
+        }
+
+        public void SaveCookie()
+        {
+            if (!Directory.Exists(CookieFolder))
+            {
+                Directory.CreateDirectory(CookieFolder);
+            }
+
+            string accountCookieFileName = Path.Combine(CookieFolder, this.UserName);
+
+            this.Cookie.Save(accountCookieFileName);
         }
 
         public void Login(LoginHelper helper)
         {
+            helper.LoginAccount(this);
         }
     }
 }

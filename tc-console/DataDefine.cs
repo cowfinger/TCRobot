@@ -16,7 +16,7 @@ namespace TC
         public string TroopId = "";
         public string GroupId = "";
         public string Leader = "";
-        public string DurationString = "";
+        public string ToCityNodeId;
         public int Duration = 0;
         public bool isGroupTroop = false;
         public bool isDefendTroop = false;
@@ -24,7 +24,7 @@ namespace TC
         public int PowerIndex = 0;
     }
 
-    class AccountInfo
+    public class AccountInfo
     {
         public string UserName;
         public string Password;
@@ -42,17 +42,25 @@ namespace TC
         public string PasswordElmID;
         public string LoginTitle;
         public string HomeTitle;
-        public string LogoutURL;
     }
 
     class AttackTask
     {
+        public string TaskId = "";
+        public string TaskType = "";
         public string AccountName;
         public string FromCity;
         public string ToCity;
         public DateTime StartTime;
         public DateTime EndTime;
         public TroopInfo Troop = null;
-        public System.Timers.Timer TaskTimer = null;
+    }
+
+    class HeroInfo
+    {
+        public string AccountName = "";
+        public string HeroId = "";
+        public string Name = "";
+        public bool IsDead = false;
     }
 }

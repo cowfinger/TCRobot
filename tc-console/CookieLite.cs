@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace TC
@@ -51,7 +52,7 @@ namespace TC
 
         static public string ComposeCookieString(Dictionary<string, string> cookie)
         {
-            string output = "";
+            var cookieBuilder = new StringBuilder();
             foreach (var i in cookie)
             {
                 if (string.Compare(i.Key, "path", true) == 0)
@@ -59,33 +60,35 @@ namespace TC
                     continue;
                 }
 
-                output += i;
-                if (string.IsNullOrEmpty(i.Value))
+                if (!string.IsNullOrEmpty(i.Value))
                 {
-                    output += "=";
-                    output += i.Value;
+                    cookieBuilder.AppendFormat("{0}={1};", i.Key, i.Value);
                 }
-
-                output += ";";
             }
 
-            return output;
+            return cookieBuilder.ToString();
         }
 
         public string CookieString
         {
             get
             {
-                return ComposeCookieString(this.cookieMap);
-            }
-
-            set
-            {
-                var setCookies = ParseCookieString(value);
-
-                foreach (var cookie in setCookies)
+                lock (this.cookieMap)
                 {
-                    if (this.cookieMap[cookie.Key].Contains(cookie.Key))
+                    return ComposeCookieString(this.cookieMap);
+                }
+            }
+        }
+
+        public void SetCookie(string cookieString)
+        {
+            var setCookies = ParseCookieString(cookieString);
+
+            foreach (var cookie in setCookies)
+            {
+                lock (this.cookieMap)
+                {
+                    if (this.cookieMap.ContainsKey(cookie.Key))
                     {
                         this.cookieMap[cookie.Key] = cookie.Value;
                     }
@@ -97,8 +100,41 @@ namespace TC
             }
         }
 
-        public CookieLite()
+        public bool Load(string fileName)
         {
+            if (!File.Exists(fileName))
+            {
+                return false;
+            }
+
+            using (var streamReader = new StreamReader(fileName))
+            {
+                SetCookie(streamReader.ReadToEnd());
+            }
+
+            return true;
+        }
+
+        public void Save(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            using (var streamWriter = new StreamWriter(fileName))
+            {
+                streamWriter.Write(this.CookieString);
+                streamWriter.Flush();
+            }
+        }
+
+        public CookieLite(string cookie = "")
+        {
+            if (!string.IsNullOrEmpty(cookie))
+            {
+                SetCookie(cookie);
+            }
         }
     }
 }

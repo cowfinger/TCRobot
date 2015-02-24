@@ -60,12 +60,6 @@ namespace TC
             HTTPRequest(url, account, body);
         }
 
-        private IEnumerable<TroopInfo> GetAttackTeamsInfo(string srccityid, string dstcityid, string account)
-        {
-            string response = OpenCityPage(srccityid, account);
-            return ParseAttackTeams(response, dstcityid, account);
-        }
-
         private IEnumerable<TroopInfo> GetTeamsInfo(string srccityid, string account)
         {
             string cityPage = OpenCityPage(srccityid, account);
@@ -220,6 +214,27 @@ namespace TC
             HTTPRequest(url, account, body);
         }
 
+        private void OpenCityPage(string cityId, ref HttpClient client)
+        {
+            // string url0 = string.Format(
+            //     "http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}",
+            //     this.hostname, this.randGen.NextDouble()
+            //     );
+            // client.OpenUrl(url0);
+
+            string url1 = string.Format(
+                "http://{0}/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={1}&r={2}",
+                this.hostname, cityId, this.randGen.NextDouble()
+                );
+            client.OpenUrl(url1);
+
+            // string url2 = string.Format(
+            //     "http://{0}/index.php?mod=military/world_war&op=show&func=attack&team_id=0&r={1}",
+            //     this.hostname, this.randGen.NextDouble()
+            //     );
+            // return client.OpenUrl(url2);
+        }
+
         private string OpenCityPage(string srccityid, string account)
         {
             string url0 = string.Format(
@@ -281,11 +296,19 @@ namespace TC
             return HTTPRequest(url, account);
         }
 
-        private string OpenGroupTeamAttackPage(string teamId, string cityId, string account)
+        private string OpenGroupAttackPage(string groupId, string cityId, ref HttpClient httpClient)
         {
             string url = string.Format(
                 "http://{0}/index.php?mod=military/world_war&op=show&func=join_attack_confirm&group_id={1}&to_city_id={2}&join_attack_type=1&r={3}",
-                hostname, teamId, cityId, randGen.NextDouble());
+                hostname, groupId, cityId, randGen.NextDouble());
+            return httpClient.OpenUrl(url);
+        }
+
+        private string OpenGroupAttackPage(string groupId, string cityId, string account)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=show&func=join_attack_confirm&group_id={1}&to_city_id={2}&join_attack_type=1&r={3}",
+                hostname, groupId, cityId, randGen.NextDouble());
             return HTTPRequest(url, account);
         }
 
@@ -338,7 +361,16 @@ namespace TC
             return ParseTargetCityList(page);
         }
 
-        private string OpenAttackCityPage(string teamid, string cityid, string account)
+        private string OpenTeamAttackPage(string teamid, string cityid, ref HttpClient httpClient)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=show&func=attack_confirm&team_id={1}&to_city_id={2}&r={3}",
+                this.hostname, teamid, cityid, this.randGen.NextDouble()
+                );
+            return httpClient.OpenUrl(url);
+        }
+
+        private string OpenTeamAttackPage(string teamid, string cityid, string account)
         {
             string url = string.Format(
                 "http://{0}/index.php?mod=military/world_war&op=show&func=attack_confirm&team_id={1}&to_city_id={2}&r={3}",
@@ -347,7 +379,17 @@ namespace TC
             return HTTPRequest(url, account);
         }
 
-        private void AttackTarget(string team_id, string city_id, string account)
+        private string TeamAttackTarget(string team_id, string city_id, ref HttpClient httpClient)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=do&func=attack&r={1}", 
+                this.hostname, randGen.NextDouble()
+                );
+            string body = string.Format("team_id={0}&to_city_id={1}", team_id, city_id);
+            return httpClient.OpenUrl(url, body);
+        }
+
+        private void TeamAttackTarget(string team_id, string city_id, string account)
         {
             string url = string.Format(
                 "http://{0}/index.php?mod=military/world_war&op=do&func=attack&r={1}", 
@@ -356,6 +398,16 @@ namespace TC
                 );
             string body = string.Format("team_id={0}&to_city_id={1}", team_id, city_id);
             HTTPRequest(url, account, body);
+        }
+
+        private void GroupAttackTarget(string groupId, string cityId, ref HttpClient httpClient)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=do&func=join_attack&r={1}", 
+                this.hostname, this.randGen.NextDouble()
+                );
+            string body = string.Format("group_id={0}&to_city_id={1}&join_attack_type=1", groupId, cityId);
+            httpClient.OpenUrl(url, body);
         }
 
         private void GroupAttackTarget(string groupId, string cityId, string account)
@@ -454,33 +506,6 @@ namespace TC
             }
         }
 
-        private IEnumerable<TroopInfo> ParseGroupAttackTeams(string content, string destCityId, string account)
-        {
-            var groupIdPattern = new Regex("worldWarClass\\.showGroupDetail\\((\\d+)\\)");
-
-            var matches = groupIdPattern.Matches(content);
-            foreach (Match match in matches)
-            {
-                string teamId = match.Groups[1].Value;
-                string teamPageContent = OpenGroupTeamDetailPage(teamId, account);
-                string attackPage = OpenGroupTeamAttackPage(teamId, destCityId, account);
-                string durationString = ParseAttackDuration(attackPage);
-
-                yield return new TroopInfo()
-                {
-                    GroupId = match.Groups[1].Value,
-                    //TroopId = match.Groups[1].Value,
-                    isGroupTroop = true,
-                    isDefendTroop = false,
-                    Name = ParseAttribute(teamPageContent, "<td>小队名称</td>", @"<td>(.*)</td>", 0).FirstOrDefault(),
-                    Leader = ParseAttribute(teamPageContent, "<td>本小队队长</td>", @"<td>(.*)</td>", 0).FirstOrDefault(),
-                    DurationString = durationString,
-                    Duration = TimeStr2Sec(durationString),
-                    AccountName = account,
-                };
-            }
-        }
-
         private IEnumerable<TroopInfo> ParseTeams(string content, string account)
         {
             Regex re = new Regex("worldWarClass\\.changeMyAttackTeam\\([0-9]+,[0-9]+,[0-9]+\\)");
@@ -519,13 +544,12 @@ namespace TC
                 team.isGroupTroop = false;
                 team.isDefendTroop = false;
                 team.Leader = team_no.ToString(); //temporary solution
-                string rsp = OpenAttackCityPage(team.TroopId, dstcityid, account);
-                team.DurationString = ParseAttackDuration(rsp);
-                team.Duration = TimeStr2Sec(team.DurationString);
+                string rsp = OpenTeamAttackPage(team.TroopId, dstcityid, account);
+                team.Duration = TimeStr2Sec(ParseAttackDuration(rsp));
 
                 team.AccountName = account;
 
-                if (!string.IsNullOrEmpty(team.DurationString))
+                if (team.Duration > 0)
                 {
                     yield return team;
                     team_no++;
@@ -715,6 +739,214 @@ namespace TC
                 );
             string body = string.Format("group_id={0}&from_address=1", groupId);
             HTTPRequest(url, account, body);
+        }
+
+        private IEnumerable<AttackTask> QueryOnlineTroopList(string eventType, string account)
+        {
+            // const string pattern4 = 
+            //     "<div class=\"attack_infor\">(?<from>.+)&nbsp;&nbsp;(?<tasktype>.+)&nbsp;&nbsp;" + ".*" +
+            //     "military\\.show_attack\\('gj',(\\d+),0\\);\">(?<to>.+)</a><span class=\"button1\">" + ".*" +
+            //     "&nbsp;&nbsp;将于&nbsp;&nbsp;(?<eta>\\d+\\-\\d+\\-\\d+ \\d+:\\d+:\\d+)&nbsp;&nbsp;到达" + ".*" +
+            //     "<span id=\"event_(?<taskid>\\d+)\">";
+
+            // const string pattern2 =
+            //     "military\\.show_attack\\('gj',(\\d+),0\\);\">(?<from>.+)</a><span class=" + ".*" +
+            //     "&nbsp;&nbsp;(?<tasktype>.+)&nbsp;&nbsp;(?<to>.+)&nbsp;&nbsp;将于" +
+            //     "&nbsp;&nbsp;(?<eta>\\d+\\-\\d+\\-\\d+ \\d+:\\d+:\\d+)&nbsp;&nbsp;到达&nbsp;&nbsp;" + ".*" +
+            //     "<span id=\"event_(?<taskid>\\d+)\">";
+
+            const string linePattern = "<span id=\"event_(?<taskid>\\d+)\"></span>";
+            const string etaPattern = @"将于&nbsp;&nbsp;(?<eta>\d\d\d\-\d\d\-\d\d \d\d:\d\d:\d\d)&nbsp;&nbsp;到达";
+            const string cityPattern = "<a href='javascript:void\\(0\\)' onclick=\"military\\.show_attack\\('gj',\\d+,0\\);\">(?<city>.+)</a><span class=\"button1\">";
+            const string fromCityPattern = "<div class=\"attack_infor\">(?<city>.*)&nbsp;&nbsp;返回&nbsp;&nbsp;";
+
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/attack&op=show&func=military_event_list&type={1}&r={2}",
+                this.hostname, eventType, this.randGen.NextDouble()
+                );
+
+            string content = HTTPRequest(url, account);
+
+            var lines = content.Split('\r');
+            foreach (var line in lines)
+            {
+                var lineMatch = Regex.Match(line, linePattern);
+                if (!lineMatch.Success)
+                {
+                    continue;
+                }
+
+                var etaMatch = Regex.Match(line, etaPattern);
+                if (!etaMatch.Success)
+                {
+                    continue;
+                }
+
+                var cityMatches = Regex.Matches(line, cityPattern);
+                if (cityMatches.Count == 0)
+                {
+                    continue;
+                }
+
+                string fromCity = "";
+                string toCity = "";
+                if (cityMatches.Count == 1)
+                {
+                    toCity = cityMatches[0].Groups["city"].Value;
+
+                    var fromCityMatch = Regex.Match(line, fromCityPattern);
+                    if (fromCityMatch.Success)
+                    {
+                        fromCity = fromCityMatch.Groups["city"].Value;
+                    }
+                }
+                else if (cityMatches.Count == 2)
+                {
+                    fromCity = cityMatches[0].Groups["city"].Value;
+                    toCity = cityMatches[1].Groups["city"].Value;
+                }
+
+                yield return new AttackTask()
+                {
+                    AccountName = account,
+                    TaskType = line.Contains("攻击") ? "Attack" : "Return",
+                    TaskId = lineMatch.Groups["taskid"].Value,
+                    FromCity = fromCity,
+                    ToCity = toCity,
+                    EndTime = DateTime.Parse(etaMatch.Groups["eta"].Value),
+                };
+            }
+
+            // string pattern = eventType == "4" ? pattern4 : pattern2;
+
+            // var matches = Regex.Matches(content, pattern);
+            // foreach (Match match in matches)
+            // {
+            //     yield return new AttackTask()
+            //     {
+            //         AccountName = account,
+            //         TaskType = match.Groups["tasktype"].Value,
+            //         TaskId = match.Groups["taskid"].Value,
+            //         FromCity = match.Groups["from"].Value,
+            //         ToCity = match.Groups["to"].Value,
+            //         EndTime = DateTime.Parse(match.Groups["eta"].Value),
+            //     };
+            // }
+        }
+
+        private string OpenHeroPage(string account)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=hero/hero&op=show&func=my_heros&r={1}",
+                this.hostname, this.randGen.NextDouble()
+                );
+            return HTTPRequest(url, account);
+        }
+
+        private IEnumerable<HeroInfo> QueryDeadHeroList(string account)
+        {
+            var content = OpenHeroPage(account);
+
+            return ParseHeroList(content, account);
+        }
+
+        private IEnumerable<HeroInfo> ParseHeroList(string content, string account)
+        {
+            const string pattern = "<li id=\"li_hero_my(?<heroid>\\d+)\" hname=\"(?<heroname>.+)\" die=(?<isdead>\\d)>";
+
+            var matches = Regex.Matches(content, pattern);
+            foreach (Match match in matches)
+            {
+                yield return new HeroInfo()
+                {
+                    AccountName = account,
+                    HeroId = match.Groups["heroid"].Value,
+                    Name = match.Groups["heroname"].Value,
+                    IsDead = match.Groups["isdead"].Value == "1",
+                };
+            }
+        }
+
+        private void ReliveHero(string heroId, string account)
+        {
+            string url = string.Format(
+                "http://{0}//index.php?mod=hero/hero&op=do&func=relive_hero&hero_id={1}&r={2}",
+                this.hostname, heroId, this.randGen.NextDouble()
+                );
+            HTTPRequest(url, account);
+        }
+
+        private void QuickReliveHero(string heroId, AccountInfo account)
+        {
+            ReliveHero(heroId, account.UserName);
+            var tid = GetTid(account);
+            var reliveQueueId = QueryReliveQueueId(tid, account);
+            var reliveItem = QueryReliveItem(reliveQueueId, tid, account);
+            UserReliveItem(reliveItem, heroId, reliveQueueId, tid, account);
+        }
+
+        private void UserReliveItem(DepotItem item, string heroId, string queueId, string tid, AccountInfo account)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=prop/prop&op=do&func=use_prop&prop_id={1}" + 
+                "&user_prop_id={2}&hero_id={3}&pet_id=0&queue_id={4}&" + 
+                "call_back=get_build_task_queue%28undefined%2C+{5}%2C+true%29&r={6}",
+                this.hostname, item.PropertyID, item.UserPropertyID, heroId, queueId, tid, this.randGen.NextDouble()
+                );
+            HTTPRequest(url, account.UserName);
+        }
+
+        private DepotItem QueryReliveItem(string reliveQueueId, string tid, AccountInfo account)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=prop/prop&op=show&func=allow_prop&type=29&queue_id={1}" + 
+                "&call_back=get_build_task_queue(undefined,%20{2},%20true)&r={3}",
+                this.hostname, reliveQueueId, tid, this.randGen.NextDouble()
+                );
+            string data = HTTPRequest(url, account.UserName);
+
+            const string pattern = "<li onclick=\"shop\\.choose_prop\\((?<prop_id>\\d+), (?<user_prop_id>\\d+), 29\\);\">";
+            var match = Regex.Match(data, pattern);
+            if (!match.Success)
+            {
+                return null;
+            }
+
+            return new DepotItem()
+            {
+                GoodsType = 29,
+                PropertyID = int.Parse(match.Groups["prop_id"].Value),
+                UserPropertyID = int.Parse(match.Groups["user_prop_id"].Value),
+            };
+        }
+
+        private string GetTid(AccountInfo account)
+        {
+            var cookieMap = ParseCookieStr(account.CookieStr);
+
+            string tmp_id = string.Empty;
+            if (!cookieMap.TryGetValue("tmp_id", out tmp_id))
+            {
+                return string.Empty;
+            }
+
+            return tmp_id;
+        }
+
+        private string QueryReliveQueueId(string tid, AccountInfo account)
+        {
+            string url0 = string.Format(
+                "http://{0}/index.php?mod=get_data&op=do&r=P{1}",
+                this.hostname, this.randGen.NextDouble()
+                );
+
+            string body0 = string.Format("module=%7B%22task%22%3A%5B{0}%2C2%5D%7D", tid);
+            string taskData = HTTPRequest(url0, account.UserName, body0);
+
+            const string taskPattern = "\"tid\":(?<tid>\\d+)";
+            var taskIdMatch = Regex.Match(taskData, taskPattern);
+
+            return taskIdMatch.Success ? taskIdMatch.Groups["tid"].Value : string.Empty;
         }
     }
 }

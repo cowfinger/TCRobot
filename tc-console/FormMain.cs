@@ -18,8 +18,6 @@ namespace TC
     {
         private static string UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2; .NET4.0C; .NET4.0E)";
 
-        // private List<TroopInfo> troopList = new List<TroopInfo>();
-
         private IEnumerable<TroopInfo> CityTroopList
         {
             get
@@ -47,11 +45,6 @@ namespace TC
         private string hostname = "yw1.tc.9wee.com";
         private Dictionary<string, LoginParam> multiLoginConf = new Dictionary<string, LoginParam>();
 
-        private string m_srcCityID = "";
-        private string m_srcCityName = "";
-        private string destCityID = "";
-        private string m_dstCityName = "";
-
         private AutoResetEvent loginLock = new AutoResetEvent(true);
         private AutoResetEvent m_sendTroopLock = new AutoResetEvent(true);
 
@@ -64,6 +57,7 @@ namespace TC
         private System.Timers.Timer syncTimeToUITimer = new System.Timers.Timer(500);
         private System.Timers.Timer syncRemoteTimeTimer = new System.Timers.Timer(15 * 1000);
         private DateTime remoteTime = DateTime.MinValue;
+        private DateTime remoteTimeLastSync = DateTime.MinValue;
 
         private DateTime RemoteTime
         {
@@ -247,14 +241,15 @@ namespace TC
             this.listBoxSrcCities.Enabled = false;
 
             string cityId = cityList[cityname];
+
             Task.Run(() =>
             {
+                var targetCityNameList = QueryTargetCityList(cityId);
+
                 this.Invoke(new DoSomething(() =>
                 {
                     this.listBoxDstCities.Items.Clear();
                 }));
-
-                var targetCityNameList = QueryTargetCityList(cityId);
 
                 foreach (var name in targetCityNameList)
                 {
@@ -263,9 +258,16 @@ namespace TC
                         this.listBoxDstCities.Items.Add(name);
                     }));
                 }
+            });
 
-                var troopList = QueryCityTroops(cityId);
-                foreach (var troop in troopList)
+            // var troopList = QueryCityTroops(cityId);
+            var relatedAccountList = this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId));
+            Parallel.Dispatch(relatedAccountList, account =>
+            {
+                var singleAttackTeams = GetActiveTroopInfo(cityId, "1", account.UserName);
+                var singleDefendTeams = GetActiveTroopInfo(cityId, "2", account.UserName);
+                var groupAttackteams = GetGroupTeamList(cityId, account.UserName);
+                foreach (var troop in singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams))
                 {
                     this.Invoke(new DoSomething(() =>
                     {
@@ -289,7 +291,8 @@ namespace TC
                         TrySyncTroopInfoToUI(troop);
                     }));
                 }
-
+            }).Then(() =>
+            {
                 this.Invoke(new DoSomething(() =>
                 {
                     this.listViewTroops.Enabled = true;
@@ -297,6 +300,7 @@ namespace TC
                     this.listBoxSrcCities.Enabled = true;
                 }));
             });
+
         }
 
         private void btnDismissTroop_Click(object sender, EventArgs e)
@@ -400,36 +404,76 @@ namespace TC
 
             btnAutoAttack.Enabled = false;
 
-            m_srcCityName = listBoxSrcCities.SelectedItem.ToString();
-            m_srcCityID = cityList[m_srcCityName];
-            m_dstCityName = listBoxDstCities.SelectedItem.ToString();
+            var srcCityName = this.listBoxSrcCities.SelectedItem.ToString();
+            var srcCityID = this.cityList[srcCityName];
+            var dstCityName = this.listBoxDstCities.SelectedItem.ToString();
 
-            var troopList = this.CityTroopList.ToList();
+            var troopList = this.CityTroopList.ToList().Where(troop => !troop.isDefendTroop);
+            Parallel.Dispatch(troopList, team =>
+            {
+                string cityPage = OpenCityPage(srcCityID, team.AccountName);
+                string destCityID = ParseTargetCityID(cityPage, dstCityName);
 
-            Task.Run(() => AutoAttackProc(troopList));
+                if (string.IsNullOrEmpty(destCityID))
+                {
+                    string groupAttackPage = OpenGroupTeamListPage(srcCityID, team.AccountName);
+                    destCityID = ParseTargetCityID(groupAttackPage, dstCityName);
+                    if (string.IsNullOrEmpty(destCityID))
+                    {
+                        return;
+                    }
+                }
+
+                team.ToCityNodeId = destCityID;
+
+                string attackPage = team.isGroupTroop ?
+                    OpenGroupAttackPage(team.GroupId, destCityID, team.AccountName) :
+                    OpenTeamAttackPage(team.TroopId, destCityID, team.AccountName);
+
+                var durationString = ParseAttackDuration(attackPage);
+                team.Duration = TimeStr2Sec(durationString);
+
+                this.Invoke(new DoSomething(() => { TrySyncTroopInfoToUI(team); }));
+            }).Then(() =>
+            {
+                this.Invoke(new DoSomething(() =>
+                {
+                    this.btnAutoAttack.Enabled = true;
+                    this.btnConfirmMainTroops.Enabled = true;
+                }));
+            });
         }
 
         private void btnConfirmMainTroops_Click(object sender, EventArgs e)
         {
-            if (btnConfirmMainTroops.Text != "取消")
+            if (this.listViewTroops.CheckedItems.Count == 0)
             {
-                TimeSpan diff = this.dateTimePickerArrival.Value - this.RemoteTime;
-                int maxDuration = this.CityTroopList.Max(troop => troop.Duration);
+                MessageBox.Show("请选择需要出发的部队.");
+                return;
+            }
 
-                if (maxDuration > diff.TotalSeconds)
+            TimeSpan diff = this.dateTimePickerArrival.Value - this.RemoteTime;
+            var selectedTroops = new List<TroopInfo>();
+            foreach (ListViewItem lvItem in this.listViewTroops.CheckedItems)
+            {
+                var troop = lvItem.Tag as TroopInfo;
+                if (troop != null)
                 {
-                    MessageBox.Show(string.Format("到达时间必须晚于{0}", this.RemoteTime.AddSeconds(maxDuration)));
-                    return;
+                    selectedTroops.Add(troop);
                 }
+            }
 
-                btnConfirmMainTroops.Text = "取消";
-                StartSendTroopTasks();
-            }
-            else
+            int maxDuration = selectedTroops.Max(troop => troop.Duration);
+
+            if (maxDuration > diff.TotalSeconds)
             {
-                StopSendTroopTasks();
-                btnConfirmMainTroops.Text = "确认攻击";
+                var minArrivalTime = this.RemoteTime.AddSeconds(maxDuration);
+                MessageBox.Show(string.Format("到达时间必须晚于{0}", minArrivalTime));
+                this.dateTimePickerArrival.Value = minArrivalTime.AddSeconds(60);
+                return;
             }
+
+            StartSendTroopTasks();
         }
 
         private void btnLoadProfile_Click(object sender, EventArgs e)
@@ -546,6 +590,19 @@ namespace TC
                         RefreshTroopInfoToUI(troopList);
                     }));
                 });
+
+        }
+
+        private void btnCancelTasks_Click(object sender, EventArgs e)
+        {
+            if (this.listViewTasks.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("请选择需要取消的任务.");
+                return;
+            }
+
+            StopSendTroopTasks();
+            btnConfirmMainTroops.Text = "确认攻击";
         }
     }
 }

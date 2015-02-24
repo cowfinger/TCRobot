@@ -121,12 +121,14 @@ namespace TC
 
             if (handledAccountNumber >= this.accountTable.Keys.Count)
             {
+                this.remoteTimeLastSync = DateTime.Now;
                 this.RemoteTime = QueryRemoteSysTime(this.accountTable.Keys.First());
-                StartRemoteTimeSyncTimer();
+                // StartRemoteTimeSyncTimer();
                 StartUITimeSyncTimer();
+                StartTaskTimer();
+                StartOnlineTaskCheckTimer();
             }
 
-            // this.Invoke(new DoSomething(SyncAccountsStatus));
             this.Invoke(new DoSomething(() =>
             {
                 foreach (ListViewItem lvItem in this.listViewAccounts.Items)

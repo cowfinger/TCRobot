@@ -12,7 +12,7 @@ namespace TC
     {
         private AutoResetEvent loginLock = new AutoResetEvent(true);
         private WebBrowser webBrowser = null;
-        private Dictionary<string, LoginParam> multiLoginConf = new Dictionary<string, LoginParam>();
+        private Dictionary<string, LoginParam> multiLoginConfig = new Dictionary<string, LoginParam>();
 
         public LoginHelper(WebBrowser webBrowser)
         {
@@ -22,9 +22,9 @@ namespace TC
 
         public void LoadProfile(string fileName)
         {
-            using (var sr = new StreamReader(fileName, Encoding.Default))
+            using (var streamReader = new StreamReader(fileName))
             {
-                string line = sr.ReadLine();
+                string line = streamReader.ReadLine();
                 while (line != null)
                 {
                     string[] strs = line.Split('|');
@@ -40,17 +40,17 @@ namespace TC
                             HomeTitle = strs[5].Trim(' '),
                         };
 
-                        if (this.multiLoginConf.ContainsKey(conf.Name))
+                        if (this.multiLoginConfig.ContainsKey(conf.Name))
                         {
-                            this.multiLoginConf[conf.Name] = conf;
+                            this.multiLoginConfig[conf.Name] = conf;
                         }
                         else
                         {
-                            this.multiLoginConf.Add(conf.Name, conf);
+                            this.multiLoginConfig.Add(conf.Name, conf);
                         }
                     }
 
-                    line = sr.ReadLine();
+                    line = streamReader.ReadLine();
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace TC
         {
             loginLock.WaitOne();
             {
-                var loginPara = this.multiLoginConf[account.AccountType];
+                var loginPara = this.multiLoginConfig[account.AccountType];
 
                 this.webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(
                     (obj, args) =>
@@ -80,7 +80,7 @@ namespace TC
                             case TCAccount.AccountLoginStatus.Submitting:
                                 if (this.webBrowser.Document.Title.Contains(loginPara.HomeTitle))
                                 {
-                                    account.Cookie.CookieString = this.webBrowser.Document.Cookie;
+                                    account.Cookie.SetCookie(this.webBrowser.Document.Cookie);
                                     account.LoginStatus = TCAccount.AccountLoginStatus.Online;
                                 }
                                 else
@@ -94,6 +94,7 @@ namespace TC
                                 break;
                         }
                     });
+
                 this.webBrowser.Navigate(loginPara.LoginURL);
             }
         }
