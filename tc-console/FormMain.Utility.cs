@@ -224,10 +224,10 @@ namespace TC
             {
                 Parallel.Dispatch(this.accountTable.Values, account =>
                 {
-                    var tasks2 = QueryOnlineTroopList("2", account.UserName);
-                    var tasks4 = QueryOnlineTroopList("4", account.UserName);
+                    var tasks2 = QueryOnlineTroopList("2", account.UserName).ToList();
+                    var tasks4 = QueryOnlineTroopList("4", account.UserName).ToList();
 
-                    var allTasks = tasks2.Concat(tasks4).ToList().ToList();
+                    var allTasks = tasks2.Concat(tasks4);
 
                     this.Invoke(new DoSomething(() =>
                     {
@@ -316,14 +316,14 @@ namespace TC
                         }
                     }));
 
-                    var toExecuteTaskList = new List<AttackTask>();
+                    var toExecuteTaskList = new List<TCTask>();
                     var toChangeTaskLvItems = new List<ListViewItem>();
 
                     foreach (var lvItem in taskLvItemList)
                     {
-                        var task = lvItem.Tag as AttackTask;
+                        var task = lvItem.Tag as TCTask;
 
-                        if (remoteTimeSnapshot >= task.EndTime)
+                        if (remoteTimeSnapshot >= task.ExecuteTime)
                         {
                             toExecuteTaskList.Add(task);
                             this.Invoke(new DoSomething(() => { this.listViewTasks.Items.Remove(lvItem); }));
@@ -338,9 +338,9 @@ namespace TC
                     {
                         foreach (var lvItem in toChangeTaskLvItems)
                         {
-                            var task = lvItem.Tag as AttackTask;
-                            int timeLeft = (int)((task.EndTime - remoteTimeSnapshot).TotalSeconds);
-                            lvItem.SubItems[6].Text = Time2Str(timeLeft);
+                            var task = lvItem.Tag as TCTask;
+                            int timeLeft = (int)((task.ExecuteTime - remoteTimeSnapshot).TotalSeconds);
+                            lvItem.SubItems[4].Text = Time2Str(timeLeft);
                         }
                     }));
 
@@ -349,13 +349,35 @@ namespace TC
                     {
                         Parallel.Dispatch(accountTaskGroups, taskGroup =>
                         {
-                            DispatchSendTroopTasks(taskGroup.Key, taskGroup);
+                            // DispatchSendTroopTasks(taskGroup.Key, taskGroup);
+                            DispatchTasks(taskGroup.Key, taskGroup);
                         });
                     }
                 }
             });
 
             taskTimer.Start();
+        }
+
+        private void DispatchTasks(string accountName, IEnumerable<TCTask> accountTaskGroup)
+        {
+            var subTaskGroups = accountTaskGroup.GroupBy(task => task.GroupKey);
+
+            foreach (var taskGroup in subTaskGroups)
+            {
+                var groupAction = taskGroup.First().GroupAction;
+                var taskGroupPara = groupAction != null ? groupAction(taskGroup.Key) : null;
+
+                Parallel.Dispatch(taskGroup, task =>
+                {
+                    if (task.TaskAction != null)
+                    {
+                        task.TaskAction(taskGroupPara);
+                    }
+                });
+
+                Parallel.Dispatch(taskGroup, task => { task.TaskAction(taskGroupPara); });
+            }
         }
 
         private void DispatchSendTroopTasks(string accountName, IEnumerable<AttackTask> accountTaskGroup)
@@ -400,25 +422,42 @@ namespace TC
 
                 if (!team.isDefendTroop && ((team.isGroupTroop && team.IsGroupHead) || !team.isGroupTroop))
                 {
-                    var task = new AttackTask()
+                    var fromCity = this.listBoxSrcCities.SelectedItem.ToString();
+                    var toCity = this.listBoxDstCities.SelectedItem.ToString();
+                    var task = new SendTroopTask(fromCity, toCity, team);
+                    task.ExecuteTime = arrivalTime.AddSeconds(-team.Duration);
+                    task.EndTime = arrivalTime;
+                    task.TaskAction = obj =>
                     {
-                        AccountName = team.AccountName,
-                        FromCity = this.listBoxSrcCities.SelectedItem.ToString(),
-                        ToCity = this.listBoxDstCities.SelectedItem.ToString(),
-                        StartTime = arrivalTime,
-                        EndTime = arrivalTime.AddSeconds(-team.Duration),
-                        Troop = team,
+                        var httpClient = obj as HttpClient;
+                        if (httpClient == null)
+                        {
+                            return;
+                        }
+
+                        if (team.isGroupTroop)
+                        {
+                            // OpenGroupAttackPage(team.GroupId, team.ToCityNodeId, ref httpClient);
+                            GroupAttackTarget(team.GroupId, team.ToCityNodeId, ref httpClient);
+                        }
+                        else
+                        {
+                            // OpenTeamAttackPage(team.TroopId, team.ToCityNodeId, ref httpClient);
+                            TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref httpClient);
+                        }
+                    };
+
+                    task.GroupAction = (groupKey) =>
+                    {
+                        var httpClient = new HttpClient(GetAccountCookie(team.AccountName));
+                        var fromCityId = this.cityList[groupKey];
+                        OpenCityPage(fromCityId, ref httpClient); // Open City Page to refresh cookie.
+                        return httpClient;
                     };
 
                     var lvItemTask = new ListViewItem();
-                    lvItemTask.SubItems[0].Text = "Attack";
-                    lvItemTask.SubItems.Add(task.AccountName);
-                    lvItemTask.SubItems.Add(task.FromCity);
-                    lvItemTask.SubItems.Add(task.ToCity);
-                    lvItemTask.SubItems.Add(task.StartTime.ToString());
-                    lvItemTask.SubItems.Add(task.EndTime.ToString());
-                    lvItemTask.SubItems.Add("00:00:00");
                     lvItemTask.Tag = task;
+                    task.SyncToListViewItem(lvItemTask, this.RemoteTime);
                     this.listViewTasks.Items.Add(lvItemTask);
                     this.listViewTroops.Items.Remove(lvItemTroop);
                 }
@@ -429,7 +468,7 @@ namespace TC
         {
             foreach (ListViewItem lvItemTask in this.listViewTasks.CheckedItems)
             {
-                var task = lvItemTask.Tag as AttackTask;
+                var task = lvItemTask.Tag as SendTroopTask;
                 if (task == null)
                 {
                     continue;
@@ -622,27 +661,6 @@ namespace TC
                 var influenceRes = ParseInfluenceResource(influenceSciencePage).ToList();
                 var resNeeds = influenceRes.Select(resPair => resPair.Value - resPair.Key).ToList();
 
-                this.Invoke(new DoSomething(() =>
-                {
-                    foreach (ListViewItem lvItem in this.listViewInfluence.Items)
-                    {
-                        if (lvItem.SubItems[0].Text == account)
-                        {
-                            for (int j = 1; j < 5; ++j)
-                            {
-                                lvItem.SubItems[j].Text = influenceRes[j - 1].Key.ToString();
-                            }
-
-                            return;
-                        }
-                    }
-
-                    var newLvItem = new ListViewItem(account);
-                    newLvItem.SubItems.AddRange(influenceRes.Select(ar => ar.Key.ToString()).ToArray());
-                    this.listViewInfluence.Items.Add(newLvItem);
-
-                }));
-
                 if (resNeeds[3] < 1000000)
                 {
                     accountList.Remove(account);
@@ -730,6 +748,7 @@ namespace TC
                     var deadHeroList = ParseHeroList(heroPage, account.UserName).Where(hero => hero.IsDead);
                     if (!deadHeroList.Any())
                     {
+                        MessageBox.Show(string.Format("复活武将完成:{0}", account.UserName));
                         return;
                     }
 
@@ -737,6 +756,7 @@ namespace TC
                     ReliveHero(toReliveHero.HeroId, account.UserName);
                 });
             });
+            this.reliveHeroTimer.Start();
         }
     }
 }

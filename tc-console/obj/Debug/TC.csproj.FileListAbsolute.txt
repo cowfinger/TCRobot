@@ -20,7 +20,6 @@ C:\Users\jackyw\TCRobot\tc-console\bin\Debug\TC.exe
 C:\Users\jackyw\TCRobot\tc-console\bin\Debug\TC.pdb
 C:\Users\jackyw\TCRobot\tc-console\obj\Debug\TC.exe
 C:\Users\jackyw\TCRobot\tc-console\obj\Debug\TC.pdb
-C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.FormChooseTeamHead.resources
 C:\Users\wingforce\Workplane\tc-robot\tc-console\bin\Debug\TC.exe
 C:\Users\wingforce\Workplane\tc-robot\tc-console\bin\Debug\TC.pdb
 C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.exe
@@ -35,3 +34,4 @@ C:\Users\wingforce\workplane\tc-robot\TCRobot\tc-console\obj\Debug\TC.exe
 C:\Users\wingforce\workplane\tc-robot\TCRobot\tc-console\obj\Debug\TC.pdb
 C:\Users\wingforce\workplane\tc-robot\TCRobot\tc-console\obj\Debug\TC.FormChooseTroopHead.resources
 C:\Users\wingforce\workplane\tc-robot\TCRobot\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
+C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.FormChooseTroopHead.resources

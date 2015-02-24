@@ -146,60 +146,64 @@ namespace TC
             var cityId = cityList[cityName];
             this.btnQuickCreateTroop.Enabled = false;
 
-            Task.Run(() =>
+            int maxSoilderNumber = 0;
+            if (!int.TryParse(this.textBoxMaxTroopNumber.Text, out maxSoilderNumber))
             {
-                foreach (var account in this.accountTable)
+                maxSoilderNumber = 20000;
+            }
+
+            Parallel.Dispatch(this.accountTable, account =>
+            {
+                if (!account.Value.CityIDList.Contains(cityId))
                 {
-                    if (!account.Value.CityIDList.Contains(cityId))
-                    {
-                        continue;
-                    }
-
-                    this.Invoke(new DoSomething(() =>
-                    {
-                        this.txtInfo.Text = string.Format("Create Troop for Account: {0} at {1}", account.Key, cityName);
-                    }));
-
-                    var page = OpenCreateTeamPage(cityId, account.Key);
-                    var heroList = ParseHerosInCreateTeamPage(page);
-                    var soldierList = ParseSoldiersInCreateTeamPage(page).ToList();
-
-                    soldierList.Sort((x, y) => { return x.SoldierNumber.CompareTo(y.SoldierNumber); });
-                    soldierList.Reverse();
-
-                    if (this.radioButtonFullTroop.Checked)
-                    {
-                        int totalSolderNumber = soldierList.Sum(x => x.SoldierNumber);
-                        string soldierString = BuildSoldierString(ref soldierList, totalSolderNumber);
-
-                        var heroRawList = heroList.ToList();
-                        string headHero = heroRawList.First();
-                        heroRawList.RemoveAt(0);
-                        string subHeroes = BuildSubHeroesString(ref heroRawList);
-
-                        CreateTeam(cityId, headHero, subHeroes, soldierString, this.checkBoxDefend.Checked ? "2" : "1", account.Key);
-                    }
-                    else
-                    {
-                        foreach (var hero in heroList)
-                        {
-                            string soldierString = BuildSoldierString(ref soldierList, this.radioButtonSmallTroop.Checked ? 1000 : 0);
-                            this.Invoke(new DoSomething(() =>
-                            {
-                                this.txtInfo.Text = string.Format(
-                                    "Create Troop for Account: {0} at {1}, Hero={2}, Soldier={3}",
-                                    account.Key,
-                                    cityName,
-                                    hero,
-                                    soldierString
-                                    );
-                            }));
-
-                            CreateTeam(cityId, hero, "", soldierString, this.checkBoxDefend.Checked ? "2" : "1", account.Key);
-                        }
-                    }
+                    return;
                 }
 
+                this.Invoke(new DoSomething(() =>
+                {
+                    this.txtInfo.Text = string.Format("Create Troop for Account: {0} at {1}", account.Key, cityName);
+                }));
+
+                var page = OpenCreateTeamPage(cityId, account.Key);
+                var heroList = ParseHerosInCreateTeamPage(page);
+                var soldierList = ParseSoldiersInCreateTeamPage(page).ToList();
+
+                soldierList.Sort((x, y) => { return x.SoldierNumber.CompareTo(y.SoldierNumber); });
+                soldierList.Reverse();
+
+                if (this.radioButtonFullTroop.Checked)
+                {
+                    int totalSolderNumber = Math.Min(soldierList.Sum(x => x.SoldierNumber), maxSoilderNumber);
+                    string soldierString = BuildSoldierString(ref soldierList, totalSolderNumber);
+
+                    var heroRawList = heroList.ToList();
+                    string headHero = heroRawList.First();
+                    heroRawList.RemoveAt(0);
+                    string subHeroes = BuildSubHeroesString(ref heroRawList);
+
+                    CreateTeam(cityId, headHero, subHeroes, soldierString, this.checkBoxDefend.Checked ? "2" : "1", account.Key);
+                }
+                else
+                {
+                    foreach (var hero in heroList)
+                    {
+                        string soldierString = BuildSoldierString(ref soldierList, this.radioButtonSmallTroop.Checked ? 1000 : 0);
+                        this.Invoke(new DoSomething(() =>
+                        {
+                            this.txtInfo.Text = string.Format(
+                                "Create Troop for Account: {0} at {1}, Hero={2}, Soldier={3}",
+                                account.Key,
+                                cityName,
+                                hero,
+                                soldierString
+                                );
+                        }));
+
+                        CreateTeam(cityId, hero, "", soldierString, this.checkBoxDefend.Checked ? "2" : "1", account.Key);
+                    }
+                }
+            }).Then(() =>
+            {
                 this.Invoke(new DoSomething(() =>
                 {
                     this.txtInfo.Text = string.Format("Create Troop Completed");
@@ -603,6 +607,51 @@ namespace TC
 
             StopSendTroopTasks();
             btnConfirmMainTroops.Text = "确认攻击";
+        }
+
+        private void btnReliveHeroTask_Click(object sender, EventArgs e)
+        {
+            if (this.checkBoxUseReliveItem.Checked)
+            {
+                Parallel.Dispatch(this.accountTable.Values, account =>
+                {
+                    var heroPage = OpenHeroPage(account.UserName);
+                    var deadHeroList = ParseHeroList(heroPage, account.UserName).Where(hero => hero.IsDead).ToList();
+                    if (!deadHeroList.Any())
+                    {
+                        return;
+                    }
+
+                    int status = 0;
+                    foreach (var toReliveHero in deadHeroList)
+                    {
+                        if (status == 0) // relive running now.
+                        {
+                            status = 1;
+                            if (!heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                            {
+                                ReliveHero(toReliveHero.HeroId, account.UserName);
+                            }
+                        }
+                        else
+                        {
+                            ReliveHero(toReliveHero.HeroId, account.UserName);
+                        }
+
+                        var tid = GetTid(account);
+                        var reliveQueueId = QueryReliveQueueId(tid, account);
+                        var reliveItem = QueryReliveItem(reliveQueueId, tid, account);
+                        UserReliveItem(reliveItem, toReliveHero.HeroId, reliveQueueId, tid, account);
+                    }
+                }).Then(() =>
+                {
+                    MessageBox.Show(string.Format("复活武将完成"));
+                });
+            }
+            else
+            {
+                StartReliveHeroTimer();
+            }
         }
     }
 }

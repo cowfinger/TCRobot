@@ -743,22 +743,10 @@ namespace TC
 
         private IEnumerable<AttackTask> QueryOnlineTroopList(string eventType, string account)
         {
-            // const string pattern4 = 
-            //     "<div class=\"attack_infor\">(?<from>.+)&nbsp;&nbsp;(?<tasktype>.+)&nbsp;&nbsp;" + ".*" +
-            //     "military\\.show_attack\\('gj',(\\d+),0\\);\">(?<to>.+)</a><span class=\"button1\">" + ".*" +
-            //     "&nbsp;&nbsp;将于&nbsp;&nbsp;(?<eta>\\d+\\-\\d+\\-\\d+ \\d+:\\d+:\\d+)&nbsp;&nbsp;到达" + ".*" +
-            //     "<span id=\"event_(?<taskid>\\d+)\">";
-
-            // const string pattern2 =
-            //     "military\\.show_attack\\('gj',(\\d+),0\\);\">(?<from>.+)</a><span class=" + ".*" +
-            //     "&nbsp;&nbsp;(?<tasktype>.+)&nbsp;&nbsp;(?<to>.+)&nbsp;&nbsp;将于" +
-            //     "&nbsp;&nbsp;(?<eta>\\d+\\-\\d+\\-\\d+ \\d+:\\d+:\\d+)&nbsp;&nbsp;到达&nbsp;&nbsp;" + ".*" +
-            //     "<span id=\"event_(?<taskid>\\d+)\">";
-
             const string linePattern = "<span id=\"event_(?<taskid>\\d+)\"></span>";
-            const string etaPattern = @"将于&nbsp;&nbsp;(?<eta>\d\d\d\-\d\d\-\d\d \d\d:\d\d:\d\d)&nbsp;&nbsp;到达";
-            const string cityPattern = "<a href='javascript:void\\(0\\)' onclick=\"military\\.show_attack\\('gj',\\d+,0\\);\">(?<city>.+)</a><span class=\"button1\">";
-            const string fromCityPattern = "<div class=\"attack_infor\">(?<city>.*)&nbsp;&nbsp;返回&nbsp;&nbsp;";
+            const string etaPattern = @"将于&nbsp;&nbsp;(?<eta>\d\d\d\d\-\d\d\-\d\d \d\d:\d\d:\d\d)&nbsp;&nbsp;到达";
+            const string cityPattern = "<a href='javascript:void\\(0\\)' onclick=\"military\\.show_attack\\('gj',\\d+,0\\);\">(?<city>[^<]+)</a><span class=\"button1\">";
+            const string fromCityPattern = "<div class=\"attack_infor\">(?<city>[^&]*)&nbsp;&nbsp;返回&nbsp;&nbsp;";
 
             string url = string.Format(
                 "http://{0}/index.php?mod=military/attack&op=show&func=military_event_list&type={1}&r={2}",
@@ -816,22 +804,6 @@ namespace TC
                     EndTime = DateTime.Parse(etaMatch.Groups["eta"].Value),
                 };
             }
-
-            // string pattern = eventType == "4" ? pattern4 : pattern2;
-
-            // var matches = Regex.Matches(content, pattern);
-            // foreach (Match match in matches)
-            // {
-            //     yield return new AttackTask()
-            //     {
-            //         AccountName = account,
-            //         TaskType = match.Groups["tasktype"].Value,
-            //         TaskId = match.Groups["taskid"].Value,
-            //         FromCity = match.Groups["from"].Value,
-            //         ToCity = match.Groups["to"].Value,
-            //         EndTime = DateTime.Parse(match.Groups["eta"].Value),
-            //     };
-            // }
         }
 
         private string OpenHeroPage(string account)
