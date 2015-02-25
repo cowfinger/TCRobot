@@ -10,13 +10,14 @@ namespace TC
 {
     class RequestAgent
     {
-        private Random randGen = new Random();
+        private Random randGen = null;
 
         public TCAccount Account { get; private set; }
 
         public RequestAgent(TCAccount account)
         {
             this.Account = account;
+            this.randGen = new Random(account.GetHashCode());
         }
 
         public string BuildUrl(string urlPathFormat, params object[] args)

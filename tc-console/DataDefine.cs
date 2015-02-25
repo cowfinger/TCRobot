@@ -62,4 +62,11 @@ namespace TC
         public string Name = "";
         public bool IsDead = false;
     }
+
+    class CityInfo
+    {
+        public string Name = "";
+        public int NodeId = 0;
+        public int CityId = 0;
+    }
 }

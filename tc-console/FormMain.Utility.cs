@@ -347,40 +347,5 @@ namespace TC
                 DonateResource(account, resToContribute[0], resToContribute[1], resToContribute[2], resToContribute[3]);
             }
         }
-
-        private void QuickReliveAllHeroes()
-        {
-            Parallel.Dispatch(this.accountTable.Values, account =>
-            {
-                var heroPage = OpenHeroPage(account.UserName);
-                var deadHeroList = ParseHeroList(heroPage, account.UserName).Where(hero => hero.IsDead).ToList();
-                if (!deadHeroList.Any())
-                {
-                    return;
-                }
-
-                int status = 0;
-                foreach (var toReliveHero in deadHeroList)
-                {
-                    if (status == 0) // relive running now.
-                    {
-                        status = 1;
-                        if (!heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
-                        {
-                            ReliveHero(toReliveHero.HeroId, account.UserName);
-                        }
-                    }
-                    else
-                    {
-                        ReliveHero(toReliveHero.HeroId, account.UserName);
-                    }
-
-                    var tid = GetTid(account);
-                    var reliveQueueId = QueryReliveQueueId(tid, account);
-                    var reliveItem = QueryReliveItem(reliveQueueId, tid, account);
-                    UserReliveItem(reliveItem, toReliveHero.HeroId, reliveQueueId, tid, account);
-                }
-            });
-        }
     }
 }

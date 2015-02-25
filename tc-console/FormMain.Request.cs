@@ -208,7 +208,7 @@ namespace TC
                 );
             string body = string.Format(
                 "team_type={0}&main_hero={1}&using_embattle_id=&sub_hero={2}&soldiers={3}&pk_hero_id=",
-                teamType, heroId,  subHeroes, soldier
+                teamType, heroId, subHeroes, soldier
                 );
 
             HTTPRequest(url, account, body);
@@ -382,7 +382,7 @@ namespace TC
         private string TeamAttackTarget(string team_id, string city_id, ref HttpClient httpClient)
         {
             string url = string.Format(
-                "http://{0}/index.php?mod=military/world_war&op=do&func=attack&r={1}", 
+                "http://{0}/index.php?mod=military/world_war&op=do&func=attack&r={1}",
                 this.hostname, randGen.NextDouble()
                 );
             string body = string.Format("team_id={0}&to_city_id={1}", team_id, city_id);
@@ -392,7 +392,7 @@ namespace TC
         private void TeamAttackTarget(string team_id, string city_id, string account)
         {
             string url = string.Format(
-                "http://{0}/index.php?mod=military/world_war&op=do&func=attack&r={1}", 
+                "http://{0}/index.php?mod=military/world_war&op=do&func=attack&r={1}",
                 this.hostname,
                 randGen.NextDouble()
                 );
@@ -403,7 +403,7 @@ namespace TC
         private void GroupAttackTarget(string groupId, string cityId, ref HttpClient httpClient)
         {
             string url = string.Format(
-                "http://{0}/index.php?mod=military/world_war&op=do&func=join_attack&r={1}", 
+                "http://{0}/index.php?mod=military/world_war&op=do&func=join_attack&r={1}",
                 this.hostname, this.randGen.NextDouble()
                 );
             string body = string.Format("group_id={0}&to_city_id={1}&join_attack_type=1", groupId, cityId);
@@ -413,7 +413,7 @@ namespace TC
         private void GroupAttackTarget(string groupId, string cityId, string account)
         {
             string url = string.Format(
-                "http://{0}/index.php?mod=military/world_war&op=do&func=join_attack&r={1}", 
+                "http://{0}/index.php?mod=military/world_war&op=do&func=join_attack&r={1}",
                 this.hostname, this.randGen.NextDouble()
                 );
             string body = string.Format("group_id={0}&to_city_id={1}&join_attack_type=1", groupId, cityId);
@@ -860,8 +860,8 @@ namespace TC
         private void UserReliveItem(DepotItem item, string heroId, string queueId, string tid, AccountInfo account)
         {
             string url = string.Format(
-                "http://{0}/index.php?mod=prop/prop&op=do&func=use_prop&prop_id={1}" + 
-                "&user_prop_id={2}&hero_id={3}&pet_id=0&queue_id={4}&" + 
+                "http://{0}/index.php?mod=prop/prop&op=do&func=use_prop&prop_id={1}" +
+                "&user_prop_id={2}&hero_id={3}&pet_id=0&queue_id={4}&" +
                 "call_back=get_build_task_queue%28undefined%2C+{5}%2C+true%29&r={6}",
                 this.hostname, item.PropertyID, item.UserPropertyID, heroId, queueId, tid, this.randGen.NextDouble()
                 );
@@ -871,7 +871,7 @@ namespace TC
         private DepotItem QueryReliveItem(string reliveQueueId, string tid, AccountInfo account)
         {
             string url = string.Format(
-                "http://{0}/index.php?mod=prop/prop&op=show&func=allow_prop&type=29&queue_id={1}" + 
+                "http://{0}/index.php?mod=prop/prop&op=show&func=allow_prop&type=29&queue_id={1}" +
                 "&call_back=get_build_task_queue(undefined,%20{2},%20true)&r={3}",
                 this.hostname, reliveQueueId, tid, this.randGen.NextDouble()
                 );
@@ -919,6 +919,90 @@ namespace TC
             var taskIdMatch = Regex.Match(taskData, taskPattern);
 
             return taskIdMatch.Success ? taskIdMatch.Groups["tid"].Value : string.Empty;
+        }
+
+        private string OpenMoveTroopPage(string account)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=show&func=move_army&r={1}",
+                this.hostname, this.randGen.NextDouble()
+                );
+            return HTTPRequest(url, account);
+        }
+
+        private IEnumerable<CityInfo> QueryInfluenceCityList(string account, string fromCityId)
+        {
+            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"  >(?<name>[^<]+)</option>";
+            const string selectedCityPattern = "<option value=\"(?<nodeId>\\d+)\" selected >(?<name>[^<]+)</option>";
+
+            OpenCityPage(fromCityId, account);
+            string content = OpenMoveTroopPage(account);
+
+            var contentParts = content.Split(new string[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
+            if (contentParts.Count() < 2)
+            {
+                yield break;
+            }
+
+            var fromCityMatches = Regex.Matches(contentParts[0], cityPattern);
+            var selectedCityMatch = Regex.Match(contentParts[0], selectedCityPattern);
+
+            if (selectedCityMatch.Success)
+            {
+                yield return new CityInfo()
+                {
+                    Name = selectedCityMatch.Groups["name"].Value,
+                    NodeId = int.Parse(selectedCityMatch.Groups["nodeId"].Value),
+                    CityId = int.Parse(this.cityList[selectedCityMatch.Groups["name"].Value]),
+                };
+            }
+
+            foreach (Match cityMatch in fromCityMatches)
+            {
+                yield return new CityInfo()
+                {
+                    Name = cityMatch.Groups["name"].Value,
+                    NodeId = int.Parse(cityMatch.Groups["nodeId"].Value),
+                    CityId = int.Parse(this.cityList[cityMatch.Groups["name"].Value]),
+                };
+            }
+        }
+
+        private string ChangeMoveFromCity(string account, string fromCityId)
+        {
+            string url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=show&func=move_army&from_city_id={1}&r={2}",
+                this.hostname, fromCityId, this.randGen.NextDouble()
+                );
+            return HTTPRequest(url, account);
+        }
+
+        private Dictionary<string, HashSet<string>> BuildInfluenceCityMap(IEnumerable<CityInfo> influenceCityList, string account)
+        {
+            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"  >(?<name>[^<]+)</option>";
+
+            var map = new Dictionary<string, HashSet<string>>();
+            foreach (var cityInfo in influenceCityList)
+            {
+                string cityMovePage = ChangeMoveFromCity(account, cityInfo.NodeId.ToString());
+                var contentParts = cityMovePage.Split(new string[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
+                if (contentParts.Count() < 2)
+                {
+                    continue;
+                }
+
+                var toCityMatches = Regex.Matches(contentParts[1], cityPattern);
+
+                var toSet = new HashSet<string>();
+                foreach (Match toCityMatch in toCityMatches)
+                {
+                    toSet.Add(toCityMatch.Groups["name"].Value);
+                }
+
+                map.Add(cityInfo.Name, toSet);
+            }
+
+            return map;
         }
     }
 }
