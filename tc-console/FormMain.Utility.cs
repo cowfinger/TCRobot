@@ -36,7 +36,6 @@ namespace TC
                     request.GetRequestStream().Write(codedBytes, 0, codedBytes.Length);
                 }
 
-                // var response = (HttpWebResponse)request.GetResponse();
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
                     SetAccountCookie(account, response.Headers["Set-Cookie"]);

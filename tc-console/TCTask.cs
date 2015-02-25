@@ -46,7 +46,7 @@ namespace TC
 
     class SendTroopTask : TCTask
     {
-        private TroopInfo taskData = null;
+        public TroopInfo taskData = null;
         private string fromCity = null;
         private string toCity = null;
 

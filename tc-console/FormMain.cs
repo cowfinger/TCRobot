@@ -29,13 +29,13 @@ namespace TC
             }
         }
 
-        private IEnumerable<AttackTask> ActiveTaskList
+        private IEnumerable<TCTask> ActiveTaskList
         {
             get
             {
                 foreach (ListViewItem lvItem in this.listViewTasks.Items)
                 {
-                    yield return lvItem.Tag as AttackTask;
+                    yield return lvItem.Tag as TCTask;
                 }
             }
         }
@@ -277,7 +277,9 @@ namespace TC
                     {
                         if (troop.isGroupTroop)
                         {
-                            var taskGroupIdList = this.ActiveTaskList.Where(task => task.Troop.isGroupTroop).Select(task => task.Troop.GroupId);
+                            var taskGroupIdList = this.ActiveTaskList.Where(
+                                task => (task as SendTroopTask) != null && (task as SendTroopTask).taskData.isGroupTroop
+                                ).Select(task => (task as SendTroopTask).taskData.GroupId);
                             if (taskGroupIdList.Contains(troop.GroupId))
                             {
                                 return;
@@ -285,7 +287,9 @@ namespace TC
                         }
                         else
                         {
-                            var taskTroopIdList = this.ActiveTaskList.Where(task => !task.Troop.isGroupTroop).Select(task => task.Troop.TroopId);
+                            var taskTroopIdList = this.ActiveTaskList.Where(
+                                task => (task as SendTroopTask) != null && !(task as SendTroopTask).taskData.isGroupTroop
+                                ).Select(task => (task as SendTroopTask).taskData.TroopId);
                             if (taskTroopIdList.Contains(troop.TroopId))
                             {
                                 return;
@@ -472,9 +476,15 @@ namespace TC
             if (maxDuration > diff.TotalSeconds)
             {
                 var minArrivalTime = this.RemoteTime.AddSeconds(maxDuration);
-                MessageBox.Show(string.Format("到达时间必须晚于{0}", minArrivalTime));
-                this.dateTimePickerArrival.Value = minArrivalTime.AddSeconds(60);
-                return;
+                var result = MessageBox.Show(
+                    string.Format("建议到达时间必须晚于{0}", minArrivalTime), 
+                    "是否使用建议时间", 
+                    MessageBoxButtons.YesNo
+                    );
+                if (result == DialogResult.Yes)
+                {
+                    this.dateTimePickerArrival.Value = minArrivalTime.AddSeconds(60);
+                }
             }
 
             StartSendTroopTasks();
