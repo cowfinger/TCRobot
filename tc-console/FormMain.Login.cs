@@ -143,11 +143,10 @@ namespace TC
 
                 if (handledAccountNumber >= this.accountTable.Keys.Count)
                 {
-                    btnLoginAll.Text = "登录所有";
-                    btnAutoAttack.Enabled = true;
-                    btnLoginAll.Enabled = false;
-                    btnScanCity.Enabled = true;
-                    btnQuickCreateTroop.Enabled = true;
+                    this.btnAutoAttack.Enabled = true;
+                    this.btnQuickCreateTroop.Enabled = true;
+                    this.ToolStripMenuItemFunctions.Enabled = true;
+                    this.ToolStripMenuItemScan.Enabled = true;
                 }
             }));
         }

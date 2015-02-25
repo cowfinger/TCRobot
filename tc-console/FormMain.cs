@@ -46,18 +46,12 @@ namespace TC
         private Dictionary<string, LoginParam> multiLoginConf = new Dictionary<string, LoginParam>();
 
         private AutoResetEvent loginLock = new AutoResetEvent(true);
-        private AutoResetEvent m_sendTroopLock = new AutoResetEvent(true);
 
         private Random randGen = new Random(DateTime.Now.Millisecond);
 
         private Dictionary<string, AccountInfo> accountTable = new Dictionary<string, AccountInfo>();
         private string activeAccount;
 
-        private object remoteTimeLock = new object();
-        private System.Timers.Timer syncTimeToUITimer = new System.Timers.Timer(500);
-        private System.Timers.Timer syncRemoteTimeTimer = new System.Timers.Timer(15 * 1000);
-        private DateTime remoteTime = DateTime.MinValue;
-        private DateTime remoteTimeLastSync = DateTime.MinValue;
 
         private DateTime RemoteTime
         {
@@ -90,46 +84,6 @@ namespace TC
             LoadCheckpoint();
         }
 
-        private void btnScanCity_Click(object sender, EventArgs e)
-        {
-            btnScanCity.Enabled = false;
-            Task.Run(() =>
-            {
-                var validCityNameList = this.accountTable.Values.SelectMany(
-                    account =>
-                    {
-                        this.Invoke(new DoSomething(() =>
-                        {
-                            this.txtInfo.Text = string.Format("Scan Account:{0}", account.UserName);
-                        }));
-
-                        var cityNameList = GetAccountInflunceCityNameListWithArmy(account.UserName);
-                        account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]);
-
-                        return cityNameList;
-                    }).ToList().Distinct();
-
-                this.Invoke(new DoSomething(() =>
-                {
-                    listBoxSrcCities.Items.Clear();
-                    foreach (var city in validCityNameList)
-                    {
-                        listBoxSrcCities.Items.Add(city);
-                    }
-
-                    this.txtInfo.Text = string.Format("Scan Completed");
-                    btnScanCity.Enabled = true;
-                }));
-            });
-        }
-
-        private void btnLoginAll_Click(object sender, EventArgs e)
-        {
-            btnLoginAll.Enabled = false;
-            btnLoginAll.Text = "登录中";
-            Task.Run(() => { BatchLoginProc(); });
-        }
-
         private void btnQuickCreateTroop_Click(object sender, EventArgs e)
         {
             var cityName = this.listBoxSrcCities.SelectedItem as string;
@@ -159,11 +113,6 @@ namespace TC
                     return;
                 }
 
-                this.Invoke(new DoSomething(() =>
-                {
-                    this.txtInfo.Text = string.Format("Create Troop for Account: {0} at {1}", account.Key, cityName);
-                }));
-
                 var page = OpenCreateTeamPage(cityId, account.Key);
                 var heroList = ParseHerosInCreateTeamPage(page);
                 var soldierList = ParseSoldiersInCreateTeamPage(page).ToList();
@@ -188,17 +137,6 @@ namespace TC
                     foreach (var hero in heroList)
                     {
                         string soldierString = BuildSoldierString(ref soldierList, this.radioButtonSmallTroop.Checked ? 1000 : 0);
-                        this.Invoke(new DoSomething(() =>
-                        {
-                            this.txtInfo.Text = string.Format(
-                                "Create Troop for Account: {0} at {1}, Hero={2}, Soldier={3}",
-                                account.Key,
-                                cityName,
-                                hero,
-                                soldierString
-                                );
-                        }));
-
                         CreateTeam(cityId, hero, "", soldierString, this.checkBoxDefend.Checked ? "2" : "1", account.Key);
                     }
                 }
@@ -206,7 +144,6 @@ namespace TC
             {
                 this.Invoke(new DoSomething(() =>
                 {
-                    this.txtInfo.Text = string.Format("Create Troop Completed");
                     this.btnQuickCreateTroop.Enabled = true;
                 }));
 
@@ -248,23 +185,19 @@ namespace TC
 
             Task.Run(() =>
             {
-                var targetCityNameList = QueryTargetCityList(cityId);
+                var targetCityNameList = QueryTargetCityList(cityId).ToList();
 
                 this.Invoke(new DoSomething(() =>
                 {
                     this.listBoxDstCities.Items.Clear();
-                }));
-
-                foreach (var name in targetCityNameList)
-                {
-                    this.Invoke(new DoSomething(() =>
+                    foreach (var name in targetCityNameList)
                     {
                         this.listBoxDstCities.Items.Add(name);
-                    }));
-                }
+                    }
+                }));
+
             });
 
-            // var troopList = QueryCityTroops(cityId);
             var relatedAccountList = this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId));
             Parallel.Dispatch(relatedAccountList, account =>
             {
@@ -477,8 +410,8 @@ namespace TC
             {
                 var minArrivalTime = this.RemoteTime.AddSeconds(maxDuration);
                 var result = MessageBox.Show(
-                    string.Format("建议到达时间必须晚于{0}", minArrivalTime), 
-                    "是否使用建议时间", 
+                    string.Format("建议到达时间必须晚于{0}", minArrivalTime),
+                    "是否使用建议时间",
                     MessageBoxButtons.YesNo
                     );
                 if (result == DialogResult.Yes)
@@ -488,68 +421,6 @@ namespace TC
             }
 
             StartSendTroopTasks();
-        }
-
-        private void btnLoadProfile_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            DialogResult ret = dlg.ShowDialog();
-            if (ret == DialogResult.OK)
-            {
-                StreamReader sr = new StreamReader(dlg.FileName, System.Text.Encoding.Default);
-                string line = sr.ReadLine();
-                while (line != null)
-                {
-                    string[] strs = line.Split('|', ':');
-                    if (strs.Length > 1)
-                    {
-                        AccountInfo accountinfo = new AccountInfo();
-                        {
-                            accountinfo.UserName = strs[0];
-                            accountinfo.Password = strs[1];
-                            if (strs.Length > 2)
-                                accountinfo.AccountType = strs[2];
-                            else
-                                accountinfo.AccountType = "tianya";
-
-                            accountinfo.CookieStr = "";
-                            accountinfo.LoginStatus = "off-line";
-                        }
-                        this.accountTable.Add(strs[0], accountinfo);
-                    }
-                    line = sr.ReadLine();
-                }
-
-                foreach (var account in this.accountTable.Values)
-                {
-                    TryLoadAccountCookie(account);
-                }
-
-                SyncAccountsStatus();
-                if (this.accountTable.Keys.Count > 0)
-                {
-                    btnLoadProfile.Enabled = false;
-                    btnLoginAll.Enabled = true;
-                }
-            }
-        }
-
-        private void btnContribute_Click(object sender, EventArgs e)
-        {
-            Task.Run(() =>
-            {
-                var accountList = this.accountTable.Keys.ToList();
-
-                for (int i = 0; i < 1000 && accountList.Any(); ++i)
-                {
-                    BatchDonate(i, ref accountList);
-                }
-
-                this.Invoke(new DoSomething(() =>
-                {
-                    this.txtInfo.Text = string.Format("Donate: Completed");
-                }));
-            });
         }
 
         private void btnGroupTroop_Click(object sender, EventArgs e)
@@ -619,49 +490,138 @@ namespace TC
             btnConfirmMainTroops.Text = "确认攻击";
         }
 
-        private void btnReliveHeroTask_Click(object sender, EventArgs e)
+        private void ToolStripMenuItemLoadAccountFile_Click(object sender, EventArgs e)
         {
-            if (this.checkBoxUseReliveItem.Checked)
+            OpenFileDialog dlg = new OpenFileDialog();
+            DialogResult ret = dlg.ShowDialog();
+            if (ret == DialogResult.OK)
             {
-                Parallel.Dispatch(this.accountTable.Values, account =>
+                StreamReader sr = new StreamReader(dlg.FileName, System.Text.Encoding.Default);
+                string line = sr.ReadLine();
+                while (line != null)
                 {
-                    var heroPage = OpenHeroPage(account.UserName);
-                    var deadHeroList = ParseHeroList(heroPage, account.UserName).Where(hero => hero.IsDead).ToList();
-                    if (!deadHeroList.Any())
+                    string[] strs = line.Split('|', ':');
+                    if (strs.Length > 1)
                     {
-                        return;
+                        AccountInfo accountinfo = null;
+                        if (!this.accountTable.TryGetValue(strs[0], out accountinfo))
+                        {
+                            accountinfo = new AccountInfo();
+                            this.accountTable.Add(strs[0], accountinfo);
+                        }
+
+                        accountinfo.UserName = strs[0];
+                        accountinfo.Password = strs[1];
+                        if (strs.Length > 2)
+                            accountinfo.AccountType = strs[2];
+                        else
+                            accountinfo.AccountType = "tianya";
+
+                        accountinfo.CookieStr = "";
+                        accountinfo.LoginStatus = "off-line";
+
                     }
 
-                    int status = 0;
-                    foreach (var toReliveHero in deadHeroList)
+                    line = sr.ReadLine();
+                }
+
+                foreach (var account in this.accountTable.Values)
+                {
+                    TryLoadAccountCookie(account);
+                }
+
+                SyncAccountsStatus();
+
+                if (this.accountTable.Keys.Any())
+                {
+                    this.ToolStripMenuItemBatchLogin.Enabled = true;
+                }
+            }
+        }
+
+        private void ToolStripMenuItemBatchLogin_Click(object sender, EventArgs e)
+        {
+            Task.Run(() => { BatchLoginProc(); });
+        }
+
+        private void ToolStripMenuItemScan_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                var validCityNameList = this.accountTable.Values.SelectMany(
+                    account =>
                     {
-                        if (status == 0) // relive running now.
-                        {
-                            status = 1;
-                            if (!heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
-                            {
-                                ReliveHero(toReliveHero.HeroId, account.UserName);
-                            }
-                        }
-                        else
+                        var cityNameList = GetAccountInflunceCityNameListWithArmy(account.UserName);
+                        account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]);
+
+                        return cityNameList;
+                    }).ToList().Distinct();
+
+                this.Invoke(new DoSomething(() =>
+                {
+                    listBoxSrcCities.Items.Clear();
+                    foreach (var city in validCityNameList)
+                    {
+                        listBoxSrcCities.Items.Add(city);
+                    }
+                }));
+            });
+        }
+
+        private void ToolStripMenuItemDonation_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                var accountList = this.accountTable.Keys.ToList();
+
+                for (int i = 0; i < 1000 && accountList.Any(); ++i)
+                {
+                    BatchDonate(i, ref accountList);
+                }
+            });
+        }
+
+        private void ToolStripMenuItemReliveHero_Click(object sender, EventArgs e)
+        {
+            StartReliveHeroTimer();
+        }
+
+        private void ToolStripMenuItemQuickReliveHero_Click(object sender, EventArgs e)
+        {
+            Parallel.Dispatch(this.accountTable.Values, account =>
+            {
+                var heroPage = OpenHeroPage(account.UserName);
+                var deadHeroList = ParseHeroList(heroPage, account.UserName).Where(hero => hero.IsDead).ToList();
+                if (!deadHeroList.Any())
+                {
+                    return;
+                }
+
+                int status = 0;
+                foreach (var toReliveHero in deadHeroList)
+                {
+                    if (status == 0) // relive running now.
+                    {
+                        status = 1;
+                        if (!heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
                         {
                             ReliveHero(toReliveHero.HeroId, account.UserName);
                         }
-
-                        var tid = GetTid(account);
-                        var reliveQueueId = QueryReliveQueueId(tid, account);
-                        var reliveItem = QueryReliveItem(reliveQueueId, tid, account);
-                        UserReliveItem(reliveItem, toReliveHero.HeroId, reliveQueueId, tid, account);
                     }
-                }).Then(() =>
-                {
-                    MessageBox.Show(string.Format("复活武将完成"));
-                });
-            }
-            else
+                    else
+                    {
+                        ReliveHero(toReliveHero.HeroId, account.UserName);
+                    }
+
+                    var tid = GetTid(account);
+                    var reliveQueueId = QueryReliveQueueId(tid, account);
+                    var reliveItem = QueryReliveItem(reliveQueueId, tid, account);
+                    UserReliveItem(reliveItem, toReliveHero.HeroId, reliveQueueId, tid, account);
+                }
+            }).Then(() =>
             {
-                StartReliveHeroTimer();
-            }
+                MessageBox.Show(string.Format("复活武将完成"));
+            });
         }
     }
 }

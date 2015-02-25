@@ -51,7 +51,6 @@ namespace TC
         public string AccountName;
         public string FromCity;
         public string ToCity;
-        public DateTime StartTime;
         public DateTime EndTime;
         public TroopInfo Troop = null;
     }
