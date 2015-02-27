@@ -815,7 +815,7 @@ namespace TC
             return HTTPRequest(url, account);
         }
 
-        private IEnumerable<HeroInfo> QueryDeadHeroList(string account)
+        private IEnumerable<HeroInfo> QueryHeroList(string account)
         {
             var content = OpenHeroPage(account);
 
@@ -939,11 +939,6 @@ namespace TC
             string content = OpenMoveTroopPage(account);
 
             var contentParts = content.Split(new string[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
-            if (contentParts.Count() < 2)
-            {
-                yield break;
-            }
-
             var fromCityMatches = Regex.Matches(contentParts[0], cityPattern);
             var selectedCityMatch = Regex.Match(contentParts[0], selectedCityPattern);
 
@@ -957,8 +952,16 @@ namespace TC
                 };
             }
 
+            int status = 0;
             foreach (Match cityMatch in fromCityMatches)
             {
+                // first city is account city.
+                if (status == 0)
+                {
+                    status = 1;
+                    continue;
+                }
+
                 yield return new CityInfo()
                 {
                     Name = cityMatch.Groups["name"].Value,

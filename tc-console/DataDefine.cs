@@ -31,7 +31,10 @@ namespace TC
         public string AccountType;
         public string CookieStr;
         public string LoginStatus;
+        public string FirstStepCityID;
         public IEnumerable<string> CityIDList = new List<string>();
+        public IEnumerable<string> CityNameList = new List<string>();
+        public Dictionary<string, HashSet<string>> InfluenceMap = null;
     }
 
     class LoginParam
@@ -68,5 +71,6 @@ namespace TC
         public string Name = "";
         public int NodeId = 0;
         public int CityId = 0;
+        public int RoadLevel = 0;
     }
 }

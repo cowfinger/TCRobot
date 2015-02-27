@@ -186,6 +186,7 @@ namespace TC
             Task.Run(() =>
             {
                 var targetCityNameList = QueryTargetCityList(cityId).ToList();
+                var influnceCityNameList = 
 
                 this.Invoke(new DoSomething(() =>
                 {
@@ -552,6 +553,7 @@ namespace TC
                     account =>
                     {
                         var cityNameList = GetAccountInflunceCityNameListWithArmy(account.UserName);
+                        account.CityNameList = cityNameList;
                         account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]);
 
                         return cityNameList;
@@ -591,7 +593,14 @@ namespace TC
             Parallel.Dispatch(this.accountTable.Values, account =>
             {
                 var heroPage = OpenHeroPage(account.UserName);
-                var deadHeroList = ParseHeroList(heroPage, account.UserName).Where(hero => hero.IsDead).ToList();
+                var heroList = ParseHeroList(heroPage, account.UserName).ToList();
+
+                if (tabControlMainInfo.SelectedTab.Name == "tabPageHero")
+                {
+                    UpdateHeroTable(heroList);
+                }
+
+                var deadHeroList = heroList.Where(hero => hero.IsDead).ToList();
                 if (!deadHeroList.Any())
                 {
                     return;
@@ -622,6 +631,32 @@ namespace TC
             {
                 MessageBox.Show(string.Format("复活武将完成"));
             });
+        }
+
+        private void tabControlMainInfo_Selected(object sender, TabControlEventArgs e)
+        {
+            if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
+            {
+                this.listViewAccountHero.Items.Clear();
+
+                Parallel.Dispatch(this.accountTable.Values, account =>
+                {
+                    var heroList = QueryHeroList(account.UserName).ToList();
+
+                    this.Invoke(new DoSomething(() =>
+                    {
+                        foreach (var hero in heroList)
+                        {
+                            var lvItem = new ListViewItem();
+                            lvItem.Tag = hero;
+                            lvItem.SubItems[0].Text = hero.AccountName;
+                            lvItem.SubItems.Add(hero.Name);
+                            lvItem.SubItems.Add(hero.IsDead.ToString());
+                            this.listViewAccountHero.Items.Add(lvItem);
+                        }
+                    }));
+                });
+            }
         }
     }
 }

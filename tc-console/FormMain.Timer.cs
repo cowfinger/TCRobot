@@ -325,18 +325,23 @@ namespace TC
                 Parallel.Dispatch(this.accountTable.Values, account =>
                 {
                     var heroPage = OpenHeroPage(account.UserName);
-                    if (heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                    var heroList = ParseHeroList(heroPage, account.UserName);
+                    if (tabControlMainInfo.SelectedTab.Name == "tabPageHero")
                     {
-                        return;
+                        UpdateHeroTable(heroList);
                     }
 
-                    var deadHeroList = ParseHeroList(heroPage, account.UserName).Where(hero => hero.IsDead);
+                    var deadHeroList = heroList.Where(hero => hero.IsDead);
                     if (!deadHeroList.Any())
                     {
                         MessageBox.Show(string.Format("复活武将完成:{0}", account.UserName));
                         return;
                     }
 
+                    if (heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                    {
+                        return;
+                    }
                     var toReliveHero = deadHeroList.First();
                     ReliveHero(toReliveHero.HeroId, account.UserName);
                 });

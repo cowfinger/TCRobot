@@ -10,6 +10,8 @@ namespace TC
 {
     partial class FormMain
     {
+        private Dictionary<string, CityInfo> cachedCityMap = new Dictionary<string, CityInfo>();
+
         private string HTTPRequest(string url, string account, string body = null)
         {
             try
@@ -347,5 +349,29 @@ namespace TC
                 DonateResource(account, resToContribute[0], resToContribute[1], resToContribute[2], resToContribute[3]);
             }
         }
+
+        private void GenerateAccountInfluenceMap(AccountInfo account)
+        {
+        }
+
+        private void UpdateHeroTable(IEnumerable<HeroInfo> heroList)
+        {
+            foreach (var hero in heroList)
+            {
+                this.Invoke(new DoSomething(() =>
+                {
+                    foreach (ListViewItem lvItem in this.listViewAccountHero.Items)
+                    {
+                        var tabHero = lvItem.Tag as HeroInfo;
+                        if (tabHero != null && tabHero.HeroId == hero.HeroId && tabHero.IsDead != hero.IsDead)
+                        {
+                            lvItem.Tag = hero;
+                            break;
+                        }
+                    }
+                }));
+            }
+        }
+
     }
 }
