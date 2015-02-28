@@ -101,62 +101,62 @@
             Parallel.Dispatch(
                 this.accountTable,
                 account =>
+                {
+                    if (!account.Value.CityIDList.Contains(cityId))
                     {
-                        if (!account.Value.CityIDList.Contains(cityId))
+                        return;
+                    }
+
+                    var page = this.OpenCreateTeamPage(cityId, account.Key);
+                    var heroList = this.ParseHerosInCreateTeamPage(page);
+                    var soldierList = this.ParseSoldiersInCreateTeamPage(page).ToList();
+
+                    soldierList.Sort((x, y) => { return x.SoldierNumber.CompareTo(y.SoldierNumber); });
+                    soldierList.Reverse();
+
+                    if (this.radioButtonFullTroop.Checked)
+                    {
+                        var totalSolderNumber = Math.Min(soldierList.Sum(x => x.SoldierNumber), maxSoilderNumber);
+                        var soldierString = this.BuildSoldierString(ref soldierList, totalSolderNumber);
+
+                        var heroRawList = heroList.ToList();
+                        var headHero = heroRawList.First();
+                        heroRawList.RemoveAt(0);
+                        var subHeroes = this.BuildSubHeroesString(ref heroRawList);
+
+                        this.CreateTeam(
+                            cityId,
+                            headHero,
+                            subHeroes,
+                            soldierString,
+                            this.checkBoxDefend.Checked ? "2" : "1",
+                            account.Key);
+                    }
+                    else
+                    {
+                        foreach (var hero in heroList)
                         {
-                            return;
-                        }
-
-                        var page = this.OpenCreateTeamPage(cityId, account.Key);
-                        var heroList = this.ParseHerosInCreateTeamPage(page);
-                        var soldierList = this.ParseSoldiersInCreateTeamPage(page).ToList();
-
-                        soldierList.Sort((x, y) => { return x.SoldierNumber.CompareTo(y.SoldierNumber); });
-                        soldierList.Reverse();
-
-                        if (this.radioButtonFullTroop.Checked)
-                        {
-                            var totalSolderNumber = Math.Min(soldierList.Sum(x => x.SoldierNumber), maxSoilderNumber);
-                            var soldierString = this.BuildSoldierString(ref soldierList, totalSolderNumber);
-
-                            var heroRawList = heroList.ToList();
-                            var headHero = heroRawList.First();
-                            heroRawList.RemoveAt(0);
-                            var subHeroes = this.BuildSubHeroesString(ref heroRawList);
-
+                            var soldierString = this.BuildSoldierString(
+                                ref soldierList,
+                                this.radioButtonSmallTroop.Checked ? 1000 : 0);
                             this.CreateTeam(
                                 cityId,
-                                headHero,
-                                subHeroes,
+                                hero,
+                                "",
                                 soldierString,
                                 this.checkBoxDefend.Checked ? "2" : "1",
                                 account.Key);
                         }
-                        else
-                        {
-                            foreach (var hero in heroList)
-                            {
-                                var soldierString = this.BuildSoldierString(
-                                    ref soldierList,
-                                    this.radioButtonSmallTroop.Checked ? 1000 : 0);
-                                this.CreateTeam(
-                                    cityId,
-                                    hero,
-                                    "",
-                                    soldierString,
-                                    this.checkBoxDefend.Checked ? "2" : "1",
-                                    account.Key);
-                            }
-                        }
-                    }).Then(
+                    }
+                }).Then(
                         () =>
-                            {
-                                this.Invoke(new DoSomething(() => { this.btnQuickCreateTroop.Enabled = true; }));
+                        {
+                            this.Invoke(new DoSomething(() => { this.btnQuickCreateTroop.Enabled = true; }));
 
-                                var troopList = this.QueryCityTroops(cityId);
+                            var troopList = this.QueryCityTroops(cityId);
 
-                                this.Invoke(new DoSomething(() => { this.RefreshTroopInfoToUI(troopList); }));
-                            });
+                            this.Invoke(new DoSomething(() => { this.RefreshTroopInfoToUI(troopList); }));
+                        });
         }
 
         private void listBoxDstCities_SelectedIndexChanged(object sender, EventArgs e)
@@ -190,76 +190,76 @@
 
             Task.Run(
                 () =>
-                    {
-                        var targetCityNameList = this.QueryTargetCityList(cityId).ToList();
-                        var influnceCityNameList = this.Invoke(
-                            new DoSomething(
-                                () =>
-                                    {
-                                        this.listBoxDstCities.Items.Clear();
-                                        foreach (var name in targetCityNameList)
-                                        {
-                                            this.listBoxDstCities.Items.Add(name);
-                                        }
-                                    }));
-                    });
+                {
+                    var targetCityNameList = this.QueryTargetCityList(cityId).ToList();
+                    var influnceCityNameList = this.Invoke(
+                        new DoSomething(
+                            () =>
+                            {
+                                this.listBoxDstCities.Items.Clear();
+                                foreach (var name in targetCityNameList)
+                                {
+                                    this.listBoxDstCities.Items.Add(name);
+                                }
+                            }));
+                });
 
             var relatedAccountList = this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId));
             Parallel.Dispatch(
                 relatedAccountList,
                 account =>
+                {
+                    var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.UserName);
+                    var singleDefendTeams = this.GetActiveTroopInfo(cityId, "2", account.UserName);
+                    var groupAttackteams = this.GetGroupTeamList(cityId, account.UserName);
+                    foreach (var troop in singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams))
                     {
-                        var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.UserName);
-                        var singleDefendTeams = this.GetActiveTroopInfo(cityId, "2", account.UserName);
-                        var groupAttackteams = this.GetGroupTeamList(cityId, account.UserName);
-                        foreach (var troop in singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams))
+                        this.Invoke(
+                            new DoSomething(
+                                () =>
+                                {
+                                    if (troop.isGroupTroop)
+                                    {
+                                        var taskGroupIdList =
+                                            this.ActiveTaskList.Where(
+                                                task =>
+                                                (task as SendTroopTask) != null
+                                                && (task as SendTroopTask).taskData.isGroupTroop)
+                                                .Select(task => (task as SendTroopTask).taskData.GroupId);
+                                        if (taskGroupIdList.Contains(troop.GroupId))
+                                        {
+                                            return;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var taskTroopIdList =
+                                            this.ActiveTaskList.Where(
+                                                task =>
+                                                (task as SendTroopTask) != null
+                                                && !(task as SendTroopTask).taskData.isGroupTroop)
+                                                .Select(task => (task as SendTroopTask).taskData.TroopId);
+                                        if (taskTroopIdList.Contains(troop.TroopId))
+                                        {
+                                            return;
+                                        }
+                                    }
+
+                                    this.TrySyncTroopInfoToUI(troop);
+                                }));
+                    }
+                }).Then(
+                        () =>
                         {
                             this.Invoke(
                                 new DoSomething(
                                     () =>
-                                        {
-                                            if (troop.isGroupTroop)
-                                            {
-                                                var taskGroupIdList =
-                                                    this.ActiveTaskList.Where(
-                                                        task =>
-                                                        (task as SendTroopTask) != null
-                                                        && (task as SendTroopTask).taskData.isGroupTroop)
-                                                        .Select(task => (task as SendTroopTask).taskData.GroupId);
-                                                if (taskGroupIdList.Contains(troop.GroupId))
-                                                {
-                                                    return;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                var taskTroopIdList =
-                                                    this.ActiveTaskList.Where(
-                                                        task =>
-                                                        (task as SendTroopTask) != null
-                                                        && !(task as SendTroopTask).taskData.isGroupTroop)
-                                                        .Select(task => (task as SendTroopTask).taskData.TroopId);
-                                                if (taskTroopIdList.Contains(troop.TroopId))
-                                                {
-                                                    return;
-                                                }
-                                            }
-
-                                            this.TrySyncTroopInfoToUI(troop);
-                                        }));
-                        }
-                    }).Then(
-                        () =>
-                            {
-                                this.Invoke(
-                                    new DoSomething(
-                                        () =>
-                                            {
-                                                this.listViewTroops.Enabled = true;
-                                                this.listBoxDstCities.Enabled = true;
-                                                this.listBoxSrcCities.Enabled = true;
-                                            }));
-                            });
+                                    {
+                                        this.listViewTroops.Enabled = true;
+                                        this.listBoxDstCities.Enabled = true;
+                                        this.listBoxSrcCities.Enabled = true;
+                                    }));
+                        });
         }
 
         private void btnDismissTroop_Click(object sender, EventArgs e)
@@ -291,44 +291,44 @@
 
             Task.Run(
                 () =>
+                {
+                    foreach (var troop in targetTroops)
                     {
-                        foreach (var troop in targetTroops)
+                        if (troop.isGroupTroop)
                         {
-                            if (troop.isGroupTroop)
+                            if (troop.IsGroupHead)
                             {
-                                if (troop.IsGroupHead)
-                                {
-                                    this.DismissGroup(troop.GroupId, troop.AccountName);
-                                }
+                                this.DismissGroup(troop.GroupId, troop.AccountName);
                             }
-                            else
-                            {
-                                this.DismissTeam(troop.TroopId, troop.AccountName);
-                            }
-
-                            this.Invoke(
-                                new DoSomething(
-                                    () =>
-                                        {
-                                            foreach (ListViewItem item in this.listViewTroops.CheckedItems)
-                                            {
-                                                var troopInfo = item.Tag as TroopInfo;
-                                                if (troopInfo == troop)
-                                                {
-                                                    this.listViewTroops.Items.Remove(item);
-                                                }
-                                            }
-                                        }));
+                        }
+                        else
+                        {
+                            this.DismissTeam(troop.TroopId, troop.AccountName);
                         }
 
                         this.Invoke(
                             new DoSomething(
                                 () =>
+                                {
+                                    foreach (ListViewItem item in this.listViewTroops.CheckedItems)
                                     {
-                                        this.btnDismissTroop.Enabled = true;
-                                        this.listViewTroops.Enabled = true;
-                                    }));
-                    });
+                                        var troopInfo = item.Tag as TroopInfo;
+                                        if (troopInfo == troop)
+                                        {
+                                            this.listViewTroops.Items.Remove(item);
+                                        }
+                                    }
+                                }));
+                    }
+
+                    this.Invoke(
+                        new DoSomething(
+                            () =>
+                            {
+                                this.btnDismissTroop.Enabled = true;
+                                this.listViewTroops.Enabled = true;
+                            }));
+                });
         }
 
         private void listViewTasks_ItemChecked(object sender, ItemCheckedEventArgs e)
@@ -375,41 +375,41 @@
             Parallel.Dispatch(
                 troopList,
                 team =>
-                    {
-                        var cityPage = this.OpenCityShowAttackPage(srcCityID, team.AccountName);
-                        var destCityID = this.ParseTargetCityID(cityPage, dstCityName);
+                {
+                    var cityPage = this.OpenCityShowAttackPage(srcCityID, team.AccountName);
+                    var destCityID = this.ParseTargetCityID(cityPage, dstCityName);
 
+                    if (string.IsNullOrEmpty(destCityID))
+                    {
+                        var groupAttackPage = this.OpenGroupTeamListPage(srcCityID, team.AccountName);
+                        destCityID = this.ParseTargetCityID(groupAttackPage, dstCityName);
                         if (string.IsNullOrEmpty(destCityID))
                         {
-                            var groupAttackPage = this.OpenGroupTeamListPage(srcCityID, team.AccountName);
-                            destCityID = this.ParseTargetCityID(groupAttackPage, dstCityName);
-                            if (string.IsNullOrEmpty(destCityID))
-                            {
-                                return;
-                            }
+                            return;
                         }
+                    }
 
-                        team.ToCityNodeId = destCityID;
+                    team.ToCityNodeId = destCityID;
 
-                        var attackPage = team.isGroupTroop
-                                             ? this.OpenGroupAttackPage(team.GroupId, destCityID, team.AccountName)
-                                             : this.OpenTeamAttackPage(team.TroopId, destCityID, team.AccountName);
+                    var attackPage = team.isGroupTroop
+                                         ? this.OpenGroupAttackPage(team.GroupId, destCityID, team.AccountName)
+                                         : this.OpenTeamAttackPage(team.TroopId, destCityID, team.AccountName);
 
-                        var durationString = this.ParseAttackDuration(attackPage);
-                        team.Duration = this.TimeStr2Sec(durationString);
+                    var durationString = this.ParseAttackDuration(attackPage);
+                    team.Duration = this.TimeStr2Sec(durationString);
 
-                        this.Invoke(new DoSomething(() => { this.TrySyncTroopInfoToUI(team); }));
-                    }).Then(
+                    this.Invoke(new DoSomething(() => { this.TrySyncTroopInfoToUI(team); }));
+                }).Then(
                         () =>
-                            {
-                                this.Invoke(
-                                    new DoSomething(
-                                        () =>
-                                            {
-                                                this.btnAutoAttack.Enabled = true;
-                                                this.btnConfirmMainTroops.Enabled = true;
-                                            }));
-                            });
+                        {
+                            this.Invoke(
+                                new DoSomething(
+                                    () =>
+                                    {
+                                        this.btnAutoAttack.Enabled = true;
+                                        this.btnConfirmMainTroops.Enabled = true;
+                                    }));
+                        });
         }
 
         private void btnConfirmMainTroops_Click(object sender, EventArgs e)
@@ -472,36 +472,36 @@
             this.btnGroupTroop.Enabled = false;
             Task.Run(
                 () =>
+                {
+                    var troopGroup =
+                        candidateTroops.GroupBy(troop => troop.AccountName)
+                            .Select(troops => troops.First())
+                            .ToList();
+                    if (!troopGroup.Any())
                     {
-                        var troopGroup =
-                            candidateTroops.GroupBy(troop => troop.AccountName)
-                                .Select(troops => troops.First())
-                                .ToList();
-                        if (!troopGroup.Any())
+                        return;
+                    }
+
+                    if (!headTroop.isGroupTroop)
+                    {
+                        var groupName = this.CreateGroupHead(cityId, headTroop.TroopId, headTroop.AccountName);
+                        var groupTroops = this.GetGroupTeamList(cityId, headTroop.AccountName);
+                        headTroop = groupTroops.Where(troop => troop.Name == groupName).FirstOrDefault();
+                        if (headTroop == null || headTroop.Name != groupName)
                         {
                             return;
                         }
+                    }
 
-                        if (!headTroop.isGroupTroop)
-                        {
-                            var groupName = this.CreateGroupHead(cityId, headTroop.TroopId, headTroop.AccountName);
-                            var groupTroops = this.GetGroupTeamList(cityId, headTroop.AccountName);
-                            headTroop = groupTroops.Where(troop => troop.Name == groupName).FirstOrDefault();
-                            if (headTroop == null || headTroop.Name != groupName)
-                            {
-                                return;
-                            }
-                        }
+                    foreach (var troop in troopGroup)
+                    {
+                        this.JoinGroup(cityId, headTroop.GroupId, troop.TroopId, troop.AccountName);
+                    }
 
-                        foreach (var troop in troopGroup)
-                        {
-                            this.JoinGroup(cityId, headTroop.GroupId, troop.TroopId, troop.AccountName);
-                        }
+                    var troopList = this.QueryCityTroops(cityId).ToList();
 
-                        var troopList = this.QueryCityTroops(cityId).ToList();
-
-                        this.Invoke(new DoSomething(() => { this.RefreshTroopInfoToUI(troopList); }));
-                    });
+                    this.Invoke(new DoSomething(() => { this.RefreshTroopInfoToUI(troopList); }));
+                });
         }
 
         private void btnCancelTasks_Click(object sender, EventArgs e)
@@ -577,42 +577,42 @@
         {
             Task.Run(
                 () =>
-                    {
-                        var validCityNameList = this.accountTable.Values.SelectMany(
-                            account =>
+                {
+                    var validCityNameList = this.accountTable.Values.SelectMany(
+                        account =>
+                        {
+                            var cityNameList = this.GetAccountInflunceCityNameListWithArmy(account.UserName);
+                            account.CityNameList = cityNameList;
+                            account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]);
+
+                            return cityNameList;
+                        }).ToList().Distinct();
+
+                    this.Invoke(
+                        new DoSomething(
+                            () =>
+                            {
+                                this.listBoxSrcCities.Items.Clear();
+                                foreach (var city in validCityNameList)
                                 {
-                                    var cityNameList = this.GetAccountInflunceCityNameListWithArmy(account.UserName);
-                                    account.CityNameList = cityNameList;
-                                    account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]);
-
-                                    return cityNameList;
-                                }).ToList().Distinct();
-
-                        this.Invoke(
-                            new DoSomething(
-                                () =>
-                                    {
-                                        this.listBoxSrcCities.Items.Clear();
-                                        foreach (var city in validCityNameList)
-                                        {
-                                            this.listBoxSrcCities.Items.Add(city);
-                                        }
-                                    }));
-                    });
+                                    this.listBoxSrcCities.Items.Add(city);
+                                }
+                            }));
+                });
         }
 
         private void ToolStripMenuItemDonation_Click(object sender, EventArgs e)
         {
             Task.Run(
                 () =>
-                    {
-                        var accountList = this.accountTable.Keys.ToList();
+                {
+                    var accountList = this.accountTable.Keys.ToList();
 
-                        for (var i = 0; i < 1000 && accountList.Any(); ++i)
-                        {
-                            this.BatchDonate(i, ref accountList);
-                        }
-                    });
+                    for (var i = 0; i < 1000 && accountList.Any(); ++i)
+                    {
+                        this.BatchDonate(i, ref accountList);
+                    }
+                });
         }
 
         private void ToolStripMenuItemReliveHero_Click(object sender, EventArgs e)
@@ -625,48 +625,48 @@
             Parallel.Dispatch(
                 this.accountTable.Values,
                 account =>
-                    {
-                        var heroPage = this.OpenHeroPage(account.UserName);
-                        var heroList = this.ParseHeroList(heroPage, account.UserName).ToList();
+                {
+                    var heroPage = this.OpenHeroPage(account.UserName);
+                    var heroList = this.ParseHeroList(heroPage, account.UserName).ToList();
 
-                        this.Invoke(
-                            new DoSomething(
-                                () =>
-                                    {
-                                        if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
-                                        {
-                                            this.UpdateHeroTable(heroList);
-                                        }
-                                    }));
-
-                        var deadHeroList = heroList.Where(hero => hero.IsDead).ToList();
-                        if (!deadHeroList.Any())
-                        {
-                            return;
-                        }
-
-                        var status = 0;
-                        foreach (var toReliveHero in deadHeroList)
-                        {
-                            if (status == 0) // relive running now.
+                    this.Invoke(
+                        new DoSomething(
+                            () =>
                             {
-                                status = 1;
-                                if (!heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                                if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
                                 {
-                                    this.ReliveHero(toReliveHero.HeroId, account.UserName);
+                                    this.UpdateHeroTable(heroList);
                                 }
-                            }
-                            else
+                            }));
+
+                    var deadHeroList = heroList.Where(hero => hero.IsDead).ToList();
+                    if (!deadHeroList.Any())
+                    {
+                        return;
+                    }
+
+                    var status = 0;
+                    foreach (var toReliveHero in deadHeroList)
+                    {
+                        if (status == 0) // relive running now.
+                        {
+                            status = 1;
+                            if (!heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
                             {
                                 this.ReliveHero(toReliveHero.HeroId, account.UserName);
                             }
-
-                            var tid = this.GetTid(account);
-                            var reliveQueueId = this.QueryReliveQueueId(tid, account);
-                            var reliveItem = this.QueryReliveItem(reliveQueueId, tid, account);
-                            this.UserReliveItem(reliveItem, toReliveHero.HeroId, reliveQueueId, tid, account);
                         }
-                    }).Then(() => { MessageBox.Show(string.Format("复活武将完成")); });
+                        else
+                        {
+                            this.ReliveHero(toReliveHero.HeroId, account.UserName);
+                        }
+
+                        var tid = this.GetTid(account);
+                        var reliveQueueId = this.QueryReliveQueueId(tid, account);
+                        var reliveItem = this.QueryReliveItem(reliveQueueId, tid, account);
+                        this.UserReliveItem(reliveItem, toReliveHero.HeroId, reliveQueueId, tid, account);
+                    }
+                }).Then(() => { MessageBox.Show(string.Format("复活武将完成")); });
         }
 
         private void tabControlMainInfo_Selected(object sender, TabControlEventArgs e)
@@ -678,24 +678,24 @@
                 Parallel.Dispatch(
                     this.accountTable.Values,
                     account =>
-                        {
-                            var heroList = this.QueryHeroList(account.UserName).ToList();
+                    {
+                        var heroList = this.QueryHeroList(account.UserName).ToList();
 
-                            this.Invoke(
-                                new DoSomething(
-                                    () =>
-                                        {
-                                            foreach (var hero in heroList)
-                                            {
-                                                var lvItem = new ListViewItem();
-                                                lvItem.Tag = hero;
-                                                lvItem.SubItems[0].Text = hero.AccountName;
-                                                lvItem.SubItems.Add(hero.Name);
-                                                lvItem.SubItems.Add(hero.IsDead.ToString());
-                                                this.listViewAccountHero.Items.Add(lvItem);
-                                            }
-                                        }));
-                        });
+                        this.Invoke(
+                            new DoSomething(
+                                () =>
+                                {
+                                    foreach (var hero in heroList)
+                                    {
+                                        var lvItem = new ListViewItem();
+                                        lvItem.Tag = hero;
+                                        lvItem.SubItems[0].Text = hero.AccountName;
+                                        lvItem.SubItems.Add(hero.Name);
+                                        lvItem.SubItems.Add(hero.IsDead.ToString());
+                                        this.listViewAccountHero.Items.Add(lvItem);
+                                    }
+                                }));
+                    });
             }
         }
 
@@ -737,45 +737,47 @@
             var accountName = this.comboBoxAccount.SelectedItem.ToString();
             Task.Run(
                 () =>
+                {
+                    var cityId = this.cityList[fromCity];
+                    var cityPage = this.OpenCityPage(cityId, accountName);
+                    var soldiers = this.ParseSoldierInfoFromCityPage(cityPage).ToList();
+                    var heroes = this.ParseHeroNameListFromCityPage(cityPage).ToList();
+                    var heroIdList = this.ParseHeroIdListFromCityPage(cityPage).ToList();
+
+                    if (!soldiers.Any())
                     {
-                        var cityId = this.cityList[fromCity];
-                        var cityPage = this.OpenCityPage(cityId, accountName);
-                        var soldiers = this.ParseSoldierInfoFromCityPage(cityPage).ToList();
-                        var heroes = this.ParseHeroNameListFromCityPage(cityPage).ToList();
+                        MessageBox.Show("没有空闲的部队，请先解散部队.");
+                    }
 
-                        if (!soldiers.Any())
-                        {
-                            MessageBox.Show("没有空闲的部队，请先解散部队.");
-                        }
+                    if (!heroes.Any())
+                    {
+                        MessageBox.Show("没有空闲的将领，请先解散部队.");
+                    }
 
-                        if (!heroes.Any())
-                        {
-                            MessageBox.Show("没有空闲的将领，请先解散部队.");
-                        }
+                    this.Invoke(
+                        new DoSomething(
+                            () =>
+                            {
+                                this.listViewAccountArmy.Items.Clear();
+                                foreach (var soldierInfo in soldiers)
+                                {
+                                    var lvItem = new ListViewItem();
+                                    lvItem.Tag = soldierInfo;
+                                    lvItem.SubItems[0].Text = soldierInfo.Name;
+                                    lvItem.SubItems.Add(soldierInfo.SoldierNumber.ToString());
+                                    this.listViewAccountArmy.Items.Add(lvItem);
+                                }
 
-                        this.Invoke(
-                            new DoSomething(
-                                () =>
-                                    {
-                                        this.listViewAccountArmy.Items.Clear();
-                                        foreach (var soldierInfo in soldiers)
-                                        {
-                                            var lvItem = new ListViewItem();
-                                            lvItem.Tag = soldierInfo;
-                                            lvItem.SubItems[0].Text = soldierInfo.Name;
-                                            lvItem.SubItems.Add(soldierInfo.SoldierNumber.ToString());
-                                            this.listViewAccountArmy.Items.Add(lvItem);
-                                        }
-
-                                        this.listViewMoveHero.Items.Clear();
-                                        foreach (var hero in heroes)
-                                        {
-                                            var lvItem = new ListViewItem();
-                                            lvItem.SubItems[0].Text = hero;
-                                            this.listViewMoveHero.Items.Add(lvItem);
-                                        }
-                                    }));
-                    });
+                                this.listViewMoveHero.Items.Clear();
+                                for (int i = 0; i < heroes.Count(); ++i)
+                                {
+                                    var lvItem = new ListViewItem();
+                                    lvItem.SubItems[0].Text = heroes[i];
+                                    lvItem.SubItems.Add(heroIdList[i]);
+                                    this.listViewMoveHero.Items.Add(lvItem);
+                                }
+                            }));
+                });
         }
 
         private void comboBoxToCity_SelectedIndexChanged(object sender, EventArgs e)
@@ -785,7 +787,11 @@
             var accountName = this.comboBoxAccount.SelectedItem.ToString();
             var account = this.accountTable[accountName];
 
-            var path = new DijstraHelper(account.InfluenceMap).GetPath(fromCity, toCity).ToList();
+            var helper = new DijstraHelper(account.InfluenceMap);
+            helper.DistanceCalculate = this.CalculateDistance;
+            helper.account = accountName;
+
+            var path = helper.GetPath(fromCity, toCity).ToList();
             path.Reverse();
 
             this.listBoxMovePath.Items.Clear();
@@ -797,6 +803,64 @@
 
         private void buttonConfirmMove_Click(object sender, EventArgs e)
         {
+            string accountName = this.comboBoxAccount.SelectedItem.ToString();
+            string fromCity = this.comboBoxFromCity.SelectedItem.ToString();
+            string toCity = this.comboBoxToCity.SelectedItem.ToString();
+            string nextCity = this.listBoxMovePath.Items[0].ToString();
+            bool halfArmy = !this.radioButtonAllArmy.Checked;
+
+            var heroList = (from ListViewItem lvItem in this.listViewMoveHero.CheckedItems select lvItem.SubItems[1].Text).ToList();
+            var soldierList = (from ListViewItem lvItem in this.listViewAccountArmy.CheckedItems
+                               let soldier = lvItem.Tag as Soldier
+                               where soldier.SoldierNumber > 0
+                               select new Soldier()
+                               {
+                                   Name = soldier.Name,
+                                   SoldierType = soldier.SoldierType,
+                                   SoldierNumber = halfArmy ? soldier.SoldierNumber / 2 : soldier.SoldierNumber,
+                               }).ToList();
+
+            var accountInfo = this.accountTable[accountName];
+            var moveTask = new MoveTroopTask(accountInfo, fromCity, nextCity, toCity);
+            moveTask.SoldierList = soldierList;
+            moveTask.HeroNameList = heroList;
+            moveTask.TaskAction = obj =>
+                {
+                    if (!this.HasTroopArrived(moveTask))
+                    {
+                        moveTask.ExecuteTime = moveTask.ExecuteTime.AddMinutes(2);
+                        moveTask.EndTime = moveTask.ExecuteTime.AddMinutes(2);
+                        return;
+                    }
+
+                    if (moveTask.NextCity == moveTask.TerminalCity)
+                    {
+                        moveTask.EndTime = this.RemoteTime.AddSeconds(10); // So the task will be deleted next time.
+                        return;
+                    }
+
+                    var helper = new DijstraHelper(accountInfo.InfluenceMap);
+                    helper.DistanceCalculate = this.CalculateDistance;
+                    helper.account = accountName;
+                    var path = helper.GetPath(moveTask.NextCity, moveTask.TerminalCity).ToList();
+
+                    moveTask.CurrentCity = toCity;
+                    moveTask.NextCity = path.Last();
+
+                    this.MoveTroop(moveTask);
+                };
+            moveTask.AccountName = accountInfo.UserName;
+            moveTask.CreationTime = this.RemoteTime;
+            moveTask.ExecuteTime = this.RemoteTime.AddMinutes(2);
+            moveTask.EndTime = moveTask.ExecuteTime.AddMinutes(2);
+            moveTask.TaskId = string.Format("Move:{0}", this.randGen.NextDouble());
+
+            var lvItemTask = new ListViewItem();
+            lvItemTask.Tag = moveTask;
+            moveTask.SyncToListViewItem(lvItemTask, this.RemoteTime);
+            this.listViewTasks.Items.Add(lvItemTask);
+
+            this.MoveTroop(moveTask);
         }
     }
 }

@@ -192,12 +192,12 @@
         {
             return this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId)).Select(
                 account =>
-                    {
-                        var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.UserName);
-                        var singleDefendTeams = this.GetActiveTroopInfo(cityId, "2", account.UserName);
-                        var groupAttackteams = this.GetGroupTeamList(cityId, account.UserName);
-                        return singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams);
-                    }).SelectMany(teams => teams);
+                {
+                    var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.UserName);
+                    var singleDefendTeams = this.GetActiveTroopInfo(cityId, "2", account.UserName);
+                    var groupAttackteams = this.GetGroupTeamList(cityId, account.UserName);
+                    return singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams);
+                }).SelectMany(teams => teams);
         }
 
         private IEnumerable<string> QueryTargetCityList(string cityId)
@@ -364,18 +364,18 @@
                 this.Invoke(
                     new DoSomething(
                         () =>
+                        {
+                            foreach (ListViewItem lvItem in this.listViewAccountHero.Items)
                             {
-                                foreach (ListViewItem lvItem in this.listViewAccountHero.Items)
+                                var tabHero = lvItem.Tag as HeroInfo;
+                                if (tabHero != null && tabHero.HeroId == hero.HeroId
+                                    && tabHero.IsDead != hero.IsDead)
                                 {
-                                    var tabHero = lvItem.Tag as HeroInfo;
-                                    if (tabHero != null && tabHero.HeroId == hero.HeroId
-                                        && tabHero.IsDead != hero.IsDead)
-                                    {
-                                        lvItem.Tag = hero;
-                                        break;
-                                    }
+                                    lvItem.Tag = hero;
+                                    break;
                                 }
-                            }));
+                            }
+                        }));
             }
         }
 
@@ -384,10 +384,10 @@
             Parallel.Dispatch(
                 this.accountTable.Values,
                 account =>
-                    {
-                        var accountCityList = this.QueryInfluenceCityList(account.UserName).ToList();
-                        account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
-                    }).Then(() => { this.LoadAccountListToMoveArmyTab(); });
+                {
+                    var accountCityList = this.QueryInfluenceCityList(account.UserName).ToList();
+                    account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
+                }).Then(() => { this.LoadAccountListToMoveArmyTab(); });
         }
 
         private void LoadAccountListToMoveArmyTab()
@@ -395,13 +395,78 @@
             this.Invoke(
                 new DoSomething(
                     () =>
+                    {
+                        this.comboBoxAccount.Items.Clear();
+                        foreach (var account in this.accountTable.Keys)
                         {
-                            this.comboBoxAccount.Items.Clear();
-                            foreach (var account in this.accountTable.Keys)
-                            {
-                                this.comboBoxAccount.Items.Add(account);
-                            }
-                        }));
+                            this.comboBoxAccount.Items.Add(account);
+                        }
+                    }));
+        }
+
+        private bool HasTroopArrived(MoveTroopTask task)
+        {
+            string cityNodeId = this.cityList[task.NextCity];
+            string cityPage = OpenCityPage(cityNodeId, task.Account.UserName);
+            var soldiers = this.ParseSoldierInfoFromCityPage(cityPage).ToList();
+            var heroes = this.ParseHeroIdListFromCityPage(cityPage).ToList();
+
+            if (!soldiers.Any() && !heroes.Any())
+            {
+                return false;
+            }
+
+            int heroMatchCount = task.HeroNameList.Sum(hero => heroes.Contains(hero) ? 1 : 0);
+            return heroMatchCount == task.HeroNameList.Count();
+        }
+
+        private void MoveTroop(MoveTroopTask task)
+        {
+            string cityNodeId = this.cityList[task.CurrentCity];
+
+            this.OpenCityPage(cityNodeId, task.Account.UserName);
+            string page = this.OpenMoveTroopPage(task.Account.UserName);
+            var influenceCityTable = ParseCityListFromMoveTroopPage(page).ToDictionary(city => city.Name);
+
+            var fromCityId = influenceCityTable[task.CurrentCity].NodeId;
+            var toCityId = influenceCityTable[task.NextCity].NodeId;
+
+            var heroString = string.Join("%7C", task.HeroNameList.ToArray());
+            var soldierString = string.Join(
+                "%7c",
+                task.SoldierList.Select(
+                    soldier => string.Format("{0}%3A{1}", soldier.SoldierType, soldier.SoldierNumber)
+                    ).ToArray()
+            );
+
+            ConfirmMoveTroop(fromCityId.ToString(), toCityId.ToString(), soldierString, heroString, 0, task.Account.UserName);
+        }
+
+        private int CalculateDistance(string from, string to, string account)
+        {
+            string fromCityId;
+            if (!this.cityList.TryGetValue(from, out fromCityId))
+            {
+                return 2;
+            }
+
+            string toCityId;
+            if (!this.cityList.TryGetValue(to, out toCityId))
+            {
+                return 120;
+            }
+
+            OpenCityPage(fromCityId, account);
+            string page = OpenCityBuildPage(fromCityId, account);
+            int roadLevel = ParseRoadLevelFromCityBuildPage(page);
+
+            if (roadLevel >= 10) { return 2; }
+            if (roadLevel >= 9) { return 6; }
+            if (roadLevel >= 8) { return 18; }
+            if (roadLevel >= 7) { return 36; }
+            if (roadLevel >= 6) { return 72; }
+
+            return 120;
         }
 
         private delegate void DoSomething();

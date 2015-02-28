@@ -252,6 +252,28 @@
             // return client.OpenUrl(url2);
         }
 
+        private string OpenCityBuildPage(string cityId, string account)
+        {
+            var url = string.Format(
+                "http://{0}/index.php?mod=influence/influence&op=show&func=city_build&node_id={1}&r={2}",
+                this.hostname, cityId, this.randGen.NextDouble());
+            return HTTPRequest(url, account);
+        }
+
+        private int ParseRoadLevelFromCityBuildPage(string page)
+        {
+            const string pattern = @"<span>等级：(\d+)/10</span>";
+            var match = Regex.Match(page, pattern);
+            if (match.Success)
+            {
+                return int.Parse(match.Groups[1].Value);
+            }
+            else
+            {
+                return 6;
+            }
+        }
+
         private string OpenCityPage(string cityId, string account)
         {
             var url1 =
@@ -726,12 +748,13 @@
         {
             const string Pattern = @"prop\.use_prop\((\d+), (\d+), (\d+), (\d+)\)";
             var matches = Regex.Matches(page, Pattern);
-            return from Match match in matches select new DepotItem
-                                                          {
-                                                              PropertyID = int.Parse(match.Groups[1].Value),
-                                                              UserPropertyID = int.Parse(match.Groups[3].Value),
-                                                              GoodsType = int.Parse(match.Groups[2].Value)
-                                                          };
+            return from Match match in matches
+                   select new DepotItem
+                              {
+                                  PropertyID = int.Parse(match.Groups[1].Value),
+                                  UserPropertyID = int.Parse(match.Groups[3].Value),
+                                  GoodsType = int.Parse(match.Groups[2].Value)
+                              };
         }
 
         private int ParseMaxPageID(string page)
@@ -891,13 +914,14 @@
             const string pattern = "<li id=\"li_hero_my(?<heroid>\\d+)\" hname=\"(?<heroname>.+)\" die=(?<isdead>\\d)>";
 
             var matches = Regex.Matches(content, pattern);
-            return from Match match in matches select new HeroInfo
-                                                          {
-                                                              AccountName = account,
-                                                              HeroId = match.Groups["heroid"].Value,
-                                                              Name = match.Groups["heroname"].Value,
-                                                              IsDead = match.Groups["isdead"].Value == "1"
-                                                          };
+            return from Match match in matches
+                   select new HeroInfo
+                              {
+                                  AccountName = account,
+                                  HeroId = match.Groups["heroid"].Value,
+                                  Name = match.Groups["heroname"].Value,
+                                  IsDead = match.Groups["isdead"].Value == "1"
+                              };
         }
 
         private void ReliveHero(string heroId, string account)
@@ -997,13 +1021,42 @@
             return this.HTTPRequest(url, account);
         }
 
+        private IEnumerable<string> ParseHeroIdListFromCityPage(string page)
+        {
+            const string pattern = "<li id=\"user_hero_(?<heroId>\\d+)\" style=\"display:block;\">";
+            var matches = Regex.Matches(page, pattern);
+            return from Match match in matches
+                   select match.Groups["heroId"].Value;
+        }
+
+        private string ConfirmMoveTroop(
+            string fromCityId,
+            string toCityId,
+            string soldierString,
+            string heroString,
+            int brickCount,
+            string account)
+        {
+            string url = string.Format("http://{0}/index.php?mod=military/world_war&op=do&func=move_army&r={1}",
+                this.hostname, this.randGen.NextDouble());
+            string body = string.Format("from_city_id={0}&to_city_id={1}&soldier={2}&hero={3}&brick_num=",
+                fromCityId, toCityId, soldierString, heroString);
+            return HTTPRequest(url, account, body);
+        }
+
         private IEnumerable<CityInfo> QueryInfluenceCityList(string account)
+        {
+            this.OpenAccountFirstCity(account);
+            var content = this.OpenMoveTroopPage(account);
+
+            return ParseCityListFromMoveTroopPage(content);
+
+        }
+
+        private IEnumerable<CityInfo> ParseCityListFromMoveTroopPage(string content)
         {
             const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
             const string selectedCityPattern = "<option value=\"(?<nodeId>\\d+)\" selected\\s*>(?<name>[^<]+)</option>";
-
-            this.OpenAccountFirstCity(account);
-            var content = this.OpenMoveTroopPage(account);
 
             var contentParts = content.Split(new[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
             var fromCityMatches = Regex.Matches(contentParts[0], cityPattern);
@@ -1108,12 +1161,13 @@
             const string pattern =
                 "<li><img src=\"http://.+?/soldier/(?<typeId>\\d+)\\.gif\" titleContent=\"(?<name>.+?)\"/><span>(?<count>\\d+)</span></li>";
             var matches = Regex.Matches(page, pattern);
-            return from Match match in matches select new Soldier
-                                                          {
-                                                              Name = match.Groups["name"].Value,
-                                                              SoldierType = int.Parse(match.Groups["typeId"].Value),
-                                                              SoldierNumber = int.Parse(match.Groups["count"].Value)
-                                                          };
+            return from Match match in matches
+                   select new Soldier
+                              {
+                                  Name = match.Groups["name"].Value,
+                                  SoldierType = int.Parse(match.Groups["typeId"].Value),
+                                  SoldierNumber = int.Parse(match.Groups["count"].Value)
+                              };
         }
 
         private IEnumerable<string> ParseHeroNameListFromCityPage(string page)

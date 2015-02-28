@@ -14,7 +14,11 @@ namespace TC
             public int Distance = 0;
         }
 
+        public Func<string, string, string, int> DistanceCalculate = null;
+
         private Dictionary<string, HashSet<string>> map = null;
+
+        public string account = "";
 
         private List<NodeInfo> sNodeQueue = new List<NodeInfo>();
         private Dictionary<string, int> sNodeMap = new Dictionary<string, int>();
@@ -27,6 +31,10 @@ namespace TC
 
         public int GetDistance(string from, string to)
         {
+            if (this.DistanceCalculate != null)
+            {
+                return DistanceCalculate(from, to, this.account);
+            }
             return 1;
         }
 

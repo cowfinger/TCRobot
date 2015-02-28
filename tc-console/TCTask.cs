@@ -82,4 +82,28 @@ namespace TC
             return string.Format("Relive {0}", this.CurrentHeroId);
         }
     }
+
+    class MoveTroopTask : TCTask
+    {
+        public AccountInfo Account = null;
+        public string CurrentCity = "";
+        public string NextCity = "";
+        public string TerminalCity = "";
+        public List<string> HeroNameList = new List<string>();
+        public List<Soldier> SoldierList = new List<Soldier>();
+
+        public MoveTroopTask(AccountInfo account, string from, string next, string terminal)
+        {
+            this.Account = account;
+            this.CurrentCity = from;
+            this.NextCity = next;
+            this.TerminalCity = terminal;
+        }
+
+        public override string GetTaskHint()
+        {
+            return string.Format("Move Troop: {0} => {1} =>... => {2}",
+                this.CurrentCity, this.NextCity, this.TerminalCity);
+        }
+    }
 }

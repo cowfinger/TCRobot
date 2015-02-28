@@ -284,12 +284,6 @@
         {
             foreach (ListViewItem lvItemTask in this.listViewTasks.CheckedItems)
             {
-                var task = lvItemTask.Tag as SendTroopTask;
-                if (task == null)
-                {
-                    continue;
-                }
-
                 this.listViewTasks.Items.Remove(lvItemTask);
             }
         }
