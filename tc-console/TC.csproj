@@ -71,6 +71,7 @@
     <Compile Include="CookieLite.cs" />
     <Compile Include="DataDefine.cs" />
     <Compile Include="DepotItem.cs" />
+    <Compile Include="DijstraHelper.cs" />
     <Compile Include="FormChooseTroopHead.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,12 +96,6 @@
     <Compile Include="FormMain.Utility.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormMoveArmy.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormMoveArmy.Designer.cs">
-      <DependentUpon>FormMoveArmy.cs</DependentUpon>
-    </Compile>
     <Compile Include="HttpClient.cs" />
     <Compile Include="LoginHelper.cs" />
     <Compile Include="Program.cs" />
@@ -111,9 +106,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormMoveArmy.resx">
-      <DependentUpon>FormMoveArmy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

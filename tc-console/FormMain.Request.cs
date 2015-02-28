@@ -32,13 +32,13 @@ namespace TC
 
         private string GetTargetCityID(string srccityid, string dstcityname, string account)
         {
-            string response = OpenCityPage(srccityid, account);
+            string response = OpenCityShowAttackPage(srccityid, account);
             return ParseTargetCityID(response, dstcityname);
         }
 
         private string CreateGroupHead(string cityId, string teamId, string account)
         {
-            OpenCityPage(cityId, account);
+            OpenCityShowAttackPage(cityId, account);
             string url = string.Format(
                 "http://{0}/index.php?mod=military/world_war&op=do&func=create_group&r={1}",
                 this.hostname, this.randGen.NextDouble()
@@ -62,7 +62,7 @@ namespace TC
 
         private IEnumerable<TroopInfo> GetTeamsInfo(string srccityid, string account)
         {
-            string cityPage = OpenCityPage(srccityid, account);
+            string cityPage = OpenCityShowAttackPage(srccityid, account);
             return ParseTeams(cityPage, account);
         }
 
@@ -146,7 +146,7 @@ namespace TC
 
         private string OpenCreateTeamPage(string cityId, string account)
         {
-            OpenCityPage(cityId, account);
+            OpenCityShowAttackPage(cityId, account);
 
             string url = string.Format(
                 "http://{0}/index.php?mod=military/world_war&op=show&func=create_team&team_type=1&from_address=1&r={1}",
@@ -235,7 +235,16 @@ namespace TC
             // return client.OpenUrl(url2);
         }
 
-        private string OpenCityPage(string srccityid, string account)
+        private string OpenCityPage(string cityId, string account)
+        {
+            string url1 = string.Format(
+                "http://{0}/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={1}&r={2}",
+                this.hostname, cityId, this.randGen.NextDouble()
+                );
+            return HTTPRequest(url1, account);
+        }
+
+        private string OpenCityShowAttackPage(string srccityid, string account)
         {
             string url0 = string.Format(
                 "http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}",
@@ -357,7 +366,7 @@ namespace TC
 
         private IEnumerable<string> OpenAttackPage(string cityId, string account)
         {
-            string page = OpenCityPage(cityId, account);
+            string page = OpenCityShowAttackPage(cityId, account);
             return ParseTargetCityList(page);
         }
 
@@ -569,7 +578,7 @@ namespace TC
 
         private IEnumerable<string> GetMoveTargetCities(string sourceCidyId, string account)
         {
-            OpenCityPage(sourceCidyId, account);
+            OpenCityShowAttackPage(sourceCidyId, account);
             string url = string.Format(
                 "http://{0}/index.php?mod=military/world_war&op=show&func=move_army&r={1}",
                 this.hostname, this.randGen.NextDouble()
@@ -930,12 +939,12 @@ namespace TC
             return HTTPRequest(url, account);
         }
 
-        private IEnumerable<CityInfo> QueryInfluenceCityList(string account, string fromCityId)
+        private IEnumerable<CityInfo> QueryInfluenceCityList(string account)
         {
-            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"  >(?<name>[^<]+)</option>";
-            const string selectedCityPattern = "<option value=\"(?<nodeId>\\d+)\" selected >(?<name>[^<]+)</option>";
+            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
+            const string selectedCityPattern = "<option value=\"(?<nodeId>\\d+)\" selected\\s*>(?<name>[^<]+)</option>";
 
-            OpenCityPage(fromCityId, account);
+            OpenAccountFirstCity(account);
             string content = OpenMoveTroopPage(account);
 
             var contentParts = content.Split(new string[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
@@ -952,21 +961,20 @@ namespace TC
                 };
             }
 
-            int status = 0;
             foreach (Match cityMatch in fromCityMatches)
             {
-                // first city is account city.
-                if (status == 0)
+                var cityName = cityMatch.Groups["name"].Value;
+                string cityId = "0";
+                if (!this.cityList.TryGetValue(cityName, out cityId))
                 {
-                    status = 1;
-                    continue;
+                    cityId = "0";
                 }
 
                 yield return new CityInfo()
                 {
-                    Name = cityMatch.Groups["name"].Value,
+                    Name = cityName,
                     NodeId = int.Parse(cityMatch.Groups["nodeId"].Value),
-                    CityId = int.Parse(this.cityList[cityMatch.Groups["name"].Value]),
+                    CityId = int.Parse(cityId),
                 };
             }
         }
@@ -982,7 +990,7 @@ namespace TC
 
         private Dictionary<string, HashSet<string>> BuildInfluenceCityMap(IEnumerable<CityInfo> influenceCityList, string account)
         {
-            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"  >(?<name>[^<]+)</option>";
+            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
 
             var map = new Dictionary<string, HashSet<string>>();
             foreach (var cityInfo in influenceCityList)
@@ -1006,6 +1014,48 @@ namespace TC
             }
 
             return map;
+        }
+
+        private void OpenAccountFirstCity(string account)
+        {
+            const string pattern = @"index\.php\?mod=influence/influence&op=show&func=influence_city_detail&node_id=(\d+)";
+            string url = string.Format("http://{0}/index.php?mod=influence/influence&op=show&func=influence_city&r={1}",
+                this.hostname, this.randGen.NextDouble());
+
+            string page = HTTPRequest(url, account);
+
+            var match = Regex.Match(page, pattern);
+            if (match.Success)
+            {
+                string cityUrl = string.Format("http://{0}/{1}&r={2}",
+                    this.hostname, match.Value, this.randGen.NextDouble());
+                HTTPRequest(cityUrl, account);
+            }
+        }
+
+        private IEnumerable<Soldier> ParseSoldierInfoFromCityPage(string page)
+        {
+            const string pattern = "<li><img src=\"http://.+?/soldier/(?<typeId>\\d+)\\.gif\" titleContent=\"(?<name>.+?)\"/><span>(?<count>\\d+)</span></li>";
+            var matches = Regex.Matches(page, pattern);
+            foreach (Match match in matches)
+            {
+                yield return new Soldier()
+                {
+                    Name = match.Groups["name"].Value,
+                    SoldierType = int.Parse(match.Groups["typeId"].Value),
+                    SoldierNumber = int.Parse(match.Groups["count"].Value),
+                };
+            }
+        }
+
+        private IEnumerable<string> ParseHeroNameListFromCityPage(string page)
+        {
+            const string pattern = "<div class=\"name\">(?<heroName>.+?)</div>";
+            var matches = Regex.Matches(page, pattern);
+            foreach (Match match in matches)
+            {
+                yield return match.Groups["heroName"].Value;
+            }
         }
     }
 }

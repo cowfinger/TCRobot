@@ -350,10 +350,6 @@ namespace TC
             }
         }
 
-        private void GenerateAccountInfluenceMap(AccountInfo account)
-        {
-        }
-
         private void UpdateHeroTable(IEnumerable<HeroInfo> heroList)
         {
             foreach (var hero in heroList)
@@ -372,6 +368,31 @@ namespace TC
                 }));
             }
         }
+
+        private void TryBuildInfluenceMaps()
+        {
+            Parallel.Dispatch(this.accountTable.Values, account =>
+            {
+                var accountCityList = QueryInfluenceCityList(account.UserName).ToList();
+                account.InfluenceMap = BuildInfluenceCityMap(accountCityList, account.UserName);
+            }).Then(() =>
+            {
+                LoadAccountListToMoveArmyTab();
+            });
+        }
+
+        private void LoadAccountListToMoveArmyTab()
+        {
+            this.Invoke(new DoSomething(() =>
+            {
+                this.comboBoxAccount.Items.Clear();
+                foreach (var account in this.accountTable.Keys)
+                {
+                    this.comboBoxAccount.Items.Add(account);
+                }
+            }));
+        }
+
 
     }
 }

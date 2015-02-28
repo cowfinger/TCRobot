@@ -79,9 +79,36 @@
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.tabControlMainInfo = new System.Windows.Forms.TabControl();
             this.tabPageAccount = new System.Windows.Forms.TabPage();
+            this.tabPageHero = new System.Windows.Forms.TabPage();
+            this.listViewAccountHero = new System.Windows.Forms.ListView();
+            this.columnHeaderAccount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderIsDead = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.tabControlTask = new System.Windows.Forms.TabControl();
+            this.tabPageAttack = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxMaxTroopNumber = new System.Windows.Forms.TextBox();
+            this.tabPageMoveArmy = new System.Windows.Forms.TabPage();
+            this.listBoxMovePath = new System.Windows.Forms.ListBox();
+            this.buttonConfirmMove = new System.Windows.Forms.Button();
+            this.radioButtonAllArmy = new System.Windows.Forms.RadioButton();
+            this.radioButtonHalfArmy = new System.Windows.Forms.RadioButton();
+            this.checkBoxTakeBrick = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.listViewAccountArmy = new System.Windows.Forms.ListView();
+            this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listViewMoveHero = new System.Windows.Forms.ListView();
+            this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label6 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.comboBoxToCity = new System.Windows.Forms.ComboBox();
+            this.comboBoxFromCity = new System.Windows.Forms.ComboBox();
+            this.comboBoxAccount = new System.Windows.Forms.ComboBox();
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemLoadAccountFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,16 +118,8 @@
             this.ToolStripMenuItemDonation = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemReliveHero = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemQuickReliveHero = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStripMain = new System.Windows.Forms.StatusStrip();
-            this.tabPageHero = new System.Windows.Forms.TabPage();
-            this.listViewAccountHero = new System.Windows.Forms.ListView();
-            this.columnHeaderAccount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderIsDead = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.调动部队ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControlTask = new System.Windows.Forms.TabControl();
-            this.tabPageAttack = new System.Windows.Forms.TabPage();
-            this.tabPageMoveArmy = new System.Windows.Forms.TabPage();
+            this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -109,13 +128,14 @@
             this.splitContainer3.SuspendLayout();
             this.tabControlMainInfo.SuspendLayout();
             this.tabPageAccount.SuspendLayout();
+            this.tabPageHero.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            this.menuStripMain.SuspendLayout();
-            this.tabPageHero.SuspendLayout();
             this.tabControlTask.SuspendLayout();
             this.tabPageAttack.SuspendLayout();
+            this.tabPageMoveArmy.SuspendLayout();
+            this.menuStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -155,7 +175,7 @@
             this.listViewTroops.GridLines = true;
             this.listViewTroops.Location = new System.Drawing.Point(0, 171);
             this.listViewTroops.Name = "listViewTroops";
-            this.listViewTroops.Size = new System.Drawing.Size(621, 169);
+            this.listViewTroops.Size = new System.Drawing.Size(621, 89);
             this.listViewTroops.TabIndex = 13;
             this.listViewTroops.UseCompatibleStateImageBehavior = false;
             this.listViewTroops.View = System.Windows.Forms.View.Details;
@@ -262,7 +282,7 @@
             this.listViewAccounts.GridLines = true;
             this.listViewAccounts.Location = new System.Drawing.Point(3, 3);
             this.listViewAccounts.Name = "listViewAccounts";
-            this.listViewAccounts.Size = new System.Drawing.Size(357, 334);
+            this.listViewAccounts.Size = new System.Drawing.Size(357, 254);
             this.listViewAccounts.TabIndex = 29;
             this.listViewAccounts.UseCompatibleStateImageBehavior = false;
             this.listViewAccounts.View = System.Windows.Forms.View.Details;
@@ -351,7 +371,7 @@
             this.listViewTasks.GridLines = true;
             this.listViewTasks.Location = new System.Drawing.Point(-1, 32);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(631, 331);
+            this.listViewTasks.Size = new System.Drawing.Size(631, 251);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
@@ -464,7 +484,7 @@
             this.listViewCompletedTasks.Location = new System.Drawing.Point(0, 0);
             this.listViewCompletedTasks.Margin = new System.Windows.Forms.Padding(0);
             this.listViewCompletedTasks.Name = "listViewCompletedTasks";
-            this.listViewCompletedTasks.Size = new System.Drawing.Size(371, 364);
+            this.listViewCompletedTasks.Size = new System.Drawing.Size(371, 284);
             this.listViewCompletedTasks.TabIndex = 51;
             this.listViewCompletedTasks.UseCompatibleStateImageBehavior = false;
             this.listViewCompletedTasks.View = System.Windows.Forms.View.Details;
@@ -535,7 +555,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1008, 736);
+            this.splitContainer1.Size = new System.Drawing.Size(1008, 576);
             this.splitContainer1.SplitterDistance = 373;
             this.splitContainer1.TabIndex = 55;
             // 
@@ -553,8 +573,8 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.listViewCompletedTasks);
-            this.splitContainer3.Size = new System.Drawing.Size(371, 734);
-            this.splitContainer3.SplitterDistance = 366;
+            this.splitContainer3.Size = new System.Drawing.Size(371, 574);
+            this.splitContainer3.SplitterDistance = 286;
             this.splitContainer3.TabIndex = 55;
             // 
             // tabControlMainInfo
@@ -565,7 +585,7 @@
             this.tabControlMainInfo.Location = new System.Drawing.Point(0, 0);
             this.tabControlMainInfo.Name = "tabControlMainInfo";
             this.tabControlMainInfo.SelectedIndex = 0;
-            this.tabControlMainInfo.Size = new System.Drawing.Size(371, 366);
+            this.tabControlMainInfo.Size = new System.Drawing.Size(371, 286);
             this.tabControlMainInfo.TabIndex = 30;
             this.tabControlMainInfo.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControlMainInfo_Selected);
             // 
@@ -575,10 +595,52 @@
             this.tabPageAccount.Location = new System.Drawing.Point(4, 22);
             this.tabPageAccount.Name = "tabPageAccount";
             this.tabPageAccount.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAccount.Size = new System.Drawing.Size(363, 340);
+            this.tabPageAccount.Size = new System.Drawing.Size(363, 260);
             this.tabPageAccount.TabIndex = 0;
             this.tabPageAccount.Text = "Account";
             this.tabPageAccount.UseVisualStyleBackColor = true;
+            // 
+            // tabPageHero
+            // 
+            this.tabPageHero.Controls.Add(this.listViewAccountHero);
+            this.tabPageHero.Location = new System.Drawing.Point(4, 22);
+            this.tabPageHero.Name = "tabPageHero";
+            this.tabPageHero.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageHero.Size = new System.Drawing.Size(363, 260);
+            this.tabPageHero.TabIndex = 2;
+            this.tabPageHero.Text = "Hero";
+            this.tabPageHero.UseVisualStyleBackColor = true;
+            // 
+            // listViewAccountHero
+            // 
+            this.listViewAccountHero.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewAccountHero.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderAccount,
+            this.columnHeaderName,
+            this.columnHeaderIsDead});
+            this.listViewAccountHero.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewAccountHero.GridLines = true;
+            this.listViewAccountHero.Location = new System.Drawing.Point(3, 3);
+            this.listViewAccountHero.Name = "listViewAccountHero";
+            this.listViewAccountHero.Size = new System.Drawing.Size(357, 254);
+            this.listViewAccountHero.TabIndex = 0;
+            this.listViewAccountHero.UseCompatibleStateImageBehavior = false;
+            this.listViewAccountHero.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderAccount
+            // 
+            this.columnHeaderAccount.Text = "Account";
+            this.columnHeaderAccount.Width = 85;
+            // 
+            // columnHeaderName
+            // 
+            this.columnHeaderName.Text = "Name";
+            this.columnHeaderName.Width = 82;
+            // 
+            // columnHeaderIsDead
+            // 
+            this.columnHeaderIsDead.Text = "IsDead";
+            this.columnHeaderIsDead.Width = 101;
             // 
             // splitContainer2
             // 
@@ -600,162 +662,9 @@
             this.splitContainer2.Panel2.Controls.Add(this.textBoxSysTime);
             this.splitContainer2.Panel2.Controls.Add(this.btnCancelTasks);
             this.splitContainer2.Panel2.Controls.Add(this.label7);
-            this.splitContainer2.Size = new System.Drawing.Size(631, 736);
-            this.splitContainer2.SplitterDistance = 367;
+            this.splitContainer2.Size = new System.Drawing.Size(631, 576);
+            this.splitContainer2.SplitterDistance = 287;
             this.splitContainer2.TabIndex = 51;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(399, 94);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(59, 12);
-            this.label5.TabIndex = 52;
-            this.label5.Text = "最大兵力:";
-            // 
-            // textBoxMaxTroopNumber
-            // 
-            this.textBoxMaxTroopNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxMaxTroopNumber.Location = new System.Drawing.Point(458, 91);
-            this.textBoxMaxTroopNumber.Name = "textBoxMaxTroopNumber";
-            this.textBoxMaxTroopNumber.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.textBoxMaxTroopNumber.Size = new System.Drawing.Size(46, 21);
-            this.textBoxMaxTroopNumber.TabIndex = 51;
-            this.textBoxMaxTroopNumber.Text = "20000";
-            this.textBoxMaxTroopNumber.WordWrap = false;
-            // 
-            // menuStripMain
-            // 
-            this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.ToolStripMenuItemFunctions});
-            this.menuStripMain.Location = new System.Drawing.Point(0, 0);
-            this.menuStripMain.Name = "menuStripMain";
-            this.menuStripMain.Size = new System.Drawing.Size(1008, 25);
-            this.menuStripMain.TabIndex = 56;
-            this.menuStripMain.Text = "menuStrip1";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemLoadAccountFile,
-            this.ToolStripMenuItemBatchLogin,
-            this.ToolStripMenuItemScan});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.fileToolStripMenuItem.Text = "文件";
-            // 
-            // ToolStripMenuItemLoadAccountFile
-            // 
-            this.ToolStripMenuItemLoadAccountFile.Name = "ToolStripMenuItemLoadAccountFile";
-            this.ToolStripMenuItemLoadAccountFile.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItemLoadAccountFile.Text = "载入账号";
-            this.ToolStripMenuItemLoadAccountFile.Click += new System.EventHandler(this.ToolStripMenuItemLoadAccountFile_Click);
-            // 
-            // ToolStripMenuItemBatchLogin
-            // 
-            this.ToolStripMenuItemBatchLogin.Enabled = false;
-            this.ToolStripMenuItemBatchLogin.Name = "ToolStripMenuItemBatchLogin";
-            this.ToolStripMenuItemBatchLogin.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItemBatchLogin.Text = "登陆所有";
-            this.ToolStripMenuItemBatchLogin.Click += new System.EventHandler(this.ToolStripMenuItemBatchLogin_Click);
-            // 
-            // ToolStripMenuItemScan
-            // 
-            this.ToolStripMenuItemScan.Enabled = false;
-            this.ToolStripMenuItemScan.Name = "ToolStripMenuItemScan";
-            this.ToolStripMenuItemScan.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItemScan.Text = "扫描";
-            this.ToolStripMenuItemScan.Click += new System.EventHandler(this.ToolStripMenuItemScan_Click);
-            // 
-            // ToolStripMenuItemFunctions
-            // 
-            this.ToolStripMenuItemFunctions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemDonation,
-            this.ToolStripMenuItemReliveHero,
-            this.ToolStripMenuItemQuickReliveHero,
-            this.调动部队ToolStripMenuItem});
-            this.ToolStripMenuItemFunctions.Enabled = false;
-            this.ToolStripMenuItemFunctions.Name = "ToolStripMenuItemFunctions";
-            this.ToolStripMenuItemFunctions.Size = new System.Drawing.Size(44, 21);
-            this.ToolStripMenuItemFunctions.Text = "功能";
-            // 
-            // ToolStripMenuItemDonation
-            // 
-            this.ToolStripMenuItemDonation.Name = "ToolStripMenuItemDonation";
-            this.ToolStripMenuItemDonation.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItemDonation.Text = "捐粮";
-            this.ToolStripMenuItemDonation.Click += new System.EventHandler(this.ToolStripMenuItemDonation_Click);
-            // 
-            // ToolStripMenuItemReliveHero
-            // 
-            this.ToolStripMenuItemReliveHero.Name = "ToolStripMenuItemReliveHero";
-            this.ToolStripMenuItemReliveHero.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItemReliveHero.Text = "复活武将";
-            this.ToolStripMenuItemReliveHero.Click += new System.EventHandler(this.ToolStripMenuItemReliveHero_Click);
-            // 
-            // ToolStripMenuItemQuickReliveHero
-            // 
-            this.ToolStripMenuItemQuickReliveHero.Name = "ToolStripMenuItemQuickReliveHero";
-            this.ToolStripMenuItemQuickReliveHero.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItemQuickReliveHero.Text = "快速复活武将";
-            this.ToolStripMenuItemQuickReliveHero.Click += new System.EventHandler(this.ToolStripMenuItemQuickReliveHero_Click);
-            // 
-            // statusStripMain
-            // 
-            this.statusStripMain.Location = new System.Drawing.Point(0, 739);
-            this.statusStripMain.Name = "statusStripMain";
-            this.statusStripMain.Size = new System.Drawing.Size(1008, 22);
-            this.statusStripMain.TabIndex = 57;
-            this.statusStripMain.Text = "statusStrip1";
-            // 
-            // tabPageHero
-            // 
-            this.tabPageHero.Controls.Add(this.listViewAccountHero);
-            this.tabPageHero.Location = new System.Drawing.Point(4, 22);
-            this.tabPageHero.Name = "tabPageHero";
-            this.tabPageHero.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageHero.Size = new System.Drawing.Size(363, 340);
-            this.tabPageHero.TabIndex = 2;
-            this.tabPageHero.Text = "Hero";
-            this.tabPageHero.UseVisualStyleBackColor = true;
-            // 
-            // listViewAccountHero
-            // 
-            this.listViewAccountHero.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listViewAccountHero.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeaderAccount,
-            this.columnHeaderName,
-            this.columnHeaderIsDead});
-            this.listViewAccountHero.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewAccountHero.GridLines = true;
-            this.listViewAccountHero.Location = new System.Drawing.Point(3, 3);
-            this.listViewAccountHero.Name = "listViewAccountHero";
-            this.listViewAccountHero.Size = new System.Drawing.Size(357, 334);
-            this.listViewAccountHero.TabIndex = 0;
-            this.listViewAccountHero.UseCompatibleStateImageBehavior = false;
-            this.listViewAccountHero.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeaderAccount
-            // 
-            this.columnHeaderAccount.Text = "Account";
-            this.columnHeaderAccount.Width = 85;
-            // 
-            // columnHeaderName
-            // 
-            this.columnHeaderName.Text = "Name";
-            this.columnHeaderName.Width = 82;
-            // 
-            // columnHeaderIsDead
-            // 
-            this.columnHeaderIsDead.Text = "IsDead";
-            this.columnHeaderIsDead.Width = 101;
-            // 
-            // 调动部队ToolStripMenuItem
-            // 
-            this.调动部队ToolStripMenuItem.Name = "调动部队ToolStripMenuItem";
-            this.调动部队ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.调动部队ToolStripMenuItem.Text = "调动部队";
             // 
             // tabControlTask
             // 
@@ -765,8 +674,9 @@
             this.tabControlTask.Location = new System.Drawing.Point(0, 0);
             this.tabControlTask.Name = "tabControlTask";
             this.tabControlTask.SelectedIndex = 0;
-            this.tabControlTask.Size = new System.Drawing.Size(629, 365);
+            this.tabControlTask.Size = new System.Drawing.Size(629, 285);
             this.tabControlTask.TabIndex = 53;
+            this.tabControlTask.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControlTask_Selected);
             // 
             // tabPageAttack
             // 
@@ -792,32 +702,342 @@
             this.tabPageAttack.Location = new System.Drawing.Point(4, 22);
             this.tabPageAttack.Name = "tabPageAttack";
             this.tabPageAttack.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAttack.Size = new System.Drawing.Size(621, 339);
+            this.tabPageAttack.Size = new System.Drawing.Size(621, 259);
             this.tabPageAttack.TabIndex = 0;
             this.tabPageAttack.Text = "Attack";
             this.tabPageAttack.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(399, 94);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(59, 12);
+            this.label5.TabIndex = 52;
+            this.label5.Text = "最大兵力:";
+            // 
+            // textBoxMaxTroopNumber
+            // 
+            this.textBoxMaxTroopNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxMaxTroopNumber.Location = new System.Drawing.Point(458, 91);
+            this.textBoxMaxTroopNumber.Name = "textBoxMaxTroopNumber";
+            this.textBoxMaxTroopNumber.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.textBoxMaxTroopNumber.Size = new System.Drawing.Size(46, 21);
+            this.textBoxMaxTroopNumber.TabIndex = 51;
+            this.textBoxMaxTroopNumber.Text = "20000";
+            this.textBoxMaxTroopNumber.WordWrap = false;
+            // 
             // tabPageMoveArmy
             // 
+            this.tabPageMoveArmy.Controls.Add(this.listBoxMovePath);
+            this.tabPageMoveArmy.Controls.Add(this.buttonConfirmMove);
+            this.tabPageMoveArmy.Controls.Add(this.radioButtonAllArmy);
+            this.tabPageMoveArmy.Controls.Add(this.radioButtonHalfArmy);
+            this.tabPageMoveArmy.Controls.Add(this.checkBoxTakeBrick);
+            this.tabPageMoveArmy.Controls.Add(this.label12);
+            this.tabPageMoveArmy.Controls.Add(this.listViewAccountArmy);
+            this.tabPageMoveArmy.Controls.Add(this.listViewMoveHero);
+            this.tabPageMoveArmy.Controls.Add(this.label6);
+            this.tabPageMoveArmy.Controls.Add(this.label9);
+            this.tabPageMoveArmy.Controls.Add(this.label10);
+            this.tabPageMoveArmy.Controls.Add(this.label11);
+            this.tabPageMoveArmy.Controls.Add(this.comboBoxToCity);
+            this.tabPageMoveArmy.Controls.Add(this.comboBoxFromCity);
+            this.tabPageMoveArmy.Controls.Add(this.comboBoxAccount);
             this.tabPageMoveArmy.Location = new System.Drawing.Point(4, 22);
             this.tabPageMoveArmy.Name = "tabPageMoveArmy";
             this.tabPageMoveArmy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageMoveArmy.Size = new System.Drawing.Size(621, 339);
+            this.tabPageMoveArmy.Size = new System.Drawing.Size(621, 259);
             this.tabPageMoveArmy.TabIndex = 1;
             this.tabPageMoveArmy.Text = "Move Army";
             this.tabPageMoveArmy.UseVisualStyleBackColor = true;
+            // 
+            // listBoxMovePath
+            // 
+            this.listBoxMovePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.listBoxMovePath.FormattingEnabled = true;
+            this.listBoxMovePath.ItemHeight = 12;
+            this.listBoxMovePath.Location = new System.Drawing.Point(447, 74);
+            this.listBoxMovePath.Name = "listBoxMovePath";
+            this.listBoxMovePath.Size = new System.Drawing.Size(120, 172);
+            this.listBoxMovePath.TabIndex = 27;
+            // 
+            // buttonConfirmMove
+            // 
+            this.buttonConfirmMove.Location = new System.Drawing.Point(492, 36);
+            this.buttonConfirmMove.Name = "buttonConfirmMove";
+            this.buttonConfirmMove.Size = new System.Drawing.Size(75, 23);
+            this.buttonConfirmMove.TabIndex = 26;
+            this.buttonConfirmMove.Text = "确定移动";
+            this.buttonConfirmMove.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonAllArmy
+            // 
+            this.radioButtonAllArmy.AutoSize = true;
+            this.radioButtonAllArmy.Location = new System.Drawing.Point(328, 51);
+            this.radioButtonAllArmy.Name = "radioButtonAllArmy";
+            this.radioButtonAllArmy.Size = new System.Drawing.Size(71, 16);
+            this.radioButtonAllArmy.TabIndex = 25;
+            this.radioButtonAllArmy.TabStop = true;
+            this.radioButtonAllArmy.Text = "全部部队";
+            this.radioButtonAllArmy.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonHalfArmy
+            // 
+            this.radioButtonHalfArmy.AutoSize = true;
+            this.radioButtonHalfArmy.Location = new System.Drawing.Point(250, 51);
+            this.radioButtonHalfArmy.Name = "radioButtonHalfArmy";
+            this.radioButtonHalfArmy.Size = new System.Drawing.Size(71, 16);
+            this.radioButtonHalfArmy.TabIndex = 24;
+            this.radioButtonHalfArmy.TabStop = true;
+            this.radioButtonHalfArmy.Text = "一半部队";
+            this.radioButtonHalfArmy.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxTakeBrick
+            // 
+            this.checkBoxTakeBrick.AutoSize = true;
+            this.checkBoxTakeBrick.Location = new System.Drawing.Point(8, 36);
+            this.checkBoxTakeBrick.Name = "checkBoxTakeBrick";
+            this.checkBoxTakeBrick.Size = new System.Drawing.Size(72, 16);
+            this.checkBoxTakeBrick.TabIndex = 23;
+            this.checkBoxTakeBrick.Text = "携带砖块";
+            this.checkBoxTakeBrick.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(8, 55);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(29, 12);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "武将";
+            // 
+            // listViewAccountArmy
+            // 
+            this.listViewAccountArmy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.listViewAccountArmy.CheckBoxes = true;
+            this.listViewAccountArmy.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader16,
+            this.columnHeader17});
+            this.listViewAccountArmy.GridLines = true;
+            this.listViewAccountArmy.Location = new System.Drawing.Point(217, 70);
+            this.listViewAccountArmy.Name = "listViewAccountArmy";
+            this.listViewAccountArmy.Size = new System.Drawing.Size(223, 183);
+            this.listViewAccountArmy.TabIndex = 21;
+            this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
+            this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader16
+            // 
+            this.columnHeader16.Text = "Name";
+            this.columnHeader16.Width = 88;
+            // 
+            // columnHeader17
+            // 
+            this.columnHeader17.Text = "Number";
+            this.columnHeader17.Width = 123;
+            // 
+            // listViewMoveHero
+            // 
+            this.listViewMoveHero.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.listViewMoveHero.CheckBoxes = true;
+            this.listViewMoveHero.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader14,
+            this.columnHeader15});
+            this.listViewMoveHero.GridLines = true;
+            this.listViewMoveHero.Location = new System.Drawing.Point(8, 70);
+            this.listViewMoveHero.Name = "listViewMoveHero";
+            this.listViewMoveHero.Size = new System.Drawing.Size(203, 183);
+            this.listViewMoveHero.TabIndex = 20;
+            this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
+            this.listViewMoveHero.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader14
+            // 
+            this.columnHeader14.Text = "Name";
+            this.columnHeader14.Width = 92;
+            // 
+            // columnHeader15
+            // 
+            this.columnHeader15.Text = "City";
+            this.columnHeader15.Width = 101;
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(215, 55);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(29, 12);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "士兵";
+            // 
+            // label9
+            // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(376, 9);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(53, 12);
+            this.label9.TabIndex = 15;
+            this.label9.Text = "目标城市";
+            // 
+            // label10
+            // 
+            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(175, 9);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(53, 12);
+            this.label10.TabIndex = 14;
+            this.label10.Text = "出发城市";
+            // 
+            // label11
+            // 
+            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 9);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(29, 12);
+            this.label11.TabIndex = 13;
+            this.label11.Text = "账号";
+            // 
+            // comboBoxToCity
+            // 
+            this.comboBoxToCity.FormattingEnabled = true;
+            this.comboBoxToCity.Location = new System.Drawing.Point(446, 6);
+            this.comboBoxToCity.Name = "comboBoxToCity";
+            this.comboBoxToCity.Size = new System.Drawing.Size(121, 20);
+            this.comboBoxToCity.TabIndex = 12;
+            this.comboBoxToCity.SelectedIndexChanged += new System.EventHandler(this.comboBoxToCity_SelectedIndexChanged);
+            // 
+            // comboBoxFromCity
+            // 
+            this.comboBoxFromCity.FormattingEnabled = true;
+            this.comboBoxFromCity.Location = new System.Drawing.Point(245, 6);
+            this.comboBoxFromCity.Name = "comboBoxFromCity";
+            this.comboBoxFromCity.Size = new System.Drawing.Size(121, 20);
+            this.comboBoxFromCity.TabIndex = 11;
+            this.comboBoxFromCity.SelectedIndexChanged += new System.EventHandler(this.comboBoxFromCity_SelectedIndexChanged);
+            // 
+            // comboBoxAccount
+            // 
+            this.comboBoxAccount.FormattingEnabled = true;
+            this.comboBoxAccount.Location = new System.Drawing.Point(41, 6);
+            this.comboBoxAccount.Name = "comboBoxAccount";
+            this.comboBoxAccount.Size = new System.Drawing.Size(121, 20);
+            this.comboBoxAccount.TabIndex = 10;
+            this.comboBoxAccount.SelectedIndexChanged += new System.EventHandler(this.comboBoxAccount_SelectedIndexChanged);
+            // 
+            // menuStripMain
+            // 
+            this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.ToolStripMenuItemFunctions});
+            this.menuStripMain.Location = new System.Drawing.Point(0, 0);
+            this.menuStripMain.Name = "menuStripMain";
+            this.menuStripMain.Size = new System.Drawing.Size(1008, 25);
+            this.menuStripMain.TabIndex = 56;
+            this.menuStripMain.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItemLoadAccountFile,
+            this.ToolStripMenuItemBatchLogin,
+            this.ToolStripMenuItemScan});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.fileToolStripMenuItem.Text = "文件";
+            // 
+            // ToolStripMenuItemLoadAccountFile
+            // 
+            this.ToolStripMenuItemLoadAccountFile.Name = "ToolStripMenuItemLoadAccountFile";
+            this.ToolStripMenuItemLoadAccountFile.Size = new System.Drawing.Size(124, 22);
+            this.ToolStripMenuItemLoadAccountFile.Text = "载入账号";
+            this.ToolStripMenuItemLoadAccountFile.Click += new System.EventHandler(this.ToolStripMenuItemLoadAccountFile_Click);
+            // 
+            // ToolStripMenuItemBatchLogin
+            // 
+            this.ToolStripMenuItemBatchLogin.Enabled = false;
+            this.ToolStripMenuItemBatchLogin.Name = "ToolStripMenuItemBatchLogin";
+            this.ToolStripMenuItemBatchLogin.Size = new System.Drawing.Size(124, 22);
+            this.ToolStripMenuItemBatchLogin.Text = "登陆所有";
+            this.ToolStripMenuItemBatchLogin.Click += new System.EventHandler(this.ToolStripMenuItemBatchLogin_Click);
+            // 
+            // ToolStripMenuItemScan
+            // 
+            this.ToolStripMenuItemScan.Enabled = false;
+            this.ToolStripMenuItemScan.Name = "ToolStripMenuItemScan";
+            this.ToolStripMenuItemScan.Size = new System.Drawing.Size(124, 22);
+            this.ToolStripMenuItemScan.Text = "扫描";
+            this.ToolStripMenuItemScan.Click += new System.EventHandler(this.ToolStripMenuItemScan_Click);
+            // 
+            // ToolStripMenuItemFunctions
+            // 
+            this.ToolStripMenuItemFunctions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItemDonation,
+            this.ToolStripMenuItemReliveHero,
+            this.ToolStripMenuItemQuickReliveHero,
+            this.调动部队ToolStripMenuItem});
+            this.ToolStripMenuItemFunctions.Enabled = false;
+            this.ToolStripMenuItemFunctions.Name = "ToolStripMenuItemFunctions";
+            this.ToolStripMenuItemFunctions.Size = new System.Drawing.Size(44, 21);
+            this.ToolStripMenuItemFunctions.Text = "功能";
+            // 
+            // ToolStripMenuItemDonation
+            // 
+            this.ToolStripMenuItemDonation.Name = "ToolStripMenuItemDonation";
+            this.ToolStripMenuItemDonation.Size = new System.Drawing.Size(148, 22);
+            this.ToolStripMenuItemDonation.Text = "捐粮";
+            this.ToolStripMenuItemDonation.Click += new System.EventHandler(this.ToolStripMenuItemDonation_Click);
+            // 
+            // ToolStripMenuItemReliveHero
+            // 
+            this.ToolStripMenuItemReliveHero.Name = "ToolStripMenuItemReliveHero";
+            this.ToolStripMenuItemReliveHero.Size = new System.Drawing.Size(148, 22);
+            this.ToolStripMenuItemReliveHero.Text = "复活武将";
+            this.ToolStripMenuItemReliveHero.Click += new System.EventHandler(this.ToolStripMenuItemReliveHero_Click);
+            // 
+            // ToolStripMenuItemQuickReliveHero
+            // 
+            this.ToolStripMenuItemQuickReliveHero.Name = "ToolStripMenuItemQuickReliveHero";
+            this.ToolStripMenuItemQuickReliveHero.Size = new System.Drawing.Size(148, 22);
+            this.ToolStripMenuItemQuickReliveHero.Text = "快速复活武将";
+            this.ToolStripMenuItemQuickReliveHero.Click += new System.EventHandler(this.ToolStripMenuItemQuickReliveHero_Click);
+            // 
+            // 调动部队ToolStripMenuItem
+            // 
+            this.调动部队ToolStripMenuItem.Name = "调动部队ToolStripMenuItem";
+            this.调动部队ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.调动部队ToolStripMenuItem.Text = "调动部队";
+            // 
+            // statusStripMain
+            // 
+            this.statusStripMain.Location = new System.Drawing.Point(0, 579);
+            this.statusStripMain.Name = "statusStripMain";
+            this.statusStripMain.Size = new System.Drawing.Size(1008, 22);
+            this.statusStripMain.TabIndex = 57;
+            this.statusStripMain.Text = "statusStrip1";
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 761);
+            this.ClientSize = new System.Drawing.Size(1008, 601);
             this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStripMain);
             this.Controls.Add(this.webBrowserMain);
             this.Name = "FormMain";
-            this.Text = "TC Console (1.0)";
+            this.Text = "TC Console (2.0)";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -827,17 +1047,19 @@
             this.splitContainer3.ResumeLayout(false);
             this.tabControlMainInfo.ResumeLayout(false);
             this.tabPageAccount.ResumeLayout(false);
+            this.tabPageHero.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             this.splitContainer2.ResumeLayout(false);
-            this.menuStripMain.ResumeLayout(false);
-            this.menuStripMain.PerformLayout();
-            this.tabPageHero.ResumeLayout(false);
             this.tabControlTask.ResumeLayout(false);
             this.tabPageAttack.ResumeLayout(false);
             this.tabPageAttack.PerformLayout();
+            this.tabPageMoveArmy.ResumeLayout(false);
+            this.tabPageMoveArmy.PerformLayout();
+            this.menuStripMain.ResumeLayout(false);
+            this.menuStripMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -918,6 +1140,25 @@
         private System.Windows.Forms.TabControl tabControlTask;
         private System.Windows.Forms.TabPage tabPageAttack;
         private System.Windows.Forms.TabPage tabPageMoveArmy;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ComboBox comboBoxToCity;
+        private System.Windows.Forms.ComboBox comboBoxFromCity;
+        private System.Windows.Forms.ComboBox comboBoxAccount;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ListView listViewAccountArmy;
+        private System.Windows.Forms.ColumnHeader columnHeader16;
+        private System.Windows.Forms.ColumnHeader columnHeader17;
+        private System.Windows.Forms.ListView listViewMoveHero;
+        private System.Windows.Forms.ColumnHeader columnHeader14;
+        private System.Windows.Forms.ColumnHeader columnHeader15;
+        private System.Windows.Forms.CheckBox checkBoxTakeBrick;
+        private System.Windows.Forms.RadioButton radioButtonAllArmy;
+        private System.Windows.Forms.RadioButton radioButtonHalfArmy;
+        private System.Windows.Forms.Button buttonConfirmMove;
+        private System.Windows.Forms.ListBox listBoxMovePath;
     }
 }
 

@@ -52,7 +52,6 @@ namespace TC
         private Dictionary<string, AccountInfo> accountTable = new Dictionary<string, AccountInfo>();
         private string activeAccount;
 
-
         private DateTime RemoteTime
         {
             get
@@ -353,7 +352,7 @@ namespace TC
             var troopList = this.CityTroopList.ToList().Where(troop => !troop.isDefendTroop);
             Parallel.Dispatch(troopList, team =>
             {
-                string cityPage = OpenCityPage(srcCityID, team.AccountName);
+                string cityPage = OpenCityShowAttackPage(srcCityID, team.AccountName);
                 string destCityID = ParseTargetCityID(cityPage, dstCityName);
 
                 if (string.IsNullOrEmpty(destCityID))
@@ -656,6 +655,99 @@ namespace TC
                         }
                     }));
                 });
+            }
+        }
+
+        private void tabControlTask_Selected(object sender, TabControlEventArgs e)
+        {
+            if (this.tabControlTask.SelectedTab.Name == "tabPageMoveArmy")
+            {
+                TryBuildInfluenceMaps();
+            }
+        }
+
+        private void comboBoxAccount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedAccount = this.comboBoxAccount.SelectedItem.ToString();
+
+            AccountInfo account = null;
+            if (!this.accountTable.TryGetValue(selectedAccount, out account))
+            {
+                MessageBox.Show("账号不存在");
+                return;
+            }
+
+            this.comboBoxFromCity.Items.Clear();
+            foreach (var cityName in account.CityNameList)
+            {
+                this.comboBoxFromCity.Items.Add(cityName);
+            }
+
+            this.comboBoxToCity.Items.Clear();
+            foreach (var cityName in account.InfluenceMap.Keys)
+            {
+                this.comboBoxToCity.Items.Add(cityName);
+            }
+        }
+
+        private void comboBoxFromCity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string fromCity = this.comboBoxFromCity.SelectedItem.ToString();
+            string accountName = this.comboBoxAccount.SelectedItem.ToString();
+            Task.Run(() =>
+            {
+                string cityId = this.cityList[fromCity];
+                string cityPage = OpenCityPage(cityId, accountName);
+                var soldiers = ParseSoldierInfoFromCityPage(cityPage).ToList();
+                var heroes = ParseHeroNameListFromCityPage(cityPage).ToList();
+
+                if (!soldiers.Any())
+                {
+                    MessageBox.Show("没有空闲的部队，请先解散部队.");
+                }
+
+                if (!heroes.Any())
+                {
+                    MessageBox.Show("没有空闲的将领，请先解散部队.");
+                }
+
+                this.Invoke(new DoSomething(() =>
+                {
+                    this.listViewAccountArmy.Items.Clear();
+                    foreach (var soldierInfo in soldiers)
+                    {
+                        var lvItem = new ListViewItem();
+                        lvItem.Tag = soldierInfo;
+                        lvItem.SubItems[0].Text = soldierInfo.Name;
+                        lvItem.SubItems.Add(soldierInfo.SoldierNumber.ToString());
+                        this.listViewAccountArmy.Items.Add(lvItem);
+                    }
+
+                    this.listViewMoveHero.Items.Clear();
+                    foreach (var hero in heroes)
+                    {
+                        var lvItem = new ListViewItem();
+                        lvItem.SubItems[0].Text = hero;
+                        this.listViewMoveHero.Items.Add(lvItem);
+                    }
+                }));
+            });
+        }
+
+        private void comboBoxToCity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string fromCity = this.comboBoxFromCity.SelectedItem.ToString();
+            string toCity = this.comboBoxToCity.SelectedItem.ToString();
+            string accountName = this.comboBoxAccount.SelectedItem.ToString();
+            var account = this.accountTable[accountName];
+
+            var path = new DijstraHelper(account.InfluenceMap).GetPath(fromCity, toCity).ToList();
+            path.Reverse();
+
+            this.listBoxMovePath.Items.Clear();
+            foreach (var city in path)
+            {
+                this.listBoxMovePath.Items.Add(city);
             }
         }
     }

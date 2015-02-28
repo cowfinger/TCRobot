@@ -119,6 +119,13 @@ namespace TC
                 a => a.LoginStatus == "on-line" || a.LoginStatus == "login-failed" ? 1 : 0
                 );
 
+            Task.Run(() =>
+            {
+                var cityNameList = GetAccountInflunceCityNameListWithArmy(account.UserName);
+                account.CityNameList = cityNameList;
+                account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]);
+            });
+
             if (handledAccountNumber >= this.accountTable.Keys.Count)
             {
                 this.remoteTimeLastSync = DateTime.Now;
@@ -127,6 +134,7 @@ namespace TC
                 StartUITimeSyncTimer();
                 StartTaskTimer();
                 StartOnlineTaskCheckTimer();
+
             }
 
             this.Invoke(new DoSomething(() =>
