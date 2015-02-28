@@ -185,7 +185,7 @@ namespace TC
             Task.Run(() =>
             {
                 var targetCityNameList = QueryTargetCityList(cityId).ToList();
-                var influnceCityNameList = 
+                var influnceCityNameList =
 
                 this.Invoke(new DoSomething(() =>
                 {
@@ -594,10 +594,13 @@ namespace TC
                 var heroPage = OpenHeroPage(account.UserName);
                 var heroList = ParseHeroList(heroPage, account.UserName).ToList();
 
-                if (tabControlMainInfo.SelectedTab.Name == "tabPageHero")
-                {
-                    UpdateHeroTable(heroList);
-                }
+                this.Invoke(new DoSomething(() =>
+                    {
+                        if (tabControlMainInfo.SelectedTab.Name == "tabPageHero")
+                        {
+                            UpdateHeroTable(heroList);
+                        }
+                    }));
 
                 var deadHeroList = heroList.Where(hero => hero.IsDead).ToList();
                 if (!deadHeroList.Any())
@@ -749,6 +752,11 @@ namespace TC
             {
                 this.listBoxMovePath.Items.Add(city);
             }
+        }
+
+        private void buttonConfirmMove_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

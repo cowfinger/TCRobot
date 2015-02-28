@@ -906,7 +906,7 @@ namespace TC
             var cookieMap = ParseCookieStr(account.CookieStr);
 
             string tmp_id = string.Empty;
-            if (!cookieMap.TryGetValue("tmp_id", out tmp_id))
+            if (!cookieMap.TryGetValue("tmp_mid", out tmp_id))
             {
                 return string.Empty;
             }
@@ -917,7 +917,7 @@ namespace TC
         private string QueryReliveQueueId(string tid, AccountInfo account)
         {
             string url0 = string.Format(
-                "http://{0}/index.php?mod=get_data&op=do&r=P{1}",
+                "http://{0}/index.php?mod=get_data&op=do&r={1}",
                 this.hostname, this.randGen.NextDouble()
                 );
 

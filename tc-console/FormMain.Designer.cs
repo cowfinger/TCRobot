@@ -771,10 +771,12 @@
             this.buttonConfirmMove.TabIndex = 26;
             this.buttonConfirmMove.Text = "确定移动";
             this.buttonConfirmMove.UseVisualStyleBackColor = true;
+            this.buttonConfirmMove.Click += new System.EventHandler(this.buttonConfirmMove_Click);
             // 
             // radioButtonAllArmy
             // 
             this.radioButtonAllArmy.AutoSize = true;
+            this.radioButtonAllArmy.Checked = true;
             this.radioButtonAllArmy.Location = new System.Drawing.Point(328, 51);
             this.radioButtonAllArmy.Name = "radioButtonAllArmy";
             this.radioButtonAllArmy.Size = new System.Drawing.Size(71, 16);
