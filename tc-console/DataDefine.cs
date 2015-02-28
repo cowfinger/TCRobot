@@ -1,76 +1,105 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-
-namespace TC
+﻿namespace TC
 {
+    using System;
+    using System.Collections.Generic;
+
     public class TroopInfo
     {
-        public string Name = "";
         public string AccountName = "";
-        public string TroopId = "";
-        public string GroupId = "";
-        public string Leader = "";
-        public string ToCityNodeId;
+
         public int Duration = 0;
-        public bool isGroupTroop = false;
+
+        public string GroupId = "";
+
         public bool isDefendTroop = false;
+
         public bool IsGroupHead = false;
+
+        public bool isGroupTroop = false;
+
+        public string Leader = "";
+
+        public string Name = "";
+
         public int PowerIndex = 0;
+
+        public string ToCityNodeId;
+
+        public string TroopId = "";
     }
 
     public class AccountInfo
     {
-        public string UserName;
-        public string Password;
         public string AccountType;
-        public string CookieStr;
-        public string LoginStatus;
-        public string FirstStepCityID;
+
         public IEnumerable<string> CityIDList = new List<string>();
+
         public IEnumerable<string> CityNameList = new List<string>();
+
+        public string CookieStr;
+
+        public string FirstStepCityID;
+
         public Dictionary<string, HashSet<string>> InfluenceMap = null;
+
+        public string LoginStatus;
+
+        public string Password;
+
+        public string UserName;
     }
 
-    class LoginParam
+    internal class LoginParam
     {
-        public string Name;
-        public string LoginURL;
-        public string UsernameElmID;
-        public string PasswordElmID;
-        public string LoginTitle;
         public string HomeTitle;
+
+        public string LoginTitle;
+
+        public string LoginURL;
+
+        public string Name;
+
+        public string PasswordElmID;
+
+        public string UsernameElmID;
     }
 
-    class AttackTask
+    internal class AttackTask
     {
-        public string TaskId = "";
-        public string TaskType = "";
         public string AccountName;
-        public string FromCity;
-        public string ToCity;
+
         public DateTime EndTime;
+
+        public string FromCity;
+
+        public string TaskId = "";
+
+        public string TaskType = "";
+
+        public string ToCity;
+
         public TroopInfo Troop = null;
     }
 
-    class HeroInfo
+    internal class HeroInfo
     {
         public string AccountName = "";
+
         public string HeroId = "";
-        public string Name = "";
+
         public bool IsDead = false;
+
+        public string Name = "";
     }
 
-    class CityInfo
+    internal class CityInfo
     {
-        public string Name = "";
-        public int NodeId = 0;
         public int CityId = 0;
+
+        public string Name = "";
+
+        public int NodeId = 0;
+
         public int RoadLevel = 0;
     }
 }
