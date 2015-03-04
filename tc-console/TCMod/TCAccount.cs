@@ -15,16 +15,51 @@ namespace TC
             Offline, Submitting, Logining, Online, LoginFailed
         }
 
-        public string UserName { get; private set; }
-        public string Password { get; private set; }
-        public string AccountType { get; private set; }
-        public CookieLite Cookie { get; private set; }
-        public AccountLoginStatus LoginStatus { get; set; }
-        public IEnumerable<string> CityIDList { get; private set; }
+        public TCInfluence Influence
+        {
+            get;
+            private set;
+        }
+
+        public string UserName
+        {
+            get;
+            private set;
+        }
+
+        public string Password
+        {
+            get;
+            private set;
+        }
+
+        public string AccountType
+        {
+            get;
+            private set;
+        }
+
+        public CookieLite Cookie
+        {
+            get;
+            private set;
+        }
+
+        public AccountLoginStatus LoginStatus
+        {
+            get;
+            set;
+        }
+
+        public IEnumerable<TCCity> CityList
+        {
+            get;
+            private set;
+        }
 
         public TCAccount(string userName, string password, string accountType)
         {
-            this.CityIDList = new List<string>();
+            this.CityList = new List<TCCity>();
             this.Cookie = new CookieLite();
             this.UserName = userName;
             this.Password = password;

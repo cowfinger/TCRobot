@@ -100,7 +100,10 @@
     <Compile Include="LoginHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TCTask.cs" />
+    <Compile Include="TCMod\TCArmy.cs" />
+    <Compile Include="TCMod\TCCity.cs" />
+    <Compile Include="TCMod\TCInfluence.cs" />
+    <Compile Include="TCMod\TCTask.cs" />
     <EmbeddedResource Include="FormChooseTroopHead.resx">
       <DependentUpon>FormChooseTroopHead.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,9 +132,9 @@
     </Compile>
     <Compile Include="Soldier.cs" />
     <Compile Include="Task.cs" />
-    <Compile Include="TCAccount.cs" />
+    <Compile Include="TCMod\TCAccount.cs" />
     <Compile Include="RequestAgent.cs" />
-    <Compile Include="TCResource.cs" />
+    <Compile Include="TCMod\TCResource.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

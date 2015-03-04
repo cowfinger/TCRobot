@@ -49,8 +49,6 @@ namespace TC
                     {
                         content = reader.ReadToEnd();
                     }
-
-                    response.Close();
                     return content;
                 }
             }
