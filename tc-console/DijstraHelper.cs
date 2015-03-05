@@ -57,6 +57,11 @@ namespace TC
             for (int cursor = 0; cursor < this.sNodeQueue.Count(); ++cursor)
             {
                 var curNode = this.sNodeQueue[cursor];
+                if (curNode.Name == to)
+                {
+                    break;
+                }
+
                 var subNodes = this.map[curNode.Name];
                 var subNodeGroups = subNodes.GroupBy(name => this.uNodes.Contains(name)).ToList();
 

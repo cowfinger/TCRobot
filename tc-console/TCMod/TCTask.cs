@@ -15,8 +15,14 @@ namespace TC
         public DateTime EndTime { get; set; }
         public Action<object> TaskAction { get; set; }
         public string GroupKey { get; set; }
+        public bool Executing { get; set; }
 
         public Func<string, object> GroupAction { get; set; }
+
+        public TCTask()
+        {
+            this.Executing = false;
+        }
 
         public static string Time2Str(int timeval)
         {
@@ -39,6 +45,28 @@ namespace TC
             string etaString = totalSeconds >= 0 ? totalSeconds.ToString() : "N/A";
             lvItem.SubItems.Add(etaString);
             lvItem.SubItems.Add(this.GetTaskHint());
+        }
+
+        public bool TryEnter()
+        {
+            lock (this)
+            {
+                if (this.Executing)
+                {
+                    return false;
+                }
+
+                this.Executing = true;
+                return true;
+            }
+        }
+
+        public void Leave()
+        {
+            lock (this)
+            {
+                this.Executing = false;
+            }
         }
 
         public abstract string GetTaskHint();

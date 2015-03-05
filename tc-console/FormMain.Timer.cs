@@ -154,15 +154,15 @@
                             if (remoteTimeSnapshot >= task.ExecuteTime)
                             {
                                 toExecuteTaskList.Add(task);
+                                toChangeTaskLvItems.Add(lvItem);
+                            }
+                            else if (remoteTimeSnapshot >= task.EndTime)
+                            {
+                                this.Invoke(new DoSomething(() => { this.listViewTasks.Items.Remove(lvItem); }));
                             }
                             else
                             {
                                 toChangeTaskLvItems.Add(lvItem);
-                            }
-
-                            if (remoteTimeSnapshot >= task.EndTime)
-                            {
-                                this.Invoke(new DoSomething(() => { this.listViewTasks.Items.Remove(lvItem); }));
                             }
                         }
 

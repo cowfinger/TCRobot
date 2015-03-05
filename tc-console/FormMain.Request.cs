@@ -1029,6 +1029,13 @@
                    select match.Groups["heroId"].Value;
         }
 
+        private IEnumerable<string> ParseHeroIDListFromMovePage(string page)
+        {
+            const string pattern = "<li id=\"move_hero_(\\d+)\">";
+            var matches = Regex.Matches(page, pattern);
+            return from Match match in matches select match.Groups[1].Value;
+        }
+
         private string ConfirmMoveTroop(
             string fromCityId,
             string toCityId,

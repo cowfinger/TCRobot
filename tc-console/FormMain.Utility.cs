@@ -406,12 +406,20 @@
 
         private bool HasTroopArrived(MoveTroopTask task)
         {
-            string cityNodeId = this.cityList[task.NextCity];
-            string cityPage = OpenCityPage(cityNodeId, task.Account.UserName);
-            var soldiers = this.ParseSoldierInfoFromCityPage(cityPage).ToList();
-            var heroes = this.ParseHeroIdListFromCityPage(cityPage).ToList();
+            string movePage = this.OpenMoveTroopPage(task.Account.UserName);
+            var cityIDMap = ParseCityListFromMoveTroopPage(movePage).ToList().ToDictionary(city=> city.Name);
 
-            if (!soldiers.Any() && !heroes.Any())
+            string fromCityId = cityIDMap[task.NextCity].NodeId.ToString();
+            string movePageFrom = this.ChangeMoveFromCity(task.Account.UserName, fromCityId);
+
+            var heroes = this.ParseHeroIDListFromMovePage(movePageFrom).ToList();
+
+            // string cityNodeId = this.cityList[task.NextCity];
+            // string cityPage = OpenCityPage(cityNodeId, task.Account.UserName);
+            // var soldiers = this.ParseSoldierInfoFromCityPage(cityPage).ToList();
+            // var heroes = this.ParseHeroIdListFromCityPage(cityPage).ToList();
+
+            if (!heroes.Any())
             {
                 return false;
             }

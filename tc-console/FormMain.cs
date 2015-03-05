@@ -709,7 +709,7 @@
 
         private void comboBoxAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedAccount = this.comboBoxAccount.SelectedItem.ToString();
+            var selectedAccount = this.comboBoxAccount.Text;
 
             AccountInfo account = null;
             if (!this.accountTable.TryGetValue(selectedAccount, out account))
@@ -733,8 +733,8 @@
 
         private void comboBoxFromCity_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var fromCity = this.comboBoxFromCity.SelectedItem.ToString();
-            var accountName = this.comboBoxAccount.SelectedItem.ToString();
+            var fromCity = this.comboBoxFromCity.Text;
+            var accountName = this.comboBoxAccount.Text;
             Task.Run(
                 () =>
                 {
@@ -782,9 +782,9 @@
 
         private void comboBoxToCity_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var fromCity = this.comboBoxFromCity.SelectedItem.ToString();
-            var toCity = this.comboBoxToCity.SelectedItem.ToString();
-            var accountName = this.comboBoxAccount.SelectedItem.ToString();
+            var fromCity = this.comboBoxFromCity.Text;
+            var toCity = this.comboBoxToCity.Text;
+            var accountName = this.comboBoxAccount.Text;
             var account = this.accountTable[accountName];
 
             var helper = new DijstraHelper(account.InfluenceMap);
@@ -826,16 +826,23 @@
             moveTask.HeroNameList = heroList;
             moveTask.TaskAction = obj =>
                 {
+                    if (!moveTask.TryEnter())
+                    {
+                        return;
+                    }
+
                     if (!this.HasTroopArrived(moveTask))
                     {
                         moveTask.ExecuteTime = moveTask.ExecuteTime.AddMinutes(2);
                         moveTask.EndTime = moveTask.ExecuteTime.AddMinutes(2);
+                        moveTask.Leave();
                         return;
                     }
 
                     if (moveTask.NextCity == moveTask.TerminalCity)
                     {
                         moveTask.EndTime = this.RemoteTime.AddSeconds(10); // So the task will be deleted next time.
+                        moveTask.Leave();
                         return;
                     }
 
@@ -848,6 +855,7 @@
                     moveTask.NextCity = path.Last();
 
                     this.MoveTroop(moveTask);
+                    moveTask.Leave();
                 };
             moveTask.AccountName = accountInfo.UserName;
             moveTask.CreationTime = this.RemoteTime;

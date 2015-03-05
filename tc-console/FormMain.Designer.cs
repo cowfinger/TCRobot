@@ -826,7 +826,7 @@
             this.listViewAccountArmy.GridLines = true;
             this.listViewAccountArmy.Location = new System.Drawing.Point(217, 70);
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(223, 184);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(223, 185);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -852,7 +852,7 @@
             this.listViewMoveHero.GridLines = true;
             this.listViewMoveHero.Location = new System.Drawing.Point(8, 70);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(203, 184);
+            this.listViewMoveHero.Size = new System.Drawing.Size(203, 185);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
