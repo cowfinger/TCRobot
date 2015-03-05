@@ -94,7 +94,6 @@
             this.buttonConfirmMove = new System.Windows.Forms.Button();
             this.radioButtonAllArmy = new System.Windows.Forms.RadioButton();
             this.radioButtonHalfArmy = new System.Windows.Forms.RadioButton();
-            this.checkBoxTakeBrick = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.listViewAccountArmy = new System.Windows.Forms.ListView();
             this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -120,6 +119,8 @@
             this.ToolStripMenuItemQuickReliveHero = new System.Windows.Forms.ToolStripMenuItem();
             this.调动部队ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
+            this.numericUpDownBrickNum = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -136,6 +137,7 @@
             this.tabPageAttack.SuspendLayout();
             this.tabPageMoveArmy.SuspendLayout();
             this.menuStripMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBrickNum)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -729,11 +731,12 @@
             // 
             // tabPageMoveArmy
             // 
+            this.tabPageMoveArmy.Controls.Add(this.label13);
+            this.tabPageMoveArmy.Controls.Add(this.numericUpDownBrickNum);
             this.tabPageMoveArmy.Controls.Add(this.listBoxMovePath);
             this.tabPageMoveArmy.Controls.Add(this.buttonConfirmMove);
             this.tabPageMoveArmy.Controls.Add(this.radioButtonAllArmy);
             this.tabPageMoveArmy.Controls.Add(this.radioButtonHalfArmy);
-            this.tabPageMoveArmy.Controls.Add(this.checkBoxTakeBrick);
             this.tabPageMoveArmy.Controls.Add(this.label12);
             this.tabPageMoveArmy.Controls.Add(this.listViewAccountArmy);
             this.tabPageMoveArmy.Controls.Add(this.listViewMoveHero);
@@ -796,16 +799,6 @@
             this.radioButtonHalfArmy.Text = "一半部队";
             this.radioButtonHalfArmy.UseVisualStyleBackColor = true;
             // 
-            // checkBoxTakeBrick
-            // 
-            this.checkBoxTakeBrick.AutoSize = true;
-            this.checkBoxTakeBrick.Location = new System.Drawing.Point(8, 36);
-            this.checkBoxTakeBrick.Name = "checkBoxTakeBrick";
-            this.checkBoxTakeBrick.Size = new System.Drawing.Size(72, 16);
-            this.checkBoxTakeBrick.TabIndex = 23;
-            this.checkBoxTakeBrick.Text = "携带砖块";
-            this.checkBoxTakeBrick.UseVisualStyleBackColor = true;
-            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -864,7 +857,7 @@
             // 
             // columnHeader15
             // 
-            this.columnHeader15.Text = "City";
+            this.columnHeader15.Text = "ID";
             this.columnHeader15.Width = 101;
             // 
             // label6
@@ -1029,6 +1022,22 @@
             this.statusStripMain.TabIndex = 57;
             this.statusStripMain.Text = "statusStrip1";
             // 
+            // numericUpDownBrickNum
+            // 
+            this.numericUpDownBrickNum.Location = new System.Drawing.Point(42, 30);
+            this.numericUpDownBrickNum.Name = "numericUpDownBrickNum";
+            this.numericUpDownBrickNum.Size = new System.Drawing.Size(120, 21);
+            this.numericUpDownBrickNum.TabIndex = 28;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(7, 34);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(29, 12);
+            this.label13.TabIndex = 29;
+            this.label13.Text = "砖块";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1062,6 +1071,7 @@
             this.tabPageMoveArmy.PerformLayout();
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBrickNum)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1156,11 +1166,12 @@
         private System.Windows.Forms.ListView listViewMoveHero;
         private System.Windows.Forms.ColumnHeader columnHeader14;
         private System.Windows.Forms.ColumnHeader columnHeader15;
-        private System.Windows.Forms.CheckBox checkBoxTakeBrick;
         private System.Windows.Forms.RadioButton radioButtonAllArmy;
         private System.Windows.Forms.RadioButton radioButtonHalfArmy;
         private System.Windows.Forms.Button buttonConfirmMove;
         private System.Windows.Forms.ListBox listBoxMovePath;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.NumericUpDown numericUpDownBrickNum;
     }
 }
 

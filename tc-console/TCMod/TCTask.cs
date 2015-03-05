@@ -117,8 +117,11 @@ namespace TC
         public string CurrentCity = "";
         public string NextCity = "";
         public string TerminalCity = "";
-        public List<string> HeroNameList = new List<string>();
+        public List<string> HeroIdList = new List<string>();
         public List<Soldier> SoldierList = new List<Soldier>();
+        public List<string> Path = null;
+        public int BrickNum = 0;
+        public int RetryCount = 0;
 
         public MoveTroopTask(AccountInfo account, string from, string next, string terminal)
         {
@@ -130,8 +133,8 @@ namespace TC
 
         public override string GetTaskHint()
         {
-            return string.Format("Move Troop: {0} => {1} =>... => {2}",
-                this.CurrentCity, this.NextCity, this.TerminalCity);
+            var pathString = string.Join("=>", this.Path.ToArray());
+            return string.Format("Move Troop: {0}=>{1}", this.CurrentCity, pathString);
         }
     }
 }

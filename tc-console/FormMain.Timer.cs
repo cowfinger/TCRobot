@@ -15,7 +15,7 @@
 
         private readonly Timer syncRemoteTimeTimer = new Timer(15 * 1000);
 
-        private readonly Timer syncTimeToUITimer = new Timer(500);
+        private readonly Timer syncTimeToUITimer = new Timer(100);
 
         private readonly object taskTimerLock = new object();
 
@@ -118,7 +118,7 @@
                 return;
             }
 
-            this.taskTimer = new Timer(500);
+            this.taskTimer = new Timer(200);
 
             this.taskTimer.AutoReset = true;
             this.taskTimer.Elapsed += (obj, evn) =>
@@ -241,6 +241,10 @@
                     var toCity = this.listBoxDstCities.SelectedItem.ToString();
                     var task = new SendTroopTask(fromCity, toCity, team);
                     task.ExecuteTime = arrivalTime.AddSeconds(-team.Duration);
+                    if (!team.isGroupTroop)
+                    {
+                        task.ExecuteTime = task.ExecuteTime.AddMilliseconds(200);
+                    }
                     task.EndTime = task.ExecuteTime; // Same time so that it is a once task.
 
                     task.TaskAction = obj =>

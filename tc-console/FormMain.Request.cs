@@ -1033,6 +1033,38 @@
             return this.HTTPRequest(url, account);
         }
 
+        private string OpenMoveTaskQueue(string account)
+        {
+            var url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=show&func=move_army_queue&r={1}",
+                this.hostname, this.randGen.NextDouble());
+            return this.HTTPRequest(url, account);
+        }
+
+        private IEnumerable<MoveTask> ParseMoveTaskList(string page)
+        {
+            const string eventPattern = "id=\"event_(?<taskId>\\d+)\"";
+            const string etaPattern = "预计于(?<eta>.+?)到达";
+
+            var eventMatches = Regex.Matches(page, eventPattern);
+            var etaMatches = Regex.Matches(page, etaPattern);
+
+            var eventIdList = (from Match eventId in eventMatches
+                              select eventId.Groups["taskId"].Value).ToList();
+
+            var etaList = (from Match eta in etaMatches
+                          select DateTime.Parse(eta.Groups["eta"].Value)).ToList();
+
+            for (int i = 0; i < eventIdList.Count; ++i)
+            {
+                yield return new MoveTask()
+                {
+                    EndTime = etaList[i],
+                    TaskId = eventIdList[i],
+                };
+            }
+        }
+
         private IEnumerable<string> ParseHeroIdListFromCityPage(string page)
         {
             const string pattern = "<li id=\"user_hero_(?<heroId>\\d+)\" style=\"display:block;\">";
@@ -1041,11 +1073,23 @@
                    select match.Groups["heroId"].Value;
         }
 
-        private IEnumerable<string> ParseHeroIDListFromMovePage(string page)
+        private IEnumerable<string> ParseHeroIdListFromMovePage(string page)
         {
-            const string pattern = "<li id=\"move_hero_(\\d+)\">";
+            //const string pattern = "<li id=\"move_hero_(\\d+)\">";
+            const string pattern = "hero_id=\"(\\d+)\" hero_status=\"1\"";
             var matches = Regex.Matches(page, pattern);
             return from Match match in matches select match.Groups[1].Value;
+        }
+
+        private int ParseBrickNumberFromMovePage(string page)
+        {
+            const string pattern = "<span id=\"brick_num_max\">\\d+</span>/(\\d+)</span>\\)</span>";
+            var match = Regex.Match(page, pattern);
+            if (match.Success)
+            {
+                return int.Parse(match.Groups[1].Value);
+            }
+            return 0;
         }
 
         private string ConfirmMoveTroop(
@@ -1058,8 +1102,8 @@
         {
             string url = string.Format("http://{0}/index.php?mod=military/world_war&op=do&func=move_army&r={1}",
                 this.hostname, this.randGen.NextDouble());
-            string body = string.Format("from_city_id={0}&to_city_id={1}&soldier={2}&hero={3}&brick_num=",
-                fromCityId, toCityId, soldierString, heroString);
+            string body = string.Format("from_city_id={0}&to_city_id={1}&soldier={2}&hero={3}&brick_num={4}",
+                fromCityId, toCityId, soldierString, heroString, brickCount > 0 ? brickCount.ToString() : "");
             return HTTPRequest(url, account, body);
         }
 

@@ -42,6 +42,8 @@
 
         public Dictionary<string, HashSet<string>> InfluenceMap = null;
 
+        public Dictionary<string, CityInfo> InfluenceCityList = null;
+
         public string LoginStatus;
 
         public string Password;
@@ -81,6 +83,12 @@
         public TroopInfo Troop = null;
     }
 
+    internal class MoveTask
+    {
+        public DateTime EndTime;
+        public string TaskId = "";
+    }
+
     internal class HeroInfo
     {
         public string AccountName = "";
@@ -92,7 +100,7 @@
         public string Name = "";
     }
 
-    internal class CityInfo
+    public class CityInfo
     {
         public int CityId = 0;
 

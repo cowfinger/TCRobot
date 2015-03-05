@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Net;
     using System.Text;
+    using System.Threading;
     using System.Windows.Forms;
 
     partial class FormMain
@@ -386,6 +387,7 @@
                 account =>
                 {
                     var accountCityList = this.QueryInfluenceCityList(account.UserName).ToList();
+                    account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
                     account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
                 }).Then(() => { this.LoadAccountListToMoveArmyTab(); });
         }
@@ -406,40 +408,34 @@
 
         private bool HasTroopArrived(MoveTroopTask task)
         {
-            string movePage = this.OpenMoveTroopPage(task.Account.UserName);
-            var cityIDMap = ParseCityListFromMoveTroopPage(movePage).ToList().ToDictionary(city=> city.Name);
-
-            string fromCityId = cityIDMap[task.NextCity].NodeId.ToString();
+            string cityNodeId = this.cityList[task.NextCity];
+            string fromCityId = task.Account.InfluenceCityList[task.NextCity].NodeId.ToString();
+            this.OpenCityPage(cityNodeId, task.Account.UserName);
             string movePageFrom = this.ChangeMoveFromCity(task.Account.UserName, fromCityId);
 
-            var heroes = this.ParseHeroIDListFromMovePage(movePageFrom).ToList();
-
-            // string cityNodeId = this.cityList[task.NextCity];
-            // string cityPage = OpenCityPage(cityNodeId, task.Account.UserName);
-            // var soldiers = this.ParseSoldierInfoFromCityPage(cityPage).ToList();
-            // var heroes = this.ParseHeroIdListFromCityPage(cityPage).ToList();
+            var heroes = this.ParseHeroIdListFromMovePage(movePageFrom).ToList();
 
             if (!heroes.Any())
             {
                 return false;
             }
 
-            int heroMatchCount = task.HeroNameList.Sum(hero => heroes.Contains(hero) ? 1 : 0);
-            return heroMatchCount == task.HeroNameList.Count();
+            int heroMatchCount = task.HeroIdList.Sum(hero => heroes.Contains(hero) ? 1 : 0);
+            return heroMatchCount == task.HeroIdList.Count();
         }
 
-        private void MoveTroop(MoveTroopTask task)
+        private MoveTask MoveTroop(MoveTroopTask task)
         {
             string cityNodeId = this.cityList[task.CurrentCity];
 
             this.OpenCityPage(cityNodeId, task.Account.UserName);
-            string page = this.OpenMoveTroopPage(task.Account.UserName);
-            var influenceCityTable = ParseCityListFromMoveTroopPage(page).ToDictionary(city => city.Name);
+            string moveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
+            var moveTaskList = this.ParseMoveTaskList(moveQueuePage).ToList();
 
-            var fromCityId = influenceCityTable[task.CurrentCity].NodeId;
-            var toCityId = influenceCityTable[task.NextCity].NodeId;
+            var fromCityId = task.Account.InfluenceCityList[task.CurrentCity].NodeId;
+            var toCityId = task.Account.InfluenceCityList[task.NextCity].NodeId;
 
-            var heroString = string.Join("%7C", task.HeroNameList.ToArray());
+            var heroString = string.Join("%7C", task.HeroIdList.ToArray());
             var soldierString = string.Join(
                 "%7c",
                 task.SoldierList.Select(
@@ -447,7 +443,28 @@
                     ).ToArray()
             );
 
-            ConfirmMoveTroop(fromCityId.ToString(), toCityId.ToString(), soldierString, heroString, 0, task.Account.UserName);
+            ConfirmMoveTroop(fromCityId.ToString(), toCityId.ToString(), soldierString, heroString, task.BrickNum, task.Account.UserName);
+
+            for (int i = 0; i < 10; ++i)
+            {
+                Thread.Sleep(2000);
+                this.OpenCityPage(toCityId.ToString(), task.Account.UserName);
+                string newMoveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
+                var newMoveTaskList = this.ParseMoveTaskList(newMoveQueuePage).ToList();
+
+                if (!newMoveTaskList.Any())
+                {
+                    continue;
+                }
+
+                var thisMoveTask = newMoveTaskList.Single(taskItem => !moveTaskList.Select(item => item.TaskId).Contains(taskItem.TaskId));
+                task.TaskId = thisMoveTask.TaskId;
+                task.ExecuteTime = thisMoveTask.EndTime.AddSeconds(2);
+                task.EndTime = task.ExecuteTime.AddSeconds(10);
+                return thisMoveTask;
+            }
+
+            return null;
         }
 
         private int CalculateDistance(string from, string to, string account)
