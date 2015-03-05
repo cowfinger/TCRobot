@@ -9,19 +9,17 @@
     {
         private IEnumerable<string> GetAccountInflunceCityNameListWithArmy(string account)
         {
-            var url =
-                string.Format(
-                    "http://{0}/index.php?mod=influence/influence&op=show&func=influence_city_army&r={1}",
-                    this.hostname,
-                    this.randGen.NextDouble());
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.influence_city_army);
             var resp = this.HTTPRequest(url, account);
 
             var pattern = new Regex("<td width=\"12%\">(.*)</td>");
             var matches = pattern.Matches(resp);
-            foreach (Match match in matches)
-            {
-                yield return match.Groups[1].Value;
-            }
+            return from Match match in matches select match.Groups[1].Value;
         }
 
         private DateTime QueryRemoteSysTime(string accountName)
@@ -30,7 +28,7 @@
             return this.ParseSysTimeFromHomePage(rsp);
         }
 
-        private string GetTargetCityID(string srccityid, string dstcityname, string account)
+        private string GetTargetCityId(string srccityid, string dstcityname, string account)
         {
             var response = this.OpenCityShowAttackPage(srccityid, account);
             return this.ParseTargetCityID(response, dstcityname);
@@ -39,10 +37,12 @@
         private string CreateGroupHead(string cityId, string teamId, string account)
         {
             this.OpenCityShowAttackPage(cityId, account);
-            var url = string.Format(
-                "http://{0}/index.php?mod=military/world_war&op=do&func=create_group&r={1}",
+            var url = RequestAgent.BuildUrl(
                 this.hostname,
-                this.randGen.NextDouble());
+                TCMod.military,
+                TCSubMod.world_war,
+                TCOperation.Do,
+                TCFunc.create_group);
 
             var name = this.randGen.Next(100000, 999999).ToString();
             var body = string.Format("team_id={0}&group_name={1}", teamId, name);
@@ -52,10 +52,12 @@
 
         private void JoinGroup(string cityId, string groupTroopId, string subTroopId, string account)
         {
-            var url = string.Format(
-                "http://{0}/index.php?mod=military/world_war&op=do&func=join_group&r={1}",
+            var url = RequestAgent.BuildUrl(
                 this.hostname,
-                this.randGen.NextDouble());
+                TCMod.military,
+                TCSubMod.world_war,
+                TCOperation.Do,
+                TCFunc.join_group);
             var body = string.Format("team_id={0}&group_id={1}&from_address=1", subTroopId, groupTroopId);
             this.HTTPRequest(url, account, body);
         }
@@ -68,17 +70,27 @@
 
         private IEnumerable<TroopInfo> GetActiveTroopInfo(string cityId, string tabId, string account)
         {
-            var url0 = string.Format(
-                "http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}",
+            var url0 = RequestAgent.BuildUrl(
                 this.hostname,
-                this.randGen.NextDouble());
+                TCMod.world,
+                TCSubMod.world,
+                TCOperation.Show,
+                TCFunc.get_node);
+
             this.HTTPRequest(url0, account);
 
-            var url1 =
-                string.Format(
-                    "http://{0}/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={1}&r=",
-                    cityId,
-                    this.randGen.NextDouble());
+            var url1 = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.influence_city_detail,
+                new TCRequestArgument(TCElement.node_id, int.Parse(cityId)));
+            // var url1 =
+            //     string.Format(
+            //         "http://{0}/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={1}&r=",
+            //         cityId,
+            //         this.randGen.NextDouble());
             this.HTTPRequest(url1, account);
 
             var url2 =
