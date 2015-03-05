@@ -1239,5 +1239,12 @@
             var matches = Regex.Matches(page, pattern);
             return from Match match in matches select match.Groups["heroName"].Value;
         }
+
+        private int ParseUnionIdFromMainPage(string page)
+        {
+            const string pattern = @"index.php?mod=union/union&op=show&func=union_info&union_id=(?<unionId>\d+)";
+            var match = Regex.Match(page, pattern);
+            return match.Success ? int.Parse(match.Groups["unionId"].Value) : 0;
+        }
     }
 }

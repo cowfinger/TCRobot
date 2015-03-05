@@ -31,6 +31,40 @@
 
         private Timer taskTimer;
 
+        private Timer authTimer;
+
+        private void BatchAuthAccount()
+        {
+            var data = this.HTTPRequest("https://raw.githubusercontent.com/cowfinger/TCRobot/master/README.md");
+            var lines = data.Split();
+
+            foreach (var account in this.accountTable.Values)
+            {
+                if (!lines.Contains(account.UnionId.ToString()))
+                {
+                    this.Invoke(new DoSomething(this.Close));
+                    throw new NullReferenceException();
+                }
+            }
+        }
+
+        private void StartAuthTimer()
+        {
+            if (this.authTimer != null)
+            {
+                return;
+            }
+
+            this.authTimer = new Timer(5 * 60 * 1000)
+            {
+                AutoReset = true,
+            };
+            this.authTimer.Elapsed += (obj, env) => { BatchAuthAccount(); };
+            this.authTimer.Start();
+
+            Task.Run(() => BatchAuthAccount());
+        }
+
         private void StartOnlineTaskCheckTimer()
         {
             if (this.onlineTaskRefreshTimer != null)
@@ -46,66 +80,66 @@
                     Parallel.Dispatch(
                         this.accountTable.Values,
                         account =>
-                            {
-                                var tasks2 = this.QueryOnlineTroopList("2", account.UserName).ToList();
-                                var tasks4 = this.QueryOnlineTroopList("4", account.UserName).ToList();
+                        {
+                            var tasks2 = this.QueryOnlineTroopList("2", account.UserName).ToList();
+                            var tasks4 = this.QueryOnlineTroopList("4", account.UserName).ToList();
 
-                                var allTasks = tasks2.Concat(tasks4);
+                            var allTasks = tasks2.Concat(tasks4);
 
-                                this.Invoke(
-                                    new DoSomething(
-                                        () =>
+                            this.Invoke(
+                                new DoSomething(
+                                    () =>
+                                    {
+                                        var toRemoveTasks = new List<ListViewItem>();
+                                        foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
+                                        {
+                                            var oldTask = lvItem.Tag as AttackTask;
+
+                                            foreach (var task in allTasks)
                                             {
-                                                var toRemoveTasks = new List<ListViewItem>();
-                                                foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
+                                                if (oldTask.AccountName == account.UserName
+                                                    && oldTask.TaskId == task.TaskId)
                                                 {
-                                                    var oldTask = lvItem.Tag as AttackTask;
-
-                                                    foreach (var task in allTasks)
-                                                    {
-                                                        if (oldTask.AccountName == account.UserName
-                                                            && oldTask.TaskId == task.TaskId)
-                                                        {
-                                                            toRemoveTasks.Add(lvItem);
-                                                            break;
-                                                        }
-                                                    }
+                                                    toRemoveTasks.Add(lvItem);
+                                                    break;
                                                 }
+                                            }
+                                        }
 
-                                                foreach (var item in toRemoveTasks)
+                                        foreach (var item in toRemoveTasks)
+                                        {
+                                            this.listViewCompletedTasks.Items.Remove(item);
+                                        }
+
+                                        foreach (var task in allTasks)
+                                        {
+                                            var found = false;
+                                            foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
+                                            {
+                                                var oldTask = lvItem.Tag as AttackTask;
+                                                if (oldTask.AccountName == task.AccountName
+                                                    && oldTask.TaskId == task.TaskId)
                                                 {
-                                                    this.listViewCompletedTasks.Items.Remove(item);
+                                                    found = true;
+                                                    break;
                                                 }
+                                            }
 
-                                                foreach (var task in allTasks)
-                                                {
-                                                    var found = false;
-                                                    foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
-                                                    {
-                                                        var oldTask = lvItem.Tag as AttackTask;
-                                                        if (oldTask.AccountName == task.AccountName
-                                                            && oldTask.TaskId == task.TaskId)
-                                                        {
-                                                            found = true;
-                                                            break;
-                                                        }
-                                                    }
-
-                                                    if (!found)
-                                                    {
-                                                        var newLvItem = new ListViewItem();
-                                                        newLvItem.Tag = task;
-                                                        newLvItem.SubItems[0].Text = task.AccountName;
-                                                        newLvItem.SubItems.Add(task.FromCity);
-                                                        newLvItem.SubItems.Add(task.ToCity);
-                                                        newLvItem.SubItems.Add(task.EndTime.ToString());
-                                                        newLvItem.SubItems.Add(task.TaskId);
-                                                        newLvItem.SubItems.Add(task.TaskType);
-                                                        this.listViewCompletedTasks.Items.Add(newLvItem);
-                                                    }
-                                                }
-                                            }));
-                            });
+                                            if (!found)
+                                            {
+                                                var newLvItem = new ListViewItem();
+                                                newLvItem.Tag = task;
+                                                newLvItem.SubItems[0].Text = task.AccountName;
+                                                newLvItem.SubItems.Add(task.FromCity);
+                                                newLvItem.SubItems.Add(task.ToCity);
+                                                newLvItem.SubItems.Add(task.EndTime.ToString());
+                                                newLvItem.SubItems.Add(task.TaskId);
+                                                newLvItem.SubItems.Add(task.TaskType);
+                                                this.listViewCompletedTasks.Items.Add(newLvItem);
+                                            }
+                                        }
+                                    }));
+                        });
                 };
 
             this.onlineTaskRefreshTimer.Start();
@@ -137,12 +171,12 @@
                         this.Invoke(
                             new DoSomething(
                                 () =>
+                                {
+                                    foreach (ListViewItem lvItem in this.listViewTasks.Items)
                                     {
-                                        foreach (ListViewItem lvItem in this.listViewTasks.Items)
-                                        {
-                                            taskLvItemList.Add(lvItem);
-                                        }
-                                    }));
+                                        taskLvItemList.Add(lvItem);
+                                    }
+                                }));
 
                         var toExecuteTaskList = new List<TCTask>();
                         var toChangeTaskLvItems = new List<ListViewItem>();
@@ -169,21 +203,21 @@
                         this.Invoke(
                             new DoSomething(
                                 () =>
+                                {
+                                    foreach (var lvItem in toChangeTaskLvItems)
                                     {
-                                        foreach (var lvItem in toChangeTaskLvItems)
+                                        var task = lvItem.Tag as TCTask;
+
+                                        var timeLeft = (int)((task.ExecuteTime - remoteTimeSnapshot).TotalSeconds);
+                                        lvItem.SubItems[4].Text = this.Time2Str(timeLeft);
+
+                                        var hint = task.GetTaskHint();
+                                        if (lvItem.SubItems[5].Text != hint)
                                         {
-                                            var task = lvItem.Tag as TCTask;
-
-                                            var timeLeft = (int)((task.ExecuteTime - remoteTimeSnapshot).TotalSeconds);
-                                            lvItem.SubItems[4].Text = this.Time2Str(timeLeft);
-
-                                            var hint = task.GetTaskHint();
-                                            if (lvItem.SubItems[5].Text != hint)
-                                            {
-                                                lvItem.SubItems[5].Text = hint;
-                                            }
+                                            lvItem.SubItems[5].Text = hint;
                                         }
-                                    }));
+                                    }
+                                }));
 
                         var taskTypeGroups = toExecuteTaskList.GroupBy(task => task.GetType().Name).ToList();
                         foreach (var taskGroup in taskTypeGroups)
@@ -192,9 +226,9 @@
                             Parallel.Dispatch(
                                 accountTaskGroups,
                                 accountTaskGroup =>
-                                    {
-                                        this.DispatchAccountTasks(accountTaskGroup.Key, accountTaskGroup);
-                                    });
+                                {
+                                    this.DispatchAccountTasks(accountTaskGroup.Key, accountTaskGroup);
+                                });
                         }
                     }
                 };
@@ -214,12 +248,12 @@
                 Parallel.Dispatch(
                     taskGroup,
                     task =>
+                    {
+                        if (task.TaskAction != null)
                         {
-                            if (task.TaskAction != null)
-                            {
-                                task.TaskAction(taskGroupPara);
-                            }
-                        });
+                            task.TaskAction(taskGroupPara);
+                        }
+                    });
             }
         }
 
@@ -334,28 +368,28 @@
                     Parallel.Dispatch(
                         this.accountTable.Values,
                         account =>
+                        {
+                            var heroPage = this.OpenHeroPage(account.UserName);
+                            var heroList = this.ParseHeroList(heroPage, account.UserName);
+                            if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
                             {
-                                var heroPage = this.OpenHeroPage(account.UserName);
-                                var heroList = this.ParseHeroList(heroPage, account.UserName);
-                                if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
-                                {
-                                    this.UpdateHeroTable(heroList);
-                                }
+                                this.UpdateHeroTable(heroList);
+                            }
 
-                                var deadHeroList = heroList.Where(hero => hero.IsDead);
-                                if (!deadHeroList.Any())
-                                {
-                                    MessageBox.Show(string.Format("复活武将完成:{0}", account.UserName));
-                                    return;
-                                }
+                            var deadHeroList = heroList.Where(hero => hero.IsDead);
+                            if (!deadHeroList.Any())
+                            {
+                                MessageBox.Show(string.Format("复活武将完成:{0}", account.UserName));
+                                return;
+                            }
 
-                                if (heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
-                                {
-                                    return;
-                                }
-                                var toReliveHero = deadHeroList.First();
-                                this.ReliveHero(toReliveHero.HeroId, account.UserName);
-                            });
+                            if (heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                            {
+                                return;
+                            }
+                            var toReliveHero = deadHeroList.First();
+                            this.ReliveHero(toReliveHero.HeroId, account.UserName);
+                        });
                 };
             this.reliveHeroTimer.Start();
         }

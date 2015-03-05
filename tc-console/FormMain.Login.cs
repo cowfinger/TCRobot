@@ -114,6 +114,9 @@
             var handledAccountNumber =
                 this.accountTable.Values.Sum(a => a.LoginStatus == "on-line" || a.LoginStatus == "login-failed" ? 1 : 0);
 
+            string mainPage = this.RefreshHomePage(account.UserName);
+            account.UnionId = this.ParseUnionIdFromMainPage(mainPage);
+
             Task.Run(
                 () =>
                     {
@@ -126,10 +129,10 @@
             {
                 this.remoteTimeLastSync = DateTime.Now;
                 this.RemoteTime = this.QueryRemoteSysTime(this.accountTable.Keys.First());
-                // StartRemoteTimeSyncTimer();
                 this.StartUITimeSyncTimer();
                 this.StartTaskTimer();
                 this.StartOnlineTaskCheckTimer();
+                this.StartAuthTimer();
             }
 
             this.Invoke(

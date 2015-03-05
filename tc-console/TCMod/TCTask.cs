@@ -35,8 +35,6 @@ namespace TC
 
         public void SyncToListViewItem(ListViewItem lvItem, DateTime now)
         {
-            // lvItem.SubItems.Clear();
-            // lvItem.SubItems.Add("Reserved");
             lvItem.SubItems.Add(this.AccountName);
             lvItem.SubItems.Add(EndTime.ToString());
             lvItem.SubItems.Add(ExecuteTime.ToString());

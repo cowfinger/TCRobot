@@ -13,6 +13,31 @@
     {
         private Dictionary<string, CityInfo> cachedCityMap = new Dictionary<string, CityInfo>();
 
+        private string HTTPRequest(string url)
+        {
+            try
+            {
+                var request = (HttpWebRequest)WebRequest.Create(url);
+                request.UserAgent = UserAgent;
+
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    var content = string.Empty;
+                    using (var reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        content = reader.ReadToEnd();
+                    }
+
+                    response.Close();
+                    return content;
+                }
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
         private string HTTPRequest(string url, string account, string body = null)
         {
             try

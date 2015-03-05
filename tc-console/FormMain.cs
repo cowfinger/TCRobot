@@ -911,6 +911,8 @@
             this.listViewMoveHero.Items.Clear();
             this.listViewAccountArmy.Items.Clear();
             this.listBoxMovePath.Items.Clear();
+            this.numericUpDownBrickNum.Value = 0;
+            this.numericUpDownBrickNum.Maximum = 0;
         }
     }
 }

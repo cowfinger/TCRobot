@@ -49,6 +49,8 @@
         public string Password;
 
         public string UserName;
+
+        public int UnionId;
     }
 
     internal class LoginParam
