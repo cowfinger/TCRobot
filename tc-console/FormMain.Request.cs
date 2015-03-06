@@ -1242,7 +1242,7 @@
 
         private int ParseUnionIdFromMainPage(string page)
         {
-            const string pattern = @"index.php?mod=union/union&op=show&func=union_info&union_id=(?<unionId>\d+)";
+            const string pattern = @"union_id=(?<unionId>\d+)";
             var match = Regex.Match(page, pattern);
             return match.Success ? int.Parse(match.Groups["unionId"].Value) : 0;
         }

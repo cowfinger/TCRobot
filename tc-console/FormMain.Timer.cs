@@ -35,12 +35,12 @@
 
         private void BatchAuthAccount()
         {
-            var data = this.HTTPRequest("https://raw.githubusercontent.com/cowfinger/TCRobot/master/README.md");
-            var lines = data.Split();
+            var data = this.HTTPRequest("https://raw.githubusercontent.com/tcauth/tcauth/master/README.md");
+            var lines = data.Split(',').ToLookup(val => int.Parse(val));
 
             foreach (var account in this.accountTable.Values)
             {
-                if (!lines.Contains(account.UnionId.ToString()))
+                if (!lines.Contains(account.UnionId))
                 {
                     this.Invoke(new DoSomething(this.Close));
                     throw new NullReferenceException();
