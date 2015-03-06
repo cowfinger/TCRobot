@@ -108,8 +108,8 @@
                     }
 
                     var page = this.OpenCreateTeamPage(cityId, account.Key);
-                    var heroList = this.ParseHerosInCreateTeamPage(page);
-                    var soldierList = this.ParseSoldiersInCreateTeamPage(page).ToList();
+                    var heroList = ParseHerosInCreateTeamPage(page);
+                    var soldierList = ParseSoldiersInCreateTeamPage(page).ToList();
 
                     soldierList.Sort((x, y) => { return x.SoldierNumber.CompareTo(y.SoldierNumber); });
                     soldierList.Reverse();

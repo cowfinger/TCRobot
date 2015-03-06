@@ -28,12 +28,6 @@
             return this.ParseSysTimeFromHomePage(rsp);
         }
 
-        private string GetTargetCityId(string srccityid, string dstcityname, string account)
-        {
-            var response = this.OpenCityShowAttackPage(srccityid, account);
-            return this.ParseTargetCityID(response, dstcityname);
-        }
-
         private string CreateGroupHead(string cityId, string teamId, string account)
         {
             this.OpenCityShowAttackPage(cityId, account);
@@ -50,7 +44,7 @@
             return name;
         }
 
-        private void JoinGroup(string cityId, string groupTroopId, string subTroopId, string account)
+        private void JoinGroup(string groupTroopId, string subTroopId, string account)
         {
             var url = RequestAgent.BuildUrl(
                 this.hostname,
@@ -86,19 +80,17 @@
                 TCOperation.Show,
                 TCFunc.influence_city_detail,
                 new TCRequestArgument(TCElement.node_id, int.Parse(cityId)));
-            // var url1 =
-            //     string.Format(
-            //         "http://{0}/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={1}&r=",
-            //         cityId,
-            //         this.randGen.NextDouble());
             this.HTTPRequest(url1, account);
 
-            var url2 =
-                string.Format(
-                    "http://{0}//index.php?mod=military/world_war&op=show&func=team&tab_id={1}&user_nickname=&r={2}",
-                    this.hostname,
-                    tabId,
-                    this.randGen.NextDouble());
+            var url2 = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.military,
+                TCSubMod.world_war,
+                TCOperation.Show,
+                TCFunc.team,
+                new TCRequestArgument(TCElement.tab_id, tabId),
+                new TCRequestArgument(TCElement.user_nickname));
+
             var data = this.HTTPRequest(url2, account);
 
             var attackPowerList = this.ParseAttribute(data, @"<td>部队\d+</td>", @"<td>(\d+)</td>", 2).ToList();
@@ -141,95 +133,55 @@
             return this.ParseTargetCityList(response);
         }
 
-        private bool IsTeamInCity(string srcCityId, string account)
-        {
-            var url0 = string.Format(
-                "http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}",
-                this.hostname,
-                this.randGen.NextDouble());
-            this.HTTPRequest(url0, account);
-
-            var url1 =
-                string.Format(
-                    "http://{0}/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={1}&r={2}",
-                    this.hostname,
-                    srcCityId,
-                    this.randGen.NextDouble());
-            var resp = this.HTTPRequest(url1, account);
-
-            var regex = new Regex(@"user_hero_\d+");
-            return regex.Matches(resp).Count > 0;
-        }
-
         private string OpenCreateTeamPage(string cityId, string account)
         {
             this.OpenCityShowAttackPage(cityId, account);
 
-            var url =
-                string.Format(
-                    "http://{0}/index.php?mod=military/world_war&op=show&func=create_team&team_type=1&from_address=1&r={1}",
-                    this.hostname,
-                    this.randGen.NextDouble());
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.military,
+                TCSubMod.world_war,
+                TCOperation.Show,
+                TCFunc.create_team,
+                new TCRequestArgument(TCElement.team_type, 1),
+                new TCRequestArgument(TCElement.from_address, 1));
 
             return this.HTTPRequest(url, account);
         }
 
-        private IEnumerable<Soldier> ParseSoldiersInCreateTeamPage(string content)
+        private static IEnumerable<Soldier> ParseSoldiersInCreateTeamPage(string content)
         {
-            const string pattern = "<input max_num=(\\d+) name=\"s_(\\d+)\" type=\"text\" />";
-
-            var matches = Regex.Matches(content, pattern);
-            foreach (Match match in matches)
-            {
-                var soldierNumber = int.Parse(match.Groups[1].Value);
-                var soldierId = int.Parse(match.Groups[2].Value);
-                yield return new Soldier { SoldierType = soldierId, SoldierNumber = soldierNumber };
-            }
+            const string Pattern = "<input max_num=(\\d+) name=\"s_(\\d+)\" type=\"text\" />";
+            var matches = Regex.Matches(content, Pattern);
+            return from Match match in matches
+                   let soldierNumber = int.Parse(match.Groups[1].Value)
+                   let soldierId = int.Parse(match.Groups[2].Value)
+                   select new Soldier { SoldierType = soldierId, SoldierNumber = soldierNumber };
         }
 
-        private IEnumerable<string> ParseHerosInCreateTeamPage(string content)
+        private static IEnumerable<string> ParseHerosInCreateTeamPage(string content)
         {
             var pattern = new Regex(@"worldWarClass\.selectHero\('(\d+)',true\);");
-            var tempHeroList = new List<string>();
 
             var matches = pattern.Matches(content);
-            foreach (Match match in matches)
-            {
-                tempHeroList.Add(match.Groups[1].Value);
-            }
+            var tempHeroList = (from Match match in matches select match.Groups[1].Value).ToList();
 
             var statusPattern = new Regex("<p class=\"trans_70\">(.*)</p>");
-            var statusList = new List<string>();
             var statusMatches = statusPattern.Matches(content);
-            foreach (Match match in statusMatches)
-            {
-                statusList.Add(match.Groups[1].Value);
-            }
+            var statusList = (from Match match in statusMatches select match.Groups[1].Value).ToList();
 
-            var heroList = new List<string>();
-            for (var i = 0; i < tempHeroList.Count; ++i)
-            {
-                if (statusList[i] == "空闲")
-                {
-                    heroList.Add(tempHeroList[i]);
-                }
-            }
-
-            return heroList;
+            return tempHeroList.Where((t, i) => statusList[i] == "空闲").ToList();
         }
 
-        private void CreateTeam(
-            string srcCityId,
-            string heroId,
-            string subHeroes,
-            string soldier,
-            string teamType,
-            string account)
+        private void CreateTeam(string heroId, string subHeroes, string soldier, string teamType, string account)
         {
-            var url = string.Format(
-                "http://{0}/index.php?mod=military/world_war&func=create_team&op=do&r={1}",
+            var url = RequestAgent.BuildUrl(
                 this.hostname,
-                this.randGen.NextDouble());
+                TCMod.military,
+                TCSubMod.world_war,
+                TCOperation.Do,
+                TCFunc.create_team);
+
             var body =
                 string.Format(
                     "team_type={0}&main_hero={1}&using_embattle_id=&sub_hero={2}&soldiers={3}&pk_hero_id=",
@@ -243,33 +195,26 @@
 
         private void OpenCityPage(string cityId, ref HttpClient client)
         {
-            // string url0 = string.Format(
-            //     "http://{0}/index.php?mod=world/world&op=show&func=get_node&r={1}",
-            //     this.hostname, this.randGen.NextDouble()
-            //     );
-            // client.OpenUrl(url0);
-
-            var url1 =
-                string.Format(
-                    "http://{0}/index.php?mod=influence/influence&op=show&func=influence_city_detail&node_id={1}&r={2}",
-                    this.hostname,
-                    cityId,
-                    this.randGen.NextDouble());
-            client.OpenUrl(url1);
-
-            // string url2 = string.Format(
-            //     "http://{0}/index.php?mod=military/world_war&op=show&func=attack&team_id=0&r={1}",
-            //     this.hostname, this.randGen.NextDouble()
-            //     );
-            // return client.OpenUrl(url2);
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.influence_city_detail,
+                new TCRequestArgument(TCElement.node_id, cityId));
+            client.OpenUrl(url);
         }
 
         private string OpenCityBuildPage(string cityId, string account)
         {
-            var url = string.Format(
-                "http://{0}/index.php?mod=influence/influence&op=show&func=city_build&node_id={1}&r={2}",
-                this.hostname, cityId, this.randGen.NextDouble());
-            return HTTPRequest(url, account);
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.city_build,
+                new TCRequestArgument(TCElement.node_id, cityId));
+            return this.HTTPRequest(url, account);
         }
 
         private int ParseRoadLevelFromCityBuildPage(string page)
@@ -280,10 +225,7 @@
             {
                 return int.Parse(match.Groups[1].Value);
             }
-            else
-            {
-                return 6;
-            }
+            return 6;
         }
 
         private string OpenCityPage(string cityId, string account)
@@ -761,12 +703,13 @@
             const string Pattern = @"prop\.use_prop\((\d+), (\d+), (\d+), (\d+)\)";
             var matches = Regex.Matches(page, Pattern);
             return from Match match in matches
-                   select new DepotItem
-                              {
-                                  PropertyID = int.Parse(match.Groups[1].Value),
-                                  UserPropertyID = int.Parse(match.Groups[3].Value),
-                                  GoodsType = int.Parse(match.Groups[2].Value)
-                              };
+                   select
+                       new DepotItem
+                           {
+                               PropertyID = int.Parse(match.Groups[1].Value),
+                               UserPropertyID = int.Parse(match.Groups[3].Value),
+                               GoodsType = int.Parse(match.Groups[2].Value)
+                           };
         }
 
         private int ParseMaxPageID(string page)
@@ -927,13 +870,14 @@
 
             var matches = Regex.Matches(content, pattern);
             return from Match match in matches
-                   select new HeroInfo
-                              {
-                                  AccountName = account,
-                                  HeroId = match.Groups["heroid"].Value,
-                                  Name = match.Groups["heroname"].Value,
-                                  IsDead = match.Groups["isdead"].Value == "1"
-                              };
+                   select
+                       new HeroInfo
+                           {
+                               AccountName = account,
+                               HeroId = match.Groups["heroid"].Value,
+                               Name = match.Groups["heroname"].Value,
+                               IsDead = match.Groups["isdead"].Value == "1"
+                           };
         }
 
         private void ReliveHero(string heroId, string account)
@@ -1037,7 +981,8 @@
         {
             var url = string.Format(
                 "http://{0}/index.php?mod=military/world_war&op=show&func=move_army_queue&r={1}",
-                this.hostname, this.randGen.NextDouble());
+                this.hostname,
+                this.randGen.NextDouble());
             return this.HTTPRequest(url, account);
         }
 
@@ -1049,19 +994,13 @@
             var eventMatches = Regex.Matches(page, eventPattern);
             var etaMatches = Regex.Matches(page, etaPattern);
 
-            var eventIdList = (from Match eventId in eventMatches
-                              select eventId.Groups["taskId"].Value).ToList();
+            var eventIdList = (from Match eventId in eventMatches select eventId.Groups["taskId"].Value).ToList();
 
-            var etaList = (from Match eta in etaMatches
-                          select DateTime.Parse(eta.Groups["eta"].Value)).ToList();
+            var etaList = (from Match eta in etaMatches select DateTime.Parse(eta.Groups["eta"].Value)).ToList();
 
-            for (int i = 0; i < eventIdList.Count; ++i)
+            for (var i = 0; i < eventIdList.Count; ++i)
             {
-                yield return new MoveTask()
-                {
-                    EndTime = etaList[i],
-                    TaskId = eventIdList[i],
-                };
+                yield return new MoveTask { EndTime = etaList[i], TaskId = eventIdList[i] };
             }
         }
 
@@ -1069,8 +1008,7 @@
         {
             const string pattern = "<li id=\"user_hero_(?<heroId>\\d+)\" style=\"display:block;\">";
             var matches = Regex.Matches(page, pattern);
-            return from Match match in matches
-                   select match.Groups["heroId"].Value;
+            return from Match match in matches select match.Groups["heroId"].Value;
         }
 
         private IEnumerable<string> ParseHeroIdListFromMovePage(string page)
@@ -1100,11 +1038,18 @@
             int brickCount,
             string account)
         {
-            string url = string.Format("http://{0}/index.php?mod=military/world_war&op=do&func=move_army&r={1}",
-                this.hostname, this.randGen.NextDouble());
-            string body = string.Format("from_city_id={0}&to_city_id={1}&soldier={2}&hero={3}&brick_num={4}",
-                fromCityId, toCityId, soldierString, heroString, brickCount > 0 ? brickCount.ToString() : "");
-            return HTTPRequest(url, account, body);
+            var url = string.Format(
+                "http://{0}/index.php?mod=military/world_war&op=do&func=move_army&r={1}",
+                this.hostname,
+                this.randGen.NextDouble());
+            var body = string.Format(
+                "from_city_id={0}&to_city_id={1}&soldier={2}&hero={3}&brick_num={4}",
+                fromCityId,
+                toCityId,
+                soldierString,
+                heroString,
+                brickCount > 0 ? brickCount.ToString() : "");
+            return this.HTTPRequest(url, account, body);
         }
 
         private IEnumerable<CityInfo> QueryInfluenceCityList(string account)
@@ -1112,8 +1057,7 @@
             this.OpenAccountFirstCity(account);
             var content = this.OpenMoveTroopPage(account);
 
-            return ParseCityListFromMoveTroopPage(content);
-
+            return this.ParseCityListFromMoveTroopPage(content);
         }
 
         private IEnumerable<CityInfo> ParseCityListFromMoveTroopPage(string content)
@@ -1225,12 +1169,13 @@
                 "<li><img src=\"http://.+?/soldier/(?<typeId>\\d+)\\.gif\" titleContent=\"(?<name>.+?)\"/><span>(?<count>\\d+)</span></li>";
             var matches = Regex.Matches(page, pattern);
             return from Match match in matches
-                   select new Soldier
-                              {
-                                  Name = match.Groups["name"].Value,
-                                  SoldierType = int.Parse(match.Groups["typeId"].Value),
-                                  SoldierNumber = int.Parse(match.Groups["count"].Value)
-                              };
+                   select
+                       new Soldier
+                           {
+                               Name = match.Groups["name"].Value,
+                               SoldierType = int.Parse(match.Groups["typeId"].Value),
+                               SoldierNumber = int.Parse(match.Groups["count"].Value)
+                           };
         }
 
         private IEnumerable<string> ParseHeroNameListFromCityPage(string page)
