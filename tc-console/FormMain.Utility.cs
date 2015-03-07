@@ -196,6 +196,7 @@
                 {
                     newli.SubItems[0].Text = account.UserName;
                     newli.SubItems.Add(this.ConvertStatusStr(account.LoginStatus));
+                    newli.SubItems.Add("");
                 }
                 newli.Tag = account;
                 this.listViewAccounts.Items.Add(newli);

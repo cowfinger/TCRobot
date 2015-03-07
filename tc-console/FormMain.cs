@@ -125,7 +125,6 @@
                         var subHeroes = this.BuildSubHeroesString(ref heroRawList);
 
                         this.CreateTeam(
-                            cityId,
                             headHero,
                             subHeroes,
                             soldierString,
@@ -140,7 +139,6 @@
                                 ref soldierList,
                                 this.radioButtonSmallTroop.Checked ? 1000 : 0);
                             this.CreateTeam(
-                                cityId,
                                 hero,
                                 "",
                                 soldierString,
@@ -495,7 +493,7 @@
 
                     foreach (var troop in troopGroup)
                     {
-                        this.JoinGroup(cityId, headTroop.GroupId, troop.TroopId, troop.AccountName);
+                        this.JoinGroup(headTroop.GroupId, troop.TroopId, troop.AccountName);
                     }
 
                     var troopList = this.QueryCityTroops(cityId).ToList();
@@ -581,9 +579,9 @@
                     var validCityNameList = this.accountTable.Values.SelectMany(
                         account =>
                         {
-                            var cityNameList = this.GetAccountInflunceCityNameListWithArmy(account.UserName);
+                            var cityNameList = this.GetAccountInflunceCityNameListWithArmy(account.UserName).ToList();
                             account.CityNameList = cityNameList;
-                            account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]);
+                            account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]).ToList();
 
                             return cityNameList;
                         }).ToList().Distinct();
@@ -664,6 +662,12 @@
                         var tid = this.GetTid(account);
                         var reliveQueueId = this.QueryReliveQueueId(tid, account);
                         var reliveItem = this.QueryReliveItem(reliveQueueId, tid, account);
+                        if (reliveItem == null)
+                        {
+                            MessageBox.Show(string.Format("复活药用完了."));
+                            return;
+                        }
+
                         this.UserReliveItem(reliveItem, toReliveHero.HeroId, reliveQueueId, tid, account);
                     }
                 }).Then(() => { MessageBox.Show(string.Format("复活武将完成")); });

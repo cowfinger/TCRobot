@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     public enum TCElement
     {
         call_back,
@@ -131,6 +132,8 @@
 
         move_army,
 
+        move_army_queue,
+
         military_event_list,
 
         my_depot,
@@ -183,7 +186,7 @@
     {
         private static readonly Random RandGen = new Random();
 
-        public RequestAgent(TCAccount account)
+        public RequestAgent(AccountInfo account)
         {
             if (account == null)
             {
@@ -191,10 +194,10 @@
             }
 
             this.Account = account;
-            this.WebClient = new HttpClient(account.Cookie.CookieString);
+            this.WebClient = new HttpClient(account.CookieStr);
         }
 
-        public TCAccount Account { get; private set; }
+        public AccountInfo Account { get; private set; }
 
         public HttpClient WebClient { get; private set; }
 
@@ -206,11 +209,6 @@
                 hostName,
                 urlPath,
                 RandGen.NextDouble());
-        }
-
-        public string BuildUrl(string urlPathFormat, params object[] args)
-        {
-            return BuildUrl(this.Account.UserName, urlPathFormat, args);
         }
 
         public static string BuildUrl(
@@ -246,6 +244,11 @@
             return BuildUrl(hostName, mod, subMode, operatoin, func, args.ToList());
         }
 
+        public string BuildUrl(string urlPathFormat, params object[] args)
+        {
+            return BuildUrl(this.Account.UserName, urlPathFormat, args);
+        }
+
         public string BuildUrl(
             TCMod mod,
             TCSubMod subMode,
@@ -262,6 +265,5 @@
             }
             return this.BuildUrl(url);
         }
-
     }
 }

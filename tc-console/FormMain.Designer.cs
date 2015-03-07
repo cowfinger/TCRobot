@@ -90,6 +90,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxMaxTroopNumber = new System.Windows.Forms.TextBox();
             this.tabPageMoveArmy = new System.Windows.Forms.TabPage();
+            this.label13 = new System.Windows.Forms.Label();
+            this.numericUpDownBrickNum = new System.Windows.Forms.NumericUpDown();
             this.listBoxMovePath = new System.Windows.Forms.ListBox();
             this.buttonConfirmMove = new System.Windows.Forms.Button();
             this.radioButtonAllArmy = new System.Windows.Forms.RadioButton();
@@ -119,8 +121,7 @@
             this.ToolStripMenuItemQuickReliveHero = new System.Windows.Forms.ToolStripMenuItem();
             this.调动部队ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
-            this.numericUpDownBrickNum = new System.Windows.Forms.NumericUpDown();
-            this.label13 = new System.Windows.Forms.Label();
+            this.columnHeader18 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -136,8 +137,8 @@
             this.tabControlTask.SuspendLayout();
             this.tabPageAttack.SuspendLayout();
             this.tabPageMoveArmy.SuspendLayout();
-            this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBrickNum)).BeginInit();
+            this.menuStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -278,7 +279,8 @@
             this.listViewAccounts.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listViewAccounts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderAccountName,
-            this.columnHeaderLoginStatus});
+            this.columnHeaderLoginStatus,
+            this.columnHeader18});
             this.listViewAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewAccounts.FullRowSelect = true;
             this.listViewAccounts.GridLines = true;
@@ -292,12 +294,12 @@
             // columnHeaderAccountName
             // 
             this.columnHeaderAccountName.Text = "账号";
-            this.columnHeaderAccountName.Width = 196;
+            this.columnHeaderAccountName.Width = 172;
             // 
             // columnHeaderLoginStatus
             // 
             this.columnHeaderLoginStatus.Text = "状态";
-            this.columnHeaderLoginStatus.Width = 112;
+            this.columnHeaderLoginStatus.Width = 96;
             // 
             // webBrowserMain
             // 
@@ -755,6 +757,22 @@
             this.tabPageMoveArmy.Text = "Move Army";
             this.tabPageMoveArmy.UseVisualStyleBackColor = true;
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(7, 34);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(29, 12);
+            this.label13.TabIndex = 29;
+            this.label13.Text = "砖块";
+            // 
+            // numericUpDownBrickNum
+            // 
+            this.numericUpDownBrickNum.Location = new System.Drawing.Point(42, 30);
+            this.numericUpDownBrickNum.Name = "numericUpDownBrickNum";
+            this.numericUpDownBrickNum.Size = new System.Drawing.Size(120, 21);
+            this.numericUpDownBrickNum.TabIndex = 28;
+            // 
             // listBoxMovePath
             // 
             this.listBoxMovePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -819,7 +837,7 @@
             this.listViewAccountArmy.GridLines = true;
             this.listViewAccountArmy.Location = new System.Drawing.Point(217, 70);
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(223, 185);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(223, 186);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -845,7 +863,7 @@
             this.listViewMoveHero.GridLines = true;
             this.listViewMoveHero.Location = new System.Drawing.Point(8, 70);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(203, 185);
+            this.listViewMoveHero.Size = new System.Drawing.Size(203, 186);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1022,21 +1040,10 @@
             this.statusStripMain.TabIndex = 57;
             this.statusStripMain.Text = "statusStrip1";
             // 
-            // numericUpDownBrickNum
+            // columnHeader18
             // 
-            this.numericUpDownBrickNum.Location = new System.Drawing.Point(42, 30);
-            this.numericUpDownBrickNum.Name = "numericUpDownBrickNum";
-            this.numericUpDownBrickNum.Size = new System.Drawing.Size(120, 21);
-            this.numericUpDownBrickNum.TabIndex = 28;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(7, 34);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(29, 12);
-            this.label13.TabIndex = 29;
-            this.label13.Text = "砖块";
+            this.columnHeader18.Text = "UnionID";
+            this.columnHeader18.Width = 81;
             // 
             // FormMain
             // 
@@ -1069,9 +1076,9 @@
             this.tabPageAttack.PerformLayout();
             this.tabPageMoveArmy.ResumeLayout(false);
             this.tabPageMoveArmy.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBrickNum)).EndInit();
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBrickNum)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1172,6 +1179,7 @@
         private System.Windows.Forms.ListBox listBoxMovePath;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.NumericUpDown numericUpDownBrickNum;
+        private System.Windows.Forms.ColumnHeader columnHeader18;
     }
 }
 

@@ -121,8 +121,8 @@
                 () =>
                     {
                         var cityNameList = this.GetAccountInflunceCityNameListWithArmy(account.UserName);
-                        account.CityNameList = cityNameList;
-                        account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]);
+                        account.CityNameList = cityNameList.ToList();
+                        account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]).ToList();
                     });
 
             if (handledAccountNumber >= this.accountTable.Keys.Count)
@@ -132,7 +132,7 @@
                 this.StartUITimeSyncTimer();
                 this.StartTaskTimer();
                 this.StartOnlineTaskCheckTimer();
-                this.StartAuthTimer();
+                // this.StartAuthTimer();
             }
 
             this.Invoke(
@@ -145,6 +145,7 @@
                                 if (tagAccount == account)
                                 {
                                     lvItem.SubItems[1].Text = this.ConvertStatusStr(account.LoginStatus);
+                                    lvItem.SubItems[2].Text = account.UnionId.ToString();
                                     break;
                                 }
                             }
