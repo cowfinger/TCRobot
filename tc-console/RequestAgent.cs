@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     public enum TCElement
     {
@@ -182,7 +183,7 @@
         }
     };
 
-    internal class RequestAgent
+    partial class RequestAgent
     {
         private static readonly Random RandGen = new Random();
 
@@ -246,7 +247,7 @@
 
         public string BuildUrl(string urlPathFormat, params object[] args)
         {
-            return BuildUrl(this.Account.UserName, urlPathFormat, args);
+            return BuildUrl(this.Account.AccountType, urlPathFormat, args);
         }
 
         public string BuildUrl(
@@ -264,6 +265,14 @@
                 url += "&" + string.Join("&", argPairs);
             }
             return this.BuildUrl(url);
+        }
+
+        private IEnumerable<CityInfo> QueryInfluenceCityList()
+        {
+            this.OpenAccountFirstCity();
+            var content = this.OpenMoveTroopPage();
+
+            return this.ParseCityListFromMoveTroopPage(content);
         }
     }
 }

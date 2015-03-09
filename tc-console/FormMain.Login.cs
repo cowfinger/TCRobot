@@ -128,7 +128,7 @@
             if (handledAccountNumber >= this.accountTable.Keys.Count)
             {
                 this.remoteTimeLastSync = DateTime.Now;
-                this.RemoteTime = this.QueryRemoteSysTime(this.accountTable.Keys.First());
+                RemoteTime = this.QueryRemoteSysTime(this.accountTable.Keys.First());
                 this.StartUITimeSyncTimer();
                 this.StartTaskTimer();
                 this.StartOnlineTaskCheckTimer();

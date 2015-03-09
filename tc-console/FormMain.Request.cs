@@ -16,7 +16,7 @@
         private void OpenAccountFirstCity(string account)
         {
             const string pattern =
-                @"index\.php\?mod=influence/influence&op=show&func=influence_city_detail&node_id=(\d+)";
+                @"mod=influence/influence&op=show&func=influence_city_detail&node_id=(\d+)";
 
             var url = RequestAgent.BuildUrl(
                 this.hostname,
@@ -30,11 +30,7 @@
             var match = Regex.Match(page, pattern);
             if (match.Success)
             {
-                var cityUrl = string.Format(
-                    "http://{0}/{1}&r={2}",
-                    this.hostname,
-                    match.Value,
-                    this.randGen.NextDouble());
+                var cityUrl = RequestAgent.BuildUrl(this.hostname, match.Value);
                 this.HTTPRequest(cityUrl, account);
             }
         }
@@ -52,8 +48,8 @@
         }
 
         private string ConfirmMoveTroop(
-            string fromCityId,
-            string toCityId,
+            int fromCityId,
+            int toCityId,
             string soldierString,
             string heroString,
             int brickCount,
@@ -97,15 +93,12 @@
                 TCFunc.move_army_queue);
             return this.HTTPRequest(url, account);
         }
+
         private string QueryReliveQueueId(string tid, AccountInfo account)
         {
-            var url0 = string.Format(
-                "http://{0}/index.php?mod=get_data&op=do&r={1}",
-                this.hostname,
-                this.randGen.NextDouble());
-
-            var body0 = string.Format("module=%7B%22task%22%3A%5B{0}%2C2%5D%7D", tid);
-            var taskData = this.HTTPRequest(url0, account.UserName, body0);
+            var url = RequestAgent.BuildUrl(this.hostname, "mod=get_data&op=do");
+            var body = string.Format("module=%7B%22task%22%3A%5B{0}%2C2%5D%7D", tid);
+            var taskData = this.HTTPRequest(url, account.UserName, body);
 
             const string taskPattern = "\"tid\":(?<tid>\\d+)";
             var taskIdMatch = Regex.Match(taskData, taskPattern);
@@ -115,7 +108,7 @@
 
         private void UserReliveItem(DepotItem item, string heroId, string queueId, string tid, AccountInfo account)
         {
-            var callBack = string.Format("call_back=get_build_task_queue%28undefined%2C+{0}%2C+true%29", tid);
+            var callBack = string.Format("get_build_task_queue%28undefined%2C+{0}%2C+true%29", tid);
             var url = RequestAgent.BuildUrl(
                 this.hostname,
                 TCMod.prop,
@@ -159,6 +152,7 @@
                            UserPropertyID = int.Parse(match.Groups["user_prop_id"].Value)
                        };
         }
+
         private void ReliveHero(string heroId, string account)
         {
             var url = RequestAgent.BuildUrl(

@@ -40,6 +40,8 @@
 
         public string FirstStepCityID;
 
+        public CityInfo MainCity = null;
+
         public Dictionary<string, HashSet<string>> InfluenceMap = null;
 
         public Dictionary<string, CityInfo> InfluenceCityList = null;
@@ -100,6 +102,8 @@
         public bool IsDead = false;
 
         public string Name = "";
+
+        public bool IsBusy = false;
     }
 
     public class CityInfo

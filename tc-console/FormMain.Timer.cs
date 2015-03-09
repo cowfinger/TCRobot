@@ -11,7 +11,9 @@
     {
         private readonly DateTime lastTaskTimerWakeup = DateTime.MinValue;
 
-        private readonly object remoteTimeLock = new object();
+        private static object remoteTimeLock = new object();
+
+        private static DateTime remoteTime = DateTime.MinValue;
 
         private readonly Timer syncRemoteTimeTimer = new Timer(15 * 1000);
 
@@ -24,8 +26,6 @@
         private Timer onlineTaskRefreshTimer;
 
         private Timer reliveHeroTimer;
-
-        private DateTime remoteTime = DateTime.MinValue;
 
         private DateTime remoteTimeLastSync = DateTime.MinValue;
 
@@ -81,10 +81,11 @@
                         this.accountTable.Values,
                         account =>
                         {
+                            var tasks1 = this.QueryOnlineTroopList("1", account.UserName).ToList();
                             var tasks2 = this.QueryOnlineTroopList("2", account.UserName).ToList();
                             var tasks4 = this.QueryOnlineTroopList("4", account.UserName).ToList();
 
-                            var allTasks = tasks2.Concat(tasks4);
+                            var allTasks = tasks1.Concat(tasks2).Concat(tasks4).ToList();
 
                             this.Invoke(
                                 new DoSomething(
@@ -95,14 +96,9 @@
                                         {
                                             var oldTask = lvItem.Tag as AttackTask;
 
-                                            foreach (var task in allTasks)
+                                            if (allTasks.Find(task => task.TaskId == oldTask.TaskId) == null)
                                             {
-                                                if (oldTask.AccountName == account.UserName
-                                                    && oldTask.TaskId == task.TaskId)
-                                                {
-                                                    toRemoveTasks.Add(lvItem);
-                                                    break;
-                                                }
+                                                toRemoveTasks.Add(lvItem);
                                             }
                                         }
 
@@ -117,8 +113,7 @@
                                             foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
                                             {
                                                 var oldTask = lvItem.Tag as AttackTask;
-                                                if (oldTask.AccountName == task.AccountName
-                                                    && oldTask.TaskId == task.TaskId)
+                                                if (oldTask.TaskId == task.TaskId)
                                                 {
                                                     found = true;
                                                     break;
@@ -159,7 +154,7 @@
                 {
                     lock (this.taskTimerLock)
                     {
-                        var remoteTimeSnapshot = this.RemoteTime;
+                        var remoteTimeSnapshot = RemoteTime;
 
                         var diff = remoteTimeSnapshot - this.lastTaskTimerWakeup;
                         if (diff.TotalSeconds < 1.0)
@@ -172,43 +167,12 @@
                             new DoSomething(
                                 () =>
                                 {
+                                    var toRemoveList = new List<ListViewItem>();
                                     foreach (ListViewItem lvItem in this.listViewTasks.Items)
-                                    {
-                                        taskLvItemList.Add(lvItem);
-                                    }
-                                }));
-
-                        var toExecuteTaskList = new List<TCTask>();
-                        var toChangeTaskLvItems = new List<ListViewItem>();
-
-                        foreach (var lvItem in taskLvItemList)
-                        {
-                            var task = lvItem.Tag as TCTask;
-
-                            if (remoteTimeSnapshot >= task.ExecuteTime)
-                            {
-                                toExecuteTaskList.Add(task);
-                                toChangeTaskLvItems.Add(lvItem);
-                            }
-                            else if (remoteTimeSnapshot >= task.EndTime)
-                            {
-                                this.Invoke(new DoSomething(() => { this.listViewTasks.Items.Remove(lvItem); }));
-                            }
-                            else
-                            {
-                                toChangeTaskLvItems.Add(lvItem);
-                            }
-                        }
-
-                        this.Invoke(
-                            new DoSomething(
-                                () =>
-                                {
-                                    foreach (var lvItem in toChangeTaskLvItems)
                                     {
                                         var task = lvItem.Tag as TCTask;
 
-                                        var timeLeft = (int)((task.ExecuteTime - remoteTimeSnapshot).TotalSeconds);
+                                        var timeLeft = (int)((task.ExecutionTime - remoteTimeSnapshot).TotalSeconds);
                                         lvItem.SubItems[4].Text = this.Time2Str(timeLeft);
 
                                         var hint = task.GetTaskHint();
@@ -216,50 +180,27 @@
                                         {
                                             lvItem.SubItems[5].Text = hint;
                                         }
+
+                                        if (task.IsCompleted)
+                                        {
+                                            toRemoveList.Add(lvItem);
+                                        }
+                                    }
+
+                                    foreach (ListViewItem lvItem in toRemoveList)
+                                    {
+                                        this.listViewTasks.Items.Remove(lvItem);
                                     }
                                 }));
-
-                        var taskTypeGroups = toExecuteTaskList.GroupBy(task => task.GetType().Name).ToList();
-                        foreach (var taskGroup in taskTypeGroups)
-                        {
-                            var accountTaskGroups = taskGroup.GroupBy(task => task.AccountName).ToList();
-                            Parallel.Dispatch(
-                                accountTaskGroups,
-                                accountTaskGroup =>
-                                {
-                                    this.DispatchAccountTasks(accountTaskGroup.Key, accountTaskGroup);
-                                });
-                        }
                     }
                 };
 
             this.taskTimer.Start();
         }
 
-        private void DispatchAccountTasks(string accountName, IEnumerable<TCTask> accountTaskGroup)
-        {
-            var subTaskGroups = accountTaskGroup.GroupBy(task => task.GroupKey);
-
-            foreach (var taskGroup in subTaskGroups)
-            {
-                var groupAction = taskGroup.First().GroupAction;
-                var taskGroupPara = groupAction != null ? groupAction(taskGroup.Key) : null;
-
-                Parallel.Dispatch(
-                    taskGroup,
-                    task =>
-                    {
-                        if (task.TaskAction != null)
-                        {
-                            task.TaskAction(taskGroupPara);
-                        }
-                    });
-            }
-        }
-
         private void StartSendTroopTasks()
         {
-            var timeSnapshot = this.RemoteTime;
+            var timeSnapshot = RemoteTime;
             var arrivalTime = this.dateTimePickerArrival.Value;
             foreach (ListViewItem lvItemTroop in this.listViewTroops.CheckedItems)
             {
@@ -271,47 +212,50 @@
 
                 if (!team.isDefendTroop && ((team.isGroupTroop && team.IsGroupHead) || !team.isGroupTroop))
                 {
-                    var fromCity = this.listBoxSrcCities.SelectedItem.ToString();
-                    var toCity = this.listBoxDstCities.SelectedItem.ToString();
-                    var task = new SendTroopTask(fromCity, toCity, team);
-                    task.ExecuteTime = arrivalTime.AddSeconds(-team.Duration);
-                    if (!team.isGroupTroop)
+                    var account = this.accountTable[team.AccountName];
+                    var fromCityName = this.listBoxSrcCities.SelectedItem.ToString();
+                    var toCityName = this.listBoxDstCities.SelectedItem.ToString();
+
+                    var fromCity = account.InfluenceCityList[fromCityName];
+                    var toCity = new CityInfo()
                     {
-                        task.ExecuteTime = task.ExecuteTime.AddMilliseconds(200);
-                    }
-                    task.EndTime = task.ExecuteTime; // Same time so that it is a once task.
+                        Name = toCityName,
+                        CityId = int.Parse(this.cityList[toCityName]),
+                        NodeId = int.Parse(team.ToCityNodeId),
+                    };
+
+                    var task = new SendTroopTask(account, fromCity, toCity, team, arrivalTime);
 
                     task.TaskAction = obj =>
                         {
-                            var httpClient = obj as HttpClient;
-                            if (httpClient == null)
+                            switch (task.Status)
                             {
-                                return;
-                            }
+                                case SendTroopTask.TaskStatus.OpenAttackPage:
+                                    var requestPerfTimer = DateTime.Now;
+                                    this.OpenCityPage(team.ToCityNodeId, ref task.webClient);
+                                    var cost = DateTime.Now - requestPerfTimer;
+                                    var attackTime = task.ExecutionTime.AddSeconds(SendTroopTask.OpenAttackPageTime);
+                                    task.ExecutionTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
+                                    task.Status = SendTroopTask.TaskStatus.ConfirmAttack;
+                                    break;
 
-                            if (team.isGroupTroop)
-                            {
-                                // OpenGroupAttackPage(team.GroupId, team.ToCityNodeId, ref httpClient);
-                                this.GroupAttackTarget(team.GroupId, team.ToCityNodeId, ref httpClient);
+                                case SendTroopTask.TaskStatus.ConfirmAttack:
+                                    if (team.isGroupTroop)
+                                    {
+                                        this.GroupAttackTarget(team.GroupId, team.ToCityNodeId, ref task.webClient);
+                                    }
+                                    else
+                                    {
+                                        this.TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref task.webClient);
+                                    }
+                                    task.IsCompleted = true;
+                                    break;
                             }
-                            else
-                            {
-                                // OpenTeamAttackPage(team.TroopId, team.ToCityNodeId, ref httpClient);
-                                this.TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref httpClient);
-                            }
-                        };
-
-                    task.GroupAction = groupKey =>
-                        {
-                            var httpClient = new HttpClient(this.GetAccountCookie(team.AccountName));
-                            var fromCityId = this.cityList[groupKey];
-                            this.OpenCityPage(fromCityId, ref httpClient); // Open City Page to refresh cookie.
-                            return httpClient;
                         };
 
                     var lvItemTask = new ListViewItem();
                     lvItemTask.Tag = task;
-                    task.SyncToListViewItem(lvItemTask, this.RemoteTime);
+                    task.SyncToListViewItem(lvItemTask, timeSnapshot);
                     this.listViewTasks.Items.Add(lvItemTask);
                     this.listViewTroops.Items.Remove(lvItemTroop);
                 }
@@ -329,7 +273,7 @@
         private void StartRemoteTimeSyncTimer()
         {
             this.syncRemoteTimeTimer.Elapsed +=
-                (obj, args) => { this.RemoteTime = this.QueryRemoteSysTime(this.accountTable.Keys.First()); };
+                (obj, args) => { RemoteTime = this.QueryRemoteSysTime(this.accountTable.Keys.First()); };
 
             this.syncRemoteTimeTimer.AutoReset = true;
             this.syncRemoteTimeTimer.Start();
@@ -342,11 +286,11 @@
                     var now = DateTime.Now;
 
                     var diff = now - this.remoteTimeLastSync;
-                    var remoteTimeSnapshot = this.RemoteTime;
+                    var remoteTimeSnapshot = RemoteTime;
 
-                    this.RemoteTime = remoteTimeSnapshot + diff;
+                    RemoteTime = remoteTimeSnapshot + diff;
                     this.remoteTimeLastSync = now;
-                    this.Invoke(new DoSomething(() => { this.textBoxSysTime.Text = this.RemoteTime.ToString(); }));
+                    this.Invoke(new DoSomething(() => { this.textBoxSysTime.Text = RemoteTime.ToString(); }));
                 };
 
             this.syncTimeToUITimer.AutoReset = true;

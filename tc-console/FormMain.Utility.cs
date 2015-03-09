@@ -6,11 +6,13 @@
     using System.Linq;
     using System.Net;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading;
     using System.Windows.Forms;
 
     partial class FormMain
     {
+        public static Dictionary<string, string> KeyWordMap = new Dictionary<string, string>();
         private Dictionary<string, CityInfo> cachedCityMap = new Dictionary<string, CityInfo>();
 
         private string HTTPRequest(string url)
@@ -247,7 +249,7 @@
 
         private void LoadCityList()
         {
-            using (var sr = new StreamReader("cities.txt", Encoding.Default))
+            using (var sr = new StreamReader("cities.txt", Encoding.UTF8))
             {
                 var line = sr.ReadLine();
                 while (line != null)
@@ -261,11 +263,33 @@
                     line = sr.ReadLine();
                 }
             }
+
+            CityList = this.cityList;
+        }
+
+        private void LoadLangChs()
+        {
+            const string pattern = @"'(?<key>.+?)':'(?<val>.+?)',";
+            using (var streamReader = new StreamReader("lang_chs.txt", Encoding.UTF8))
+            {
+                var fileContent = streamReader.ReadToEnd();
+                var matches = Regex.Matches(fileContent, pattern);
+                var items = from Match match in matches
+                            select new { key = match.Groups["key"].Value, val = match.Groups["val"].Value };
+
+                foreach (var item in items)
+                {
+                    if (!KeyWordMap.ContainsKey(item.key))
+                    {
+                        KeyWordMap.Add(item.key, item.val);
+                    }
+                }
+            }
         }
 
         private void LoadMultiLoginConf()
         {
-            using (var sr = new StreamReader("multi_login.conf", Encoding.Default))
+            using (var sr = new StreamReader("multi_login.conf", Encoding.UTF8))
             {
                 var line = sr.ReadLine();
                 while (line != null)
@@ -412,10 +436,17 @@
                 this.accountTable.Values,
                 account =>
                 {
-                    var accountCityList = this.QueryInfluenceCityList(account.UserName).ToList();
-                    account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
-                    account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
-                }).Then(() => { this.LoadAccountListToMoveArmyTab(); });
+                    if (account.InfluenceCityList == null)
+                    {
+                        var accountCityList = this.QueryInfluenceCityList(account.UserName).ToList();
+                        account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
+                        account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
+                        account.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
+                    }
+                }).Then(() =>
+                {
+                    this.LoadAccountListToMoveArmyTab();
+                });
         }
 
         private void LoadAccountListToMoveArmyTab()
@@ -434,8 +465,8 @@
 
         private bool HasTroopArrived(MoveTroopTask task)
         {
-            string cityNodeId = this.cityList[task.NextCity];
-            string fromCityId = task.Account.InfluenceCityList[task.NextCity].NodeId.ToString();
+            string cityNodeId = task.NextCity.CityId.ToString();
+            string fromCityId = task.NextCity.NodeId.ToString();
             this.OpenCityPage(cityNodeId, task.Account.UserName);
             string movePageFrom = this.ChangeMoveFromCity(task.Account.UserName, fromCityId);
 
@@ -452,14 +483,11 @@
 
         private MoveTask MoveTroop(MoveTroopTask task)
         {
-            string cityNodeId = this.cityList[task.CurrentCity];
+            string cityNodeId = task.CurrentCity.CityId.ToString();
 
             this.OpenCityPage(cityNodeId, task.Account.UserName);
             string moveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
             var moveTaskList = this.ParseMoveTaskList(moveQueuePage).ToList();
-
-            var fromCityId = task.Account.InfluenceCityList[task.CurrentCity].NodeId;
-            var toCityId = task.Account.InfluenceCityList[task.NextCity].NodeId;
 
             var heroString = string.Join("%7C", task.HeroIdList.ToArray());
             var soldierString = string.Join(
@@ -469,12 +497,18 @@
                     ).ToArray()
             );
 
-            ConfirmMoveTroop(fromCityId.ToString(), toCityId.ToString(), soldierString, heroString, task.BrickNum, task.Account.UserName);
+            ConfirmMoveTroop(
+                task.CurrentCity.NodeId,
+                task.NextCity.NodeId,
+                soldierString,
+                heroString,
+                task.BrickNum,
+                task.Account.UserName);
 
             for (int i = 0; i < 10; ++i)
             {
                 Thread.Sleep(2000);
-                this.OpenCityPage(toCityId.ToString(), task.Account.UserName);
+                this.OpenCityPage(task.NextCity.CityId.ToString(), task.Account.UserName);
                 string newMoveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
                 var newMoveTaskList = this.ParseMoveTaskList(newMoveQueuePage).ToList();
 
@@ -485,8 +519,7 @@
 
                 var thisMoveTask = newMoveTaskList.Single(taskItem => !moveTaskList.Select(item => item.TaskId).Contains(taskItem.TaskId));
                 task.TaskId = thisMoveTask.TaskId;
-                task.ExecuteTime = thisMoveTask.EndTime.AddSeconds(2);
-                task.EndTime = task.ExecuteTime.AddSeconds(10);
+                task.ExecutionTime = thisMoveTask.EndTime.AddSeconds(2);
                 return thisMoveTask;
             }
 
@@ -518,6 +551,78 @@
             if (roadLevel >= 6) { return 72; }
 
             return 120;
+        }
+
+        private ShipBrickTask CreateShipBrickTask(
+            AccountInfo account,
+            CityInfo targetCity
+            )
+        {
+            var task = new ShipBrickTask(account, targetCity);
+            task.TaskAction = obj =>
+                {
+
+                };
+
+            return null;
+        }
+
+        private MoveTroopTask CreateMoveTroopTask(
+            AccountInfo accountInfo, 
+            CityInfo fromCity, 
+            CityInfo nextCity, 
+            CityInfo toCity,
+            List<Soldier> soldierList,
+            List<string> heroList,
+            int brickNum
+            )
+        {
+            var moveTask = new MoveTroopTask(
+                accountInfo,
+                fromCity,
+                nextCity,
+                toCity,
+                brickNum,
+                "");
+            moveTask.SoldierList = soldierList;
+            moveTask.HeroIdList = heroList;
+            moveTask.Path = (from object lvitem in this.listBoxMovePath.Items select lvitem.ToString()).ToList();
+            moveTask.TaskAction = obj =>
+                {
+                    if (!this.HasTroopArrived(moveTask))
+                    {
+                        ++moveTask.RetryCount;
+                        if (moveTask.RetryCount < 3)
+                        {
+                            moveTask.ExecutionTime = moveTask.ExecutionTime.AddSeconds(10);
+                        }
+                        else
+                        {
+                            moveTask.IsCompleted = true;
+                        }
+                        return;
+                    }
+
+                    if (moveTask.NextCity == moveTask.TerminalCity)
+                    {
+                        moveTask.IsCompleted = true;
+                        return;
+                    }
+
+                    var helper = new DijstraHelper(accountInfo.InfluenceMap);
+                    helper.DistanceCalculate = this.CalculateDistance;
+                    helper.account = accountInfo.UserName;
+
+                    var path = helper.GetPath(moveTask.NextCity.Name, moveTask.TerminalCity.Name).ToList();
+                    path.Reverse();
+
+                    moveTask.Path = path;
+                    moveTask.CurrentCity = moveTask.NextCity;
+                    moveTask.NextCity = moveTask.Account.InfluenceCityList[path.First()];
+
+                    this.MoveTroop(moveTask);
+                };
+            return moveTask;
         }
 
         private delegate void DoSomething();

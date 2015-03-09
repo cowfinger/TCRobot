@@ -10,9 +10,12 @@
 
     public partial class FormMain : Form
     {
+        public static Dictionary<string, string> CityList = null;
+
         private const string UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2; .NET4.0C; .NET4.0E)";
 
         private readonly Dictionary<string, AccountInfo> accountTable = new Dictionary<string, AccountInfo>();
+
 
         private readonly Dictionary<string, string> cityList = new Dictionary<string, string>();
 
@@ -50,21 +53,21 @@
             }
         }
 
-        private DateTime RemoteTime
+        public static DateTime RemoteTime
         {
             get
             {
-                lock (this.remoteTimeLock)
+                lock (remoteTimeLock)
                 {
-                    return this.remoteTime;
+                    return remoteTime;
                 }
             }
 
             set
             {
-                lock (this.remoteTimeLock)
+                lock (remoteTimeLock)
                 {
-                    this.remoteTime = value;
+                    remoteTime = value;
                 }
             }
         }
@@ -74,6 +77,7 @@
             this.LoadMultiLoginConf();
             this.LoadCityList();
             this.LoadCheckpoint();
+            this.LoadLangChs();
         }
 
         private void btnQuickCreateTroop_Click(object sender, EventArgs e)
@@ -418,7 +422,7 @@
                 return;
             }
 
-            var diff = this.dateTimePickerArrival.Value - this.RemoteTime;
+            var diff = this.dateTimePickerArrival.Value - RemoteTime;
             var selectedTroops = new List<TroopInfo>();
             foreach (ListViewItem lvItem in this.listViewTroops.CheckedItems)
             {
@@ -433,9 +437,9 @@
 
             if (maxDuration > diff.TotalSeconds)
             {
-                var minArrivalTime = this.RemoteTime.AddSeconds(maxDuration);
+                var minArrivalTime = RemoteTime.AddSeconds(maxDuration);
                 var result = MessageBox.Show(
-                    string.Format("建议到达时间必须晚于{0}", minArrivalTime),
+                    string.Format("建议到达时间必须晚于{0}", minArrivalTime.AddSeconds(SendTroopTask.OpenAttackPageTime)),
                     "是否使用建议时间",
                     MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
@@ -727,12 +731,15 @@
             {
                 this.comboBoxFromCity.Items.Add(cityName);
             }
+            this.comboBoxFromCity.Items.Add(account.MainCity.Name);
+            this.comboBoxFromCity.Text = "";
 
             this.comboBoxToCity.Items.Clear();
             foreach (var cityName in account.InfluenceMap.Keys)
             {
                 this.comboBoxToCity.Items.Add(cityName);
             }
+            this.comboBoxToCity.Text = "";
         }
 
         private void comboBoxFromCity_SelectedIndexChanged(object sender, EventArgs e)
@@ -748,28 +755,12 @@
                 {
                     var accountInfo = this.accountTable[accountName];
 
-                    var cityNodeId = this.cityList[fromCity];
                     var cityId = accountInfo.InfluenceCityList[fromCity].NodeId;
 
-                    var cityPage = this.OpenCityPage(cityNodeId, accountName);
-                    var soldiers = this.ParseSoldierInfoFromCityPage(cityPage).ToList();
-                    var heroNameList = this.ParseHeroNameListFromCityPage(cityPage).ToList();
-
                     var cityMovePage = this.ChangeMoveFromCity(accountName, cityId.ToString());
-                    var heroIdList = this.ParseHeroIdListFromMovePage(cityMovePage).ToList();
+                    var heroList = this.ParseHeroInfoListFromMovePage(cityMovePage, accountName).Where(hero => !hero.IsBusy).ToList();
+                    var soldiers = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
                     var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
-
-                    if (!heroIdList.Any())
-                    {
-                        MessageBox.Show("没有空闲的将领，不能移动部队.");
-                        return;
-                    }
-
-                    if (heroIdList.Count != heroNameList.Count)
-                    {
-                        MessageBox.Show("天策数据错误.");
-                        return;
-                    }
 
                     this.Invoke(
                         new DoSomething(
@@ -782,21 +773,21 @@
                                     lvItem.Tag = soldierInfo;
                                     lvItem.SubItems[0].Text = soldierInfo.Name;
                                     lvItem.SubItems.Add(soldierInfo.SoldierNumber.ToString());
+                                    lvItem.SubItems.Add("0");
                                     this.listViewAccountArmy.Items.Add(lvItem);
                                 }
 
                                 this.listViewMoveHero.Items.Clear();
-                                for (int i = 0; i < heroNameList.Count(); ++i)
+                                for (int i = 0; i < heroList.Count(); ++i)
                                 {
                                     var lvItem = new ListViewItem();
-                                    lvItem.SubItems[0].Text = heroNameList[i];
-                                    lvItem.SubItems.Add(heroIdList[i]);
+                                    lvItem.SubItems[0].Text = heroList[i].Name;
+                                    lvItem.SubItems.Add(heroList[i].HeroId);
                                     this.listViewMoveHero.Items.Add(lvItem);
                                 }
 
-                                this.numericUpDownBrickNum.Value = brickNum;
                                 this.numericUpDownBrickNum.Maximum = brickNum;
-
+                                this.numericUpDownBrickNum.Value = 0;
                             }));
                 });
         }
@@ -825,10 +816,9 @@
         private void buttonConfirmMove_Click(object sender, EventArgs e)
         {
             string accountName = this.comboBoxAccount.Text;
-            string fromCity = this.comboBoxFromCity.Text;
-            string toCity = this.comboBoxToCity.Text;
-            string nextCity = this.listBoxMovePath.Items[0].ToString();
-            bool halfArmy = !this.radioButtonAllArmy.Checked;
+            string fromCityName = this.comboBoxFromCity.Text;
+            string toCityName = this.comboBoxToCity.Text;
+            string nextCityName = this.listBoxMovePath.Items[0].ToString();
 
             var heroList = (from ListViewItem lvItem in this.listViewMoveHero.CheckedItems select lvItem.SubItems[1].Text).ToList();
             var soldierList = (from ListViewItem lvItem in this.listViewAccountArmy.CheckedItems
@@ -838,69 +828,26 @@
                                {
                                    Name = soldier.Name,
                                    SoldierType = soldier.SoldierType,
-                                   SoldierNumber = halfArmy ? soldier.SoldierNumber / 2 : soldier.SoldierNumber,
+                                   SoldierNumber = soldier.SoldierNumber,
                                }).ToList();
 
             var accountInfo = this.accountTable[accountName];
-            var moveTask = new MoveTroopTask(accountInfo, fromCity, nextCity, toCity);
-            moveTask.BrickNum = (int)this.numericUpDownBrickNum.Value;
-            moveTask.SoldierList = soldierList;
-            moveTask.HeroIdList = heroList;
-            moveTask.Path = (from object lvitem in this.listBoxMovePath.Items select lvitem.ToString()).ToList();
-            moveTask.TaskAction = obj =>
-                {
-                    if (!moveTask.TryEnter())
-                    {
-                        return;
-                    }
+            var fromCity = accountInfo.InfluenceCityList[fromCityName];
+            var nextCity = accountInfo.InfluenceCityList[nextCityName];
+            var toCity = accountInfo.InfluenceCityList[toCityName];
 
-                    if (!this.HasTroopArrived(moveTask))
-                    {
-                        ++moveTask.RetryCount;
-                        if (moveTask.RetryCount < 3)
-                        {
-                            moveTask.ExecuteTime = moveTask.ExecuteTime.AddSeconds(10);
-                            moveTask.EndTime = moveTask.ExecuteTime.AddMinutes(1);
-                        }
-                        else
-                        {
-                            moveTask.EndTime = this.RemoteTime.AddSeconds(10); // So the task will be deleted next time.
-                            moveTask.ExecuteTime = moveTask.EndTime.AddSeconds(1);
-                        }
-                        moveTask.Leave();
-                        return;
-                    }
-
-                    if (moveTask.NextCity == moveTask.TerminalCity)
-                    {
-                        moveTask.EndTime = this.RemoteTime.AddSeconds(10); // So the task will be deleted next time.
-                        moveTask.ExecuteTime = moveTask.EndTime.AddSeconds(1);
-                        moveTask.Leave();
-                        return;
-                    }
-
-                    var helper = new DijstraHelper(accountInfo.InfluenceMap);
-                    helper.DistanceCalculate = this.CalculateDistance;
-                    helper.account = accountName;
-                    var path = helper.GetPath(moveTask.NextCity, moveTask.TerminalCity).ToList();
-                    path.Reverse();
-                    moveTask.Path = path;
-
-                    moveTask.CurrentCity = moveTask.NextCity;
-                    moveTask.NextCity = moveTask.Path.First();
-
-                    this.MoveTroop(moveTask);
-                    moveTask.Leave();
-                };
-            moveTask.AccountName = accountInfo.UserName;
-            moveTask.CreationTime = this.RemoteTime;
-            moveTask.ExecuteTime = this.RemoteTime.AddMinutes(1);
-            moveTask.EndTime = moveTask.ExecuteTime.AddMinutes(1);
-            moveTask.TaskId = string.Format("Move:{0}", this.randGen.NextDouble());
+            var moveTask = CreateMoveTroopTask(
+                accountInfo,
+                fromCity,
+                nextCity,
+                toCity,
+                soldierList,
+                heroList,
+                (int)this.numericUpDownBrickNum.Value);
 
             var lvItemTask = new ListViewItem();
             lvItemTask.Tag = moveTask;
-            moveTask.SyncToListViewItem(lvItemTask, this.RemoteTime);
+            moveTask.SyncToListViewItem(lvItemTask, RemoteTime);
             this.listViewTasks.Items.Add(lvItemTask);
 
             Task.Run(() =>
@@ -917,6 +864,68 @@
             this.listBoxMovePath.Items.Clear();
             this.numericUpDownBrickNum.Value = 0;
             this.numericUpDownBrickNum.Maximum = 0;
+        }
+
+        private void listViewAccountArmy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.listViewAccountArmy.SelectedItems.Count == 1)
+            {
+                ListViewItem lvItem = this.listViewAccountArmy.SelectedItems[0];
+                this.labelSelectedArmyName.Text = lvItem.Text;
+                this.labelSelectedArmyName.Visible = true;
+                this.numericUpDownToMoveArmy.Maximum = int.Parse(lvItem.SubItems[1].Text);
+                this.numericUpDownToMoveArmy.Value = int.Parse(lvItem.SubItems[2].Text);
+                this.numericUpDownToMoveArmy.Visible = true;
+            }
+            else
+            {
+                this.labelSelectedArmyName.Visible = false;
+                this.numericUpDownToMoveArmy.Visible = false;
+            }
+        }
+
+        private void numericUpDownToMoveArmy_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.listViewAccountArmy.SelectedItems.Count == 1)
+            {
+                ListViewItem lvItem = this.listViewAccountArmy.SelectedItems[0];
+                lvItem.SubItems[2].Text = this.numericUpDownToMoveArmy.Value.ToString();
+            }
+        }
+
+        private void checkBoxDirectTarget_CheckedChanged(object sender, EventArgs e)
+        {
+            this.comboBoxToCity.Text = "";
+            this.comboBoxToCity.Items.Clear();
+            var accountName = this.comboBoxAccount.Text;
+            AccountInfo account;
+            if (!this.accountTable.TryGetValue(accountName, out account))
+            {
+                return;
+            }
+
+            if (this.checkBoxDirectTarget.Checked)
+            {
+                foreach (var i in account.InfluenceMap[this.comboBoxFromCity.Text])
+                {
+                    this.comboBoxToCity.Items.Add(i);
+                }
+            }
+            else
+            {
+                foreach (var i in account.InfluenceCityList.Keys)
+                {
+                    this.comboBoxToCity.Items.Add(i);
+                }
+            }
+        }
+
+        private void checkBoxSelecteAllMoveHeroes_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (ListViewItem lvItem in this.listViewMoveHero.Items)
+            {
+                lvItem.Checked = this.checkBoxSelecteAllMoveHeroes.Checked;
+            }
         }
     }
 }

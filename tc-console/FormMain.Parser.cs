@@ -301,9 +301,9 @@ namespace TC
         {
             const string linePattern = "<span id=\"event_(?<taskid>\\d+)\"></span>";
             const string etaPattern = @"将于&nbsp;&nbsp;(?<eta>\d\d\d\d\-\d\d\-\d\d \d\d:\d\d:\d\d)&nbsp;&nbsp;到达";
-            const string fromCityPattern = "<div class=\"attack_infor\">(?<city>[^&]*)&nbsp;&nbsp;返回&nbsp;&nbsp;";
+            const string fromCityPattern = "<div class=\"attack_infor\">(?<city>.*?)&nbsp;&nbsp;返回&nbsp;&nbsp;";
             const string cityPattern =
-                "<a href='javascript:void\\(0\\)' onclick=\"military\\.show_attack\\('gj',\\d+,0\\);\">(?<city>[^<]+)</a><span class=\"button1\">";
+                "<a href='javascript:void\\(0\\)' onclick=\"military\\.show_attack\\('gj',\\d+,0\\);\">(?<city>.+?)\\(.*?</a><span class=\"button1\">";
 
             var lines = page.Split('\r');
             foreach (var line in lines)
@@ -345,11 +345,25 @@ namespace TC
                         break;
                 }
 
+                var accountInfo = this.accountTable[account];
+                string taskType = "返回";
+                if (line.Contains("攻击"))
+                {
+                    if (accountInfo.InfluenceCityList == null)
+                    {
+                        var accountCityList = this.QueryInfluenceCityList(account).ToList();
+                        accountInfo.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
+                        accountInfo.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account);
+                        accountInfo.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
+                    }
+                    taskType = accountInfo.InfluenceCityList.ContainsKey(toCity) ? "被攻击" : "攻击";
+                }
+
                 yield return
                     new AttackTask
                         {
                             AccountName = account,
-                            TaskType = line.Contains("攻击") ? "Attack" : "Return",
+                            TaskType = taskType,
                             TaskId = lineMatch.Groups["taskid"].Value,
                             FromCity = fromCity,
                             ToCity = toCity,
@@ -423,9 +437,39 @@ namespace TC
             return from Match match in matches select match.Groups["heroId"].Value;
         }
 
+        private IEnumerable<HeroInfo> ParseHeroInfoListFromMovePage(string page, string account)
+        {
+            const string namePattern = "<div class=\"name button1\"><a href=\"javascript:void\\(0\\)\"><span>(?<name>.+?)</span></a></div>";
+            const string idPattern = "hero_id=\"(\\d+)\" hero_status=\"(\\d+)\"";
+            var nameMatches = Regex.Matches(page, namePattern);
+            var nameList = (from Match match in nameMatches
+                            select match.Groups[1].Value).Select(
+                            (val, i) => new { i, val}).GroupBy( item => item.i);
+
+            var idMatches = Regex.Matches(page, idPattern);
+            var idList = (from Match match in idMatches
+                          select match.Groups[1].Value).Select(
+                          (val, i) => new { i, val}).GroupBy( item => item.i);
+            var statusList = (from Match match in idMatches
+                              select match.Groups[2].Value).Select(
+                              (val, i) => new { i, val}).GroupBy( item => item.i);
+
+            return (from name in nameList
+                   from id in idList
+                   from status in statusList
+                   where name.Key == id.Key && name.Key == status.Key
+                   select new HeroInfo()
+                   { 
+                       AccountName = account,
+                       HeroId = id.First().val,
+                       Name = name.First().val,
+                       IsBusy = status.First().val != "1",
+                   });
+        }
+
         private IEnumerable<string> ParseHeroIdListFromMovePage(string page)
         {
-            const string pattern = "hero_id=\"(\\d+)\" hero_status=\"1\"";
+            const string pattern = "hero_id=\"(\\d+)\" hero_status=\"(\\d+)\"";
             var matches = Regex.Matches(page, pattern);
             return from Match match in matches select match.Groups[1].Value;
         }
@@ -439,6 +483,18 @@ namespace TC
                 return int.Parse(match.Groups[1].Value);
             }
             return 0;
+        }
+
+        private IEnumerable<Soldier> ParseSoldierListFromMovePage(string page)
+        {
+            const string idPattern = "max_num=(\\d+) name=\"s_(\\d+)\"";
+            return from Match match in Regex.Matches(page, idPattern)
+                   select new Soldier()
+                   {
+                       Name = KeyWordMap[string.Format("soldier_{0}", match.Groups[2].Value)],
+                       SoldierType = int.Parse(match.Groups[2].Value),
+                       SoldierNumber = int.Parse(match.Groups[1].Value),
+                   };
         }
 
         private IEnumerable<CityInfo> QueryInfluenceCityList(string account)
