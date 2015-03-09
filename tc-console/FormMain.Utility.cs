@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Eventing.Reader;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -13,7 +14,6 @@
     partial class FormMain
     {
         public static Dictionary<string, string> KeyWordMap = new Dictionary<string, string>();
-        private Dictionary<string, CityInfo> cachedCityMap = new Dictionary<string, CityInfo>();
 
         private string HTTPRequest(string url)
         {
@@ -507,10 +507,10 @@
 
         private MoveTask MoveTroop(MoveTroopTask task)
         {
-            string cityNodeId = task.CurrentCity.CityId.ToString();
+            var cityNodeId = task.CurrentCity.CityId.ToString();
 
             this.OpenCityPage(cityNodeId, task.Account.UserName);
-            string moveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
+            var moveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
             var moveTaskList = this.ParseMoveTaskList(moveQueuePage).ToList();
 
             var heroString = string.Join("%7C", task.HeroIdList.ToArray());
@@ -598,19 +598,17 @@
             CityInfo toCity,
             List<Soldier> soldierList,
             List<string> heroList,
+            List<string> initialPath,
             int brickNum
             )
         {
-            var moveTask = new MoveTroopTask(
-                accountInfo,
-                fromCity,
-                nextCity,
-                toCity,
-                brickNum,
-                "");
-            moveTask.SoldierList = soldierList;
-            moveTask.HeroIdList = heroList;
-            moveTask.Path = (from object lvitem in this.listBoxMovePath.Items select lvitem.ToString()).ToList();
+            var moveTask = new MoveTroopTask(accountInfo, fromCity, nextCity, toCity, brickNum, "")
+                               {
+                                   SoldierList = soldierList,
+                                   HeroIdList = heroList,
+                                   Path = initialPath
+                               };
+
             moveTask.TaskAction = obj =>
                 {
                     if (!this.HasTroopArrived(moveTask))
@@ -633,9 +631,11 @@
                         return;
                     }
 
-                    var helper = new DijstraHelper(accountInfo.InfluenceMap);
-                    helper.DistanceCalculate = this.CalculateDistance;
-                    helper.account = accountInfo.UserName;
+                    var helper = new DijstraHelper(accountInfo.InfluenceMap)
+                                     {
+                                         DistanceCalculate = this.CalculateDistance,
+                                         account = accountInfo.UserName
+                                     };
 
                     var path = helper.GetPath(moveTask.NextCity.Name, moveTask.TerminalCity.Name).ToList();
                     path.Reverse();
@@ -646,7 +646,86 @@
 
                     this.MoveTroop(moveTask);
                 };
+
+            var lvItemTask = new ListViewItem { Tag = moveTask };
+            moveTask.SyncToListViewItem(lvItemTask, RemoteTime);
+            this.listViewTasks.Items.Add(lvItemTask);
+
+            Task.Run(() =>
+            {
+                moveTask.TryEnter();
+                this.MoveTroop(moveTask);
+                moveTask.Leave();
+            });
+
             return moveTask;
+        }
+
+        private TCTask ShipBrickScheSubTask(ShipBrickTask task)
+        {
+            var account = task.Account;
+
+            if (task.SubTask == null || !task.SubTask.IsCompleted)
+            {
+                return task.SubTask;
+            }
+
+            var homeCity = account.InfluenceCityList.Values.First(city => city.CityId == 0);
+            if (homeCity == null)
+            {
+                return task.SubTask;
+            }
+
+            var cityMovePage = this.ChangeMoveFromCity(account.UserName, homeCity.NodeId.ToString());
+            var soldiers = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
+            var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
+
+            var carryBrickNum = Math.Min(this.CalcCarryBrickNum(soldiers), brickNum);
+            var troop = this.CalcCarryTroop(carryBrickNum).ToList();
+
+            var helper = new DijstraHelper(account.InfluenceMap)
+                             {
+                                 DistanceCalculate = this.CalculateDistance,
+                                 account = account.UserName
+                             };
+            var initialPath = helper.GetPath(homeCity.Name, task.TargetCity.Name).ToList();
+            initialPath.Reverse();
+
+            task.SubTask = this.CreateMoveTroopTask(
+                task.Account,
+                homeCity,
+                account.InfluenceCityList[initialPath.First()],
+                task.TargetCity,
+                troop,
+                new List<string>(),
+                initialPath,
+                carryBrickNum);
+
+            return task.SubTask;
+        }
+
+        private IEnumerable<Soldier> CalcCarryTroop(int brickNum)
+        {
+            return null;
+        }
+
+        private int CalcCarryBrickNum(IEnumerable<Soldier> army)
+        {
+            return 0;
+        }
+
+        private IEnumerable<TCTask> GetActiveTasks()
+        {
+            if (!this.InvokeRequired)
+            {
+                return from ListViewItem lvItem in this.listViewTasks.Items
+                       let activeTask = lvItem.Tag as TCTask
+                       select activeTask;
+            }
+
+            IEnumerable<TCTask> activeTaskList = new List<TCTask>();
+            this.Invoke(new DoSomething(() => { activeTaskList = this.GetActiveTasks(); }));
+            return activeTaskList;
         }
 
         private delegate void DoSomething();

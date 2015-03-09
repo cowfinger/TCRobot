@@ -439,32 +439,25 @@ namespace TC
 
         private IEnumerable<HeroInfo> ParseHeroInfoListFromMovePage(string page, string account)
         {
-            const string namePattern = "<div class=\"name button1\"><a href=\"javascript:void\\(0\\)\"><span>(?<name>.+?)</span></a></div>";
-            const string idPattern = "hero_id=\"(\\d+)\" hero_status=\"(\\d+)\"";
-            var nameMatches = Regex.Matches(page, namePattern);
-            var nameList = (from Match match in nameMatches
-                            select match.Groups[1].Value).Select(
-                            (val, i) => new { i, val}).GroupBy( item => item.i);
+            const string NamePattern = "<div class=\"name button1\"><a href=\"javascript:void\\(0\\)\"><span>(?<name>.+?)</span></a></div>";
+            const string IdPattern = "hero_id=\"(\\d+)\" hero_status=\"(\\d+)\"";
 
-            var idMatches = Regex.Matches(page, idPattern);
-            var idList = (from Match match in idMatches
-                          select match.Groups[1].Value).Select(
-                          (val, i) => new { i, val}).GroupBy( item => item.i);
-            var statusList = (from Match match in idMatches
-                              select match.Groups[2].Value).Select(
-                              (val, i) => new { i, val}).GroupBy( item => item.i);
+            var nameMatches = Regex.Matches(page, NamePattern);
+            var nameList = (from Match match in nameMatches select match.Groups[1].Value).ToList();
 
-            return (from name in nameList
-                   from id in idList
-                   from status in statusList
-                   where name.Key == id.Key && name.Key == status.Key
-                   select new HeroInfo()
-                   { 
-                       AccountName = account,
-                       HeroId = id.First().val,
-                       Name = name.First().val,
-                       IsBusy = status.First().val != "1",
-                   });
+            var idMatches = Regex.Matches(page, IdPattern);
+            var idList = (from Match match in idMatches select match.Groups[1].Value).ToList();
+            var statusList = (from Match match in idMatches select match.Groups[2].Value).ToList();
+
+            for (var i = 0; i < Math.Min(nameList.Count, idList.Count); ++i)
+            {
+                yield return new HeroInfo {
+                                     AccountName = account,
+                                     Name = nameList[i],
+                                     HeroId = idList[i],
+                                     IsBusy = statusList[i] != "1",
+                                 };
+            }
         }
 
         private IEnumerable<string> ParseHeroIdListFromMovePage(string page)

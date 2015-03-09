@@ -57,7 +57,7 @@
         {
             get
             {
-                lock (remoteTimeLock)
+                lock (RemoteTimeLock)
                 {
                     return remoteTime;
                 }
@@ -65,7 +65,7 @@
 
             set
             {
-                lock (remoteTimeLock)
+                lock (RemoteTimeLock)
                 {
                     remoteTime = value;
                 }
@@ -804,9 +804,11 @@
             var accountName = this.comboBoxAccount.Text;
             var account = this.accountTable[accountName];
 
-            var helper = new DijstraHelper(account.InfluenceMap);
-            helper.DistanceCalculate = this.CalculateDistance;
-            helper.account = accountName;
+            var helper = new DijstraHelper(account.InfluenceMap)
+                             {
+                                 DistanceCalculate = this.CalculateDistance,
+                                 account = accountName
+                             };
 
             var path = helper.GetPath(fromCity, toCity).ToList();
             path.Reverse();
@@ -840,27 +842,17 @@
             var fromCity = accountInfo.InfluenceCityList[fromCityName];
             var nextCity = accountInfo.InfluenceCityList[nextCityName];
             var toCity = accountInfo.InfluenceCityList[toCityName];
+            var initialPath = (from object lvitem in this.listBoxMovePath.Items select lvitem.ToString()).ToList();
 
-            var moveTask = CreateMoveTroopTask(
+            this.CreateMoveTroopTask(
                 accountInfo,
                 fromCity,
                 nextCity,
                 toCity,
                 soldierList,
                 heroList,
+                initialPath,
                 (int)this.numericUpDownBrickNum.Value);
-
-            var lvItemTask = new ListViewItem();
-            lvItemTask.Tag = moveTask;
-            moveTask.SyncToListViewItem(lvItemTask, RemoteTime);
-            this.listViewTasks.Items.Add(lvItemTask);
-
-            Task.Run(() =>
-            {
-                moveTask.TryEnter();
-                this.MoveTroop(moveTask);
-                moveTask.Leave();
-            });
 
             this.comboBoxFromCity.Text = "";
             this.comboBoxAccount.Text = "";
@@ -936,22 +928,84 @@
         private void comboBoxAccountTaskType_SelectedIndexChanged(object sender, EventArgs e)
         {
             var accountList = (from ListViewItem lvItem in this.listViewTaskIdleAccount.CheckedItems
-                              let accountInfo = lvItem.Tag as AccountInfo
-                              select accountInfo).ToList();
+                               let accountInfo = lvItem.Tag as AccountInfo
+                               select accountInfo).ToList();
 
             this.comboBoxAccountTaskTarget.Text = "";
+            this.comboBoxAccountTaskTarget.Items.Clear();
+
             switch (this.comboBoxAccountTaskType.Text)
             {
                 case "运砖":
-                    this.comboBoxAccountTaskTarget.Items.Clear();
                     if (!accountList.Any())
                     {
                         return;
                     }
 
-                    this.comboBoxAccountTaskTarget.Items.AddRange(accountList.First().InfluenceCityList.Keys.ToArray());
+                    var targetList = accountList.SelectMany(info => info.InfluenceCityList.Keys).ToList().Distinct();
+                    this.comboBoxAccountTaskTarget.Items.AddRange(targetList.Select(val => val as object).ToArray());
+                    this.comboBoxAccountTaskTarget.Enabled = true;
+                    break;
+
+                default:
+                    this.comboBoxAccountTaskTarget.Enabled = false;
                     break;
             }
+        }
+
+        private void buttonAssignTask_Click(object sender, EventArgs e)
+        {
+            var targetCityName = this.comboBoxAccountTaskTarget.Text;
+
+            var accountList = (from ListViewItem lvItem in this.listViewTaskIdleAccount.CheckedItems
+                               let accountInfo = lvItem.Tag as AccountInfo
+                               select accountInfo).ToList();
+            if (!accountList.Any())
+            {
+                return;
+            }
+
+            foreach (var account in accountList)
+            {
+                CityInfo targetCity;
+                if (!account.InfluenceCityList.TryGetValue(targetCityName, out targetCity))
+                {
+                    continue;
+                }
+
+                var task = new ShipBrickTask(account, targetCity);
+                task.TaskAction = obj =>
+                    {
+                        this.ShipBrickScheSubTask(task);
+                    };
+
+                var lvItem = new ListViewItem();
+                lvItem.SubItems[0].Text = task.Account.UserName;
+                lvItem.SubItems.Add(task.TaskId);
+                lvItem.SubItems.Add(task.GetTaskHint());
+                lvItem.SubItems.Add(task.SubTask.TaskId);
+                lvItem.Tag = task;
+                this.listViewAccountActiveTask.Items.Add(lvItem);
+
+                Task.Run(() => { this.ShipBrickScheSubTask(task); });
+            }
+        }
+
+        private void listViewTaskIdleAccount_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            this.comboBoxAccountTaskType.Enabled =
+                this.listViewTaskIdleAccount.CheckedItems.Count > 0;
+        }
+
+        private void listViewAccountActiveTask_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            this.buttonCancelAccountTask.Enabled
+                = this.listViewAccountActiveTask.CheckedItems.Count > 0;
+        }
+
+        private void comboBoxAccountTaskTarget_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.buttonAssignTask.Enabled = !string.IsNullOrEmpty(this.comboBoxAccountTaskTarget.Text);
         }
     }
 }

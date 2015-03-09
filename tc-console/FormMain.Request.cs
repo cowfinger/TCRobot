@@ -318,8 +318,12 @@
 
         private DateTime QueryRemoteSysTime(string accountName)
         {
-            var rsp = this.RefreshHomePage(accountName);
-            return this.ParseSysTimeFromHomePage(rsp);
+            var url = RequestAgent.GetTimeUrl(this.hostname);
+            var date = this.HTTPRequest(url, accountName);
+            var utcStart = new DateTime(1970, 1, 1);
+            var diff = utcStart - DateTime.MinValue;
+            int seconds;
+            return int.TryParse(date, out seconds) ? new DateTime(seconds * TimeSpan.TicksPerSecond + diff.Ticks) : DateTime.Now;
         }
 
         private string CreateGroupHead(string cityId, string teamId, string account)

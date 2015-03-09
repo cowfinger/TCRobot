@@ -12,6 +12,8 @@ namespace TC
         private DateTime executionTime;
         private bool isCompleted = false;
 
+        public TCTask ParaentTask { get; set; }
+
         public int IntervalMiliseconds
         {
             get
@@ -278,7 +280,7 @@ namespace TC
 
         public List<Soldier> SoldierList = new List<Soldier>();
 
-        public List<TCTask> SubTasks = new List<TCTask>();
+        public TCTask SubTask = null;
 
         public ShipBrickTask(AccountInfo account, CityInfo targetCity)
             : base(account, 60 * 1000)

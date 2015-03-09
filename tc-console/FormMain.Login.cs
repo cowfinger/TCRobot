@@ -9,28 +9,28 @@
 
     partial class FormMain
     {
-        private const string cookieFolder = @".\Cookie";
+        private const string CookieFolder = @".\Cookie";
 
         private void LoginAccount(string account)
         {
             this.loginLock.WaitOne();
             {
                 this.activeAccount = account;
-                var account_info = this.accountTable[this.activeAccount];
+                var accountInfo = this.accountTable[this.activeAccount];
 
-                if (!string.IsNullOrEmpty(account_info.CookieStr))
+                if (!string.IsNullOrEmpty(accountInfo.CookieStr))
                 {
                     if (this.QueryRemoteSysTime(account) != DateTime.MinValue)
                     {
-                        account_info.LoginStatus = "on-line";
-                        this.OnLoginCompleted(account_info);
+                        accountInfo.LoginStatus = "on-line";
+                        this.OnLoginCompleted(accountInfo);
                         this.loginLock.Set();
                         return;
                     }
                 }
 
-                account_info.LoginStatus = "in-login";
-                var loginurl = this.multiLoginConf[account_info.AccountType].LoginURL;
+                accountInfo.LoginStatus = "in-login";
+                var loginurl = this.multiLoginConf[accountInfo.AccountType].LoginURL;
 
                 this.webBrowserMain.Navigate(loginurl);
 
@@ -40,20 +40,22 @@
 
         private bool SubmitLoginRequest(LoginParam loginconf)
         {
-            if (this.webBrowserMain.Document.GetElementById(loginconf.UsernameElmID) != null)
+            var webDoc = this.webBrowserMain.Document;
+            if (webDoc.GetElementById(loginconf.UsernameElmID) == null)
             {
-                this.webBrowserMain.Document.GetElementById(loginconf.UsernameElmID).InnerText = this.activeAccount;
-                this.webBrowserMain.Document.GetElementById(loginconf.PasswordElmID).InnerText =
-                    this.accountTable[this.activeAccount].Password;
+                return false;
+            }
 
-                Thread.Sleep(1000);
-                foreach (HtmlElement he in this.webBrowserMain.Document.GetElementsByTagName("input"))
+            webDoc.GetElementById(loginconf.UsernameElmID).InnerText = this.activeAccount;
+            webDoc.GetElementById(loginconf.PasswordElmID).InnerText = this.accountTable[this.activeAccount].Password;
+
+            Thread.Sleep(1000);
+            foreach (HtmlElement he in webDoc.GetElementsByTagName("input"))
+            {
+                if (he.GetAttribute("type") == "submit")
                 {
-                    if (he.GetAttribute("type") == "submit")
-                    {
-                        he.InvokeMember("Click");
-                        return true;
-                    }
+                    he.InvokeMember("Click");
+                    return true;
                 }
             }
 
@@ -70,33 +72,34 @@
             }
 
             var loginpara = this.multiLoginConf[account.AccountType];
-            if (account.LoginStatus == "in-login")
+            switch (account.LoginStatus)
             {
-                if (!this.webBrowserMain.Document.Title.Contains(loginpara.LoginTitle))
-                {
-                    return;
-                }
+                case "in-login":
+                    if (!this.webBrowserMain.Document.Title.Contains(loginpara.LoginTitle))
+                    {
+                        return;
+                    }
 
-                if (this.SubmitLoginRequest(loginpara))
-                {
-                    account.LoginStatus = "submitting";
-                }
-                else
-                {
-                    account.LoginStatus = "login-failed";
-                }
-            }
-            else if (account.LoginStatus == "submitting")
-            {
-                if (this.webBrowserMain.Document.Title.Contains(loginpara.HomeTitle))
-                {
-                    this.SetAccountCookie(this.activeAccount, this.webBrowserMain.Document.Cookie);
-                    account.LoginStatus = "on-line";
-                }
-                else
-                {
-                    account.LoginStatus = "login-failed";
-                }
+                    if (this.SubmitLoginRequest(loginpara))
+                    {
+                        account.LoginStatus = "submitting";
+                    }
+                    else
+                    {
+                        account.LoginStatus = "login-failed";
+                    }
+                    break;
+                case "submitting":
+                    if (this.webBrowserMain.Document.Title.Contains(loginpara.HomeTitle))
+                    {
+                        this.SetAccountCookie(this.activeAccount, this.webBrowserMain.Document.Cookie);
+                        account.LoginStatus = "on-line";
+                    }
+                    else
+                    {
+                        account.LoginStatus = "login-failed";
+                    }
+                    break;
             }
 
             if (account.LoginStatus == "on-line")
@@ -120,8 +123,8 @@
             Task.Run(
                 () =>
                     {
-                        var cityNameList = this.GetAccountInflunceCityNameListWithArmy(account.UserName);
-                        account.CityNameList = cityNameList.ToList();
+                        var cityNameList = this.GetAccountInflunceCityNameListWithArmy(account.UserName).ToList();
+                        account.CityNameList = cityNameList;
                         account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]).ToList();
                     });
 
@@ -162,10 +165,13 @@
 
         private void SetAccountCookie(string account, string val)
         {
-            AccountInfo accountInfo = null;
+            AccountInfo accountInfo;
             lock (this.accountTable)
             {
-                accountInfo = this.accountTable[account];
+                if (!this.accountTable.TryGetValue(account, out accountInfo))
+                {
+                    return;
+                }
             }
 
             lock (accountInfo)
@@ -185,7 +191,7 @@
                         oldcookies[key] = setcookies[key];
                     }
 
-                    accountInfo.CookieStr = this.ComposeCookieStr(oldcookies);
+                    accountInfo.CookieStr = ComposeCookieStr(oldcookies);
                 }
 
                 this.TrySaveAccountCookie(accountInfo);
@@ -242,16 +248,11 @@
             return output;
         }
 
-        private string ComposeCookieStr(Dictionary<string, string> input)
+        private static string ComposeCookieStr(Dictionary<string, string> input)
         {
             var output = "";
-            foreach (var i in input.Keys)
+            foreach (var i in input.Keys.Where(i => i != "path"))
             {
-                if (i == "path")
-                {
-                    continue;
-                }
-
                 output += i;
                 if (input[i] != "")
                 {
@@ -266,12 +267,12 @@
 
         private void TrySaveAccountCookie(AccountInfo account)
         {
-            if (!Directory.Exists(cookieFolder))
+            if (!Directory.Exists(CookieFolder))
             {
-                Directory.CreateDirectory(cookieFolder);
+                Directory.CreateDirectory(CookieFolder);
             }
 
-            var accountCookieFileName = Path.Combine(cookieFolder, account.UserName);
+            var accountCookieFileName = Path.Combine(CookieFolder, account.UserName);
             if (File.Exists(accountCookieFileName))
             {
                 File.Delete(accountCookieFileName);
@@ -286,7 +287,7 @@
 
         private void TryLoadAccountCookie(AccountInfo account)
         {
-            var accountCookieFileName = Path.Combine(cookieFolder, account.UserName);
+            var accountCookieFileName = Path.Combine(CookieFolder, account.UserName);
             if (!File.Exists(accountCookieFileName))
             {
                 return;

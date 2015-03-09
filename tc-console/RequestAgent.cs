@@ -202,6 +202,14 @@
 
         public HttpClient WebClient { get; private set; }
 
+        public static string GetTimeUrl(string hostName)
+        {
+            return string.Format(
+                "http://{0}/get_time.php?&r={1}",
+                hostName,
+                RandGen.NextDouble());
+        }
+
         public static string BuildUrl(string hostName, string urlPathFormat, params object[] args)
         {
             var urlPath = string.Format(urlPathFormat, args);
