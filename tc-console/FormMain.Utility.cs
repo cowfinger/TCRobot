@@ -430,6 +430,29 @@
             }
         }
 
+        private void LoadAccountListToAccountTaskTable()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new DoSomething(this.LoadAccountListToAccountTaskTable));
+            }
+            else
+            {
+                if (this.listViewTaskIdleAccount.Items.Count == 0 &&
+                    this.listViewAccountActiveTask.Items.Count == 0)
+                {
+                    this.listViewTaskIdleAccount.Items.Clear();
+                    foreach (var accountInfo in this.accountTable.Values)
+                    {
+                        var lvItem = new ListViewItem();
+                        lvItem.Text = accountInfo.UserName;
+                        lvItem.Tag = accountInfo;
+                        this.listViewTaskIdleAccount.Items.Add(lvItem);
+                    }
+                }
+            }
+        }
+
         private void TryBuildInfluenceMaps()
         {
             Parallel.Dispatch(
@@ -446,6 +469,7 @@
                 }).Then(() =>
                 {
                     this.LoadAccountListToMoveArmyTab();
+                    this.LoadAccountListToAccountTaskTable();
                 });
         }
 
@@ -568,9 +592,9 @@
         }
 
         private MoveTroopTask CreateMoveTroopTask(
-            AccountInfo accountInfo, 
-            CityInfo fromCity, 
-            CityInfo nextCity, 
+            AccountInfo accountInfo,
+            CityInfo fromCity,
+            CityInfo nextCity,
             CityInfo toCity,
             List<Soldier> soldierList,
             List<string> heroList,

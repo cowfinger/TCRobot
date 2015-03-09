@@ -709,9 +709,14 @@
 
         private void tabControlTask_Selected(object sender, TabControlEventArgs e)
         {
-            if (this.tabControlTask.SelectedTab.Name == "tabPageMoveArmy")
+            switch (this.tabControlTask.SelectedTab.Name)
             {
-                this.TryBuildInfluenceMaps();
+                case "tabPageMoveArmy":
+                    this.TryBuildInfluenceMaps();
+                    break;
+                case "tabPageAccountTask":
+                    this.TryBuildInfluenceMaps();
+                    break;
             }
         }
 
@@ -925,6 +930,27 @@
             foreach (ListViewItem lvItem in this.listViewMoveHero.Items)
             {
                 lvItem.Checked = this.checkBoxSelecteAllMoveHeroes.Checked;
+            }
+        }
+
+        private void comboBoxAccountTaskType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var accountList = (from ListViewItem lvItem in this.listViewTaskIdleAccount.CheckedItems
+                              let accountInfo = lvItem.Tag as AccountInfo
+                              select accountInfo).ToList();
+
+            this.comboBoxAccountTaskTarget.Text = "";
+            switch (this.comboBoxAccountTaskType.Text)
+            {
+                case "运砖":
+                    this.comboBoxAccountTaskTarget.Items.Clear();
+                    if (!accountList.Any())
+                    {
+                        return;
+                    }
+
+                    this.comboBoxAccountTaskTarget.Items.AddRange(accountList.First().InfluenceCityList.Keys.ToArray());
+                    break;
             }
         }
     }

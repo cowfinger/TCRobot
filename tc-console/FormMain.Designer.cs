@@ -1195,10 +1195,13 @@
             // comboBoxAccountTaskType
             // 
             this.comboBoxAccountTaskType.FormattingEnabled = true;
-            this.comboBoxAccountTaskType.Location = new System.Drawing.Point(206, 34);
+            this.comboBoxAccountTaskType.Items.AddRange(new object[] {
+            "运砖"});
+            this.comboBoxAccountTaskType.Location = new System.Drawing.Point(208, 34);
             this.comboBoxAccountTaskType.Name = "comboBoxAccountTaskType";
             this.comboBoxAccountTaskType.Size = new System.Drawing.Size(96, 20);
             this.comboBoxAccountTaskType.TabIndex = 4;
+            this.comboBoxAccountTaskType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAccountTaskType_SelectedIndexChanged);
             // 
             // buttonCancelAccountTask
             // 
