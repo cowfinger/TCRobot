@@ -243,13 +243,19 @@
                                 break;
 
                             case SendTroopTask.TaskStatus.ConfirmAttack:
+                                string result;
                                 if (team.isGroupTroop)
                                 {
-                                    this.GroupAttackTarget(team.GroupId, team.ToCityNodeId, ref task.webClient);
+                                    result = this.GroupAttackTarget(team.GroupId, team.ToCityNodeId, ref task.webClient);
                                 }
                                 else
                                 {
-                                    this.TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref task.webClient);
+                                    result = this.TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref task.webClient);
+                                }
+
+                                if (result != "1")
+                                {
+                                    MessageBox.Show(string.Format("Attack(isGroup={0}) Failed:{1}", team.isGroupTroop, result));
                                 }
                                 task.IsCompleted = true;
                                 break;

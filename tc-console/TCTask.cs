@@ -201,7 +201,6 @@ namespace TC
             this.taskData = data;
             this.fromCity = fromCity;
             this.toCity = toCity;
-            this.TaskId = data.isGroupTroop ? data.GroupId : data.TroopId;
             this.webClient = new HttpClient(this.Account.CookieStr);
         }
 
@@ -280,7 +279,7 @@ namespace TC
 
         public List<Soldier> SoldierList = new List<Soldier>();
 
-        public TCTask SubTask = null;
+        public List<MoveTroopTask> SubTasks = new List<MoveTroopTask>();
 
         public ShipBrickTask(AccountInfo account, CityInfo targetCity)
             : base(account, 60 * 1000)

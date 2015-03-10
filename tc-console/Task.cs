@@ -11,6 +11,8 @@
 
         private readonly Thread taskThread;
 
+        private object result = false;
+
         public Task(IEnumerable<Task> tasks)
         {
             this.taskGroup = tasks;
@@ -19,6 +21,12 @@
         public Task(Action action)
         {
             this.taskThread = new Thread(new ThreadStart(action));
+            this.taskThread.Start();
+        }
+
+        public Task(Func<object, object> action, object arg)
+        {
+            this.taskThread = new Thread(new ThreadStart(() => { this.result = action(arg); }));
             this.taskThread.Start();
         }
 
@@ -70,10 +78,29 @@
         {
             return new Task(
                 () =>
+                {
+                    this.Wait();
+                    action();
+                });
+        }
+
+        public Task Then(Func<IEnumerable<bool>, object> action)
+        {
+            return new Task(
+                arg =>
+                {
+                    this.Wait();
+                    var resultSet = this.result as IEnumerable<bool>;
+                    if (resultSet != null)
                     {
-                        this.Wait();
-                        action();
-                    });
+                        return action(resultSet);
+                    }
+                    else
+                    {
+                        return action(null);
+                    }
+                },
+                this.result);
         }
 
         public bool Wait(int miliseconds)
@@ -101,6 +128,7 @@
             if (this.taskGroup != null)
             {
                 WaitAll(this.taskGroup);
+                this.result = this.taskGroup.Select(t => t.result).ToList();
             }
         }
     }
@@ -112,7 +140,18 @@
             return tasks.Select(taskData => new Task(() => action(taskData)));
         }
 
+        public static IEnumerable<Task> DispatchTask<T, U>(IEnumerable<T> tasks, Func<T, U> action)
+        {
+            return tasks.Select(taskData => new Task(() => action(taskData)));
+        }
+
         public static Task Dispatch<T>(IEnumerable<T> tasks, Action<T> action)
+        {
+            var batchTask = DispatchTask(tasks, action).ToList(); // ToList() to ensure Tasks are all created.
+            return new Task(batchTask);
+        }
+
+        public static Task Dispatch<T, U>(IEnumerable<T> tasks, Func<T, U> action)
         {
             var batchTask = DispatchTask(tasks, action).ToList(); // ToList() to ensure Tasks are all created.
             return new Task(batchTask);

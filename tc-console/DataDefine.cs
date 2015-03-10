@@ -53,6 +53,8 @@
         public string UserName;
 
         public int UnionId;
+
+        public int Level;
     }
 
     internal class LoginParam
@@ -115,5 +117,14 @@
         public int NodeId = 0;
 
         public int RoadLevel = 0;
+    }
+
+    public class SoldierAttribute
+    {
+        public int SoldierId;
+
+        public int Speed;
+
+        public int Capacity;
     }
 }

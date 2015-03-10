@@ -13,6 +13,52 @@
             return this.HTTPRequest(url, account);
         }
 
+        private int GetAccountLevel(AccountInfo account)
+        {
+            const string pattern = @"<h4>提升等级至(\d+)：</h4>";
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.city,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.load_city,
+                new TCRequestArgument(TCElement.cid, account.MainCity.NodeId),
+                new TCRequestArgument(TCElement.mt, 1));
+            var page = this.HTTPRequest(url, account.UserName);
+            var match = Regex.Match(page, pattern);
+            if (match.Success)
+            {
+                return int.Parse(match.Groups[1].Value) - 1;
+            }
+
+            return -1;
+        }
+
+        private string QuitUnion(string account)
+        {
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.union,
+                TCSubMod.union,
+                TCOperation.Do,
+                TCFunc.out_union);
+
+            return this.HTTPRequest(url, account);
+        }
+
+        private string ApplyUnion(string account, int unionId)
+        {
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.union,
+                TCSubMod.union,
+                TCOperation.Do,
+                TCFunc.apply_union,
+                new TCRequestArgument(TCElement.union_id, unionId));
+
+            return this.HTTPRequest(url, account);
+        }
+
         private void OpenAccountFirstCity(string account)
         {
             const string pattern =
@@ -323,7 +369,7 @@
             var utcStart = new DateTime(1970, 1, 1);
             var diff = utcStart - DateTime.MinValue;
             int seconds;
-            return int.TryParse(date, out seconds) ? new DateTime(seconds * TimeSpan.TicksPerSecond + diff.Ticks) : DateTime.Now;
+            return int.TryParse(date, out seconds) ? new DateTime(seconds * TimeSpan.TicksPerSecond + diff.Ticks) : DateTime.MinValue;
         }
 
         private string CreateGroupHead(string cityId, string teamId, string account)
@@ -687,7 +733,7 @@
             this.HTTPRequest(url, account, body);
         }
 
-        private void GroupAttackTarget(string groupId, string cityId, ref HttpClient httpClient)
+        private string GroupAttackTarget(string groupId, string cityId, ref HttpClient httpClient)
         {
             var url = RequestAgent.BuildUrl(
                 this.hostname,
@@ -696,7 +742,7 @@
                 TCOperation.Do,
                 TCFunc.join_attack);
             var body = string.Format("group_id={0}&to_city_id={1}&join_attack_type=1", groupId, cityId);
-            httpClient.OpenUrl(url, body);
+            return httpClient.OpenUrl(url, body);
         }
 
         private void GroupAttackTarget(string groupId, string cityId, string account)

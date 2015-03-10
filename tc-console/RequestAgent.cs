@@ -9,6 +9,8 @@
     {
         call_back,
 
+        cid,
+
         from,
 
         from_address,
@@ -22,6 +24,8 @@
         hero_id,
 
         join_attack_type,
+
+        mt,
 
         node_id,
 
@@ -49,6 +53,8 @@
 
         to_city_id,
 
+        union_id,
+
         user_nickname,
 
         user_prop_id
@@ -56,6 +62,8 @@
 
     internal enum TCMod
     {
+        city,
+
         depot,
 
         hero,
@@ -66,12 +74,16 @@
 
         prop,
 
+        union,
+
         world
     }
 
     internal enum TCSubMod
     {
         attack,
+
+        city,
 
         depot,
 
@@ -82,6 +94,8 @@
         prop,
 
         science,
+
+        union,
 
         world,
 
@@ -98,6 +112,8 @@
     internal enum TCFunc
     {
         allow_prop,
+
+        apply_union,
 
         attack,
 
@@ -131,6 +147,8 @@
 
         join_group,
 
+        load_city,
+
         move_army,
 
         move_army_queue,
@@ -140,6 +158,8 @@
         my_depot,
 
         my_heros,
+
+        out_union,
 
         relive_hero,
 

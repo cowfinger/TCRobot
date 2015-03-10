@@ -29,21 +29,24 @@ namespace TC
             this.map = map;
         }
 
-        public int GetDistance(string from, string to)
+        public int GetDistance(string from, string to, int speed)
         {
             if (this.DistanceCalculate != null)
             {
-                return DistanceCalculate(from, to, this.account);
+                var dist = DistanceCalculate(from, to, this.account);
+                return dist * 24 / speed;
             }
             return 1;
         }
 
-        public IEnumerable<string> GetPath(string from, string to)
+        public IEnumerable<string> GetPath(string from, string to, IEnumerable<Soldier> army)
         {
             if (!map.ContainsKey(from) || !map.ContainsKey(to))
             {
                 yield break;
             }
+
+            var speed = army != null ? army.Min(a => FormMain.SoldierTable[a.SoldierType].Speed) : 24;
 
             foreach (var item in this.map.Keys)
             {
@@ -74,8 +77,8 @@ namespace TC
                             int subNodePos = this.sNodeMap[subNodeName];
                             if (subNodePos > cursor)
                             {
-                                int distance0 = curNode.Distance + GetDistance(curNode.Name, subNodeName);
-                                int distance1 = curNode.Distance + GetDistance(subNodeName, curNode.Name);
+                                int distance0 = curNode.Distance + GetDistance(curNode.Name, subNodeName, speed);
+                                int distance1 = curNode.Distance + GetDistance(subNodeName, curNode.Name, speed);
 
                                 var subNode = this.sNodeQueue[subNodePos];
                                 if (subNode.Distance > distance0)
@@ -96,7 +99,7 @@ namespace TC
                     {
                         foreach (var subNodeName in group)
                         {
-                            int distance = curNode.Distance + GetDistance(curNode.Name, subNodeName);
+                            int distance = curNode.Distance + GetDistance(curNode.Name, subNodeName, speed);
                             this.sNodeQueue.Add(new NodeInfo() { Name = subNodeName, Distance = distance, Prev = curNode, });
                             this.sNodeMap.Add(subNodeName, this.sNodeQueue.Count - 1);
                             this.uNodes.Remove(subNodeName);

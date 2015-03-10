@@ -78,6 +78,12 @@
     <Compile Include="FormChooseTroopHead.Designer.cs">
       <DependentUpon>FormChooseTroopHead.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormJoinUnion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormJoinUnion.Designer.cs">
+      <DependentUpon>FormJoinUnion.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +113,9 @@
     <Compile Include="TCTask.cs" />
     <EmbeddedResource Include="FormChooseTroopHead.resx">
       <DependentUpon>FormChooseTroopHead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormJoinUnion.resx">
+      <DependentUpon>FormJoinUnion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
