@@ -1,27 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace TC
+﻿namespace TC
 {
-    class CookieLite
-    {
-        private Dictionary<string, string> cookieMap = new Dictionary<string, string>();
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
 
-        static public Dictionary<string, string> ParseCookieString(string cookieString)
+    internal class CookieLite
+    {
+        private readonly Dictionary<string, string> cookieMap = new Dictionary<string, string>();
+
+        public CookieLite(string cookie = "")
+        {
+            if (!string.IsNullOrEmpty(cookie))
+            {
+                this.SetCookie(cookie);
+            }
+        }
+
+        public string CookieString
+        {
+            get
+            {
+                lock (this.cookieMap)
+                {
+                    return ComposeCookieString(this.cookieMap);
+                }
+            }
+        }
+
+        public static Dictionary<string, string> ParseCookieString(string cookieString)
         {
             var result = new Dictionary<string, string>();
             if (cookieString == null)
-                return result;
-
-            string[] strs = cookieString.Split(';');
-            foreach (string i in strs)
             {
-                string key = "";
-                string val = "";
+                return result;
+            }
 
-                int seppos = i.IndexOf('=');
+            var strs = cookieString.Split(';');
+            foreach (var i in strs)
+            {
+                var key = "";
+                var val = "";
+
+                var seppos = i.IndexOf('=');
                 if (seppos == -1)
                 {
                     key = i.Trim(' ');
@@ -50,7 +70,7 @@ namespace TC
             return result;
         }
 
-        static public string ComposeCookieString(Dictionary<string, string> cookie)
+        public static string ComposeCookieString(Dictionary<string, string> cookie)
         {
             var cookieBuilder = new StringBuilder();
             foreach (var i in cookie)
@@ -67,17 +87,6 @@ namespace TC
             }
 
             return cookieBuilder.ToString();
-        }
-
-        public string CookieString
-        {
-            get
-            {
-                lock (this.cookieMap)
-                {
-                    return ComposeCookieString(this.cookieMap);
-                }
-            }
         }
 
         public void SetCookie(string cookieString)
@@ -109,7 +118,7 @@ namespace TC
 
             using (var streamReader = new StreamReader(fileName))
             {
-                SetCookie(streamReader.ReadToEnd());
+                this.SetCookie(streamReader.ReadToEnd());
             }
 
             return true;
@@ -126,14 +135,6 @@ namespace TC
             {
                 streamWriter.Write(this.CookieString);
                 streamWriter.Flush();
-            }
-        }
-
-        public CookieLite(string cookie = "")
-        {
-            if (!string.IsNullOrEmpty(cookie))
-            {
-                SetCookie(cookie);
             }
         }
     }

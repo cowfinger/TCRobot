@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TC
+﻿namespace TC
 {
-    class BigMapCity
+    internal class BigMapCity
     {
         public string CityId { get; set; }
+
         public string CityName { get; set; }
     }
 }

@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     partial class RequestAgent
     {
@@ -26,20 +25,13 @@
 
         public static string GetTimeUrl(string hostName)
         {
-            return string.Format(
-                "http://{0}/get_time.php?&r={1}",
-                hostName,
-                RandGen.NextDouble());
+            return string.Format("http://{0}/get_time.php?&r={1}", hostName, RandGen.NextDouble());
         }
 
         public static string BuildUrl(string hostName, string urlPathFormat, params object[] args)
         {
             var urlPath = string.Format(urlPathFormat, args);
-            return string.Format(
-                "http://{0}/index.php?{1}&r={2}",
-                hostName,
-                urlPath,
-                RandGen.NextDouble());
+            return string.Format("http://{0}/index.php?{1}&r={2}", hostName, urlPath, RandGen.NextDouble());
         }
 
         public static string BuildUrl(

@@ -61,8 +61,7 @@
 
         private void OpenAccountFirstCity(string account)
         {
-            const string pattern =
-                @"mod=influence/influence&op=show&func=influence_city_detail&node_id=(\d+)";
+            const string pattern = @"mod=influence/influence&op=show&func=influence_city_detail&node_id=(\d+)";
 
             var url = RequestAgent.BuildUrl(
                 this.hostname,
@@ -221,17 +220,12 @@
                 TCFunc.military_event_list,
                 new TCRequestArgument(TCElement.type, eventType));
             var content = this.HTTPRequest(url, account);
-            return ParseOnlineTroopList(content, account);
+            return this.ParseOnlineTroopList(content, account);
         }
 
         private string OpenHeroPage(string account)
         {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.hero,
-                TCSubMod.hero,
-                TCOperation.Show,
-                TCFunc.my_heros);
+            var url = RequestAgent.BuildUrl(this.hostname, TCMod.hero, TCSubMod.hero, TCOperation.Show, TCFunc.my_heros);
             return this.HTTPRequest(url, account);
         }
 
@@ -291,7 +285,7 @@
 
         private void DonateResource(string account, long val1, long val2, long val3, long val4)
         {
-            string resValue = string.Format("{1}|{2}|{3}|{4}|0|0", val1, val2, val3, val4);
+            var resValue = string.Format("{1}|{2}|{3}|{4}|0|0", val1, val2, val3, val4);
             var url = RequestAgent.BuildUrl(
                 this.hostname,
                 TCMod.influence,
@@ -321,7 +315,6 @@
             }
         }
 
-
         private void DismissTeam(string teamId, string account)
         {
             var url = RequestAgent.BuildUrl(
@@ -347,6 +340,7 @@
 
             return this.ParseTargetCityList(content);
         }
+
         private IEnumerable<string> GetAccountInflunceCityNameListWithArmy(string account)
         {
             var url = RequestAgent.BuildUrl(
@@ -369,7 +363,9 @@
             var utcStart = new DateTime(1970, 1, 1);
             var diff = utcStart - DateTime.MinValue;
             int seconds;
-            return int.TryParse(date, out seconds) ? new DateTime(seconds * TimeSpan.TicksPerSecond + diff.Ticks) : DateTime.MinValue;
+            return int.TryParse(date, out seconds)
+                       ? new DateTime(seconds * TimeSpan.TicksPerSecond + diff.Ticks)
+                       : DateTime.MinValue;
         }
 
         private string CreateGroupHead(string cityId, string teamId, string account)
@@ -756,6 +752,5 @@
             var body = string.Format("group_id={0}&to_city_id={1}&join_attack_type=1", groupId, cityId);
             var ret = this.HTTPRequest(url, account, body);
         }
-
     }
 }

@@ -14,20 +14,20 @@ namespace TC
 
         public string FirstStepCityID;
 
-        public CityInfo MainCity = null;
+        public Dictionary<string, CityInfo> InfluenceCityList = null;
 
         public Dictionary<string, HashSet<string>> InfluenceMap = null;
 
-        public Dictionary<string, CityInfo> InfluenceCityList = null;
+        public int Level;
 
         public string LoginStatus;
 
-        public string Password;
+        public CityInfo MainCity = null;
 
-        public string UserName;
+        public string Password;
 
         public int UnionId;
 
-        public int Level;
+        public string UserName;
     }
 }

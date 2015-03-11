@@ -2,16 +2,18 @@ namespace TC
 {
     using System.Collections.Generic;
 
-    class MoveTroopTask : TCTask
+    internal class MoveTroopTask : TCTask
     {
-        public CityInfo CurrentCity {get; set;}
-        public CityInfo NextCity {get; set;}
-        public CityInfo TerminalCity {get;set;}
+        public int BrickNum;
+
         public List<string> HeroIdList = new List<string>();
-        public List<Soldier> SoldierList = new List<Soldier>();
+
         public List<string> Path = null;
-        public int BrickNum = 0;
+
         public int RetryCount = 0;
+
+        public List<Soldier> SoldierList = new List<Soldier>();
+
         private string taskId = "";
 
         public MoveTroopTask(
@@ -30,11 +32,11 @@ namespace TC
             this.taskId = taskId;
         }
 
-        public override string GetTaskHint()
-        {
-            var pathString = this.Path == null ? "" : string.Join("=>", this.Path.ToArray());
-            return string.Format("Move Troop: {0}=>{1}", this.CurrentCity.Name, pathString);
-        }
+        public CityInfo CurrentCity { get; set; }
+
+        public CityInfo NextCity { get; set; }
+
+        public CityInfo TerminalCity { get; set; }
 
         public override string TaskId
         {
@@ -46,6 +48,12 @@ namespace TC
             {
                 this.taskId = value;
             }
+        }
+
+        public override string GetTaskHint()
+        {
+            var pathString = this.Path == null ? "" : string.Join("=>", this.Path.ToArray());
+            return string.Format("Move Troop: {0}=>{1}", this.CurrentCity.Name, pathString);
         }
     }
 }

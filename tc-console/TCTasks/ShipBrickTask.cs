@@ -3,14 +3,8 @@ namespace TC
     using System;
     using System.Collections.Generic;
 
-    class ShipBrickTask : TCTask
+    internal class ShipBrickTask : TCTask
     {
-        public CityInfo TargetCity
-        {
-            get;
-            private set;
-        }
-
         public List<Soldier> SoldierList = new List<Soldier>();
 
         public List<MoveTroopTask> SubTasks = new List<MoveTroopTask>();
@@ -21,10 +15,7 @@ namespace TC
             this.TargetCity = targetCity;
         }
 
-        public override string GetTaskHint()
-        {
-            return this.TaskId;
-        }
+        public CityInfo TargetCity { get; private set; }
 
         public override string TaskId
         {
@@ -36,6 +27,11 @@ namespace TC
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public override string GetTaskHint()
+        {
+            return this.TaskId;
         }
     }
 }

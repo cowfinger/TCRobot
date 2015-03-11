@@ -2,23 +2,26 @@ namespace TC
 {
     using System;
 
-    class SendTroopTask : TCTask
+    internal class SendTroopTask : TCTask
     {
-        public const int OpenAttackPageTime = 5;
-
         public enum TaskStatus
         {
             OpenAttackPage,
-            ConfirmAttack,
+
+            ConfirmAttack
         }
 
-        private readonly CityInfo fromCity = null;
-        private readonly CityInfo toCity = null;
+        public const int OpenAttackPageTime = 5;
 
-        public TroopInfo TaskData = null;
-        public HttpClient WebClient = null;
+        private readonly CityInfo fromCity;
+
+        private readonly CityInfo toCity;
 
         public TaskStatus Status = TaskStatus.OpenAttackPage;
+
+        public TroopInfo TaskData;
+
+        public HttpClient WebClient;
 
         public SendTroopTask(
             AccountInfo account,
@@ -39,11 +42,6 @@ namespace TC
             this.WebClient = new HttpClient(this.Account.CookieStr);
         }
 
-        public override string GetTaskHint()
-        {
-            return string.Format("{0} => {1}, duration:{2}", this.fromCity.Name, this.toCity.Name, this.TaskData.Duration);
-        }
-
         public override string TaskId
         {
             get
@@ -54,6 +52,15 @@ namespace TC
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public override string GetTaskHint()
+        {
+            return string.Format(
+                "{0} => {1}, duration:{2}",
+                this.fromCity.Name,
+                this.toCity.Name,
+                this.TaskData.Duration);
         }
     }
 }

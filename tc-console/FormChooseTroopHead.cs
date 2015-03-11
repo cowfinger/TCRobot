@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-namespace TC
+﻿namespace TC
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
+
     public partial class FormChooseTroopHead : Form
     {
-        public TroopInfo GroupHead { get; set; }
-
         public FormChooseTroopHead(IEnumerable<TroopInfo> teamList)
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             this.GroupHead = null;
             foreach (var team in teamList)
@@ -28,6 +21,8 @@ namespace TC
                 this.listViewTroop.Items.Add(lvItem);
             }
         }
+
+        public TroopInfo GroupHead { get; set; }
 
         private void listViewTroop_ItemChecked(object sender, ItemCheckedEventArgs e)
         {

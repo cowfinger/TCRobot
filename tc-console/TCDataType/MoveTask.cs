@@ -5,6 +5,7 @@ namespace TC
     internal class MoveTask
     {
         public DateTime EndTime;
+
         public string TaskId = "";
     }
 }

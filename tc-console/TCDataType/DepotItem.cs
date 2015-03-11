@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TC
+﻿namespace TC
 {
-    class DepotItem
+    internal class DepotItem
     {
         public int GoodsType;
+
         public int PropertyID;
+
         public int UserPropertyID;
     }
 }

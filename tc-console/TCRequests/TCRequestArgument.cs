@@ -2,10 +2,6 @@ namespace TC
 {
     public class TCRequestArgument
     {
-        public TCElement Name { get; set; }
-
-        public string Value { get; set; }
-
         public TCRequestArgument(TCElement name)
         {
             this.Name = name;
@@ -29,5 +25,9 @@ namespace TC
             this.Name = name;
             this.Value = value.ToString();
         }
+
+        public TCElement Name { get; set; }
+
+        public string Value { get; set; }
     };
 }

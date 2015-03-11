@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-
-namespace TC
+﻿namespace TC
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+
     partial class RequestAgent
     {
         private void OpenAccountFirstCity()
@@ -13,11 +11,7 @@ namespace TC
             const string pattern =
                 @"index\.php\?mod=influence/influence&op=show&func=influence_city_detail&node_id=(\d+)";
 
-            var url = this.BuildUrl(
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_city);
+            var url = this.BuildUrl(TCMod.influence, TCSubMod.influence, TCOperation.Show, TCFunc.influence_city);
 
             var page = this.WebClient.OpenUrl(url);
 
@@ -35,11 +29,7 @@ namespace TC
 
         private string OpenMoveTroopPage()
         {
-            var url = this.BuildUrl(
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Show,
-                TCFunc.move_army);
+            var url = this.BuildUrl(TCMod.military, TCSubMod.world_war, TCOperation.Show, TCFunc.move_army);
             return this.WebClient.OpenUrl(url);
         }
 
@@ -92,6 +82,5 @@ namespace TC
                         };
             }
         }
-
     }
 }

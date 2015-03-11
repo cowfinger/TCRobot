@@ -26,7 +26,7 @@
 
         public Task(Func<object, object> action, object arg)
         {
-            this.taskThread = new Thread(new ThreadStart(() => { this.result = action(arg); }));
+            this.taskThread = new Thread(() => { this.result = action(arg); });
             this.taskThread.Start();
         }
 
@@ -78,28 +78,25 @@
         {
             return new Task(
                 () =>
-                {
-                    this.Wait();
-                    action();
-                });
+                    {
+                        this.Wait();
+                        action();
+                    });
         }
 
         public Task Then(Func<IEnumerable<bool>, object> action)
         {
             return new Task(
                 arg =>
-                {
-                    this.Wait();
-                    var resultSet = this.result as IEnumerable<bool>;
-                    if (resultSet != null)
                     {
-                        return action(resultSet);
-                    }
-                    else
-                    {
+                        this.Wait();
+                        var resultSet = this.result as IEnumerable<bool>;
+                        if (resultSet != null)
+                        {
+                            return action(resultSet);
+                        }
                         return action(null);
-                    }
-                },
+                    },
                 this.result);
         }
 

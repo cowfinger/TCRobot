@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-namespace TC
+﻿namespace TC
 {
+    using System;
+    using System.Windows.Forms;
+
     public partial class FormJoinUnion : Form
     {
-        public bool IsOk = false;
-        public int UnionId = 0;
+        public bool IsOk;
+
+        public int UnionId;
 
         public FormJoinUnion()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)

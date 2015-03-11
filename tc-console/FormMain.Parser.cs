@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-
-namespace TC
+﻿namespace TC
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
     partial class FormMain
     {
         private int ParseRoadLevelFromCityBuildPage(string page)
@@ -346,7 +345,7 @@ namespace TC
                 }
 
                 var accountInfo = this.accountTable[account];
-                string taskType = "返回";
+                var taskType = "返回";
                 if (line.Contains("攻击"))
                 {
                     if (accountInfo.InfluenceCityList == null)
@@ -439,7 +438,8 @@ namespace TC
 
         private IEnumerable<HeroInfo> ParseHeroInfoListFromMovePage(string page, string account)
         {
-            const string NamePattern = "<div class=\"name button1\"><a href=\"javascript:void\\(0\\)\"><span>(?<name>.+?)</span></a></div>";
+            const string NamePattern =
+                "<div class=\"name button1\"><a href=\"javascript:void\\(0\\)\"><span>(?<name>.+?)</span></a></div>";
             const string IdPattern = "hero_id=\"(\\d+)\" hero_status=\"(\\d+)\"";
 
             var nameMatches = Regex.Matches(page, NamePattern);
@@ -451,12 +451,14 @@ namespace TC
 
             for (var i = 0; i < Math.Min(nameList.Count, idList.Count); ++i)
             {
-                yield return new HeroInfo {
-                                     AccountName = account,
-                                     Name = nameList[i],
-                                     HeroId = idList[i],
-                                     IsBusy = statusList[i] != "1",
-                                 };
+                yield return
+                    new HeroInfo
+                        {
+                            AccountName = account,
+                            Name = nameList[i],
+                            HeroId = idList[i],
+                            IsBusy = statusList[i] != "1"
+                        };
             }
         }
 
@@ -482,12 +484,13 @@ namespace TC
         {
             const string idPattern = "max_num=(\\d+) name=\"s_(\\d+)\"";
             return from Match match in Regex.Matches(page, idPattern)
-                   select new Soldier()
-                   {
-                       Name = KeyWordMap[string.Format("soldier_{0}", match.Groups[2].Value)],
-                       SoldierType = int.Parse(match.Groups[2].Value),
-                       SoldierNumber = int.Parse(match.Groups[1].Value),
-                   };
+                   select
+                       new Soldier
+                           {
+                               Name = KeyWordMap[string.Format("soldier_{0}", match.Groups[2].Value)],
+                               SoldierType = int.Parse(match.Groups[2].Value),
+                               SoldierNumber = int.Parse(match.Groups[1].Value)
+                           };
         }
 
         private IEnumerable<CityInfo> QueryInfluenceCityList(string account)
