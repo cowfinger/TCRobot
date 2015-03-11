@@ -10,11 +10,14 @@
 
     public partial class FormMain : Form
     {
-        public static Dictionary<string, string> CityList = null;
+        private const string UserAgent =
+            "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2; .NET4.0C; .NET4.0E)";
+
+        public static Dictionary<string, string> CityList;
 
         public static Dictionary<int, SoldierAttribute> SoldierTable = new Dictionary<int, SoldierAttribute>();
 
-        private const string UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2; .NET4.0C; .NET4.0E)";
+        public static Dictionary<int, int> RoadLevelToDistanceMap = new Dictionary<int, int>();
 
         private readonly Dictionary<string, AccountInfo> accountTable = new Dictionary<string, AccountInfo>();
 
@@ -80,6 +83,7 @@
             this.LoadCheckpoint();
             this.LoadLangChs();
             this.LoadSoldierInfo();
+            this.LoadRoadInfo();
         }
 
         private void btnQuickCreateTroop_Click(object sender, EventArgs e)
@@ -228,8 +232,8 @@
                                             this.ActiveTaskList.Where(
                                                 task =>
                                                 (task as SendTroopTask) != null
-                                                && (task as SendTroopTask).taskData.isGroupTroop)
-                                                .Select(task => (task as SendTroopTask).taskData.GroupId);
+                                                && (task as SendTroopTask).TaskData.isGroupTroop)
+                                                .Select(task => (task as SendTroopTask).TaskData.GroupId);
                                         if (taskGroupIdList.Contains(troop.GroupId))
                                         {
                                             return;
@@ -241,8 +245,8 @@
                                             this.ActiveTaskList.Where(
                                                 task =>
                                                 (task as SendTroopTask) != null
-                                                && !(task as SendTroopTask).taskData.isGroupTroop)
-                                                .Select(task => (task as SendTroopTask).taskData.TroopId);
+                                                && !(task as SendTroopTask).TaskData.isGroupTroop)
+                                                .Select(task => (task as SendTroopTask).TaskData.TroopId);
                                         if (taskTroopIdList.Contains(troop.TroopId))
                                         {
                                             return;
@@ -451,10 +455,11 @@
             if (maxDuration > diff.TotalSeconds)
             {
                 var minArrivalTime = RemoteTime.AddSeconds(maxDuration);
-                var result = MessageBox.Show(
-                    string.Format("建议到达时间必须晚于{0}", minArrivalTime.AddSeconds(SendTroopTask.OpenAttackPageTime)),
-                    "是否使用建议时间",
-                    MessageBoxButtons.YesNo);
+                var result =
+                    MessageBox.Show(
+                        string.Format("建议到达时间必须晚于{0}", minArrivalTime.AddSeconds(SendTroopTask.OpenAttackPageTime)),
+                        "是否使用建议时间",
+                        MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
                     this.dateTimePickerArrival.Value = minArrivalTime.AddSeconds(60);
@@ -571,7 +576,7 @@
 
                 foreach (var account in this.accountTable.Values)
                 {
-                    this.TryLoadAccountCookie(account);
+                    TryLoadAccountCookie(account);
                 }
 
                 this.SyncAccountsStatus();
@@ -596,9 +601,11 @@
                     var validCityNameList = this.accountTable.Values.SelectMany(
                         account =>
                         {
-                            var cityNameList = this.GetAccountInflunceCityNameListWithArmy(account.UserName).ToList();
+                            var cityNameList =
+                                this.GetAccountInflunceCityNameListWithArmy(account.UserName).ToList();
                             account.CityNameList = cityNameList;
-                            account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]).ToList();
+                            account.CityIDList =
+                                cityNameList.Select(cityName => this.cityList[cityName]).ToList();
 
                             return cityNameList;
                         }).ToList().Distinct();
@@ -613,7 +620,11 @@
                                     this.listBoxSrcCities.Items.Add(city);
                                 }
                             }));
-                });
+                }).Then(
+                    () =>
+                        {
+                            this.Invoke( new DoSomething( () => { this.tabControlTask.Enabled = true; }));
+                        });
         }
 
         private void ToolStripMenuItemDonation_Click(object sender, EventArgs e)
@@ -782,7 +793,10 @@
                     var cityId = accountInfo.InfluenceCityList[fromCity].NodeId;
 
                     var cityMovePage = this.ChangeMoveFromCity(accountName, cityId.ToString());
-                    var heroList = this.ParseHeroInfoListFromMovePage(cityMovePage, accountName).Where(hero => !hero.IsBusy).ToList();
+                    var heroList =
+                        this.ParseHeroInfoListFromMovePage(cityMovePage, accountName)
+                            .Where(hero => !hero.IsBusy)
+                            .ToList();
                     var soldiers = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
                     var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
 
@@ -802,7 +816,7 @@
                                 }
 
                                 this.listViewMoveHero.Items.Clear();
-                                for (int i = 0; i < heroList.Count(); ++i)
+                                for (var i = 0; i < heroList.Count(); ++i)
                                 {
                                     var lvItem = new ListViewItem();
                                     lvItem.SubItems[0].Text = heroList[i].Name;
@@ -841,20 +855,22 @@
 
         private void buttonConfirmMove_Click(object sender, EventArgs e)
         {
-            string accountName = this.comboBoxAccount.Text;
-            string fromCityName = this.comboBoxFromCity.Text;
-            string toCityName = this.comboBoxToCity.Text;
+            var accountName = this.comboBoxAccount.Text;
+            var fromCityName = this.comboBoxFromCity.Text;
+            var toCityName = this.comboBoxToCity.Text;
 
-            var heroList = (from ListViewItem lvItem in this.listViewMoveHero.CheckedItems select lvItem.SubItems[1].Text).ToList();
+            var heroList =
+                (from ListViewItem lvItem in this.listViewMoveHero.CheckedItems select lvItem.SubItems[1].Text).ToList();
             var soldierList = (from ListViewItem lvItem in this.listViewAccountArmy.CheckedItems
                                let soldier = lvItem.Tag as Soldier
                                where soldier.SoldierNumber > 0
-                               select new Soldier()
-                               {
-                                   Name = soldier.Name,
-                                   SoldierType = soldier.SoldierType,
-                                   SoldierNumber = soldier.SoldierNumber,
-                               }).ToList();
+                               select
+                                   new Soldier
+                                       {
+                                           Name = soldier.Name,
+                                           SoldierType = soldier.SoldierType,
+                                           SoldierNumber = soldier.SoldierNumber
+                                       }).ToList();
 
             var accountInfo = this.accountTable[accountName];
             var fromCity = accountInfo.InfluenceCityList[fromCityName];
@@ -881,7 +897,7 @@
         {
             if (this.listViewAccountArmy.SelectedItems.Count == 1)
             {
-                ListViewItem lvItem = this.listViewAccountArmy.SelectedItems[0];
+                var lvItem = this.listViewAccountArmy.SelectedItems[0];
                 this.labelSelectedArmyName.Text = lvItem.Text;
                 this.labelSelectedArmyName.Visible = true;
                 this.numericUpDownToMoveArmy.Maximum = int.Parse(lvItem.SubItems[1].Text);
@@ -899,7 +915,7 @@
         {
             if (this.listViewAccountArmy.SelectedItems.Count == 1)
             {
-                ListViewItem lvItem = this.listViewAccountArmy.SelectedItems[0];
+                var lvItem = this.listViewAccountArmy.SelectedItems[0];
                 lvItem.SubItems[2].Text = this.numericUpDownToMoveArmy.Value.ToString();
             }
         }
@@ -955,6 +971,18 @@
             var targetList = accountList.SelectMany(info => info.InfluenceCityList.Keys).ToList().Distinct();
             this.comboBoxAccountTaskTarget.Items.AddRange(targetList.Select(val => val as object).ToArray());
             this.comboBoxAccountTaskTarget.Enabled = true;
+
+            switch (this.comboBoxAccountTaskType.Text)
+            {
+                case "运砖":
+                    this.checkBoxAccountTaskOption.Text = "使用将领";
+                    this.checkBoxAccountTaskOption.Visible = false;
+                    break;
+                case "调兵":
+                    this.checkBoxAccountTaskOption.Text = "带砖";
+                    this.checkBoxAccountTaskOption.Visible = true;
+                    break;
+            }
         }
 
         private void buttonAssignTask_Click(object sender, EventArgs e)
@@ -980,10 +1008,10 @@
                 switch (this.comboBoxAccountTaskType.Text)
                 {
                     case "运砖":
-                        CreateShipBrickTask(account, targetCity);
+                        this.CreateShipBrickTask(account, targetCity);
                         break;
                     case "调兵":
-                        CreateShipTroopTasks(account, targetCity);
+                        this.CreateShipTroopTasks(account, targetCity, this.checkBoxAccountTaskOption.Checked);
                         break;
                 }
             }
@@ -991,14 +1019,12 @@
 
         private void listViewTaskIdleAccount_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            this.comboBoxAccountTaskType.Enabled =
-                this.listViewTaskIdleAccount.CheckedItems.Count > 0;
+            this.comboBoxAccountTaskType.Enabled = this.listViewTaskIdleAccount.CheckedItems.Count > 0;
         }
 
         private void listViewAccountActiveTask_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            this.buttonCancelAccountTask.Enabled
-                = this.listViewAccountActiveTask.CheckedItems.Count > 0;
+            this.buttonCancelAccountTask.Enabled = this.listViewAccountActiveTask.CheckedItems.Count > 0;
         }
 
         private void comboBoxAccountTaskTarget_SelectedIndexChanged(object sender, EventArgs e)
@@ -1018,7 +1044,6 @@
         {
             foreach (ListViewItem lvItem in this.listViewAccountActiveTask.CheckedItems)
             {
-
             }
         }
 
@@ -1035,10 +1060,7 @@
             foreach (ListViewItem lvItem in this.listViewAccounts.CheckedItems)
             {
                 var account = lvItem.Tag as AccountInfo;
-                Task.Run(() =>
-                {
-                    this.QuitUnion(account.UserName);
-                });
+                Task.Run(() => { this.QuitUnion(account.UserName); });
             }
         }
 
@@ -1054,28 +1076,27 @@
         {
             var form = new FormJoinUnion();
             form.ShowDialog();
-            if (form.IsOk)
+            if (!form.IsOk)
             {
-                int unionId = form.UnionId;
-                var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
-                                   select lvItem.Tag as AccountInfo);
-                Parallel.ForEach(accountList, account =>
-                {
-                    this.ApplyUnion(account.UserName, unionId);
-                    this.Invoke(new DoSomething(() =>
-                    {
-                        foreach (ListViewItem lvItem in this.listViewAccounts.Items)
-                        {
-                            var tagAccount = lvItem.Tag as AccountInfo;
-                            if (tagAccount == account)
-                            {
-                                lvItem.SubItems[2].Text = unionId.ToString();
-                                break;
-                            }
-                        }
-                    }));
-                });
+                return;
             }
+            var unionId = form.UnionId;
+            var accountList =
+                (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                 select new { Account = lvItem.Tag as AccountInfo, lvItem }).ToList();
+
+            Parallel.ForEach(
+                accountList,
+                account =>
+                {
+                    this.ApplyUnion(account.Account.UserName, unionId);
+                    this.Invoke(
+                        new DoSomething(
+                            () =>
+                            {
+                                account.lvItem.SubItems[2].Text = unionId.ToString();
+                            }));
+                });
         }
     }
 }

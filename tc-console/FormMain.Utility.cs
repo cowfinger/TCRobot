@@ -268,12 +268,29 @@
             CityList = this.cityList;
         }
 
+        private void LoadRoadInfo()
+        {
+            using (var streamReader = new StreamReader("road.txt", Encoding.ASCII))
+            {
+                var line = streamReader.ReadLine();
+                while (!string.IsNullOrEmpty(line))
+                {
+                    var strs = line.Split(',', ':');
+                    if (strs.Length == 2)
+                    {
+                        RoadLevelToDistanceMap.Add(int.Parse(strs[0]), int.Parse(strs[1]));
+                    }
+
+                    line = streamReader.ReadLine();
+                }
+            }
+        }
+
         private void LoadSoldierInfo()
         {
-
             using (var streamReader = new StreamReader("soldier.txt", Encoding.ASCII))
             {
-                string line = streamReader.ReadLine();
+                var line = streamReader.ReadLine();
                 while (!string.IsNullOrEmpty(line))
                 {
                     var strs = line.Split(',', ':');
@@ -584,7 +601,7 @@
             return null;
         }
 
-        private int CalculateDistance(string from, string to, string account)
+        private int CalculateDistance(string from, string to, string account, Dictionary<string, int> roadLevelCache)
         {
             string fromCityId;
             if (!this.cityList.TryGetValue(from, out fromCityId))
@@ -598,17 +615,16 @@
                 return 120;
             }
 
-            OpenCityPage(fromCityId, account);
-            string page = OpenCityBuildPage(fromCityId, account);
-            int roadLevel = ParseRoadLevelFromCityBuildPage(page);
+            int roadLevel;
+            if (!roadLevelCache.TryGetValue(from, out roadLevel))
+            {
+                this.OpenCityPage(fromCityId, account);
+                var page = this.OpenCityBuildPage(fromCityId, account);
+                roadLevel = this.ParseRoadLevelFromCityBuildPage(page);
+                roadLevelCache.Add(from, roadLevel);
+            }
 
-            if (roadLevel >= 10) { return 2; }
-            if (roadLevel >= 9) { return 6; }
-            if (roadLevel >= 8) { return 18; }
-            if (roadLevel >= 7) { return 36; }
-            if (roadLevel >= 6) { return 72; }
-
-            return 120;
+            return RoadLevelToDistanceMap[roadLevel];
         }
 
         private MoveTroopTask CreateMoveTroopTask(
@@ -716,10 +732,8 @@
 
                 var moveTroopTasks = completedTasks.Where(t => t.TerminalCity.Name != targetCity.Name);
                 var newMoveBrickTasks = moveTroopTasks.Select(
-                    t =>
-                    {
-                        return ShipBrickCreateMoveBrickTask(account, t.TerminalCity, task.TargetCity);
-                    }).Where(t => t != null).ToList();
+                    t => this.ShipBrickCreateMoveBrickTask(account, t.TerminalCity, task.TargetCity)
+                    ).Where(t => t != null).ToList();
 
                 task.SubTasks.AddRange(newMoveBrickTasks);
 
@@ -747,16 +761,12 @@
                     }
 
                     var cityMovePage = this.ChangeMoveFromCity(account.UserName, cityInfo.NodeId.ToString());
-                    var soldiers = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
                     var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
-                    if (brickNum == 0)
-                    {
-                        return this.ShipBrickCreateMoveTroopTask(account, cityInfo, homeCity);
-                    }
-                    else
-                    {
-                        return this.ShipBrickCreateMoveBrickTask(account, cityInfo, targetCity);
-                    }
+
+                    return brickNum == 0 ?
+                        this.ShipBrickCreateMoveTroopTask(account, cityInfo, homeCity) :
+                        this.ShipBrickCreateMoveBrickTask(account, cityInfo, targetCity);
+
                 }).Where(t => t != null).ToList();
                 task.SubTasks.AddRange(newTasks);
             }
@@ -848,20 +858,26 @@
             return activeTaskList;
         }
 
-        private void CreateShipTroopTasks(AccountInfo account, CityInfo targetCity)
+        private void CreateShipTroopTasks(AccountInfo account, CityInfo targetCity, bool carryBrick)
         {
             var fromCityList = account.CityNameList.Where(c => c != targetCity.Name).ToList();
-            foreach (var city in fromCityList)
+            foreach (var cityInfo in fromCityList.Select(city => account.InfluenceCityList[city]))
             {
-                var cityInfo = account.InfluenceCityList[city];
+                var info = cityInfo;
                 Task.Run(() =>
-                {
-                    var cityMovePage = this.ChangeMoveFromCity(account.UserName, cityInfo.NodeId.ToString());
-                    var soldiers = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
-                    var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
-                    var heroes = this.ParseHeroIdListFromMovePage(cityMovePage).ToList();
-                    CreateMoveTroopTask(account, cityInfo, targetCity, soldiers, heroes, 0);
-                });
+                    {
+                        var cityMovePage = this.ChangeMoveFromCity(account.UserName, info.NodeId.ToString());
+                        var troop = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
+                        var heroes = this.ParseHeroIdListFromMovePage(cityMovePage).ToList();
+                        var carryBrickNum = 0;
+                        if (carryBrick)
+                        {
+                            var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
+                            carryBrickNum = Math.Min(this.CalcCarryBrickNum(troop), brickNum);
+                        }
+
+                        this.CreateMoveTroopTask(account, info, targetCity, troop, heroes, carryBrickNum);
+                    });
             }
         }
 

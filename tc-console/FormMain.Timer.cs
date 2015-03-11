@@ -235,7 +235,7 @@
                         {
                             case SendTroopTask.TaskStatus.OpenAttackPage:
                                 var requestPerfTimer = DateTime.Now;
-                                this.OpenCityPage(team.ToCityNodeId, ref task.webClient);
+                                this.OpenCityPage(team.ToCityNodeId, ref task.WebClient);
                                 var cost = DateTime.Now - requestPerfTimer;
                                 var attackTime = task.ExecutionTime.AddSeconds(SendTroopTask.OpenAttackPageTime);
                                 task.ExecutionTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
@@ -246,11 +246,11 @@
                                 string result;
                                 if (team.isGroupTroop)
                                 {
-                                    result = this.GroupAttackTarget(team.GroupId, team.ToCityNodeId, ref task.webClient);
+                                    result = this.GroupAttackTarget(team.GroupId, team.ToCityNodeId, ref task.WebClient);
                                 }
                                 else
                                 {
-                                    result = this.TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref task.webClient);
+                                    result = this.TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref task.WebClient);
                                 }
 
                                 if (result != "1")

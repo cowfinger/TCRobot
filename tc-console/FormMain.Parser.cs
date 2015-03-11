@@ -406,7 +406,7 @@ namespace TC
 
         private string GetTid(AccountInfo account)
         {
-            var cookieMap = this.ParseCookieStr(account.CookieStr);
+            var cookieMap = ParseCookieStr(account.CookieStr);
 
             string tmp_id;
             return !cookieMap.TryGetValue("tmp_mid", out tmp_id) ? string.Empty : tmp_id;

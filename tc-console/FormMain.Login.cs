@@ -210,8 +210,8 @@
                 }
                 else
                 {
-                    var setcookies = this.ParseCookieStr(val);
-                    var oldcookies = this.ParseCookieStr(oldcookiestr);
+                    var setcookies = ParseCookieStr(val);
+                    var oldcookies = ParseCookieStr(oldcookiestr);
 
                     foreach (var key in setcookies.Keys)
                     {
@@ -221,7 +221,7 @@
                     accountInfo.CookieStr = ComposeCookieStr(oldcookies);
                 }
 
-                this.TrySaveAccountCookie(accountInfo);
+                TrySaveAccountCookie(accountInfo);
             }
         }
 
@@ -233,7 +233,7 @@
             }
         }
 
-        private Dictionary<string, string> ParseCookieStr(string cookiestr)
+        private static Dictionary<string, string> ParseCookieStr(string cookiestr)
         {
             var output = new Dictionary<string, string>();
             if (string.IsNullOrEmpty(cookiestr))
@@ -292,7 +292,7 @@
             return output;
         }
 
-        private void TrySaveAccountCookie(AccountInfo account)
+        private static void TrySaveAccountCookie(AccountInfo account)
         {
             if (!Directory.Exists(CookieFolder))
             {
@@ -312,7 +312,7 @@
             }
         }
 
-        private void TryLoadAccountCookie(AccountInfo account)
+        private static void TryLoadAccountCookie(AccountInfo account)
         {
             var accountCookieFileName = Path.Combine(CookieFolder, account.UserName);
             if (!File.Exists(accountCookieFileName))
