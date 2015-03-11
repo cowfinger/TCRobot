@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
 
@@ -433,7 +434,7 @@
 
             var data = this.HTTPRequest(url2, account);
 
-            var attackPowerList = this.ParseAttribute(data, @"<td>部队\d+</td>", @"<td>(\d+)</td>", 2).ToList();
+            var attackPowerList = ParseAttribute(data, @"<td>部队\d+</td>", @"<td>(\d+)</td>", 2).ToList();
 
             var i = 0;
             const string TeamIdPattern = @"worldWarClass\.doDisbandTeam\((\d+),\d+,\d+\)";
@@ -545,7 +546,22 @@
             client.OpenUrl(url);
         }
 
-        private string OpenCityBuildPage(string cityId, string account)
+        private string OpenCityWallPage(int cityNodeId, int wallLevel, string account)
+        {
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.influence_build,
+                new TCRequestArgument(TCElement.build_id, 1002),
+                new TCRequestArgument(TCElement.node_id, cityNodeId),
+                new TCRequestArgument(TCElement.level, wallLevel),
+                new TCRequestArgument(TCElement.action, "repair"));
+            return this.HTTPRequest(url, account);
+        }
+
+        private string OpenCityBuildPage(int cityId, string account)
         {
             var url = RequestAgent.BuildUrl(
                 this.hostname,
@@ -557,7 +573,22 @@
             return this.HTTPRequest(url, account);
         }
 
-        private string OpenCityPage(string cityId, string account)
+        private string RepairCityBuild(int cityId, int buildId, int brickNum, string account)
+        {
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Do,
+                TCFunc.build_repair,
+                new TCRequestArgument(TCElement.build_id, cityId),
+                new TCRequestArgument(TCElement.node_id, buildId),
+                new TCRequestArgument(TCElement.brick_num, brickNum)
+                );
+            return this.HTTPRequest(url, account);
+        }
+
+        private string OpenCityPage(int cityId, string account)
         {
             var url = RequestAgent.BuildUrl(
                 this.hostname,

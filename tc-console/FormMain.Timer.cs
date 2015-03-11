@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Windows.Forms;
 
+    using TC.TCTasks;
+
     using Timer = System.Timers.Timer;
 
     partial class FormMain

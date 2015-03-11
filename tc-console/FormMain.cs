@@ -8,6 +8,8 @@
     using System.Threading;
     using System.Windows.Forms;
 
+    using TC.TCTasks;
+
     public partial class FormMain : Form
     {
         private const string UserAgent =
@@ -50,10 +52,7 @@
         {
             get
             {
-                foreach (ListViewItem lvItem in this.listViewTasks.Items)
-                {
-                    yield return lvItem.Tag as TCTask;
-                }
+                return from ListViewItem lvItem in this.listViewTasks.Items select lvItem.Tag as TCTask;
             }
         }
 
@@ -590,7 +589,7 @@
 
         private void ToolStripMenuItemBatchLogin_Click(object sender, EventArgs e)
         {
-            Task.Run(() => { this.BatchLoginProc(); });
+            Task.Run(this.BatchLoginProc);
         }
 
         private void ToolStripMenuItemScan_Click(object sender, EventArgs e)

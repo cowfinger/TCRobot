@@ -7,18 +7,14 @@
 
     partial class FormMain
     {
-        private int ParseRoadLevelFromCityBuildPage(string page)
+        private static int ParseRoadLevelFromCityBuildPage(string page)
         {
             const string pattern = @"<span>等级：(\d+)/10</span>";
             var match = Regex.Match(page, pattern);
-            if (match.Success)
-            {
-                return int.Parse(match.Groups[1].Value);
-            }
-            return 6;
+            return match.Success ? int.Parse(match.Groups[1].Value) : 6;
         }
 
-        private IEnumerable<string> ParseAttribute(
+        private static IEnumerable<string> ParseAttribute(
             string content,
             string headPattern,
             string attributePattern,

@@ -117,6 +117,7 @@
             this.comboBoxFromCity = new System.Windows.Forms.ComboBox();
             this.comboBoxAccount = new System.Windows.Forms.ComboBox();
             this.tabPageAccountTask = new System.Windows.Forms.TabPage();
+            this.checkBoxAccountTaskOption = new System.Windows.Forms.CheckBox();
             this.checkBoxSelectAllTaskAccount = new System.Windows.Forms.CheckBox();
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
@@ -147,7 +148,6 @@
             this.QuitUnionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinUnionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
-            this.checkBoxAccountTaskOption = new System.Windows.Forms.CheckBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -911,7 +911,7 @@
             this.listViewAccountArmy.Location = new System.Drawing.Point(190, 76);
             this.listViewAccountArmy.MultiSelect = false;
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(301, 302);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(301, 303);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -943,7 +943,7 @@
             this.listViewMoveHero.GridLines = true;
             this.listViewMoveHero.Location = new System.Drawing.Point(8, 76);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(176, 302);
+            this.listViewMoveHero.Size = new System.Drawing.Size(176, 303);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1051,6 +1051,17 @@
             this.tabPageAccountTask.Text = "Account Task";
             this.tabPageAccountTask.UseVisualStyleBackColor = true;
             // 
+            // checkBoxAccountTaskOption
+            // 
+            this.checkBoxAccountTaskOption.AutoSize = true;
+            this.checkBoxAccountTaskOption.Location = new System.Drawing.Point(213, 132);
+            this.checkBoxAccountTaskOption.Name = "checkBoxAccountTaskOption";
+            this.checkBoxAccountTaskOption.Size = new System.Drawing.Size(121, 17);
+            this.checkBoxAccountTaskOption.TabIndex = 11;
+            this.checkBoxAccountTaskOption.Text = "AccountTaskOption";
+            this.checkBoxAccountTaskOption.UseVisualStyleBackColor = true;
+            this.checkBoxAccountTaskOption.Visible = false;
+            // 
             // checkBoxSelectAllTaskAccount
             // 
             this.checkBoxSelectAllTaskAccount.AutoSize = true;
@@ -1149,7 +1160,7 @@
             this.listViewAccountActiveTask.GridLines = true;
             this.listViewAccountActiveTask.Location = new System.Drawing.Point(311, 21);
             this.listViewAccountActiveTask.Name = "listViewAccountActiveTask";
-            this.listViewAccountActiveTask.Size = new System.Drawing.Size(497, 358);
+            this.listViewAccountActiveTask.Size = new System.Drawing.Size(499, 359);
             this.listViewAccountActiveTask.TabIndex = 2;
             this.listViewAccountActiveTask.UseCompatibleStateImageBehavior = false;
             this.listViewAccountActiveTask.View = System.Windows.Forms.View.Details;
@@ -1194,7 +1205,7 @@
             this.listViewTaskIdleAccount.GridLines = true;
             this.listViewTaskIdleAccount.Location = new System.Drawing.Point(0, 21);
             this.listViewTaskIdleAccount.Name = "listViewTaskIdleAccount";
-            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(201, 358);
+            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(201, 359);
             this.listViewTaskIdleAccount.TabIndex = 0;
             this.listViewTaskIdleAccount.UseCompatibleStateImageBehavior = false;
             this.listViewTaskIdleAccount.View = System.Windows.Forms.View.Details;
@@ -1324,17 +1335,6 @@
             this.statusStripMain.Size = new System.Drawing.Size(1264, 22);
             this.statusStripMain.TabIndex = 57;
             this.statusStripMain.Text = "statusStrip1";
-            // 
-            // checkBoxAccountTaskOption
-            // 
-            this.checkBoxAccountTaskOption.AutoSize = true;
-            this.checkBoxAccountTaskOption.Location = new System.Drawing.Point(213, 132);
-            this.checkBoxAccountTaskOption.Name = "checkBoxAccountTaskOption";
-            this.checkBoxAccountTaskOption.Size = new System.Drawing.Size(121, 17);
-            this.checkBoxAccountTaskOption.TabIndex = 11;
-            this.checkBoxAccountTaskOption.Text = "AccountTaskOption";
-            this.checkBoxAccountTaskOption.UseVisualStyleBackColor = true;
-            this.checkBoxAccountTaskOption.Visible = false;
             // 
             // FormMain
             // 

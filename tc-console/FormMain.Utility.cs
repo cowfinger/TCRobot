@@ -10,6 +10,8 @@
     using System.Threading;
     using System.Windows.Forms;
 
+    using TC.TCTasks;
+
     partial class FormMain
     {
         public static Dictionary<string, string> KeyWordMap = new Dictionary<string, string>();
@@ -538,10 +540,10 @@
 
         private bool HasTroopArrived(MoveTroopTask task)
         {
-            var cityNodeId = task.NextCity.CityId.ToString();
-            var fromCityId = task.NextCity.NodeId.ToString();
+            var cityNodeId = task.NextCity.CityId;
+            var fromCityId = task.NextCity.NodeId;
             this.OpenCityPage(cityNodeId, task.Account.UserName);
-            var movePageFrom = this.ChangeMoveFromCity(task.Account.UserName, fromCityId);
+            var movePageFrom = this.ChangeMoveFromCity(task.Account.UserName, fromCityId.ToString());
 
             var heroes = this.ParseHeroIdListFromMovePage(movePageFrom).ToList();
 
@@ -556,7 +558,7 @@
 
         private MoveTask MoveTroop(MoveTroopTask task)
         {
-            var cityNodeId = task.CurrentCity.CityId.ToString();
+            var cityNodeId = task.CurrentCity.CityId;
 
             this.OpenCityPage(cityNodeId, task.Account.UserName);
             var moveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
@@ -580,7 +582,7 @@
             for (var i = 0; i < 10; ++i)
             {
                 Thread.Sleep(2000);
-                this.OpenCityPage(task.NextCity.CityId.ToString(), task.Account.UserName);
+                this.OpenCityPage(task.NextCity.CityId, task.Account.UserName);
                 var newMoveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
                 var newMoveTaskList = this.ParseMoveTaskList(newMoveQueuePage).ToList();
 
@@ -602,24 +604,26 @@
 
         private int CalculateDistance(string from, string to, string account, Dictionary<string, int> roadLevelCache)
         {
-            string fromCityId;
-            if (!this.cityList.TryGetValue(from, out fromCityId))
+            string fromCityIdValue;
+            if (!this.cityList.TryGetValue(from, out fromCityIdValue))
             {
                 return 2;
             }
+            int fromCityId = int.Parse(fromCityIdValue);
 
-            string toCityId;
-            if (!this.cityList.TryGetValue(to, out toCityId))
+            string toCityIdValue;
+            if (!this.cityList.TryGetValue(to, out toCityIdValue))
             {
                 return 120;
             }
+            int toCityId = int.Parse(toCityIdValue);
 
             int roadLevel;
             if (!roadLevelCache.TryGetValue(from, out roadLevel))
             {
                 this.OpenCityPage(fromCityId, account);
                 var page = this.OpenCityBuildPage(fromCityId, account);
-                roadLevel = this.ParseRoadLevelFromCityBuildPage(page);
+                roadLevel = ParseRoadLevelFromCityBuildPage(page);
                 roadLevelCache.Add(from, roadLevel);
             }
 
@@ -721,11 +725,31 @@
             return moveTask;
         }
 
+        private void ShipBrickMonitorCityWall(ShipBrickTask task)
+        {
+            this.OpenCityPage(task.TargetCity.CityId, task.Account.UserName);
+            var cityBuildPage = this.OpenCityBuildPage(task.TargetCity.CityId, task.Account.UserName);
+
+            var cityRepairWallPageData = this.OpenCityWallPage(task.TargetCity.CityId, 10, task.Account.UserName);
+            var cityRepairWallPage = new TCPage.RepairCityWallPage(cityRepairWallPageData);
+            var brickNumToUse = Math.Min(cityRepairWallPage.BrickNum, cityRepairWallPage.CompleteRepairNeeds);
+            if (brickNumToUse > 0)
+            {
+                this.RepairCityBuild(
+                    cityRepairWallPage.CityNodeId, 
+                    cityRepairWallPage.BuildId, 
+                    brickNumToUse, 
+                    task.Account.UserName);
+            }
+        }
+
         private void ShipBrickScheSubTask(ShipBrickTask task)
         {
             var account = task.Account;
             var homeCity = account.InfluenceCityList.Values.First(city => city.CityId == 0);
             var targetCity = task.TargetCity;
+
+            this.ShipBrickMonitorCityWall(task);
 
             var completedTasks = task.SubTasks.Where(t => t.IsCompleted).ToList();
             if (completedTasks.Any())

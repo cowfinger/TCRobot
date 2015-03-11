@@ -26,6 +26,8 @@ namespace TC
 
         join_attack_type,
 
+        level,
+
         mt,
 
         node_id,

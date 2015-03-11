@@ -1,4 +1,4 @@
-namespace TC
+namespace TC.TCTasks
 {
     using System.Collections.Generic;
 
