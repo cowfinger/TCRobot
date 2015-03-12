@@ -12,6 +12,8 @@ namespace TC
 
         build_repair,
 
+        check_member,
+
         city_build,
 
         create_group,

@@ -78,7 +78,10 @@
     <Compile Include="TCDataType\BigMapCity.cs" />
     <Compile Include="TCDataType\CityInfo.cs" />
     <Compile Include="TCPage\CityBuildPage.cs" />
+    <Compile Include="TCPage\InfluenceCheckMemberPage.cs" />
+    <Compile Include="TCPage\MilitaryTrainPage.cs" />
     <Compile Include="TCPage\RepairCityWallPage.cs" />
+    <Compile Include="TCPage\TCPage.cs" />
     <Compile Include="TCTasks\InfluenceGuard.cs" />
     <Compile Include="TCUtility\CookieLite.cs" />
     <Compile Include="TCDataType\TroopInfo.cs" />

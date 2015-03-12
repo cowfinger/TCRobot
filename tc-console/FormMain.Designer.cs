@@ -1051,7 +1051,7 @@
             this.tabPageAccountTask.Location = new System.Drawing.Point(4, 22);
             this.tabPageAccountTask.Name = "tabPageAccountTask";
             this.tabPageAccountTask.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAccountTask.Size = new System.Drawing.Size(781, 336);
+            this.tabPageAccountTask.Size = new System.Drawing.Size(783, 335);
             this.tabPageAccountTask.TabIndex = 2;
             this.tabPageAccountTask.Text = "Account Task";
             this.tabPageAccountTask.UseVisualStyleBackColor = true;
@@ -1166,7 +1166,7 @@
             this.listViewAccountActiveTask.GridLines = true;
             this.listViewAccountActiveTask.Location = new System.Drawing.Point(311, 19);
             this.listViewAccountActiveTask.Name = "listViewAccountActiveTask";
-            this.listViewAccountActiveTask.Size = new System.Drawing.Size(507, 334);
+            this.listViewAccountActiveTask.Size = new System.Drawing.Size(509, 333);
             this.listViewAccountActiveTask.TabIndex = 2;
             this.listViewAccountActiveTask.UseCompatibleStateImageBehavior = false;
             this.listViewAccountActiveTask.View = System.Windows.Forms.View.Details;
@@ -1211,7 +1211,7 @@
             this.listViewTaskIdleAccount.GridLines = true;
             this.listViewTaskIdleAccount.Location = new System.Drawing.Point(0, 19);
             this.listViewTaskIdleAccount.Name = "listViewTaskIdleAccount";
-            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(201, 334);
+            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(201, 333);
             this.listViewTaskIdleAccount.TabIndex = 0;
             this.listViewTaskIdleAccount.UseCompatibleStateImageBehavior = false;
             this.listViewTaskIdleAccount.View = System.Windows.Forms.View.Details;

@@ -14,6 +14,30 @@
             return this.HTTPRequest(url, account);
         }
 
+        private string OpenInfluenceCheckMemberPage(string account)
+        {
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.check_member);
+            return this.HTTPRequest(url, account);
+        }
+
+        private string RefuseUnionJoin(int unionId, string account)
+        {
+            var url = RequestAgent.BuildUrl(
+                this.hostname,
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Do,
+                TCFunc.check_member,
+                new TCRequestArgument(TCElement.action, "refuse"),
+                new TCRequestArgument(TCElement.union_id, unionId));
+            return this.HTTPRequest(url, account);
+        }
+
         private int GetAccountLevel(AccountInfo account)
         {
             const string pattern = @"<h4>提升等级至(\d+)：</h4>";

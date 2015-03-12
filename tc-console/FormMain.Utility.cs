@@ -914,13 +914,17 @@
 
         private void CreateInfluenceGuardTask(AccountInfo account)
         {
-            var task = new InfluenceGuard(account)
-                           {
-                               TaskAction = obj =>
-                                   {
-                                       
-                                   }
-                           };
+            var task = new InfluenceGuard(account);
+            task.TaskAction = obj =>
+                              {
+                                  var pageData = this.OpenInfluenceCheckMemberPage(account.UserName);
+                                  var page = new TCPage.InfluenceCheckMemberPage(pageData);
+                                  task.recentRequstUnionList = page.RequestMemberList.Select(item => item.UnionName).ToList();
+                                  foreach (var member in page.RequestMemberList)
+                                  {
+                                      this.RefuseUnionJoin(member.UnionId, account.UserName);
+                                  }
+                              };
 
             var lvItemTask = new ListViewItem { Tag = task };
             task.SyncToListViewItem(lvItemTask, RemoteTime);

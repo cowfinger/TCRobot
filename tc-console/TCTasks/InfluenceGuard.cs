@@ -9,7 +9,7 @@ namespace TC.TCTasks
     {
         private const int CheckInterval = 60 * 1000;
 
-        private List<int> recentRequstUnionList = null; 
+        public List<string> recentRequstUnionList = null; 
 
         public InfluenceGuard(AccountInfo account)
             : base(account, CheckInterval)
@@ -31,7 +31,7 @@ namespace TC.TCTasks
         public override string GetTaskHint()
         {
             return this.recentRequstUnionList != null ? 
-                string.Join(", ", this.recentRequstUnionList.Select(i => i.ToString()).ToArray()) : "";
+                string.Join(", ", this.recentRequstUnionList.ToArray()) : "";
         }
     }
 }
