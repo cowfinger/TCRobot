@@ -29,7 +29,7 @@ namespace TC.TCTasks
             CityInfo toCity,
             TroopInfo data,
             DateTime arrivalTime)
-            : base(account, arrivalTime.AddSeconds(-(data.Duration - OpenAttackPageTime)))
+            : base(account, arrivalTime.AddSeconds(-(data.Duration + OpenAttackPageTime)))
         {
             if (!data.isGroupTroop)
             {

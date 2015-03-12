@@ -43,7 +43,7 @@
                 yield break;
             }
 
-            var speed = army != null ? army.Min(a => FormMain.SoldierTable[a.SoldierType].Speed) : 24;
+            var speed = army != null && army.Any() ? army.Min(a => FormMain.SoldierTable[a.SoldierType].Speed) : 24;
 
             foreach (var item in this.map.Keys)
             {

@@ -223,12 +223,12 @@
         {
             return this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId)).Select(
                 account =>
-                    {
-                        var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.UserName);
-                        var singleDefendTeams = this.GetActiveTroopInfo(cityId, "2", account.UserName);
-                        var groupAttackteams = this.GetGroupTeamList(cityId, account.UserName);
-                        return singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams);
-                    }).SelectMany(teams => teams);
+                {
+                    var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.UserName);
+                    var singleDefendTeams = this.GetActiveTroopInfo(cityId, "2", account.UserName);
+                    var groupAttackteams = this.GetGroupTeamList(cityId, account.UserName);
+                    return singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams);
+                }).SelectMany(teams => teams);
         }
 
         private IEnumerable<string> QueryTargetCityList(string cityId)
@@ -460,18 +460,18 @@
                 this.Invoke(
                     new DoSomething(
                         () =>
+                        {
+                            foreach (ListViewItem lvItem in this.listViewAccountHero.Items)
                             {
-                                foreach (ListViewItem lvItem in this.listViewAccountHero.Items)
+                                var tabHero = lvItem.Tag as HeroInfo;
+                                if (tabHero != null && tabHero.HeroId == hero.HeroId
+                                    && tabHero.IsDead != hero.IsDead)
                                 {
-                                    var tabHero = lvItem.Tag as HeroInfo;
-                                    if (tabHero != null && tabHero.HeroId == hero.HeroId
-                                        && tabHero.IsDead != hero.IsDead)
-                                    {
-                                        lvItem.Tag = hero;
-                                        break;
-                                    }
+                                    lvItem.Tag = hero;
+                                    break;
                                 }
-                            }));
+                            }
+                        }));
             }
         }
 
@@ -502,26 +502,26 @@
             Parallel.Dispatch(
                 this.accountTable.Values,
                 account =>
+                {
+                    if (account.InfluenceCityList == null)
                     {
-                        if (account.InfluenceCityList == null)
+                        var accountCityList = this.QueryInfluenceCityList(account.UserName).ToList();
+                        account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
+
+                        if (!accountCityList.Any())
                         {
-                            var accountCityList = this.QueryInfluenceCityList(account.UserName).ToList();
-                            account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
-
-                            if (!accountCityList.Any())
-                            {
-                                return;
-                            }
-
-                            account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
-                            account.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
+                            return;
                         }
-                    }).Then(
+
+                        account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
+                        account.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
+                    }
+                }).Then(
                         () =>
-                            {
-                                this.LoadAccountListToMoveArmyTab();
-                                this.LoadAccountListToAccountTaskTable();
-                            });
+                        {
+                            this.LoadAccountListToMoveArmyTab();
+                            this.LoadAccountListToAccountTaskTable();
+                        });
         }
 
         private void LoadAccountListToMoveArmyTab()
@@ -529,13 +529,13 @@
             this.Invoke(
                 new DoSomething(
                     () =>
+                    {
+                        this.comboBoxAccount.Items.Clear();
+                        foreach (var account in this.accountTable.Keys)
                         {
-                            this.comboBoxAccount.Items.Clear();
-                            foreach (var account in this.accountTable.Keys)
-                            {
-                                this.comboBoxAccount.Items.Add(account);
-                            }
-                        }));
+                            this.comboBoxAccount.Items.Add(account);
+                        }
+                    }));
         }
 
         private bool HasTroopArrived(MoveTroopTask task)
@@ -545,15 +545,36 @@
             this.OpenCityPage(cityNodeId, task.Account.UserName);
             var movePageFrom = this.ChangeMoveFromCity(task.Account.UserName, fromCityId.ToString());
 
-            var heroes = this.ParseHeroIdListFromMovePage(movePageFrom).ToList();
 
-            if (!heroes.Any())
+            if (task.HeroIdList.Count > 0)
             {
-                return false;
+                var heroes = this.ParseHeroIdListFromMovePage(movePageFrom).ToList();
+                var heroMatchCount = task.HeroIdList.Sum(hero => heroes.Contains(hero) ? 1 : 0);
+                if (heroMatchCount != task.HeroIdList.Count)
+                {
+                    return false;
+                }
             }
 
-            var heroMatchCount = task.HeroIdList.Sum(hero => heroes.Contains(hero) ? 1 : 0);
-            return heroMatchCount == task.HeroIdList.Count();
+            if (task.SoldierList.Count > 0)
+            {
+                var troop = this.ParseSoldierListFromMovePage(movePageFrom).ToList();
+                foreach (var soldier in task.SoldierList)
+                {
+                    if (soldier.SoldierNumber == 0)
+                    {
+                        continue;
+                    }
+
+                    var inCitySoldier = troop.Single(s => s.SoldierType == soldier.SoldierType);
+                    if (inCitySoldier.SoldierNumber < soldier.SoldierNumber)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private MoveTask MoveTroop(MoveTroopTask task)
@@ -701,11 +722,11 @@
                 this.Invoke(
                     new DoSomething(
                         () =>
-                            {
-                                var lvItemTask = new ListViewItem { Tag = moveTask };
-                                moveTask.SyncToListViewItem(lvItemTask, RemoteTime);
-                                this.listViewTasks.Items.Add(lvItemTask);
-                            }));
+                        {
+                            var lvItemTask = new ListViewItem { Tag = moveTask };
+                            moveTask.SyncToListViewItem(lvItemTask, RemoteTime);
+                            this.listViewTasks.Items.Add(lvItemTask);
+                        }));
             }
             else
             {
@@ -716,31 +737,37 @@
 
             Task.Run(
                 () =>
-                    {
-                        moveTask.TryEnter();
-                        this.MoveTroop(moveTask);
-                        moveTask.Leave();
-                    });
+                {
+                    moveTask.TryEnter();
+                    this.MoveTroop(moveTask);
+                    moveTask.Leave();
+                });
 
             return moveTask;
         }
 
-        private void ShipBrickMonitorCityWall(ShipBrickTask task)
+        private void RepairCityWall(int cityId, AccountInfo account)
         {
-            this.OpenCityPage(task.TargetCity.CityId, task.Account.UserName);
-            var cityBuildPage = this.OpenCityBuildPage(task.TargetCity.CityId, task.Account.UserName);
+            this.OpenCityPage(cityId, account.UserName);
+            var cityBuildPageData = this.OpenCityBuildPage(cityId, account.UserName);
+            var cityBuildPage = new TCPage.CityBuildPage(cityBuildPageData);
 
-            var cityRepairWallPageData = this.OpenCityWallPage(task.TargetCity.CityId, 10, task.Account.UserName);
+            var cityRepairWallPageData = this.OpenCityWallPage(cityId, cityBuildPage.Wall.Level, account.UserName);
             var cityRepairWallPage = new TCPage.RepairCityWallPage(cityRepairWallPageData);
             var brickNumToUse = Math.Min(cityRepairWallPage.BrickNum, cityRepairWallPage.CompleteRepairNeeds);
             if (brickNumToUse > 0)
             {
                 this.RepairCityBuild(
-                    cityRepairWallPage.CityNodeId, 
-                    cityRepairWallPage.BuildId, 
-                    brickNumToUse, 
-                    task.Account.UserName);
+                    cityRepairWallPage.CityNodeId,
+                    cityRepairWallPage.BuildId,
+                    brickNumToUse,
+                    account.UserName);
             }
+        }
+
+        private void ShipBrickMonitorCityWall(ShipBrickTask task)
+        {
+            this.RepairCityWall(task.TargetCity.CityId, task.Account);
         }
 
         private void ShipBrickScheSubTask(ShipBrickTask task)
@@ -779,26 +806,26 @@
                 // Search bricks and move troop.
                 var newTasks = account.CityNameList.Select(
                     cityName =>
+                    {
+                        var cityInfo = account.InfluenceCityList[cityName];
+
+                        if (cityInfo.Name == targetCity.Name)
                         {
-                            var cityInfo = account.InfluenceCityList[cityName];
+                            return this.ShipBrickCreateMoveTroopTask(account, targetCity, homeCity);
+                        }
 
-                            if (cityInfo.Name == targetCity.Name)
-                            {
-                                return this.ShipBrickCreateMoveTroopTask(account, targetCity, homeCity);
-                            }
+                        if (cityInfo.Name == homeCity.Name)
+                        {
+                            return this.ShipBrickCreateMoveBrickTask(account, homeCity, targetCity);
+                        }
 
-                            if (cityInfo.Name == homeCity.Name)
-                            {
-                                return this.ShipBrickCreateMoveBrickTask(account, homeCity, targetCity);
-                            }
+                        var cityMovePage = this.ChangeMoveFromCity(account.UserName, cityInfo.NodeId.ToString());
+                        var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
 
-                            var cityMovePage = this.ChangeMoveFromCity(account.UserName, cityInfo.NodeId.ToString());
-                            var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
-
-                            return brickNum == 0
-                                       ? this.ShipBrickCreateMoveTroopTask(account, cityInfo, homeCity)
-                                       : this.ShipBrickCreateMoveBrickTask(account, cityInfo, targetCity);
-                        }).Where(t => t != null).ToList();
+                        return brickNum == 0
+                                   ? this.ShipBrickCreateMoveTroopTask(account, cityInfo, homeCity)
+                                   : this.ShipBrickCreateMoveBrickTask(account, cityInfo, targetCity);
+                    }).Where(t => t != null).ToList();
                 task.SubTasks.AddRange(newTasks);
             }
         }
@@ -831,11 +858,11 @@
             var soldierList = army.ToList();
             soldierList.Sort(
                 (x, y) =>
-                    {
-                        var indexX = SoldierTable[x.SoldierType].Capacity * SoldierTable[x.SoldierType].Speed;
-                        var indexY = SoldierTable[y.SoldierType].Capacity * SoldierTable[y.SoldierType].Speed;
-                        return indexX.CompareTo(indexY);
-                    });
+                {
+                    var indexX = SoldierTable[x.SoldierType].Capacity * SoldierTable[x.SoldierType].Speed;
+                    var indexY = SoldierTable[y.SoldierType].Capacity * SoldierTable[y.SoldierType].Speed;
+                    return indexX.CompareTo(indexY);
+                });
             soldierList.Reverse();
 
             var totalCap = brickNum * 50000;
@@ -886,19 +913,19 @@
                 var info = cityInfo;
                 Task.Run(
                     () =>
+                    {
+                        var cityMovePage = this.ChangeMoveFromCity(account.UserName, info.NodeId.ToString());
+                        var troop = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
+                        var heroes = this.ParseHeroIdListFromMovePage(cityMovePage).ToList();
+                        var carryBrickNum = 0;
+                        if (carryBrick)
                         {
-                            var cityMovePage = this.ChangeMoveFromCity(account.UserName, info.NodeId.ToString());
-                            var troop = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
-                            var heroes = this.ParseHeroIdListFromMovePage(cityMovePage).ToList();
-                            var carryBrickNum = 0;
-                            if (carryBrick)
-                            {
-                                var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
-                                carryBrickNum = Math.Min(this.CalcCarryBrickNum(troop), brickNum);
-                            }
+                            var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
+                            carryBrickNum = Math.Min(this.CalcCarryBrickNum(troop), brickNum);
+                        }
 
-                            this.CreateMoveTroopTask(account, info, targetCity, troop, heroes, carryBrickNum);
-                        });
+                        this.CreateMoveTroopTask(account, info, targetCity, troop, heroes, carryBrickNum);
+                    });
             }
         }
 

@@ -20,7 +20,7 @@
 
                 if (!string.IsNullOrEmpty(accountInfo.CookieStr))
                 {
-                    if (this.QueryRemoteSysTime(account) != DateTime.MinValue)
+                    if (!this.RefreshHomePage(account).Contains("登录超时"))
                     {
                         accountInfo.LoginStatus = "on-line";
                         this.OnLoginCompleted(accountInfo);

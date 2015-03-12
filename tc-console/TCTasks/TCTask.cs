@@ -7,36 +7,64 @@
 
     internal abstract class TCTask
     {
+        private static Random randGen = new Random();
+
         private DateTime executionTime;
 
-        private bool isCompleted;
+        private bool isCompleted = false;
+
+        private int randomSeed = 0;
+
+        private int interval = 0;
 
         private Timer timer;
 
         public TCTask(AccountInfo account, DateTime executionTime)
         {
-            this.Executing = false;
             this.ExecutionTime = executionTime;
             this.Account = account;
-            this.IsCompleted = false;
         }
 
-        public TCTask(AccountInfo account, int intervalInMiliseconds)
+        public TCTask(AccountInfo account, int intervalInMiliseconds, int randomSeed = 0)
         {
-            this.Executing = false;
+            this.Account = account;
+
             var nextDueTime = FormMain.RemoteTime.AddMilliseconds(intervalInMiliseconds);
             this.ExecutionTime = nextDueTime;
-            this.Account = account;
-            this.IsCompleted = false;
+            this.IntervalMiliseconds = intervalInMiliseconds;
+        }
+
+        private DateTime CalcNextExecutionTime()
+        {
+            if (this.interval == 0)
+            {
+                return DateTime.MinValue;
+            }
+
+            var nextExecution = this.interval + randGen.NextDouble() * this.randomSeed;
+            return FormMain.RemoteTime.AddMilliseconds(nextExecution);
         }
 
         public TCTask ParaentTask { get; set; }
+
+        public int RandomSeed
+        {
+            get
+            {
+                return this.randomSeed;
+            }
+
+            set
+            {
+                this.randomSeed = value;
+            }
+        }
 
         public int IntervalMiliseconds
         {
             get
             {
-                return this.timer == null ? 0 : (int)this.timer.Interval;
+                return this.interval;
             }
 
             set
@@ -46,23 +74,8 @@
                     return;
                 }
 
-                this.executionTime = FormMain.RemoteTime.AddMilliseconds(value);
-                if (this.timer == null)
-                {
-                    this.timer = new Timer();
-                    this.timer.Elapsed += (obj, arg) =>
-                        {
-                            if (this.TaskAction != null)
-                            {
-                                this.TaskAction(this);
-                            }
-
-                            this.executionTime = this.executionTime.AddMilliseconds(value);
-                        };
-                }
-                this.timer.Stop();
-                this.timer.Interval = value;
-                this.timer.Start();
+                this.interval = value;
+                this.SetExecutionTime(CalcNextExecutionTime());
             }
         }
 
@@ -75,28 +88,41 @@
 
             set
             {
-                var diff = value - FormMain.RemoteTime;
-                if (diff.TotalMilliseconds <= 0)
-                {
-                    return;
-                }
-
-                this.executionTime = value;
-                if (this.timer == null)
-                {
-                    this.timer = new Timer();
-                    this.timer.Elapsed += (obj, arg) =>
-                        {
-                            if (this.TaskAction != null)
-                            {
-                                this.TaskAction(this);
-                            }
-                        };
-                }
-                this.timer.Stop();
-                this.timer.Interval = diff.TotalMilliseconds;
-                this.timer.Start();
+                SetExecutionTime(value);
             }
+        }
+
+        private void SetExecutionTime(DateTime value)
+        {
+            var diff = value - FormMain.RemoteTime;
+            if (diff.TotalMilliseconds <= 0)
+            {
+                return;
+            }
+
+            this.executionTime = value;
+            if (this.timer == null)
+            {
+                this.timer = new Timer();
+                this.timer.Elapsed += (obj, arg) =>
+                    {
+                        if (!this.TryEnter())
+                        {
+                            return;
+                        }
+
+                        if (this.TaskAction != null)
+                        {
+                            this.TaskAction(this);
+                        }
+
+                        this.SetExecutionTime(this.CalcNextExecutionTime());
+                        this.Leave();
+                    };
+            }
+            this.timer.Stop();
+            this.timer.Interval = diff.TotalMilliseconds;
+            this.timer.Start();
         }
 
         public bool IsCompleted
@@ -126,6 +152,11 @@
 
         public static string Time2Str(int timeval)
         {
+            if (timeval < 0)
+            {
+                return "N/A";
+            }
+
             var secs = timeval % 60;
             var mins = (timeval / 60) % 60;
             var hours = timeval / 3600;
