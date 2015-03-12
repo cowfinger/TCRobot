@@ -1103,16 +1103,53 @@
 
         private void repairCityToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var allCityList = this.accountTable.Values.SelectMany(
+                account => account.InfluenceCityList.Keys).Distinct().ToList();
             var dlg = new FormSelectCity()
             {
-                CityList = new List<string> { "abc" }
+                CityList = allCityList,
             };
-            dlg.Show();
-            // AccountInfo account = null;
-            // var cityId = 0;
+            dlg.ShowDialog();
 
-            // RepairCityWall(cityId, account);
+            if (dlg.IsOk)
+            {
+                var cityList = dlg.CityList;
+                var accountList = this.accountTable.Values.ToList();
 
+                var cityAccountTable = from city in cityList
+                                       from account in accountList
+                                       where account.InfluenceCityList.ContainsKey(city)
+                                       select new { city, account };
+                var cityAccountGroups = cityAccountTable.GroupBy(item => item.city).ToList();
+                if (!cityAccountGroups.Any())
+                {
+                    return;
+                }
+
+                this.repairCityToolStripMenuItem.Enabled = false;
+                Parallel.Dispatch(cityAccountGroups, group =>
+                {
+                    string cityIdStr;
+                    if (!this.cityList.TryGetValue(group.Key, out cityIdStr))
+                    {
+                        return;
+                    }
+
+                    var cityId = int.Parse(cityIdStr);
+                    foreach (var account in group)
+                    {
+                        if (!this.RepairCityWall(cityId, account.account))
+                        {
+                            return;
+                        }
+                        Thread.Sleep(1000);
+                    }
+                }).Then(()=>
+                {
+                    MessageBox.Show("所有城市修理完毕.");
+                    this.Invoke(new DoSomething(() => { this.repairCityToolStripMenuItem.Enabled = true; }));
+                });
+            }
         }
 
         private void enlistTroopToolStripMenuItem_Click(object sender, EventArgs e)

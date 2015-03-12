@@ -746,7 +746,7 @@
             return moveTask;
         }
 
-        private void RepairCityWall(int cityId, AccountInfo account)
+        private bool RepairCityWall(int cityId, AccountInfo account)
         {
             this.OpenCityPage(cityId, account.UserName);
             var cityBuildPageData = this.OpenCityBuildPage(cityId, account.UserName);
@@ -754,6 +754,11 @@
 
             var cityRepairWallPageData = this.OpenCityWallPage(cityId, cityBuildPage.Wall.Level, account.UserName);
             var cityRepairWallPage = new TCPage.RepairCityWallPage(cityRepairWallPageData);
+            if (cityRepairWallPage.CompleteRepairNeeds == 0)
+            {
+                return false;
+            }
+
             var brickNumToUse = Math.Min(cityRepairWallPage.BrickNum, cityRepairWallPage.CompleteRepairNeeds);
             if (brickNumToUse > 0)
             {
@@ -763,6 +768,8 @@
                     brickNumToUse,
                     account.UserName);
             }
+
+            return true;
         }
 
         private void ShipBrickMonitorCityWall(ShipBrickTask task)

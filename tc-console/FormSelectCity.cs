@@ -42,5 +42,13 @@ namespace TC
                 );
         }
 
+        private void checkBoxSelecteAllCities_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (ListViewItem lvItem in this.listViewCityList.Items)
+            {
+                lvItem.Checked = this.checkBoxSelecteAllCities.Checked;
+            }
+        }
+
     }
 }
