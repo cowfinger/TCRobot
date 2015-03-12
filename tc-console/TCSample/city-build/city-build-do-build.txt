@@ -1,0 +1,25 @@
+﻿POST http://yw1.tc.9wee.com/index.php?mod=city/build&op=do&func=build&r=0.6462057197642093 HTTP/1.1
+
+pid=1&bid=12&hid=3079835
+
+>[[jslang("endure")]]:</span><span class="zb_color2">500</span><span class="dt">/500</span></p></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>580</span></li><li class="re_s"><span>380</span></li><li class="re_t"><span>710</span></li><li class="re_l"><span>330</span></li></ul></div><div class="time">升级所需基础时间：00:03:25</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">23</span><span class="change"><strong>↑</strong>3</span></p><p><span class="dt">耐久度</span><span class="value">610</span><span class="change"><strong>↑</strong>110</span></p></div></div></div>',
+				'b_673_6':'<div class="build_tip"><h3 class="build_name zb_color2">[[jslang('build_6')]] [[jslang('level', 2)]]</h3><div class="items_des"><p>[[jslang('build_6_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">610</span><span class="dt">/610</span></p><div style="color:#06F917"><p>[[jslang('now_lv_func', jslang('build_tool_6', "4"))]]</p><p>[[jslang('up_lv_func', jslang('build_tool_6', "6"))]]</p></div></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>300</span></li><li class="re_s"><span>380</span></li><li class="re_t"><span>260</span></li><li class="re_l"><span>80</span></li></ul></div><div class="time">升级所需基础时间：00:00:41</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">40</span><span class="change"><strong>↑</strong>5</span></p><p><span class="dt">耐久度</span><span class="value">740</span><span class="change"><strong>↑</strong>130</span></p></div></div></div>',
+			'a':''
+	};
+	window.BUILD_IM_DATA = {
+				'b_1_12':[12,2,25,2440,2440,4,'625d32'],
+				'b_210_9':[9,6,25,1350,1350,'','926da6'],
+				'b_315_5':[5,6,25,2700,2700,'','c83716'],
+				'b_451_8':[8,1,25,500,500,'','7d90ac'],
+				'b_473_16':[16,7,25,1650,1650,125,'9150d0'],
+				'b_537_7':[7,4,25,910,910,'06:36:00','e90464'],
+				'b_541_14':[14,1,25,500,500,'','0bfbd2'],
+				'b_673_6':[6,2,10,610,610,4,'c7e5e0'],
+			'a':''	
+	};
+	window.BUILD_OBJ = new build_sys();
+	city.init_inner_city(img_urls, diy_build);
+	game.current_frame = 2;
+	game.hide_icon();
+		game.get_data("get_re(82298519);get_task(82298519, 1)");task_window.show(true);wee.window.close("build_update_window");
+	</script><script type="text/javascript">wee.$( 'task_do' ).className = '' ;</script><script type="text/javascript">task.is_main_city= 1;task.task_type = 0; task.task_value = 0;</script><script type="text/javascript">task.task_type = '1'; task.task_value = 'mod:city/city|func:update_level|op:do|now_level:2';</script>

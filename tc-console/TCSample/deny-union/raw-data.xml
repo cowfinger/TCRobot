@@ -1,0 +1,1915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<log>
+	<version>1.1</version>
+	<creator>
+		<name>Internet Explorer Network Inspector</name>
+		<version>11.0.9600.17631</version>
+	</creator>
+	<browser>
+		<name>Internet Explorer</name>
+		<version>11.0.9600.17631</version>
+	</browser>
+	<pages>
+		<page>
+			<startedDateTime>2015-03-12T06:21:21.290+08:00</startedDateTime>
+			<id>0</id>
+			<title/>
+			<pageTimings>
+				<onContentLoad>-1</onContentLoad>
+				<onLoad>-1</onLoad>
+			</pageTimings>
+		</page>
+	</pages>
+	<entries>
+		<entry>
+			<pageref>0</pageref>
+			<startedDateTime>2015-03-12T06:21:22.446+08:00</startedDateTime>
+			<time>719</time>
+			<request>
+				<method>GET</method>
+				<url>http://yw1.tc.9wee.com/index.php?mod=influence/influence&amp;op=show&amp;func=influence_info&amp;r=0.20567803761269066</url>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies>
+					<cookie>
+						<name>tmp_session_id</name>
+						<value>aeb639e9f5a0384e878470a6aefd9bb3</value>
+					</cookie>
+					<cookie>
+						<name>tmp_mid</name>
+						<value>67676358</value>
+					</cookie>
+					<cookie>
+						<name>cookie3</name>
+						<value> tmp_set=</value>
+					</cookie>
+					<cookie>
+						<name>cookie4</name>
+						<value> tmp_eye=</value>
+					</cookie>
+					<cookie>
+						<name>cookie5</name>
+						<value> tmp_im=</value>
+					</cookie>
+					<cookie>
+						<name>cookie6</name>
+						<value> tmp_qu=</value>
+					</cookie>
+					<cookie>
+						<name>cookie7</name>
+						<value> tmp_map_s=</value>
+					</cookie>
+					<cookie>
+						<name>cookie8</name>
+						<value> tmp_in_pos=</value>
+					</cookie>
+					<cookie>
+						<name>__utmt</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utmb</name>
+						<value>73958170.1.10.1426141259</value>
+					</cookie>
+					<cookie>
+						<name>loginSession</name>
+						<value>11bffae803fdd5c5da16c0bfe282f192</value>
+					</cookie>
+					<cookie>
+						<name>user_real_birth</name>
+						<value>1989-07-17</value>
+					</cookie>
+					<cookie>
+						<name>sg_passport</name>
+						<value>VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D</value>
+					</cookie>
+					<cookie>
+						<name>task</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>73958170.826942271.1426141259.1426141259.1426141259.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmc</name>
+						<value>73958170</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>93058840.63586168.1424841226.1424841226.1424841226.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/</value>
+					</cookie>
+					<cookie>
+						<name>weeCookie</name>
+						<value>%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</cookie>
+				</cookies>
+				<headers>
+					<header>
+						<name>Accept</name>
+						<value>*/*</value>
+					</header>
+					<header>
+						<name>Referer</name>
+						<value>http://yw1.tc.9wee.com/index.php</value>
+					</header>
+					<header>
+						<name>Accept-Language</name>
+						<value>en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3</value>
+					</header>
+					<header>
+						<name>Accept-Encoding</name>
+						<value>gzip, deflate, peerdist</value>
+					</header>
+					<header>
+						<name>User-Agent</name>
+						<value>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko</value>
+					</header>
+					<header>
+						<name>Host</name>
+						<value>yw1.tc.9wee.com</value>
+					</header>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Pragma</name>
+						<value>no-cache</value>
+					</header>
+					<header>
+						<name>Cookie</name>
+						<value>tmp_session_id=aeb639e9f5a0384e878470a6aefd9bb3; tmp_mid=67676358; tmp_set=; tmp_eye=; tmp_im=; tmp_qu=; tmp_map_s=; tmp_in_pos=; __utmt=1; __utmb=73958170.1.10.1426141259; loginSession=11bffae803fdd5c5da16c0bfe282f192; user_real_birth=1989-07-17; sg_passport=VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D; task=1; __utma=73958170.826942271.1426141259.1426141259.1426141259.1; __utmc=73958170; __utmz=73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=93058840.63586168.1424841226.1424841226.1424841226.1; __utmz=93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/; weeCookie=%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDist</name>
+						<value>Version=1.1</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDistEx</name>
+						<value>MinContentInformation=1.0, MaxContentInformation=1.0</value>
+					</header>
+				</headers>
+				<queryString>
+					<param>
+						<name>mod</name>
+						<value>influence/influence</value>
+					</param>
+					<param>
+						<name>op</name>
+						<value>show</value>
+					</param>
+					<param>
+						<name>func</name>
+						<value>influence_info</value>
+					</param>
+					<param>
+						<name>r</name>
+						<value>0.20567803761269066</value>
+					</param>
+				</queryString>
+				<headersSize>2551</headersSize>
+				<bodySize>0</bodySize>
+			</request>
+			<response>
+				<status>200</status>
+				<statusText>OK</statusText>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies/>
+				<headers>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Transfer-Encoding</name>
+						<value>chunked</value>
+					</header>
+					<header>
+						<name>Via</name>
+						<value>1.1 TK5-PRXY-22</value>
+					</header>
+					<header>
+						<name>Date</name>
+						<value>Thu, 12 Mar 2015 06:21:23 GMT</value>
+					</header>
+					<header>
+						<name>Content-Type</name>
+						<value>text/html; charset=utf-8</value>
+					</header>
+					<header>
+						<name>Server</name>
+						<value>CWS/1.9.9</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>X-UA-Compatible</name>
+						<value>IE=EmulateIE7</value>
+					</header>
+					<header>
+						<name>P3P</name>
+						<value>CP="CAO DSP COR CUR ADM DEV TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE GOV"</value>
+					</header>
+					<header>
+						<name>Cache-Control</name>
+						<value>private</value>
+					</header>
+					<header>
+						<name>Powered-By-ChinaCache</name>
+						<value>MISS from 2508521333</value>
+					</header>
+				</headers>
+				<content>
+					<size>2432</size>
+					<mimeType>text/html; charset=utf-8</mimeType>
+					<text>
+	&lt;!--开始--&gt;
+	&lt;div class="power"&gt;
+		&lt;!--联盟--&gt;
+		&lt;div class="title"&gt;势力&lt;/div&gt;
+		&lt;div class="close"&gt;&lt;a href="javascript:void(0);" onclick="wee.window.close();"&gt;&lt;/a&gt;&lt;/div&gt;
+		&lt;div class="tab"&gt;
+			&lt;ul&gt;
+			&lt;li&gt;&lt;a class="on" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_info', 2, true, true, 'influence_info_w');"&gt;势力信息&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a  href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/science&amp;op=show&amp;func=science', 2, true, true, 'influence_info_w');"&gt;势力科技&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a   href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_member', 2, true, true, 'influence_info_w');"&gt;势力人事&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a  href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_war', 2, true, true, 'influence_info_w');"&gt;战争日志&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a  href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_log', 2, true, true, 'influence_info_w');"&gt;势力动态&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a  href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_city', 2, true, true, 'influence_info_w');"&gt;势力城池&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a  href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_city_army', 2, true, true, 'influence_info_w');"&gt;我的军队&lt;/a&gt;&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/div&gt;
+		&lt;div class="menu_dialog_con"&gt;
+			&lt;div class="union_con"&gt;
+				&lt;div class="union_3"&gt;
+										&lt;div class="union_left"&gt;
+						&lt;div class="union_logo"&gt;
+							&lt;img id="influence_pic" width="119px" height="124px" src="http://uploadstatic.tc.9wee.com/default.jpg" /&gt;
+						&lt;/div&gt;
+						&lt;div class="button2 button"&gt;
+							&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_edit_pic', 3, true, true, 'influence_edit');"&gt;&lt;span&gt;势力图片编辑&lt;/span&gt;&lt;/a&gt;						&lt;/div&gt;
+					&lt;/div&gt;
+
+					&lt;div class="union_3_right"&gt;
+						&lt;div class="union_info"&gt;
+							&lt;div class="conhead"&gt;
+								&lt;h3&gt;&lt;span&gt;势力信息&lt;/span&gt;&lt;/h3&gt;
+							&lt;/div&gt;
+							&lt;div class="itable conbody"&gt;
+								&lt;table width="100%" cellspacing="0" cellpadding="0" border="0"&gt;
+									&lt;tbody&gt;
+										&lt;tr&gt;
+											&lt;td&gt;势力名称&lt;/td&gt;
+											&lt;td&gt;黄人&lt;/td&gt;
+											&lt;td&gt;势力声望&lt;/td&gt;
+											&lt;td&gt;820&lt;/td&gt;
+											&lt;td&gt;势力等级&lt;/td&gt;
+											&lt;td&gt;3&lt;/td&gt;
+										&lt;/tr&gt;
+										&lt;tr&gt;
+											&lt;td width="14%"&gt;势力都城&lt;/td&gt;
+											&lt;td width="20%"&gt;吴郡&lt;/td&gt;
+											&lt;td width="16%"&gt;势力城池数&lt;/td&gt;
+											&lt;td width="19%"&gt; 14 &lt;/td&gt;
+											&lt;td width="17%"&gt;势力人数&lt;/td&gt;
+											&lt;td width="14%"&gt;525&lt;/td&gt;
+										&lt;/tr&gt;
+										&lt;tr&gt;
+											&lt;td&gt;创始联盟&lt;/td&gt;
+											&lt;td&gt;黄人联盟&lt;/td&gt;
+											&lt;td&gt;势力主 &lt;/td&gt;
+											&lt;td&gt;我是一只小小鸟&lt;/td&gt;
+											&lt;td&gt;势力联盟数&lt;/td&gt;
+											&lt;td&gt;6&lt;/td&gt;
+										&lt;/tr&gt;
+									&lt;/tbody&gt;
+								&lt;/table&gt;
+							&lt;/div&gt;
+						&lt;/div&gt;
+						&lt;div class="union_xuanyan"&gt;
+							&lt;div class="tab01 rel"&gt;
+								&lt;ul&gt;
+									&lt;li&gt;&lt;a href="javascript:void(0);" id="x_y" class="on" onclick="influence.change_notice('x_y');"&gt;&lt;span&gt;势力宣言&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+									&lt;li&gt;&lt;a href="javascript:void(0);" id="g_g" onclick="influence.change_notice('g_g');"&gt;&lt;span&gt;势力公告&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+								&lt;/ul&gt;
+		&lt;div class="button5" style="position:absolute; right:10px; top:3px;"&gt;&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_edit_notice&amp;action=manifestto', 3, true, true, 'influence_edit');"&gt;&lt;span&gt;编辑宣言&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class="button5" style="position:absolute; right:80px; top:3px;"&gt;&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_edit_notice&amp;action=notice', 3, true, true, 'influence_edit');"&gt;&lt;span&gt;编辑公告&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;							&lt;/div&gt;
+							&lt;div class="out_box conbody" id="xuanyan" style="display:block;"&gt;
+								&lt;div class="in_box"&gt;&lt;/div&gt;
+							&lt;/div&gt;
+							&lt;div class="out_box conbody" id="gonggao" style="display:none;"&gt;
+								&lt;div class="in_box"&gt;&lt;/div&gt;
+							&lt;/div&gt;
+						&lt;/div&gt;
+						&lt;div class="union_manage"&gt;
+							&lt;div class="conhead"&gt;
+								&lt;h3&gt;&lt;span&gt;势力管理&lt;/span&gt;&lt;/h3&gt;
+							&lt;/div&gt;
+							&lt;div class="button2"&gt;
+								&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_manage', 3, true, true, '_influence_member_manage_');"&gt;&lt;span&gt;人事管理&lt;/span&gt;&lt;/a&gt;
+								&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_election', 3, true, true, '_influence_election_');"&gt;&lt;span&gt;势力选举&lt;/span&gt;&lt;/a&gt;
+								&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=influence_updates', 3, true, true, '_influence_update_level_');"&gt;&lt;span&gt;升级势力&lt;/span&gt;&lt;/a&gt;								&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=check_member', 3, true, true, '_influence_check_member_');"&gt;&lt;span&gt;邀请联盟&lt;/span&gt;&lt;/a&gt;								&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=jingong', 3, true, true, '_influence_jingong_');"&gt;&lt;span&gt;势力外交&lt;/span&gt;&lt;/a&gt;								&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=change_influence', 3, true, true, '_change_influence_');"&gt;&lt;span&gt;转让势力&lt;/span&gt;&lt;/a&gt;								&lt;a href="javascript:void(0);" onclick="wee.window.confirm('确定要解散势力吗?', function(){wee.ajax.get('index.php?mod=influence/influence&amp;op=do&amp;func=dismiss_influence')}, wee.empty, 0, '解散');"&gt;&lt;span&gt;解散势力&lt;/span&gt;&lt;/a&gt;								&lt;a href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=move_capital', 3, true, true, '_move_capital_');"&gt;&lt;span&gt;迁都&lt;/span&gt;&lt;/a&gt;								&lt;a class="disabled" href="javascript:void(0);"&gt;&lt;span&gt;退出势力&lt;/span&gt;&lt;/a&gt;							&lt;/div&gt;
+						&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;!--结束--&gt;
+</text>
+				</content>
+				<redirectionURL/>
+				<headersSize>531</headersSize>
+				<bodySize>2432</bodySize>
+			</response>
+			<cache/>
+			<timings>
+				<send>0</send>
+				<wait>531</wait>
+				<receive>188</receive>
+			</timings>
+		</entry>
+		<entry>
+			<pageref>0</pageref>
+			<startedDateTime>2015-03-12T06:21:26.337+08:00</startedDateTime>
+			<time>422</time>
+			<request>
+				<method>GET</method>
+				<url>http://yw1.tc.9wee.com/index.php?mod=influence/influence&amp;op=show&amp;func=check_member&amp;r=0.8987722551931722</url>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies>
+					<cookie>
+						<name>tmp_session_id</name>
+						<value>aeb639e9f5a0384e878470a6aefd9bb3</value>
+					</cookie>
+					<cookie>
+						<name>tmp_mid</name>
+						<value>67676358</value>
+					</cookie>
+					<cookie>
+						<name>cookie3</name>
+						<value> tmp_set=</value>
+					</cookie>
+					<cookie>
+						<name>cookie4</name>
+						<value> tmp_eye=</value>
+					</cookie>
+					<cookie>
+						<name>cookie5</name>
+						<value> tmp_im=</value>
+					</cookie>
+					<cookie>
+						<name>cookie6</name>
+						<value> tmp_qu=</value>
+					</cookie>
+					<cookie>
+						<name>cookie7</name>
+						<value> tmp_map_s=</value>
+					</cookie>
+					<cookie>
+						<name>cookie8</name>
+						<value> tmp_in_pos=</value>
+					</cookie>
+					<cookie>
+						<name>__utmt</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utmb</name>
+						<value>73958170.1.10.1426141259</value>
+					</cookie>
+					<cookie>
+						<name>loginSession</name>
+						<value>11bffae803fdd5c5da16c0bfe282f192</value>
+					</cookie>
+					<cookie>
+						<name>user_real_birth</name>
+						<value>1989-07-17</value>
+					</cookie>
+					<cookie>
+						<name>sg_passport</name>
+						<value>VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D</value>
+					</cookie>
+					<cookie>
+						<name>task</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>73958170.826942271.1426141259.1426141259.1426141259.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmc</name>
+						<value>73958170</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>93058840.63586168.1424841226.1424841226.1424841226.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/</value>
+					</cookie>
+					<cookie>
+						<name>weeCookie</name>
+						<value>%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</cookie>
+				</cookies>
+				<headers>
+					<header>
+						<name>Accept</name>
+						<value>*/*</value>
+					</header>
+					<header>
+						<name>Referer</name>
+						<value>http://yw1.tc.9wee.com/index.php</value>
+					</header>
+					<header>
+						<name>Accept-Language</name>
+						<value>en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3</value>
+					</header>
+					<header>
+						<name>Accept-Encoding</name>
+						<value>gzip, deflate, peerdist</value>
+					</header>
+					<header>
+						<name>User-Agent</name>
+						<value>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko</value>
+					</header>
+					<header>
+						<name>Host</name>
+						<value>yw1.tc.9wee.com</value>
+					</header>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Pragma</name>
+						<value>no-cache</value>
+					</header>
+					<header>
+						<name>Cookie</name>
+						<value>tmp_session_id=aeb639e9f5a0384e878470a6aefd9bb3; tmp_mid=67676358; tmp_set=; tmp_eye=; tmp_im=; tmp_qu=; tmp_map_s=; tmp_in_pos=; __utmt=1; __utmb=73958170.1.10.1426141259; loginSession=11bffae803fdd5c5da16c0bfe282f192; user_real_birth=1989-07-17; sg_passport=VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D; task=1; __utma=73958170.826942271.1426141259.1426141259.1426141259.1; __utmc=73958170; __utmz=73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=93058840.63586168.1424841226.1424841226.1424841226.1; __utmz=93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/; weeCookie=%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDist</name>
+						<value>Version=1.1</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDistEx</name>
+						<value>MinContentInformation=1.0, MaxContentInformation=1.0</value>
+					</header>
+				</headers>
+				<queryString>
+					<param>
+						<name>mod</name>
+						<value>influence/influence</value>
+					</param>
+					<param>
+						<name>op</name>
+						<value>show</value>
+					</param>
+					<param>
+						<name>func</name>
+						<value>check_member</value>
+					</param>
+					<param>
+						<name>r</name>
+						<value>0.8987722551931722</value>
+					</param>
+				</queryString>
+				<headersSize>2548</headersSize>
+				<bodySize>0</bodySize>
+			</request>
+			<response>
+				<status>200</status>
+				<statusText>OK</statusText>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies/>
+				<headers>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Transfer-Encoding</name>
+						<value>chunked</value>
+					</header>
+					<header>
+						<name>Via</name>
+						<value>1.1 TK5-PRXY-22</value>
+					</header>
+					<header>
+						<name>Date</name>
+						<value>Thu, 12 Mar 2015 06:21:26 GMT</value>
+					</header>
+					<header>
+						<name>Content-Type</name>
+						<value>text/html; charset=utf-8</value>
+					</header>
+					<header>
+						<name>Server</name>
+						<value>CWS/1.9.9</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>X-UA-Compatible</name>
+						<value>IE=EmulateIE7</value>
+					</header>
+					<header>
+						<name>P3P</name>
+						<value>CP="CAO DSP COR CUR ADM DEV TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE GOV"</value>
+					</header>
+					<header>
+						<name>Cache-Control</name>
+						<value>private</value>
+					</header>
+					<header>
+						<name>Powered-By-ChinaCache</name>
+						<value>MISS from 2508521333</value>
+					</header>
+				</headers>
+				<content>
+					<size>1285</size>
+					<mimeType>text/html; charset=utf-8</mimeType>
+					<text>
+						&lt;!--开始--&gt;
+						&lt;div class="title"&gt;添加成员&lt;/div&gt;
+						&lt;div class="close"&gt;&lt;a href="javascript:void(0);" onclick="wee.window.close();"&gt;&lt;/a&gt;&lt;/div&gt;
+						&lt;div class="power_add"&gt;
+							&lt;div class="add_input"&gt;
+								请输入招募对象： &lt;input class="input01" type="text" style="width:95px" id="union_name" /&gt; &lt;span class="button1"&gt;&lt;a href="javascript:void(0);" onclick="var name = encodeURIComponent( wee.$('union_name').value ); if( name == '' ) { wee.window.alert('请输入您想邀请的联盟名称'); return false;} wee.ajax.get('index.php?mod=influence/influence&amp;op=do&amp;func=recruit_member&amp;union_name='+ name );	"&gt;&lt;span&gt;邀请&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;
+							&lt;/div&gt;
+							&lt;div class="add_player"&gt;
+								&lt;div class="tab01"&gt;
+									&lt;ul&gt;
+										&lt;li&gt;&lt;a class="on" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=check_member', 3, true, true, '_influence_check_member_');"&gt;&lt;span&gt;申请加入的联盟&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+										&lt;li&gt;&lt;a class="" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=check_member&amp;invite_flag=1', 3, true, true, '_influence_check_member_');"&gt;&lt;span&gt;正在邀请的联盟&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+									&lt;/ul&gt;
+								&lt;/div&gt;
+								&lt;div class="add_union_con conbody"&gt;
+									&lt;div class="table"&gt;
+										&lt;table width="100%" cellpadding="0" cellspacing="0" border="0"&gt;
+											&lt;thead&gt;
+												&lt;tr&gt;
+													&lt;th&gt;&lt;label&gt;&lt;input type="checkbox" onclick="influence.choose_member();" /&gt;全选&lt;/label&gt;&lt;/th&gt;
+													&lt;th&gt;联盟名称&lt;/th&gt;
+													&lt;th&gt;盟主名称&lt;/th&gt;
+													&lt;th&gt;联盟等级&lt;/th&gt;
+													&lt;th&gt;联盟人数&lt;/th&gt;
+													&lt;th colspan="2"&gt;操作&lt;/th&gt;
+												&lt;/tr&gt;
+											&lt;/thead&gt;
+											&lt;tbody id="check_member_list"&gt;
+																								&lt;tr&gt;
+													&lt;td&gt;&lt;input type="checkbox" value="22616" /&gt;&lt;/td&gt;
+													&lt;td&gt;自由行&lt;/td&gt;
+													&lt;td&gt;秦楚&lt;/td&gt;
+													&lt;td&gt;1&lt;/td&gt;
+													&lt;td&gt;2&lt;/td&gt;
+																										&lt;td&gt;&lt;div class="button5"&gt;&lt;a href="javascript:void(0);" onclick="wee.ajax.get('index.php?mod=influence/influence&amp;op=do&amp;func=check_member&amp;action=pass&amp;union_id='+22616);"&gt;&lt;span&gt;批准&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+													&lt;td&gt;&lt;div class="button5"&gt;&lt;a href="javascript:void(0);" onclick="wee.ajax.get('index.php?mod=influence/influence&amp;op=do&amp;func=check_member&amp;action=refuse&amp;union_id='+22616);"&gt;&lt;span&gt;拒绝&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+																									&lt;/tr&gt;
+																								&lt;tr&gt;
+													&lt;td&gt;&lt;input type="checkbox" value="22754" /&gt;&lt;/td&gt;
+													&lt;td&gt;无忧无虑&lt;/td&gt;
+													&lt;td&gt;lysh00081&lt;/td&gt;
+													&lt;td&gt;2&lt;/td&gt;
+													&lt;td&gt;2&lt;/td&gt;
+																										&lt;td&gt;&lt;div class="button5"&gt;&lt;a href="javascript:void(0);" onclick="wee.ajax.get('index.php?mod=influence/influence&amp;op=do&amp;func=check_member&amp;action=pass&amp;union_id='+22754);"&gt;&lt;span&gt;批准&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+													&lt;td&gt;&lt;div class="button5"&gt;&lt;a href="javascript:void(0);" onclick="wee.ajax.get('index.php?mod=influence/influence&amp;op=do&amp;func=check_member&amp;action=refuse&amp;union_id='+22754);"&gt;&lt;span&gt;拒绝&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+																									&lt;/tr&gt;
+																								&lt;tr&gt;
+													&lt;td&gt;&lt;input type="checkbox" value="2551" /&gt;&lt;/td&gt;
+													&lt;td&gt;青青草原&lt;/td&gt;
+													&lt;td&gt;lysh0013&lt;/td&gt;
+													&lt;td&gt;7&lt;/td&gt;
+													&lt;td&gt;6&lt;/td&gt;
+																										&lt;td&gt;&lt;div class="button5"&gt;&lt;a href="javascript:void(0);" onclick="wee.ajax.get('index.php?mod=influence/influence&amp;op=do&amp;func=check_member&amp;action=pass&amp;union_id='+2551);"&gt;&lt;span&gt;批准&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+													&lt;td&gt;&lt;div class="button5"&gt;&lt;a href="javascript:void(0);" onclick="wee.ajax.get('index.php?mod=influence/influence&amp;op=do&amp;func=check_member&amp;action=refuse&amp;union_id='+2551);"&gt;&lt;span&gt;拒绝&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+																									&lt;/tr&gt;
+																								
+											&lt;/tbody&gt;
+										&lt;/table&gt;
+									&lt;/div&gt;
+									&lt;div class="page_bottom"&gt;
+										&lt;div class="fl button2"&gt;
+																						&lt;a href="javascript:void(0);" onclick="influence.check_member('pass');"&gt;&lt;span&gt;批准&lt;/span&gt;&lt;/a&gt;
+											&lt;a href="javascript:void(0);" onclick="influence.check_member('refuse');"&gt;&lt;span&gt;拒绝&lt;/span&gt;&lt;/a&gt;
+																					&lt;/div&gt;
+										&lt;div class="TC_page button1"&gt;
+											 &lt;a href="javascript:void(0);" class="disabled"&gt;&lt;span&gt;首页&lt;/span&gt;&lt;/a&gt; &lt;a href="javascript:void(0);" class="disabled"&gt;&lt;span&gt;上一页&lt;/span&gt;&lt;/a&gt;  &lt;span class="page_on"&gt;1/1&lt;/span&gt;  &lt;a href="javascript:void(0);" class="disabled"&gt;&lt;span&gt;下一页&lt;/span&gt;&lt;/a&gt; &lt;a href="javascript:void(0);" class="disabled"&gt;&lt;span&gt;末页&lt;/span&gt;&lt;/a&gt;  &lt;input id="jump_page" type="text" class="input01" onpaste="return false;" value="1" onkeyup="if(!/^(\-?)(\d+)$/.test(this.value)) { this.value=1; }" style="width:40px" /&gt; &lt;a href="javascript:void(0);" onclick="prop.hide_deop_menu();wee.ajax.load('index.php?mod=influence/influence&amp;op=show&amp;func=check_member&amp;invite_flag=0&amp;page='+ wee.$('jump_page').value, '_influence_check_member_')"&gt;&lt;span&gt;跳转&lt;/span&gt;&lt;/a&gt; 
+										&lt;/div&gt;
+									&lt;/div&gt;
+								&lt;/div&gt;
+							&lt;/div&gt;
+						&lt;/div&gt;
+						&lt;!--结束--&gt;
+				</text>
+				</content>
+				<redirectionURL/>
+				<headersSize>531</headersSize>
+				<bodySize>1285</bodySize>
+			</response>
+			<cache/>
+			<timings>
+				<send>0</send>
+				<wait>390</wait>
+				<receive>32</receive>
+			</timings>
+		</entry>
+		<entry>
+			<pageref>0</pageref>
+			<startedDateTime>2015-03-12T06:21:27.181+08:00</startedDateTime>
+			<time>406</time>
+			<request>
+				<method>POST</method>
+				<url>http://yw1.tc.9wee.com/index.php?mod=get_data&amp;op=do&amp;r=0.6376564869467991</url>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies>
+					<cookie>
+						<name>tmp_session_id</name>
+						<value>aeb639e9f5a0384e878470a6aefd9bb3</value>
+					</cookie>
+					<cookie>
+						<name>tmp_mid</name>
+						<value>67676358</value>
+					</cookie>
+					<cookie>
+						<name>cookie3</name>
+						<value> tmp_set=</value>
+					</cookie>
+					<cookie>
+						<name>cookie4</name>
+						<value> tmp_eye=</value>
+					</cookie>
+					<cookie>
+						<name>cookie5</name>
+						<value> tmp_im=</value>
+					</cookie>
+					<cookie>
+						<name>cookie6</name>
+						<value> tmp_qu=</value>
+					</cookie>
+					<cookie>
+						<name>cookie7</name>
+						<value> tmp_map_s=</value>
+					</cookie>
+					<cookie>
+						<name>cookie8</name>
+						<value> tmp_in_pos=</value>
+					</cookie>
+					<cookie>
+						<name>__utmt</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utmb</name>
+						<value>73958170.1.10.1426141259</value>
+					</cookie>
+					<cookie>
+						<name>loginSession</name>
+						<value>11bffae803fdd5c5da16c0bfe282f192</value>
+					</cookie>
+					<cookie>
+						<name>user_real_birth</name>
+						<value>1989-07-17</value>
+					</cookie>
+					<cookie>
+						<name>sg_passport</name>
+						<value>VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D</value>
+					</cookie>
+					<cookie>
+						<name>task</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>73958170.826942271.1426141259.1426141259.1426141259.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmc</name>
+						<value>73958170</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>93058840.63586168.1424841226.1424841226.1424841226.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/</value>
+					</cookie>
+					<cookie>
+						<name>weeCookie</name>
+						<value>%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</cookie>
+				</cookies>
+				<headers>
+					<header>
+						<name>Accept</name>
+						<value>*/*</value>
+					</header>
+					<header>
+						<name>Content-Type</name>
+						<value>application/x-www-form-urlencoded</value>
+					</header>
+					<header>
+						<name>Referer</name>
+						<value>http://yw1.tc.9wee.com/index.php</value>
+					</header>
+					<header>
+						<name>Accept-Language</name>
+						<value>en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3</value>
+					</header>
+					<header>
+						<name>Accept-Encoding</name>
+						<value>gzip, deflate</value>
+					</header>
+					<header>
+						<name>User-Agent</name>
+						<value>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko</value>
+					</header>
+					<header>
+						<name>Host</name>
+						<value>yw1.tc.9wee.com</value>
+					</header>
+					<header>
+						<name>Content-Length</name>
+						<value>44</value>
+					</header>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Pragma</name>
+						<value>no-cache</value>
+					</header>
+					<header>
+						<name>Cookie</name>
+						<value>tmp_session_id=aeb639e9f5a0384e878470a6aefd9bb3; tmp_mid=67676358; tmp_set=; tmp_eye=; tmp_im=; tmp_qu=; tmp_map_s=; tmp_in_pos=; __utmt=1; __utmb=73958170.1.10.1426141259; loginSession=11bffae803fdd5c5da16c0bfe282f192; user_real_birth=1989-07-17; sg_passport=VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D; task=1; __utma=73958170.826942271.1426141259.1426141259.1426141259.1; __utmc=73958170; __utmz=73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=93058840.63586168.1424841226.1424841226.1424841226.1; __utmz=93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/; weeCookie=%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</header>
+				</headers>
+				<queryString>
+					<param>
+						<name>mod</name>
+						<value>get_data</value>
+					</param>
+					<param>
+						<name>op</name>
+						<value>do</value>
+					</param>
+					<param>
+						<name>r</name>
+						<value>0.6376564869467991</value>
+					</param>
+				</queryString>
+				<postData>
+					<mimeType>application/x-www-form-urlencoded</mimeType>
+					<text>module=%7B%22military%22%3A%2267676358%22%7D</text>
+				</postData>
+				<headersSize>2476</headersSize>
+				<bodySize>44</bodySize>
+			</request>
+			<response>
+				<status>200</status>
+				<statusText>OK</statusText>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies/>
+				<headers>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Transfer-Encoding</name>
+						<value>chunked</value>
+					</header>
+					<header>
+						<name>Via</name>
+						<value>1.1 TK5-PRXY-22</value>
+					</header>
+					<header>
+						<name>Date</name>
+						<value>Thu, 12 Mar 2015 06:21:27 GMT</value>
+					</header>
+					<header>
+						<name>Content-Type</name>
+						<value>text/html; charset=utf-8</value>
+					</header>
+					<header>
+						<name>Server</name>
+						<value>CWS/1.9.9</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>X-UA-Compatible</name>
+						<value>IE=EmulateIE7</value>
+					</header>
+					<header>
+						<name>P3P</name>
+						<value>CP="CAO DSP COR CUR ADM DEV TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE GOV"</value>
+					</header>
+					<header>
+						<name>Cache-Control</name>
+						<value>private</value>
+					</header>
+					<header>
+						<name>Powered-By-ChinaCache</name>
+						<value>MISS from 2508521333</value>
+					</header>
+				</headers>
+				<content>
+					<size>115</size>
+					<mimeType>text/html; charset=utf-8</mimeType>
+					<text>{"military":{"67676358":{"3":[{"starttime":3894,"endtime":1426141622,"queue_num":51,"dictate":100,"tid":839830}]}}}</text>
+				</content>
+				<redirectionURL/>
+				<headersSize>531</headersSize>
+				<bodySize>115</bodySize>
+			</response>
+			<cache/>
+			<timings>
+				<send>15</send>
+				<wait>391</wait>
+				<receive>0</receive>
+			</timings>
+		</entry>
+		<entry>
+			<pageref>0</pageref>
+			<startedDateTime>2015-03-12T06:21:27.181+08:00</startedDateTime>
+			<time>531</time>
+			<request>
+				<method>GET</method>
+				<url>http://yw1.tc.9wee.com/index.php?mod=city/city&amp;op=do&amp;func=get_user_flag&amp;r=0.08040898054613382</url>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies>
+					<cookie>
+						<name>tmp_session_id</name>
+						<value>aeb639e9f5a0384e878470a6aefd9bb3</value>
+					</cookie>
+					<cookie>
+						<name>tmp_mid</name>
+						<value>67676358</value>
+					</cookie>
+					<cookie>
+						<name>cookie3</name>
+						<value> tmp_set=</value>
+					</cookie>
+					<cookie>
+						<name>cookie4</name>
+						<value> tmp_eye=</value>
+					</cookie>
+					<cookie>
+						<name>cookie5</name>
+						<value> tmp_im=</value>
+					</cookie>
+					<cookie>
+						<name>cookie6</name>
+						<value> tmp_qu=</value>
+					</cookie>
+					<cookie>
+						<name>cookie7</name>
+						<value> tmp_map_s=</value>
+					</cookie>
+					<cookie>
+						<name>cookie8</name>
+						<value> tmp_in_pos=</value>
+					</cookie>
+					<cookie>
+						<name>__utmt</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utmb</name>
+						<value>73958170.1.10.1426141259</value>
+					</cookie>
+					<cookie>
+						<name>loginSession</name>
+						<value>11bffae803fdd5c5da16c0bfe282f192</value>
+					</cookie>
+					<cookie>
+						<name>user_real_birth</name>
+						<value>1989-07-17</value>
+					</cookie>
+					<cookie>
+						<name>sg_passport</name>
+						<value>VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D</value>
+					</cookie>
+					<cookie>
+						<name>task</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>73958170.826942271.1426141259.1426141259.1426141259.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmc</name>
+						<value>73958170</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>93058840.63586168.1424841226.1424841226.1424841226.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/</value>
+					</cookie>
+					<cookie>
+						<name>weeCookie</name>
+						<value>%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</cookie>
+				</cookies>
+				<headers>
+					<header>
+						<name>Accept</name>
+						<value>*/*</value>
+					</header>
+					<header>
+						<name>Referer</name>
+						<value>http://yw1.tc.9wee.com/index.php</value>
+					</header>
+					<header>
+						<name>Accept-Language</name>
+						<value>en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3</value>
+					</header>
+					<header>
+						<name>Accept-Encoding</name>
+						<value>gzip, deflate, peerdist</value>
+					</header>
+					<header>
+						<name>User-Agent</name>
+						<value>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko</value>
+					</header>
+					<header>
+						<name>Host</name>
+						<value>yw1.tc.9wee.com</value>
+					</header>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Pragma</name>
+						<value>no-cache</value>
+					</header>
+					<header>
+						<name>Cookie</name>
+						<value>tmp_session_id=aeb639e9f5a0384e878470a6aefd9bb3; tmp_mid=67676358; tmp_set=; tmp_eye=; tmp_im=; tmp_qu=; tmp_map_s=; tmp_in_pos=; __utmt=1; __utmb=73958170.1.10.1426141259; loginSession=11bffae803fdd5c5da16c0bfe282f192; user_real_birth=1989-07-17; sg_passport=VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D; task=1; __utma=73958170.826942271.1426141259.1426141259.1426141259.1; __utmc=73958170; __utmz=73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=93058840.63586168.1424841226.1424841226.1424841226.1; __utmz=93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/; weeCookie=%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDist</name>
+						<value>Version=1.1</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDistEx</name>
+						<value>MinContentInformation=1.0, MaxContentInformation=1.0</value>
+					</header>
+				</headers>
+				<queryString>
+					<param>
+						<name>mod</name>
+						<value>city/city</value>
+					</param>
+					<param>
+						<name>op</name>
+						<value>do</value>
+					</param>
+					<param>
+						<name>func</name>
+						<value>get_user_flag</value>
+					</param>
+					<param>
+						<name>r</name>
+						<value>0.08040898054613382</value>
+					</param>
+				</queryString>
+				<headersSize>2538</headersSize>
+				<bodySize>0</bodySize>
+			</request>
+			<response>
+				<status>200</status>
+				<statusText>OK</statusText>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies/>
+				<headers>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Transfer-Encoding</name>
+						<value>chunked</value>
+					</header>
+					<header>
+						<name>Via</name>
+						<value>1.1 TK5-PRXY-22</value>
+					</header>
+					<header>
+						<name>Date</name>
+						<value>Thu, 12 Mar 2015 06:21:27 GMT</value>
+					</header>
+					<header>
+						<name>Content-Type</name>
+						<value>text/html; charset=utf-8</value>
+					</header>
+					<header>
+						<name>Server</name>
+						<value>CWS/1.9.9</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>X-UA-Compatible</name>
+						<value>IE=EmulateIE7</value>
+					</header>
+					<header>
+						<name>P3P</name>
+						<value>CP="CAO DSP COR CUR ADM DEV TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE GOV"</value>
+					</header>
+					<header>
+						<name>Cache-Control</name>
+						<value>private</value>
+					</header>
+					<header>
+						<name>Powered-By-ChinaCache</name>
+						<value>MISS from 2508521333</value>
+					</header>
+				</headers>
+				<content>
+					<size>7</size>
+					<mimeType>text/html; charset=utf-8</mimeType>
+					<text>[0,1,0]</text>
+				</content>
+				<redirectionURL/>
+				<headersSize>531</headersSize>
+				<bodySize>7</bodySize>
+			</response>
+			<cache/>
+			<timings>
+				<send>0</send>
+				<wait>515</wait>
+				<receive>16</receive>
+			</timings>
+		</entry>
+		<entry>
+			<pageref>0</pageref>
+			<startedDateTime>2015-03-12T06:21:28.649+08:00</startedDateTime>
+			<time>469</time>
+			<request>
+				<method>GET</method>
+				<url>http://i.9wee.com/interface/api_webim.php?_t=0.47215704575267764&amp;act=getSysMsg&amp;callback=fun_8272748231986250257</url>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies>
+					<cookie>
+						<name>weeCookie</name>
+						<value>%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</cookie>
+				</cookies>
+				<headers>
+					<header>
+						<name>Accept</name>
+						<value>application/javascript, */*;q=0.8</value>
+					</header>
+					<header>
+						<name>Referer</name>
+						<value>http://yw1.tc.9wee.com/index.php</value>
+					</header>
+					<header>
+						<name>Accept-Language</name>
+						<value>en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3</value>
+					</header>
+					<header>
+						<name>User-Agent</name>
+						<value>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko</value>
+					</header>
+					<header>
+						<name>Accept-Encoding</name>
+						<value>gzip, deflate, peerdist</value>
+					</header>
+					<header>
+						<name>Host</name>
+						<value>i.9wee.com</value>
+					</header>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Pragma</name>
+						<value>no-cache</value>
+					</header>
+					<header>
+						<name>Cookie</name>
+						<value>weeCookie=%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDist</name>
+						<value>Version=1.1</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDistEx</name>
+						<value>MinContentInformation=1.0, MaxContentInformation=1.0</value>
+					</header>
+				</headers>
+				<queryString>
+					<param>
+						<name>_t</name>
+						<value>0.47215704575267764</value>
+					</param>
+					<param>
+						<name>act</name>
+						<value>getSysMsg</value>
+					</param>
+					<param>
+						<name>callback</name>
+						<value>fun_8272748231986250257</value>
+					</param>
+				</queryString>
+				<headersSize>891</headersSize>
+				<bodySize>0</bodySize>
+			</request>
+			<response>
+				<status>200</status>
+				<statusText>OK</statusText>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies/>
+				<headers>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Transfer-Encoding</name>
+						<value>chunked</value>
+					</header>
+					<header>
+						<name>Via</name>
+						<value>1.1 TK5-PRXY-22</value>
+					</header>
+					<header>
+						<name>Date</name>
+						<value>Thu, 12 Mar 2015 06:19:29 GMT</value>
+					</header>
+					<header>
+						<name>Content-Type</name>
+						<value>text/html; charset=utf-8</value>
+					</header>
+					<header>
+						<name>Server</name>
+						<value>nginx</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>P3P</name>
+						<value>CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"</value>
+					</header>
+				</headers>
+				<content>
+					<size>171</size>
+					<mimeType>text/html; charset=utf-8</mimeType>
+					<text>clearInterval(wee_sns_live.checkMsgThread);wee_sns_live.checkMsgThread=setInterval(function(){wee_sns_live.checkSysWithNoAccount()},294955);fun_8272748231986250257(false);</text>
+				</content>
+				<redirectionURL/>
+				<headersSize>330</headersSize>
+				<bodySize>171</bodySize>
+			</response>
+			<cache/>
+			<timings>
+				<send>0</send>
+				<wait>469</wait>
+				<receive>0</receive>
+			</timings>
+		</entry>
+		<entry>
+			<pageref>0</pageref>
+			<startedDateTime>2015-03-12T06:21:30.306+08:00</startedDateTime>
+			<time>468</time>
+			<request>
+				<method>GET</method>
+				<url>http://yw1.tc.9wee.com/index.php?mod=influence/influence&amp;op=do&amp;func=check_member&amp;action=pass&amp;union_id=22616|22754|2551&amp;r=0.43431189023887434</url>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies>
+					<cookie>
+						<name>tmp_session_id</name>
+						<value>aeb639e9f5a0384e878470a6aefd9bb3</value>
+					</cookie>
+					<cookie>
+						<name>tmp_mid</name>
+						<value>67676358</value>
+					</cookie>
+					<cookie>
+						<name>cookie3</name>
+						<value> tmp_set=</value>
+					</cookie>
+					<cookie>
+						<name>cookie4</name>
+						<value> tmp_eye=</value>
+					</cookie>
+					<cookie>
+						<name>cookie5</name>
+						<value> tmp_im=</value>
+					</cookie>
+					<cookie>
+						<name>cookie6</name>
+						<value> tmp_qu=</value>
+					</cookie>
+					<cookie>
+						<name>cookie7</name>
+						<value> tmp_map_s=</value>
+					</cookie>
+					<cookie>
+						<name>cookie8</name>
+						<value> tmp_in_pos=</value>
+					</cookie>
+					<cookie>
+						<name>__utmt</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utmb</name>
+						<value>73958170.1.10.1426141259</value>
+					</cookie>
+					<cookie>
+						<name>loginSession</name>
+						<value>11bffae803fdd5c5da16c0bfe282f192</value>
+					</cookie>
+					<cookie>
+						<name>user_real_birth</name>
+						<value>1989-07-17</value>
+					</cookie>
+					<cookie>
+						<name>sg_passport</name>
+						<value>VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D</value>
+					</cookie>
+					<cookie>
+						<name>task</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>73958170.826942271.1426141259.1426141259.1426141259.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmc</name>
+						<value>73958170</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>93058840.63586168.1424841226.1424841226.1424841226.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/</value>
+					</cookie>
+					<cookie>
+						<name>weeCookie</name>
+						<value>%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</cookie>
+				</cookies>
+				<headers>
+					<header>
+						<name>Accept</name>
+						<value>*/*</value>
+					</header>
+					<header>
+						<name>Referer</name>
+						<value>http://yw1.tc.9wee.com/index.php</value>
+					</header>
+					<header>
+						<name>Accept-Language</name>
+						<value>en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3</value>
+					</header>
+					<header>
+						<name>Accept-Encoding</name>
+						<value>gzip, deflate, peerdist</value>
+					</header>
+					<header>
+						<name>User-Agent</name>
+						<value>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko</value>
+					</header>
+					<header>
+						<name>Host</name>
+						<value>yw1.tc.9wee.com</value>
+					</header>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Pragma</name>
+						<value>no-cache</value>
+					</header>
+					<header>
+						<name>Cookie</name>
+						<value>tmp_session_id=aeb639e9f5a0384e878470a6aefd9bb3; tmp_mid=67676358; tmp_set=; tmp_eye=; tmp_im=; tmp_qu=; tmp_map_s=; tmp_in_pos=; __utmt=1; __utmb=73958170.1.10.1426141259; loginSession=11bffae803fdd5c5da16c0bfe282f192; user_real_birth=1989-07-17; sg_passport=VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D; task=1; __utma=73958170.826942271.1426141259.1426141259.1426141259.1; __utmc=73958170; __utmz=73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=93058840.63586168.1424841226.1424841226.1424841226.1; __utmz=93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/; weeCookie=%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDist</name>
+						<value>Version=1.1</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDistEx</name>
+						<value>MinContentInformation=1.0, MaxContentInformation=1.0</value>
+					</header>
+				</headers>
+				<queryString>
+					<param>
+						<name>mod</name>
+						<value>influence/influence</value>
+					</param>
+					<param>
+						<name>op</name>
+						<value>do</value>
+					</param>
+					<param>
+						<name>func</name>
+						<value>check_member</value>
+					</param>
+					<param>
+						<name>action</name>
+						<value>pass</value>
+					</param>
+					<param>
+						<name>union_id</name>
+						<value>22616|22754|2551</value>
+					</param>
+					<param>
+						<name>r</name>
+						<value>0.43431189023887434</value>
+					</param>
+				</queryString>
+				<headersSize>2585</headersSize>
+				<bodySize>0</bodySize>
+			</request>
+			<response>
+				<status>200</status>
+				<statusText>OK</statusText>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies/>
+				<headers>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Transfer-Encoding</name>
+						<value>chunked</value>
+					</header>
+					<header>
+						<name>Via</name>
+						<value>1.1 TK5-PRXY-22</value>
+					</header>
+					<header>
+						<name>Date</name>
+						<value>Thu, 12 Mar 2015 06:21:30 GMT</value>
+					</header>
+					<header>
+						<name>Content-Type</name>
+						<value>text/html; charset=utf-8</value>
+					</header>
+					<header>
+						<name>Server</name>
+						<value>CWS/1.9.9</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>X-UA-Compatible</name>
+						<value>IE=EmulateIE7</value>
+					</header>
+					<header>
+						<name>P3P</name>
+						<value>CP="CAO DSP COR CUR ADM DEV TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE GOV"</value>
+					</header>
+					<header>
+						<name>Cache-Control</name>
+						<value>private</value>
+					</header>
+					<header>
+						<name>Powered-By-ChinaCache</name>
+						<value>MISS from 2508521333</value>
+					</header>
+				</headers>
+				<content>
+					<size>193</size>
+					<mimeType>text/html; charset=utf-8</mimeType>
+					<text>javascript::wee.window.alert('审核通过', wee.lang('yes'), 'wee.window.fopen(\'index.php?mod=influence/influence&amp;op=show&amp;func=check_member\', 3, true, true, \'_influence_check_member_\');');</text>
+				</content>
+				<redirectionURL/>
+				<headersSize>531</headersSize>
+				<bodySize>193</bodySize>
+			</response>
+			<cache/>
+			<timings>
+				<send>0</send>
+				<wait>468</wait>
+				<receive>0</receive>
+			</timings>
+		</entry>
+		<entry>
+			<pageref>0</pageref>
+			<startedDateTime>2015-03-12T06:21:30.806+08:00</startedDateTime>
+			<time>2156</time>
+			<request>
+				<method>GET</method>
+				<url>http://static2.tc.9wee.com/TC_warning.png</url>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies>
+					<cookie>
+						<name>__utma</name>
+						<value>93058840.63586168.1424841226.1424841226.1424841226.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/</value>
+					</cookie>
+					<cookie>
+						<name>weeCookie</name>
+						<value>%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</cookie>
+				</cookies>
+				<headers>
+					<header>
+						<name>Accept</name>
+						<value>image/png, image/svg+xml, image/*;q=0.8, */*;q=0.5</value>
+					</header>
+					<header>
+						<name>Referer</name>
+						<value>http://yw1.tc.9wee.com/index.php</value>
+					</header>
+					<header>
+						<name>Accept-Language</name>
+						<value>en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3</value>
+					</header>
+					<header>
+						<name>User-Agent</name>
+						<value>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko</value>
+					</header>
+					<header>
+						<name>Accept-Encoding</name>
+						<value>gzip, deflate, peerdist</value>
+					</header>
+					<header>
+						<name>Host</name>
+						<value>static2.tc.9wee.com</value>
+					</header>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Pragma</name>
+						<value>no-cache</value>
+					</header>
+					<header>
+						<name>Cookie</name>
+						<value>__utma=93058840.63586168.1424841226.1424841226.1424841226.1; __utmz=93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/; weeCookie=%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDist</name>
+						<value>Version=1.1</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDistEx</name>
+						<value>MinContentInformation=1.0, MaxContentInformation=1.0</value>
+					</header>
+				</headers>
+				<queryString/>
+				<headersSize>1004</headersSize>
+				<bodySize>0</bodySize>
+			</request>
+			<response>
+				<status>200</status>
+				<statusText>OK</statusText>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies/>
+				<headers>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Content-Length</name>
+						<value>67157</value>
+					</header>
+					<header>
+						<name>Via</name>
+						<value>1.1 TK5-PRXY-22</value>
+					</header>
+					<header>
+						<name>Expires</name>
+						<value>Fri, 13 Mar 2015 06:21:31 GMT</value>
+					</header>
+					<header>
+						<name>Date</name>
+						<value>Thu, 12 Mar 2015 06:21:31 GMT</value>
+					</header>
+					<header>
+						<name>Content-Type</name>
+						<value>image/png</value>
+					</header>
+					<header>
+						<name>Server</name>
+						<value>CWS/0.9</value>
+					</header>
+					<header>
+						<name>Accept-Ranges</name>
+						<value>bytes</value>
+					</header>
+					<header>
+						<name>Last-Modified</name>
+						<value>Fri, 22 Jan 2010 01:12:33 GMT</value>
+					</header>
+					<header>
+						<name>Cache-Control</name>
+						<value>max-age=86400</value>
+					</header>
+					<header>
+						<name>Powered-By-ChinaCache</name>
+						<value>MISS from 26060113S3</value>
+					</header>
+				</headers>
+				<content>
+					<size>67157</size>
+					<mimeType>image/png</mimeType>
+				</content>
+				<redirectionURL/>
+				<headersSize>380</headersSize>
+				<bodySize>67157</bodySize>
+			</response>
+			<cache/>
+			<timings>
+				<send>0</send>
+				<wait>593</wait>
+				<receive>1563</receive>
+			</timings>
+		</entry>
+		<entry>
+			<pageref>0</pageref>
+			<startedDateTime>2015-03-12T06:21:31.962+08:00</startedDateTime>
+			<time>562</time>
+			<request>
+				<method>GET</method>
+				<url>http://yw1.tc.9wee.com/index.php?mod=influence/influence&amp;op=show&amp;func=check_member&amp;r=0.034888157992561064</url>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies>
+					<cookie>
+						<name>tmp_session_id</name>
+						<value>aeb639e9f5a0384e878470a6aefd9bb3</value>
+					</cookie>
+					<cookie>
+						<name>tmp_mid</name>
+						<value>67676358</value>
+					</cookie>
+					<cookie>
+						<name>cookie3</name>
+						<value> tmp_set=</value>
+					</cookie>
+					<cookie>
+						<name>cookie4</name>
+						<value> tmp_eye=</value>
+					</cookie>
+					<cookie>
+						<name>cookie5</name>
+						<value> tmp_im=</value>
+					</cookie>
+					<cookie>
+						<name>cookie6</name>
+						<value> tmp_qu=</value>
+					</cookie>
+					<cookie>
+						<name>cookie7</name>
+						<value> tmp_map_s=</value>
+					</cookie>
+					<cookie>
+						<name>cookie8</name>
+						<value> tmp_in_pos=</value>
+					</cookie>
+					<cookie>
+						<name>__utmt</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utmb</name>
+						<value>73958170.1.10.1426141259</value>
+					</cookie>
+					<cookie>
+						<name>loginSession</name>
+						<value>11bffae803fdd5c5da16c0bfe282f192</value>
+					</cookie>
+					<cookie>
+						<name>user_real_birth</name>
+						<value>1989-07-17</value>
+					</cookie>
+					<cookie>
+						<name>sg_passport</name>
+						<value>VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D</value>
+					</cookie>
+					<cookie>
+						<name>task</name>
+						<value>1</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>73958170.826942271.1426141259.1426141259.1426141259.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmc</name>
+						<value>73958170</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)</value>
+					</cookie>
+					<cookie>
+						<name>__utma</name>
+						<value>93058840.63586168.1424841226.1424841226.1424841226.1</value>
+					</cookie>
+					<cookie>
+						<name>__utmz</name>
+						<value>93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/</value>
+					</cookie>
+					<cookie>
+						<name>weeCookie</name>
+						<value>%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</cookie>
+				</cookies>
+				<headers>
+					<header>
+						<name>Accept</name>
+						<value>*/*</value>
+					</header>
+					<header>
+						<name>Referer</name>
+						<value>http://yw1.tc.9wee.com/index.php</value>
+					</header>
+					<header>
+						<name>Accept-Language</name>
+						<value>en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3</value>
+					</header>
+					<header>
+						<name>Accept-Encoding</name>
+						<value>gzip, deflate, peerdist</value>
+					</header>
+					<header>
+						<name>User-Agent</name>
+						<value>Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko</value>
+					</header>
+					<header>
+						<name>Host</name>
+						<value>yw1.tc.9wee.com</value>
+					</header>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Pragma</name>
+						<value>no-cache</value>
+					</header>
+					<header>
+						<name>Cookie</name>
+						<value>tmp_session_id=aeb639e9f5a0384e878470a6aefd9bb3; tmp_mid=67676358; tmp_set=; tmp_eye=; tmp_im=; tmp_qu=; tmp_map_s=; tmp_in_pos=; __utmt=1; __utmb=73958170.1.10.1426141259; loginSession=11bffae803fdd5c5da16c0bfe282f192; user_real_birth=1989-07-17; sg_passport=VGcIO1A0XThVaAJ8ACgGOAAxUmJVcAJlU2pWNQAjDjVQa1lqWD8NawdzU2wLY1RqBSVXMAhjBmAAd1FuBm5UblQ3CDpQdl06VWECPQB5BmEAbFI%2BVXACOFN1VmgAMA40UCBZYFgvDWsHc1NsC2NUagUlVz4IbgZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmdTZ1YrACMONVBxWWpYPw1qByJTZwtiVHIFPFcuCDUGNABvUXcGclQ9VGIII1A%2BXXNVaAI0AGEGIAA6Um9VawIhUz1WIQA7Dj1QOFlyWHgNMQdjU3QLa1QjBT1XbAg9Bj0Ad1EvBm9UJFRjCG9QYl05VWYCNABtBjYANVJ6VWkCcFM8VmEAOw4sUHdZPlhuDXIHO1MlC2pUYgU2V2cILQbhAN1RxAbhVMxUqQjlUL1dgFW3AogA8QbnALJS11W3ArNTiVa7ALkOkVAgWWtYfg1qBzJTbAtyVDMFfld%2FCDQGdABvUWQGPVR2VDUII1A%2BXXNVaAI0AGEGIABvUjFVNgIhUz1WIQA7DjhQOFlyWDgNZQcyU2cLZFRpBSVXZgh8Bj0AZlFvBiVUN1RvCGVQJ107VSECPQBjBjgAIFJuVWUCNVMxVmQAMg47UDpZclg2DSMHOlNkC2pUcgVrVysILQY8ACZRbwY1VG5UJAgwUDBdIlVpAnQAYQYzADhSelUoAiFTPVY7ADsOPlA5WSNYNw1lBzpTdAs9VA8FZFc0CGsGJQBuUSYGPVRsVDwII1AzXTdVZAIwAG0GMQA3UmBVcAI4U3VWaAAzDjRQIFkkWGkNcgc7Uz8LalR9BTZXZgh8Bj0AZlFvBiVUIVR0CGNQJ107VSECPQBqBjIAOFJ6VWMCOlM%2BVmsALA4%2BUDVZfVg8DWcHIlNtCyNUagU2V2cILQZhAHdRbgZ0VG5UNwg7UCddMFVwAjwAKAY4ADFSYlVwAmhTY1YrACMONVBxWWpYPg1iBzpTdAtnVGMFMldrCD8GPwA3UWcGYVRiVDQIOFBjXWJVYwJlAD0GMQA1UmtVZwI3Uz5WZQAzDjxQZllhWD4NYQc3U2ULclRrBXo%3D; task=1; __utma=73958170.826942271.1426141259.1426141259.1426141259.1; __utmc=73958170; __utmz=73958170.1426141259.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=93058840.63586168.1424841226.1424841226.1424841226.1; __utmz=93058840.1424841226.1.1.utmcsr=game.9wee.com|utmccn=(referral)|utmcmd=referral|utmcct=/; weeCookie=%7B%22loginFlag%22%3Atrue%2C%22uid%22%3A%22117176031%22%2C%22username%22%3A%22zhpeng943647%22%2C%22nickname%22%3A%22%5Cu90d1%5Cu9e4f%5Cu9e4f%22%2C%22usertype%22%3A%220%22%2C%22email%22%3A%22zhpeng943647%40126.com%22%2C%22urb%22%3A%221989-07-17%22%2C%22mac%22%3A%22650e9d9d75d11a758bc15c8729ca9ccd%22%7D</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDist</name>
+						<value>Version=1.1</value>
+					</header>
+					<header>
+						<name>X-P2P-PeerDistEx</name>
+						<value>MinContentInformation=1.0, MaxContentInformation=1.0</value>
+					</header>
+				</headers>
+				<queryString>
+					<param>
+						<name>mod</name>
+						<value>influence/influence</value>
+					</param>
+					<param>
+						<name>op</name>
+						<value>show</value>
+					</param>
+					<param>
+						<name>func</name>
+						<value>check_member</value>
+					</param>
+					<param>
+						<name>r</name>
+						<value>0.034888157992561064</value>
+					</param>
+				</queryString>
+				<headersSize>2550</headersSize>
+				<bodySize>0</bodySize>
+			</request>
+			<response>
+				<status>200</status>
+				<statusText>OK</statusText>
+				<httpVersion>HTTP/1.1</httpVersion>
+				<cookies/>
+				<headers>
+					<header>
+						<name>Proxy-Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Connection</name>
+						<value>Keep-Alive</value>
+					</header>
+					<header>
+						<name>Transfer-Encoding</name>
+						<value>chunked</value>
+					</header>
+					<header>
+						<name>Via</name>
+						<value>1.1 TK5-PRXY-22</value>
+					</header>
+					<header>
+						<name>Date</name>
+						<value>Thu, 12 Mar 2015 06:21:32 GMT</value>
+					</header>
+					<header>
+						<name>Content-Type</name>
+						<value>text/html; charset=utf-8</value>
+					</header>
+					<header>
+						<name>Server</name>
+						<value>CWS/1.9.9</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>Vary</name>
+						<value>Accept-Encoding</value>
+					</header>
+					<header>
+						<name>X-UA-Compatible</name>
+						<value>IE=EmulateIE7</value>
+					</header>
+					<header>
+						<name>P3P</name>
+						<value>CP="CAO DSP COR CUR ADM DEV TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE GOV"</value>
+					</header>
+					<header>
+						<name>Cache-Control</name>
+						<value>private</value>
+					</header>
+					<header>
+						<name>Powered-By-ChinaCache</name>
+						<value>MISS from 2508521333</value>
+					</header>
+				</headers>
+				<content>
+					<size>675</size>
+					<mimeType>text/html; charset=utf-8</mimeType>
+					<text>
+						&lt;!--开始--&gt;
+						&lt;div class="title"&gt;添加成员&lt;/div&gt;
+						&lt;div class="close"&gt;&lt;a href="javascript:void(0);" onclick="wee.window.close();"&gt;&lt;/a&gt;&lt;/div&gt;
+						&lt;div class="power_add"&gt;
+							&lt;div class="add_input"&gt;
+								请输入招募对象： &lt;input class="input01" type="text" style="width:95px" id="union_name" /&gt; &lt;span class="button1"&gt;&lt;a href="javascript:void(0);" onclick="var name = encodeURIComponent( wee.$('union_name').value ); if( name == '' ) { wee.window.alert('请输入您想邀请的联盟名称'); return false;} wee.ajax.get('index.php?mod=influence/influence&amp;op=do&amp;func=recruit_member&amp;union_name='+ name );	"&gt;&lt;span&gt;邀请&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;
+							&lt;/div&gt;
+							&lt;div class="add_player"&gt;
+								&lt;div class="tab01"&gt;
+									&lt;ul&gt;
+										&lt;li&gt;&lt;a class="on" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=check_member', 3, true, true, '_influence_check_member_');"&gt;&lt;span&gt;申请加入的联盟&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+										&lt;li&gt;&lt;a class="" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=influence/influence&amp;op=show&amp;func=check_member&amp;invite_flag=1', 3, true, true, '_influence_check_member_');"&gt;&lt;span&gt;正在邀请的联盟&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+									&lt;/ul&gt;
+								&lt;/div&gt;
+								&lt;div class="add_union_con conbody"&gt;
+									&lt;div class="table"&gt;
+										&lt;table width="100%" cellpadding="0" cellspacing="0" border="0"&gt;
+											&lt;thead&gt;
+												&lt;tr&gt;
+													&lt;th&gt;&lt;label&gt;&lt;input type="checkbox" onclick="influence.choose_member();" /&gt;全选&lt;/label&gt;&lt;/th&gt;
+													&lt;th&gt;联盟名称&lt;/th&gt;
+													&lt;th&gt;盟主名称&lt;/th&gt;
+													&lt;th&gt;联盟等级&lt;/th&gt;
+													&lt;th&gt;联盟人数&lt;/th&gt;
+													&lt;th colspan="2"&gt;操作&lt;/th&gt;
+												&lt;/tr&gt;
+											&lt;/thead&gt;
+											&lt;tbody id="check_member_list"&gt;
+																								
+											&lt;/tbody&gt;
+										&lt;/table&gt;
+									&lt;/div&gt;
+									&lt;div class="page_bottom"&gt;
+										&lt;div class="fl button2"&gt;
+																						&lt;a href="javascript:void(0);" onclick="influence.check_member('pass');"&gt;&lt;span&gt;批准&lt;/span&gt;&lt;/a&gt;
+											&lt;a href="javascript:void(0);" onclick="influence.check_member('refuse');"&gt;&lt;span&gt;拒绝&lt;/span&gt;&lt;/a&gt;
+																					&lt;/div&gt;
+										&lt;div class="TC_page button1"&gt;
+											 &lt;a href="javascript:void(0);" class="disabled"&gt;&lt;span&gt;首页&lt;/span&gt;&lt;/a&gt; &lt;a href="javascript:void(0);" class="disabled"&gt;&lt;span&gt;上一页&lt;/span&gt;&lt;/a&gt;  &lt;span class="page_on"&gt;1/1&lt;/span&gt;  &lt;a href="javascript:void(0);" class="disabled"&gt;&lt;span&gt;下一页&lt;/span&gt;&lt;/a&gt; &lt;a href="javascript:void(0);" class="disabled"&gt;&lt;span&gt;末页&lt;/span&gt;&lt;/a&gt;  &lt;input id="jump_page" type="text" class="input01" onpaste="return false;" value="1" onkeyup="if(!/^(\-?)(\d+)$/.test(this.value)) { this.value=1; }" style="width:40px" /&gt; &lt;a href="javascript:void(0);" onclick="prop.hide_deop_menu();wee.ajax.load('index.php?mod=influence/influence&amp;op=show&amp;func=check_member&amp;invite_flag=0&amp;page='+ wee.$('jump_page').value, '_influence_check_member_')"&gt;&lt;span&gt;跳转&lt;/span&gt;&lt;/a&gt; 
+										&lt;/div&gt;
+									&lt;/div&gt;
+								&lt;/div&gt;
+							&lt;/div&gt;
+						&lt;/div&gt;
+						&lt;!--结束--&gt;
+				</text>
+				</content>
+				<redirectionURL/>
+				<headersSize>531</headersSize>
+				<bodySize>675</bodySize>
+			</response>
+			<cache/>
+			<timings>
+				<send>0</send>
+				<wait>390</wait>
+				<receive>172</receive>
+			</timings>
+		</entry>
+	</entries>
+</log>

@@ -1,0 +1,55 @@
+﻿GET http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=build&pid=1&bt=2&bid=12&r=0.30979500926029085 HTTP/1.1
+
+<div class="close"><a href="javascript:void(0);" onclick="wee.window.close();"></a></div>
+<div class="title" onmouseover="wee.window.set_drag(this)">[[jslang('upgrade_key', jslang('build_12'))]]</div>
+<div class="build_repair" id="build_update_window">
+	<div class="executor_hero">
+		<div class="hero">
+			<!--div class="name button5"><a href="javascript:void(0)" onclick="hero_select.obj['smarty_hero_select'].show_list();"><span>[[jslang('chg_hero')]]</span></a></div-->
+			<!--div class="name button5"><a href="javascript:void(0)"><span>[[jslang('chg_hero')]]</span></a></div-->
+			<div id="smarty_hero_select" class="undis"><iframe src="" width="180" style="display:none"></iframe><div class="select_hero_box"><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="img01"><img hid="2531948" onclick="hero_select.obj['smarty_hero_select'].chose(this, 2531948,'smarty_hero_select');" src="http://static.tc.9wee.com/hero/3/6.gif" titlecontent="jstitle::hero.hero_tip( ['\u859b\u653e','1','16.4','18.4','18.1','16.1','16.5','C','C','C','C','C','3','3','1','5','',0,0,'2531948','855136','356','356.8','14','cef133'] )"/><p>[[jslang("hero_status_1")]]</p></div><div class="name"><span class="hero_score_1">薛放</span></div><div class="bold">00:01:07</div></td><td><div class="img01"><img hid="3079835" onclick="hero_select.obj['smarty_hero_select'].chose(this, 3079835,'smarty_hero_select');" class="on" src="http://static.tc.9wee.com/hero/3/6.gif" titlecontent="jstitle::hero.hero_tip( ['\u8881\u7b56','2','7.5','10.8','12.3','7.2','7.4','S','A','B','A','A','3','3','0','5','',0,0,'3079835','855136','222','222.8','5','7457a3'] )"/><p>[[jslang("hero_status_1")]]</p></div><div class="name"><span class="hero_score_2">袁策</span></div><div class="bold">00:01:08</div></td></tr></table></div></div><div class="hero_select"><div class="pic"><div class="img01"><img onclick="hero_select.obj['smarty_hero_select'].show_list();" id="smarty_hero_select_img" src="http://static.tc.9wee.com/hero/3/6.gif" titlecontent="jstitle::hero.hero_tip( ['\u8881\u7b56','2','7.5','10.8','12.3','7.2','7.4','S','A','B','A','A','3','3','0','5','',0,0,'3079835','855136','222','222.8','5','7457a3'] )"/></div><div class="name button5"><a href="javascript:void(0);" onclick="hero_select.obj['smarty_hero_select'].show_list();"><span id="smarty_hero_select_name">袁策</span></a></div></div></div>
+		</div>
+	</div>
+	<div class="build_repair_right">
+		<h4 class="conhead"><span>[[jslang('build_12')]]</span></h4>
+		<div class="itable">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="26%">升级信息</td>
+					<td width="74%">
+						2级→3级									
+					</td>
+				</tr>
+				<tr>
+					<td width="26%">资源需求</td>
+					<td width="74%">
+						<div class="ziyuan">
+							<ul>
+								<li class="re_m" titleContent="[[jslang('m')]]"><span>3750</span></li><li class="re_s" titleContent="[[jslang('s')]]"><span>1880</span></li><li class="re_t" titleContent="[[jslang('t')]]"><span>1500</span></li><li class="re_l" titleContent="[[jslang('l')]]"><span>1130</span></li>
+							</ul>
+						</div>											
+					</td>
+				</tr>
+				<tr>
+					<td>前置需求</td>
+					<td>--					</td>
+				</tr>
+				<tr>
+					<td>升级时间</td>
+					<td><div class="time" id="repair_need_time"></div></td>	
+				</tr>
+				<td>升级后属性变化</td>
+				<td>
+					<div class="con"><p><span class="dt">繁荣度</span><span class="value">39</span><span class="change"><strong>↑</strong>5</span></p><p><span class="dt">耐久度</span><span class="value">2980</span><span class="change"><strong>↑</strong>540</span></p><p><span class="dt">城池防御</span><span class="value">260</span><span class="change"><strong>↑</strong>30</span></p></div>									
+				</td>	
+			</table>
+		</div>
+		<div class="button button2">
+						<a href="javascript:void(0);" onclick="build.do_build(1, 12);"><span>[[jslang('upgrade_key','')]]</span></a>
+						<a href="javascript:void(0);" onclick="wee.window.close();"><span>取消</span></a>						
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+hero_select.init( {"2531948":"00:01:07","3079835":"00:01:08"} );
+</script>

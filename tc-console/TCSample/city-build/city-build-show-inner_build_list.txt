@@ -1,0 +1,90 @@
+﻿GET http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=inner_build_list&pid=0&bt=2&r=0.9169327846568097 HTTP/1.1
+
+
+<div class="close"><a href="javascript:void(0);" onclick="wee.window.close();"></a></div>
+<div class="title" onmouseover="wee.window.set_drag(this)">建筑树</div>
+<div class="build_tree" id="task_build_tree">
+	<!--建筑-->
+	<div class="build_tree_box">
+		<ul>
+									<li class="build_12">
+				<div class="img01"><img id="task_build_tree_12" class="click" src="http://static.tc.9wee.com//build/build_tree/a_12.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_12')]] [[jslang('level', 2)]]</h3><div class="items_des"><p>[[jslang('build_12_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">2440</span><span class="dt">/2440</span></p><div style="color:#06F917"><p>[[jslang('now_lv_func', jslang('build_tool_w', "4"))]]</p><p>[[jslang('up_lv_func', jslang('build_tool_w', "6"))]]</p></div></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>3750</span></li><li class="re_s"><span>1880</span></li><li class="re_t"><span>1500</span></li><li class="re_l"><span>1130</span></li></ul></div><div class="time">升级所需基础时间：00:01:08</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">39</span><span class="change"><strong>↑</strong>5</span></p><p><span class="dt">耐久度</span><span class="value">2980</span><span class="change"><strong>↑</strong>540</span></p><p><span class="dt">城池防御</span><span class="value">260</span><span class="change"><strong>↑</strong>30</span></p></div></div></div>' onclick="wee.window.fopen( 'index.php?mod=city/build&op=show&func=viewbuild&pid=1&bt=2&bid=12', 1 );wee.window.close();" /></div>
+				<div class="name">[[jslang('build_12')]] 等级2</div>
+			</li>
+												<li class="build_9">
+				<div class="img01"><img id="task_build_tree_9" class="click" src="http://static.tc.9wee.com//build/build_tree/a_9.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color2">[[jslang('build_9')]] [[jslang('level', 6)]]</h3><div class="items_des"><p>[[jslang('build_9_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">1350</span><span class="dt">/1350</span></p></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>1850</span></li><li class="re_s"><span>1790</span></li><li class="re_t"><span>1590</span></li><li class="re_l"><span>530</span></li></ul></div><div class="time">升级所需基础时间：00:06:51</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">44</span><span class="change"><strong>↑</strong>5</span></p><p><span class="dt">耐久度</span><span class="value">1650</span><span class="change"><strong>↑</strong>300</span></p><p><span class="dt">城池防御</span><span class="value">50</span><span class="change"><strong>↑</strong>10</span></p></div></div></div>' onclick="wee.window.fopen( 'index.php?mod=city/build&op=show&func=viewbuild&pid=210&bt=2&bid=9', 1 );wee.window.close();" /></div>
+				<div class="name">[[jslang('build_9')]] 等级6</div>
+			</li>
+												<li class="build_5">
+				<div class="img01"><img id="task_build_tree_5" class="click" src="http://static.tc.9wee.com//build/build_tree/a_5.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color2">[[jslang('build_5')]] [[jslang('level', 6)]]</h3><div class="items_des"><p>[[jslang('build_5_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">2700</span><span class="dt">/2700</span></p></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>1720</span></li><li class="re_s"><span>2120</span></li><li class="re_t"><span>1190</span></li><li class="re_l"><span>530</span></li></ul></div><div class="time">升级所需基础时间：00:20:32</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">69</span><span class="change"><strong>↑</strong>9</span></p><p><span class="dt">耐久度</span><span class="value">3300</span><span class="change"><strong>↑</strong>600</span></p><p><span class="dt">城池防御</span><span class="value">230</span><span class="change"><strong>↑</strong>30</span></p></div></div></div>' onclick="wee.window.fopen( 'index.php?mod=city/build&op=show&func=viewbuild&pid=315&bt=2&bid=5', 1 );wee.window.close();" /></div>
+				<div class="name">[[jslang('build_5')]] 等级6</div>
+			</li>
+												<li class="build_8">
+				<div class="img01"><img id="task_build_tree_8" class="click" src="http://static.tc.9wee.com//build/build_tree/a_8.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_8')]] [[jslang('level', 1)]]</h3><div class="items_des"><p>[[jslang('build_8_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">500</span><span class="dt">/500</span></p></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>600</span></li><li class="re_s"><span>440</span></li><li class="re_t"><span>250</span></li><li class="re_l"><span>110</span></li></ul></div><div class="time">升级所需基础时间：00:01:43</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">23</span><span class="change"><strong>↑</strong>3</span></p><p><span class="dt">耐久度</span><span class="value">610</span><span class="change"><strong>↑</strong>110</span></p></div></div></div>' onclick="wee.window.fopen( 'index.php?mod=city/build&op=show&func=viewbuild&pid=451&bt=2&bid=8', 1 );wee.window.close();" /></div>
+				<div class="name">[[jslang('build_8')]] 等级1</div>
+			</li>
+												<li class="build_16">
+				<div class="img01"><img id="task_build_tree_16" class="click" src="http://static.tc.9wee.com//build/build_tree/a_16.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color2">[[jslang('build_16')]] [[jslang('level', 7)]]</h3><div class="items_des"><p>[[jslang('build_16_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">1650</span><span class="dt">/1650</span></p><div style="color:#06F917"><p>[[jslang('now_lv_func', jslang('build_tool_16', "125"))]]</p><p>[[jslang('up_lv_func', jslang('build_tool_16', "149"))]]</p></div></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m  red"><span>44590</span></li><li class="re_s"><span>39590</span></li><li class="re_t  red"><span>44940</span></li><li class="re_l"><span>21400</span></li></ul></div><div class="time">升级所需基础时间：00:14:19</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">75</span><span class="change"><strong>↑</strong>9</span></p><p><span class="dt">耐久度</span><span class="value">2010</span><span class="change"><strong>↑</strong>360</span></p></div></div></div>' onclick="wee.window.fopen( 'index.php?mod=city/build&op=show&func=viewbuild&pid=473&bt=2&bid=16', 1 );wee.window.close();" /></div>
+				<div class="name">[[jslang('build_16')]] 等级7</div>
+			</li>
+												<li class="build_7">
+				<div class="img01"><img id="task_build_tree_7" class="click" src="http://static.tc.9wee.com//build/build_tree/a_7.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color2">[[jslang('build_7')]] [[jslang('level', 4)]]</h3><div class="items_des"><p>[[jslang('build_7_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">910</span><span class="dt">/910</span></p><div style="color:#06F917"><p>[[jslang('now_lv_func', jslang('build_tool_7', "06:36:00"))]]</p><p>[[jslang('up_lv_func', jslang('build_tool_7', "06:15:00"))]]</p></div></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>560</span></li><li class="re_s"><span>490</span></li><li class="re_t"><span>850</span></li><li class="re_l"><span>490</span></li></ul></div><div class="time">升级所需基础时间：00:02:22</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">35</span><span class="change"><strong>↑</strong>5</span></p><p><span class="dt">耐久度</span><span class="value">1110</span><span class="change"><strong>↑</strong>200</span></p></div></div></div>' onclick="wee.window.fopen( 'index.php?mod=city/build&op=show&func=viewbuild&pid=537&bt=2&bid=7', 1 );wee.window.close();" /></div>
+				<div class="name">[[jslang('build_7')]] 等级4</div>
+			</li>
+												<li class="build_14">
+				<div class="img01"><img id="task_build_tree_14" class="click" src="http://static.tc.9wee.com//build/build_tree/a_14.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_14')]] [[jslang('level', 1)]]</h3><div class="items_des"><p>[[jslang('build_14_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">500</span><span class="dt">/500</span></p></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>580</span></li><li class="re_s"><span>380</span></li><li class="re_t"><span>710</span></li><li class="re_l"><span>330</span></li></ul></div><div class="time">升级所需基础时间：00:03:25</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">23</span><span class="change"><strong>↑</strong>3</span></p><p><span class="dt">耐久度</span><span class="value">610</span><span class="change"><strong>↑</strong>110</span></p></div></div></div>' onclick="wee.window.fopen( 'index.php?mod=city/build&op=show&func=viewbuild&pid=541&bt=2&bid=14', 1 );wee.window.close();" /></div>
+				<div class="name">[[jslang('build_14')]] 等级1</div>
+			</li>
+												<li class="build_6">
+				<div class="img01"><img id="task_build_tree_6" class="click" src="http://static.tc.9wee.com//build/build_tree/a_6.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color2">[[jslang('build_6')]] [[jslang('level', 2)]]</h3><div class="items_des"><p>[[jslang('build_6_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">610</span><span class="dt">/610</span></p><div style="color:#06F917"><p>[[jslang('now_lv_func', jslang('build_tool_6', "4"))]]</p><p>[[jslang('up_lv_func', jslang('build_tool_6', "6"))]]</p></div></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>300</span></li><li class="re_s"><span>380</span></li><li class="re_t"><span>260</span></li><li class="re_l"><span>80</span></li></ul></div><div class="time">升级所需基础时间：00:00:41</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">40</span><span class="change"><strong>↑</strong>5</span></p><p><span class="dt">耐久度</span><span class="value">740</span><span class="change"><strong>↑</strong>130</span></p></div></div></div>' onclick="wee.window.fopen( 'index.php?mod=city/build&op=show&func=viewbuild&pid=673&bt=2&bid=6', 1 );wee.window.close();" /></div>
+				<div class="name">[[jslang('build_6')]] 等级2</div>
+			</li>
+												<li class="build_13 disabled">
+				<div class="img01"><img id="task_build_tree_13" src="http://static.tc.9wee.com//build/build_tree/d_13.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_13')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('build_13_intro')]]</p></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">[[jslang('city_lv')]] Lv.4<li><li class="red">[[jslang('build_19')]] [[jslang('level',10)]]</li></ul></div>' /></div>
+				<div class="name">[[jslang('build_13')]] 等级0</div>
+			</li>
+												<li class="build_17 disabled">
+				<div class="img01"><img id="task_build_tree_17" src="http://static.tc.9wee.com//build/build_tree/d_17.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_17')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('build_17_intro')]]</p></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">[[jslang('city_lv')]] Lv.3<li><li>[[jslang('build_16')]] [[jslang('level',3)]]</li></ul></div>' /></div>
+				<div class="name">[[jslang('build_17')]] 等级0</div>
+			</li>
+												<li class="build_18 disabled">
+				<div class="img01"><img id="task_build_tree_18" src="http://static.tc.9wee.com//build/build_tree/d_18.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_18')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('build_18_intro')]]</p></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">[[jslang('city_lv')]] Lv.3<li><li>[[jslang('build_14')]] [[jslang('level',1)]]</li><li class="red">[[jslang('build_8')]] [[jslang('level',5)]]</li></ul></div>' /></div>
+				<div class="name">[[jslang('build_18')]] 等级0</div>
+			</li>
+												<li class="build_19 disabled">
+				<div class="img01"><img id="task_build_tree_19" src="http://static.tc.9wee.com//build/build_tree/d_19.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_19')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('build_19_intro')]]</p></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li>[[jslang('city_lv')]] Lv.2<li><li class="red">[[jslang('build_12')]] [[jslang('level',3)]]</li></ul></div>' /></div>
+				<div class="name">[[jslang('build_19')]] 等级0</div>
+			</li>
+												<li class="build_20 disabled">
+				<div class="img01"><img id="task_build_tree_20" src="http://static.tc.9wee.com//build/build_tree/d_20.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_20')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('build_20_intro')]]</p></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">[[jslang('city_lv')]] Lv.3<li><li class="red">[[jslang('build_18')]] [[jslang('level',3)]]</li><li class="red">[[jslang('build_9')]] [[jslang('level',10)]]</li></ul></div>' /></div>
+				<div class="name">[[jslang('build_20')]] 等级0</div>
+			</li>
+												<li class="build_21 disabled">
+				<div class="img01"><img id="task_build_tree_21" src="http://static.tc.9wee.com//build/build_tree/d_21.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_21')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('build_21_intro')]]</p></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">[[jslang('city_lv')]] Lv.5<li><li class="red">[[jslang('build_18')]] [[jslang('level',5)]]</li><li class="red">[[jslang('build_8')]] [[jslang('level',15)]]</li></ul></div>' /></div>
+				<div class="name">[[jslang('build_21')]] 等级0</div>
+			</li>
+												<li class="build_51 disabled">
+				<div class="img01"><img id="task_build_tree_51" src="http://static.tc.9wee.com//build/build_tree/d_51.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_51')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('build_51_intro')]]</p></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">[[jslang('city_lv')]] Lv.5<li><li class="red">[[jslang('build_20')]] [[jslang('level',1)]]</li></ul></div>' /></div>
+				<div class="name">[[jslang('build_51')]] 等级0</div>
+			</li>
+								</ul>
+	</div>
+	<!--箭头-->
+	<div class="build_tree_arrow">
+		<ul>
+			<li class="arrow_1"><img src="http://static.tc.9wee.com//build_arrow_1.gif" /></li><!--官邸-->
+						<li class="arrow_2"><img src="http://static.tc.9wee.com//arrow_7_16_1.gif" /></li>
+						<li class="arrow_3"><img src="http://static.tc.9wee.com//arrow_16_17_1.gif" /></li>
+						<li class="arrow_4"><img src="http://static.tc.9wee.com//arrow_10_19_1.gif" /></li>
+						<li class="arrow_5"><img src="http://static.tc.9wee.com//arrow_19_13_0.gif" /></li>
+						<li class="arrow_8"><img src="http://static.tc.9wee.com//arrow_9_20_0.gif" /></li>
+						<li class="arrow_6"><img src="http://static.tc.9wee.com//arrow_9_14_1.gif" /></li>
+						<li class="arrow_7"><img src="http://static.tc.9wee.com//arrow_9_8_1.gif" /></li>
+						<li class="arrow_9"><img src="http://static.tc.9wee.com//arrow_14_18_1.gif" /></li>
+						<li class="arrow_10"><img src="http://static.tc.9wee.com//arrow_18_21_0.gif" /></li>
+						<li class="arrow_11"><img src="http://static.tc.9wee.com//arrow_18_20_0.gif" /></li>
+						<li class="arrow_12"><img src="http://static.tc.9wee.com//arrow_8_18_0.gif" /></li>
+						<li class="arrow_14"><img src="http://static.tc.9wee.com//arrow_20_51_0.gif" /></li>
+					</ul>
+	</div>
+</div><script type="text/javascript">wee.$( 'task_do' ).className = '' ;</script><script type="text/javascript">task.is_main_city= 1;task.task_type = 0; task.task_value = 0;</script><script type="text/javascript">task.task_type = '1'; task.task_value = 'mod:city/city|func:update_level|op:do|now_level:2';</script>

@@ -1,0 +1,53 @@
+﻿GET http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=wall_build&bid=1&r=0.5754195909462103 HTTP/1.1
+
+<div class="dec out_box">
+	<div class="in_box">
+		  [[jslang('wall_build_intro_1')]]
+	</div>
+</div>
+<div class="wall_info">
+	<h4 class="conhead"><span>[[jslang('wall_build_1')]] 0级 → 1 级 </span></h4>
+	<div class="out_box">
+		<div class="in_box">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td valign="middle" width="25%" align="center">
+						<div class="hero"><div id="wall_hero_select" class="undis"><iframe src="" width="180" style="display:none"></iframe><div class="select_hero_box"><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="img01"><img hid="2531948" onclick="hero_select.obj['wall_hero_select'].chose(this, 2531948,'wall_hero_select');" src="http://static.tc.9wee.com/hero/3/6.gif" titlecontent="jstitle::hero.hero_tip( ['\u859b\u653e','1','16.4','18.4','18.1','16.1','16.5','C','C','C','C','C','3','3','1','5','',0,0,'2531948','855136','356','356.8','14','cef133'] )"/><p>[[jslang("hero_status_1")]]</p></div><div class="name"><span class="hero_score_1">薛放</span></div><div class="bold">00:10:00</div></td><td><div class="img01"><img hid="3079835" onclick="hero_select.obj['wall_hero_select'].chose(this, 3079835,'wall_hero_select');" class="on" src="http://static.tc.9wee.com/hero/3/6.gif" titlecontent="jstitle::hero.hero_tip( ['\u8881\u7b56','2','7.5','10.8','12.3','7.2','7.4','S','A','B','A','A','3','3','0','5','',0,0,'3079835','855136','222','222.8','5','7457a3'] )"/><p>[[jslang("hero_status_1")]]</p></div><div class="name"><span class="hero_score_2">袁策</span></div><div class="bold">00:10:00</div></td></tr></table></div></div><div class="hero_select"><div class="pic"><div class="img01"><img onclick="hero_select.obj['wall_hero_select'].show_list();" id="wall_hero_select_img" src="http://static.tc.9wee.com/hero/3/6.gif" titlecontent="jstitle::hero.hero_tip( ['\u8881\u7b56','2','7.5','10.8','12.3','7.2','7.4','S','A','B','A','A','3','3','0','5','',0,0,'3079835','855136','222','222.8','5','7457a3'] )"/></div><div class="name button5"><a href="javascript:void(0);" onclick="hero_select.obj['wall_hero_select'].show_list();"><span id="wall_hero_select_name">袁策</span></a></div></div></div></div>
+					</td>
+					<td width="65%">
+						<table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">升级需求</td>
+								<td>
+									<div class="ziyuan">
+										<ul>
+											<li class="re_m" titleContent="[[jslang('m')]]"><span>800</span></li><li class="re_s" titleContent="[[jslang('s')]]"><span>800</span></li><li class="re_t" titleContent="[[jslang('t')]]"><span>800</span></li><li class="re_l" titleContent="[[jslang('l')]]"><span>800</span></li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td width="17%" valign="top">前置条件</td>
+								<td width="83%"><ul><li class="red">城墙等级：5</li></ul></td>
+							</tr>
+							<tr>
+								<td valign="top">升级时间</td>
+								<td><div class="time" id="wall_need_time"></div></td>
+							</tr>
+							<tr>
+								<td valign="top">升级加成</td>
+								<td><ul><li>[[jslang("build_f_1", 300)]]</li></ul></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="button button2">
+		<a class="disabled"><span>[[jslang('build_key', '')]]</span></a>
+	</div>
+<script type="text/javascript">
+hero_select.init( {"2531948":"00:10:00","3079835":"00:10:00"}, 'hero_select.wall_back', 'wall_hero_select' );
+</script>

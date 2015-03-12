@@ -1,0 +1,82 @@
+﻿GET http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=viewbuild&pid=1&bt=2&bid=12&r=0.7614745372776804 HTTP/1.1
+
+<div class="title" onmouseover="wee.window.set_drag(this)">[[jslang('build_12')]]</div>
+<div class="close"><a href="javascript:void(0);" onclick="wee.window.close();"></a></div>
+<div class="build_wall" id = 'task_build_wall'><!--城墙-->
+	<div class="build_infor">
+		<div class="img01">
+			<img src="http://static.tc.9wee.com//build/build_thumb/12.gif" />
+			<div class="lv trans_70">等级：2</div>
+		</div>
+		<div class="build_txt">
+			<!--建筑说明-->
+			<div class="build_dec">
+				<p>[[jslang('build_12_intro')]]</p>
+				<p>耐久度：2440/2440</p>
+							</div>
+			<!--建筑资源--->
+			<div class="ziyuan mt10">
+								<h4>提升等级至3：</h4>
+				<ul>
+					<li class="re_m" titleContent="[[jslang('m')]]"><span>3750</span></li><li class="re_s" titleContent="[[jslang('s')]]"><span>1880</span></li><li class="re_t" titleContent="[[jslang('t')]]"><span>1500</span></li><li class="re_l" titleContent="[[jslang('l')]]"><span>1130</span></li>
+				</ul>
+							</div>
+		</div>
+		<!--升级拆除按钮，不能点在a标签加class="disabled"--->
+		<div class="button">
+						<span class="upgrade"><a href="javascript:void(0);" onclick="build.build(1, 2, 12);wee.window.close();"></a></span>
+						<span class="remove"><a href="javascript:void(0);" onclick="build.backout(1, 2, 12);wee.window.close();"></a></span>
+			<!--span class="construct"><a href="javascript:void(0);"></a></span-->
+		</div>
+	</div>
+	<!--右边建筑功能-->
+	<div class="build_fun">
+		<div class="tab">
+			<ul>
+				<li><a class="on" href="javascript:void(0);">城墙设施</a></li>
+			</ul>
+		</div>
+		<div class="content">
+			<div class="wall_1"><br />
+				<!---->
+				<div class="wall_list">
+					<ul id="ul_wall_build_tab">
+																														<li>
+							<a href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=wall_build&bid=1', 'id_wall_build_info' );this.blur();">
+								<img src="http://static.tc.9wee.com//build/wall/wall_build_1.gif" titlecontent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('wall_build_1')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('wall_build_intro_1')]]</p><div style="color:#06F917"><p>[[jslang("up_lv_func", jslang("build_f_1", 300))]]</p></div></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">城墙等级：5</li></ul></div>'/>
+								<span class="name">[[jslang('wall_build_1')]] 等级0</span>
+							</a>
+						</li>
+																		<li>
+							<a href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=wall_build&bid=2', 'id_wall_build_info' );this.blur();">
+								<img src="http://static.tc.9wee.com//build/wall/wall_build_2.gif" titlecontent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('wall_build_2')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('wall_build_intro_2')]]</p><div style="color:#06F917"><p>[[jslang("up_lv_func", jslang("build_f_2", 1))]]</p></div></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">城墙等级：10</li></ul></div>'/>
+								<span class="name">[[jslang('wall_build_2')]] 等级0</span>
+							</a>
+						</li>
+																		<li>
+							<a href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=wall_build&bid=3', 'id_wall_build_info' );this.blur();">
+								<img src="http://static.tc.9wee.com//build/wall/wall_build_3.gif" titlecontent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('wall_build_3')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('wall_build_intro_3')]]</p><div style="color:#06F917"><p>[[jslang("up_lv_func", jslang("build_f_3", 1))]]</p></div></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">城墙等级：10</li></ul></div>'/>
+								<span class="name">[[jslang('wall_build_3')]] 等级0</span>
+							</a>
+						</li>
+																		<li>
+							<a href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=wall_build&bid=4', 'id_wall_build_info' );this.blur();">
+								<img src="http://static.tc.9wee.com//build/wall/wall_build_4.gif" titlecontent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('wall_build_4')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('wall_build_intro_4')]]</p><div style="color:#06F917"><p>[[jslang("up_lv_func", jslang("build_f_4", 1))]]</p></div></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">城墙等级：10</li></ul></div>'/>
+								<span class="name">[[jslang('wall_build_4')]] 等级0</span>
+							</a>
+						</li>
+											</ul>
+				</div>
+				<div class="wall_con" id="id_wall_build_info"></div>
+				<!----->
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var tabs = wee.$( 'ul_wall_build_tab' ).getElementsByTagName( 'a' );
+wee.dom.tab( tabs, 'a', tabs[0] );
+wee.ajax.load( 'index.php?mod=city/build&op=show&func=wall_build&bid=1', 'id_wall_build_info' );
+//task.float_task('task_build_wall','升级1级城墙',0,8,50,100,22,0,1,2,1);
+</script><script type="text/javascript">wee.$( 'task_do' ).className = '' ;</script><script type="text/javascript">task.is_main_city= 1;task.task_type = 0; task.task_value = 0;</script><script type="text/javascript">task.task_type = '1'; task.task_value = 'mod:city/city|func:update_level|op:do|now_level:2';</script>
+
