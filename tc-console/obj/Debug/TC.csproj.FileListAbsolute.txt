@@ -48,3 +48,4 @@ C:\Users\jackyw\workplane\TCRobot\tc-console\obj\Debug\TC.pdb
 C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.FormJoinUnion.resources
 C:\Users\jackyw\workplane\TCRobot\tc-console\obj\Debug\TC.FormJoinUnion.resources
 C:\Users\wingforce\Workplane\tc-robot\tc-console\obj\Debug\TC.FormSelectCity.resources
+C:\Users\jackyw\workplane\TCRobot\tc-console\obj\Debug\TC.FormSelectCity.resources

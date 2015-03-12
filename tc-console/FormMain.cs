@@ -1018,6 +1018,9 @@
                     case "调兵":
                         this.CreateShipTroopTasks(account, targetCity, this.checkBoxAccountTaskOption.Checked);
                         break;
+                    case "拒绝联盟":
+                        this.CreateInfluenceGuardTask(account);
+                        break;
                 }
             }
         }

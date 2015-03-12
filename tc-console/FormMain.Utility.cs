@@ -905,6 +905,21 @@
             return activeTaskList;
         }
 
+        private void CreateInfluenceGuardTask(AccountInfo account)
+        {
+            var task = new InfluenceGuard(account)
+                           {
+                               TaskAction = obj =>
+                                   {
+                                       
+                                   }
+                           };
+
+            var lvItemTask = new ListViewItem { Tag = task };
+            task.SyncToListViewItem(lvItemTask, RemoteTime);
+            this.listViewTasks.Items.Add(lvItemTask);
+        }
+
         private void CreateShipTroopTasks(AccountInfo account, CityInfo targetCity, bool carryBrick)
         {
             var fromCityList = account.CityNameList.Where(c => c != targetCity.Name).ToList();

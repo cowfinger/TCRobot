@@ -79,6 +79,7 @@
     <Compile Include="TCDataType\CityInfo.cs" />
     <Compile Include="TCPage\CityBuildPage.cs" />
     <Compile Include="TCPage\RepairCityWallPage.cs" />
+    <Compile Include="TCTasks\InfluenceGuard.cs" />
     <Compile Include="TCUtility\CookieLite.cs" />
     <Compile Include="TCDataType\TroopInfo.cs" />
     <Compile Include="TCDataType\DepotItem.cs" />
