@@ -10,8 +10,8 @@ namespace TC.TCPage
     {
         //<td><input type="checkbox" value="22616" /></td> <td>自由行</td> <td>秦楚</td>
         public const string MemberPattern = 
-            "<td><input type=\"checkbox\" value=\"(?<UnionId>\\d+)\" />" + 
-            "</td> <td>(?<UnionName>.+?)</td> <td>(?<LeadName>.+?)</td>";
+            "<td>\\s*<input type=\"checkbox\" value=\"(?<UnionId>\\d+)\" />\\s*" + 
+            "</td>\\s*<td>(?<UnionName>.+?)</td>\\s*<td>(?<LeadName>.+?)</td>";
 
         public class MemberInfo
         {

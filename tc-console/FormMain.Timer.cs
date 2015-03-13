@@ -91,51 +91,51 @@
             this.Invoke(
                 new DoSomething(
                     () =>
+                    {
+                        var toRemoveTasks = new List<ListViewItem>();
+                        foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
                         {
-                            var toRemoveTasks = new List<ListViewItem>();
+                            var oldTask = lvItem.Tag as AttackTask;
+
+                            if (allTasks.Find(task => task.TaskId == oldTask.TaskId) == null)
+                            {
+                                toRemoveTasks.Add(lvItem);
+                            }
+                        }
+
+                        foreach (var item in toRemoveTasks)
+                        {
+                            this.listViewCompletedTasks.Items.Remove(item);
+                        }
+
+                        foreach (var task in allTasks)
+                        {
+                            var found = false;
                             foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
                             {
                                 var oldTask = lvItem.Tag as AttackTask;
-
-                                if (allTasks.Find(task => task.TaskId == oldTask.TaskId) == null)
+                                if (oldTask.TaskId == task.TaskId)
                                 {
-                                    toRemoveTasks.Add(lvItem);
+                                    found = true;
+                                    break;
                                 }
                             }
 
-                            foreach (var item in toRemoveTasks)
+                            if (found)
                             {
-                                this.listViewCompletedTasks.Items.Remove(item);
+                                continue;
                             }
 
-                            foreach (var task in allTasks)
-                            {
-                                var found = false;
-                                foreach (ListViewItem lvItem in this.listViewCompletedTasks.Items)
-                                {
-                                    var oldTask = lvItem.Tag as AttackTask;
-                                    if (oldTask.TaskId == task.TaskId)
-                                    {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-
-                                if (found)
-                                {
-                                    continue;
-                                }
-
-                                var newLvItem = new ListViewItem { Tag = task };
-                                newLvItem.SubItems[0].Text = task.AccountName;
-                                newLvItem.SubItems.Add(task.FromCity);
-                                newLvItem.SubItems.Add(task.ToCity);
-                                newLvItem.SubItems.Add(task.EndTime.ToString());
-                                newLvItem.SubItems.Add(task.TaskId);
-                                newLvItem.SubItems.Add(task.TaskType);
-                                this.listViewCompletedTasks.Items.Add(newLvItem);
-                            }
-                        }));
+                            var newLvItem = new ListViewItem { Tag = task };
+                            newLvItem.SubItems[0].Text = task.AccountName;
+                            newLvItem.SubItems.Add(task.FromCity);
+                            newLvItem.SubItems.Add(task.ToCity);
+                            newLvItem.SubItems.Add(task.EndTime.ToString());
+                            newLvItem.SubItems.Add(task.TaskId);
+                            newLvItem.SubItems.Add(task.TaskType);
+                            this.listViewCompletedTasks.Items.Add(newLvItem);
+                        }
+                    }));
         }
 
         private void StartTaskTimer()
@@ -162,36 +162,36 @@
                         this.Invoke(
                             new DoSomething(
                                 () =>
+                                {
+                                    var toRemoveList = new List<ListViewItem>();
+                                    foreach (ListViewItem lvItem in this.listViewTasks.Items)
                                     {
-                                        var toRemoveList = new List<ListViewItem>();
-                                        foreach (ListViewItem lvItem in this.listViewTasks.Items)
+                                        var task = lvItem.Tag as TCTask;
+                                        if (task == null)
                                         {
-                                            var task = lvItem.Tag as TCTask;
-                                            if (task == null)
-                                            {
-                                                continue;
-                                            }
-
-                                            var timeLeft = (int)((task.ExecutionTime - remoteTimeSnapshot).TotalSeconds);
-                                            lvItem.SubItems[4].Text = this.Time2Str(timeLeft);
-
-                                            var hint = task.GetTaskHint();
-                                            if (lvItem.SubItems[5].Text != hint)
-                                            {
-                                                lvItem.SubItems[5].Text = hint;
-                                            }
-
-                                            if (task.IsCompleted)
-                                            {
-                                                toRemoveList.Add(lvItem);
-                                            }
+                                            continue;
                                         }
 
-                                        foreach (var lvItem in toRemoveList)
+                                        var timeLeft = (int)((task.ExecutionTime - remoteTimeSnapshot).TotalSeconds);
+                                        lvItem.SubItems[4].Text = this.Time2Str(timeLeft);
+
+                                        var hint = task.GetTaskHint();
+                                        if (lvItem.SubItems[5].Text != hint)
                                         {
-                                            this.listViewTasks.Items.Remove(lvItem);
+                                            lvItem.SubItems[5].Text = hint;
                                         }
-                                    }));
+
+                                        if (task.IsCompleted)
+                                        {
+                                            toRemoveList.Add(lvItem);
+                                        }
+                                    }
+
+                                    foreach (var lvItem in toRemoveList)
+                                    {
+                                        this.listViewTasks.Items.Remove(lvItem);
+                                    }
+                                }));
                     }
                 };
 
@@ -239,6 +239,12 @@
                                 var attackTime = task.ExecutionTime.AddSeconds(SendTroopTask.OpenAttackPageTime);
                                 task.ExecutionTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
                                 task.Status = SendTroopTask.TaskStatus.ConfirmAttack;
+
+                                this.DebugLog(
+                                    "Troop(Id={0}, isGroup={1}) Open Attack Page, Elapse={2} Miliseconds.",
+                                    team.isGroupTroop ? team.GroupId : team.TroopId,
+                                    team.isGroupTroop,
+                                    cost.TotalMilliseconds);
                                 break;
 
                             case SendTroopTask.TaskStatus.ConfirmAttack:
@@ -252,11 +258,11 @@
                                     result = this.TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref task.WebClient);
                                 }
 
-                                if (result != "1")
-                                {
-                                    MessageBox.Show(
-                                        string.Format("Attack(isGroup={0}) Failed:{1}", team.isGroupTroop, result));
-                                }
+                                this.DebugLog(
+                                    "Troop(Id={0}, isGroup={1}) Sent, result={2}.",
+                                    team.isGroupTroop ? team.GroupId : team.TroopId,
+                                    team.isGroupTroop,
+                                    result);
                                 task.IsCompleted = true;
                                 break;
                         }
@@ -326,28 +332,28 @@
                     Parallel.Dispatch(
                         this.accountTable.Values,
                         account =>
+                        {
+                            var heroPage = this.OpenHeroPage(account.UserName);
+                            var heroList = this.ParseHeroList(heroPage, account.UserName).ToList();
+                            if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
                             {
-                                var heroPage = this.OpenHeroPage(account.UserName);
-                                var heroList = this.ParseHeroList(heroPage, account.UserName).ToList();
-                                if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
-                                {
-                                    this.UpdateHeroTable(heroList);
-                                }
+                                this.UpdateHeroTable(heroList);
+                            }
 
-                                var deadHeroList = heroList.Where(hero => hero.IsDead).ToList();
-                                if (!deadHeroList.Any())
-                                {
-                                    MessageBox.Show(string.Format("复活武将完成:{0}", account.UserName));
-                                    return;
-                                }
+                            var deadHeroList = heroList.Where(hero => hero.IsDead).ToList();
+                            if (!deadHeroList.Any())
+                            {
+                                MessageBox.Show(string.Format("复活武将完成:{0}", account.UserName));
+                                return;
+                            }
 
-                                if (heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
-                                {
-                                    return;
-                                }
-                                var toReliveHero = deadHeroList.First();
-                                this.ReliveHero(toReliveHero.HeroId, account.UserName);
-                            });
+                            if (heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                            {
+                                return;
+                            }
+                            var toReliveHero = deadHeroList.First();
+                            this.ReliveHero(toReliveHero.HeroId, account.UserName);
+                        });
                 };
             this.reliveHeroTimer.Start();
         }

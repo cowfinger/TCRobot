@@ -7,7 +7,7 @@ namespace TC.TCTasks
 {
     class InfluenceGuard : TCTask
     {
-        private const int CheckInterval = 60 * 1000;
+        private const int CheckInterval = 3 * 1000;
 
         public List<string> recentRequstUnionList = null; 
 

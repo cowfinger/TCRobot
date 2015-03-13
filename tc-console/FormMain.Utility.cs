@@ -850,7 +850,7 @@
             var cityMovePage = this.ChangeMoveFromCity(account.UserName, fromCity.NodeId.ToString());
             var soldiers = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
             var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
-            var carryBrickNum = Math.Min(this.CalcCarryBrickNum(soldiers), brickNum);
+            var carryBrickNum = Math.Min(CalcCarryBrickNum(soldiers), brickNum);
             var troop = this.CalcCarryTroop(soldiers, carryBrickNum).ToList();
             if (carryBrickNum == 0)
             {
@@ -893,7 +893,7 @@
             return resultList;
         }
 
-        private int CalcCarryBrickNum(IEnumerable<Soldier> army)
+        private static int CalcCarryBrickNum(IEnumerable<Soldier> army)
         {
             return army.Sum(a => SoldierTable[a.SoldierType].Capacity * a.SoldierNumber) / 50000;
         }
@@ -923,6 +923,15 @@
                                   foreach (var member in page.RequestMemberList)
                                   {
                                       this.RefuseUnionJoin(member.UnionId, account.UserName);
+                                  }
+
+                                  if (page.RequestMemberList.Any())
+                                  {
+                                      this.DebugLog(
+                                          "Refuse {0}.",
+                                          string.Join(",",
+                                          page.RequestMemberList.Select(
+                                          item => string.Format("({0},{1})", item.UnionName, item.UnionId)).ToArray()));
                                   }
                               };
 
@@ -965,7 +974,7 @@
                         if (carryBrick)
                         {
                             var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
-                            carryBrickNum = Math.Min(this.CalcCarryBrickNum(troop), brickNum);
+                            carryBrickNum = Math.Min(CalcCarryBrickNum(troop), brickNum);
                         }
 
                         this.CreateMoveTroopTask(account, info, targetCity, troop, heroes, carryBrickNum);

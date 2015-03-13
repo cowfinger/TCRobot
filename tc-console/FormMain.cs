@@ -987,6 +987,9 @@
                     this.checkBoxAccountTaskOption.Text = "带砖";
                     this.checkBoxAccountTaskOption.Visible = true;
                     break;
+                case "拒绝联盟":
+                    this.buttonAssignTask.Enabled = true;
+                    break;
             }
         }
 
@@ -1002,20 +1005,25 @@
                 return;
             }
 
+
             foreach (var account in accountList)
             {
-                CityInfo targetCity;
-                if (!account.InfluenceCityList.TryGetValue(targetCityName, out targetCity))
-                {
-                    continue;
-                }
 
+                CityInfo targetCity;
                 switch (this.comboBoxAccountTaskType.Text)
                 {
                     case "运砖":
+                        if (!account.InfluenceCityList.TryGetValue(targetCityName, out targetCity))
+                        {
+                            continue;
+                        }
                         this.CreateShipBrickTask(account, targetCity);
                         break;
                     case "调兵":
+                        if (!account.InfluenceCityList.TryGetValue(targetCityName, out targetCity))
+                        {
+                            continue;
+                        }
                         this.CreateShipTroopTasks(account, targetCity, this.checkBoxAccountTaskOption.Checked);
                         break;
                     case "拒绝联盟":
@@ -1144,7 +1152,7 @@
                         }
                         Thread.Sleep(1000);
                     }
-                }).Then(()=>
+                }).Then(() =>
                 {
                     MessageBox.Show("所有城市修理完毕.");
                     this.Invoke(new DoSomething(() => { this.repairCityToolStripMenuItem.Enabled = true; }));
@@ -1155,6 +1163,39 @@
         private void enlistTroopToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void flushToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            const string Url =
+                "http://yw1.tc.9wee.com/index.php?mod=military/attack&op=show&func=military_event_list&type=1&r=0.6564584287467245";
+            Parallel.Dispatch(this.accountTable.Values,
+                account =>
+                {
+                    var loopTable = "".PadRight(1000, '1');
+
+                    try
+                    {
+                        var webClient = new HttpClient(account.CookieStr);
+                        Parallel.Dispatch(
+                            loopTable,
+                            ch =>
+                            {
+                                try
+                                {
+                                    webClient.OpenUrl(Url);
+                                }
+                                catch (Exception)
+                                {
+                                    // ignored
+                                }
+                            });
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+                });
         }
 
     }
