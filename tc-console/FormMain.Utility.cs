@@ -9,7 +9,6 @@
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Windows.Forms;
-
     using TC.TCTasks;
 
     partial class FormMain
@@ -542,7 +541,7 @@
         {
             var cityNodeId = task.NextCity.CityId;
             var fromCityId = task.NextCity.NodeId;
-            this.OpenCityPage(cityNodeId, task.Account.UserName);
+            TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account, cityNodeId);
             var movePageFrom = this.ChangeMoveFromCity(task.Account.UserName, fromCityId.ToString());
 
 
@@ -581,7 +580,7 @@
         {
             var cityNodeId = task.CurrentCity.CityId;
 
-            this.OpenCityPage(cityNodeId, task.Account.UserName);
+            TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account, cityNodeId);
             var moveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
             var moveTaskList = this.ParseMoveTaskList(moveQueuePage).ToList();
 
@@ -603,7 +602,7 @@
             for (var i = 0; i < 10; ++i)
             {
                 Thread.Sleep(2000);
-                this.OpenCityPage(task.NextCity.CityId, task.Account.UserName);
+                TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account, task.NextCity.CityId);
                 var newMoveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
                 var newMoveTaskList = this.ParseMoveTaskList(newMoveQueuePage).ToList();
 
@@ -617,6 +616,10 @@
                         taskItem => !moveTaskList.Select(item => item.TaskId).Contains(taskItem.TaskId));
                 task.TaskId = thisMoveTask.TaskId;
                 task.ExecutionTime = thisMoveTask.EndTime.AddSeconds(2);
+                this.DebugLog("Troop is moving: {0}=>{1}, ETA={2}.",
+                    task.CurrentCity.Name,
+                    task.NextCity.Name,
+                    thisMoveTask.EndTime);
                 return thisMoveTask;
             }
 
@@ -642,10 +645,10 @@
             int roadLevel;
             if (!roadLevelCache.TryGetValue(from, out roadLevel))
             {
-                this.OpenCityPage(fromCityId, account);
-                var page = this.OpenCityBuildPage(fromCityId, account);
-                roadLevel = ParseRoadLevelFromCityBuildPage(page);
-                roadLevelCache.Add(from, roadLevel);
+                var accountInfo = this.accountTable[account];
+                TCPage.InfluenceShowInfluenceCityDetailPage.Open(accountInfo, fromCityId);
+                var page = TCPage.InfluenceShowCityBuildPage.Open(accountInfo, fromCityId);
+                roadLevelCache.Add(from, page.Road.Level);
             }
 
             return RoadLevelToDistanceMap[roadLevel];
@@ -693,6 +696,8 @@
                         }
                         return;
                     }
+
+                    this.DebugLog("Troop Arrived: {0}.", moveTask.NextCity.Name);
 
                     if (moveTask.NextCity == moveTask.TerminalCity)
                     {
@@ -748,25 +753,36 @@
 
         private bool RepairCityWall(int cityId, AccountInfo account)
         {
-            this.OpenCityPage(cityId, account.UserName);
-            var cityBuildPageData = this.OpenCityBuildPage(cityId, account.UserName);
-            var cityBuildPage = new TCPage.CityBuildPage(cityBuildPageData);
+            TCPage.InfluenceShowInfluenceCityDetailPage.Open(account, cityId);
 
-            var cityRepairWallPageData = this.OpenCityWallPage(cityId, cityBuildPage.Wall.Level, account.UserName);
-            var cityRepairWallPage = new TCPage.RepairCityWallPage(cityRepairWallPageData);
+            var cityBuildPage = TCPage.InfluenceShowCityBuildPage.Open(account, cityId);
+
+            var cityRepairWallPage = TCPage.InfluenceShowInfluenceBuildPage.Open(
+                account,
+                cityId,
+                (int)TCPage.CityBuildId.Wall,
+                cityBuildPage.Wall.Level);
+
             if (cityRepairWallPage.CompleteRepairNeeds == 0)
             {
+                this.DebugLog("Repair Wall at {0} canceled: No Need.", cityBuildPage.CityName);
                 return false;
             }
 
             var brickNumToUse = Math.Min(cityRepairWallPage.BrickNum, cityRepairWallPage.CompleteRepairNeeds);
+
             if (brickNumToUse > 0)
             {
-                this.RepairCityBuild(
+                TCPage.InfluenceDoBuildRepairPage.Open(
+                    account,
                     cityRepairWallPage.CityNodeId,
                     cityRepairWallPage.BuildId,
-                    brickNumToUse,
-                    account.UserName);
+                    brickNumToUse);
+                this.DebugLog("Repair Wall at {0} Ok", cityBuildPage.CityName);
+            }
+            else
+            {
+                this.DebugLog("Repair Wall at {0} canceled: No Brick.", cityBuildPage.CityName);
             }
 
             return true;
@@ -854,9 +870,12 @@
             var troop = this.CalcCarryTroop(soldiers, carryBrickNum).ToList();
             if (carryBrickNum == 0)
             {
+                this.DebugLog("Move Brick {0}=>{1}: Canceld: No Brick.", fromCity.Name, toCity.Name);
                 return null;
             }
 
+            this.DebugLog("Move Brick {0}=>{1}: Task Created {2} Bricks.",
+                fromCity.Name, toCity.Name, carryBrickNum);
             return this.CreateMoveTroopTask(account, fromCity, toCity, troop, new List<string>(), carryBrickNum);
         }
 
@@ -917,12 +936,14 @@
             var task = new InfluenceGuard(account);
             task.TaskAction = obj =>
                               {
-                                  var pageData = this.OpenInfluenceCheckMemberPage(account.UserName);
-                                  var page = new TCPage.InfluenceCheckMemberPage(pageData);
+                                  var page = TCPage.InfluenceShowCheckMemberPage.Open(account);
                                   task.recentRequstUnionList = page.RequestMemberList.Select(item => item.UnionName).ToList();
                                   foreach (var member in page.RequestMemberList)
                                   {
-                                      this.RefuseUnionJoin(member.UnionId, account.UserName);
+                                      TCPage.InfluenceDoCheckMemberPage.Open(
+                                          account,
+                                          TCPage.InfluenceDoCheckMemberPage.Action.refuse,
+                                          member.UnionId);
                                   }
 
                                   if (page.RequestMemberList.Any())

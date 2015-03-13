@@ -6,7 +6,14 @@ using System.Text.RegularExpressions;
 
 namespace TC.TCPage
 {
-    class CityBuildPage
+    enum CityBuildId
+    {
+        Fortress = 1001,
+        Wall = 1002,
+        Road = 1003,
+    }
+
+    class InfluenceShowCityBuildPage
     {
         public class CityBuild
         {
@@ -29,7 +36,21 @@ namespace TC.TCPage
 
         public CityBuild Road { get; private set; }
 
-        public CityBuildPage(string page)
+        public static InfluenceShowCityBuildPage Open(AccountInfo account, int cityNodeId)
+        {
+            var url = RequestAgent.BuildUrl(
+                account.AccountType,
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.city_build,
+                new TCRequestArgument(TCElement.node_id, cityNodeId));
+            var webClient = new HttpClient(account.CookieStr);
+            var rawPage = webClient.OpenUrl(url);
+            return new InfluenceShowCityBuildPage(rawPage);
+        }
+
+        public InfluenceShowCityBuildPage(string page)
         {
             const string CityNamePattern = "<div class=\"title\">(.+?)</div>";
             const string NodeIdPattern = @"node_id=(\d+)";

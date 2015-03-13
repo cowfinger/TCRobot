@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TC</RootNamespace>
     <AssemblyName>TC</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -77,11 +77,17 @@
     <Compile Include="TCDataType\AttackTask.cs" />
     <Compile Include="TCDataType\BigMapCity.cs" />
     <Compile Include="TCDataType\CityInfo.cs" />
-    <Compile Include="TCPage\CityBuildPage.cs" />
-    <Compile Include="TCPage\InfluenceCheckMemberPage.cs" />
+    <Compile Include="TCPage\InfluenceDoCheckMemberPage.cs" />
+    <Compile Include="TCPage\InfluenceShowCityBuildPage.cs" />
+    <Compile Include="TCPage\InfluenceShowCheckMemberPage.cs" />
+    <Compile Include="TCPage\InfluenceShowInfluenceCityDetailPage.cs" />
+    <Compile Include="TCPage\InfluenceDoBuildRepairPage.cs" />
+    <Compile Include="TCPage\InnerBuildPage.cs" />
     <Compile Include="TCPage\MilitaryTrainPage.cs" />
-    <Compile Include="TCPage\RepairCityWallPage.cs" />
+    <Compile Include="TCPage\InfluenceShowInfluenceBuildPage.cs" />
     <Compile Include="TCPage\TCPage.cs" />
+    <Compile Include="TCPage\UnionDoApplyUnionPage.cs" />
+    <Compile Include="TCPage\UnionDoOutUnionPage.cs" />
     <Compile Include="TCTasks\InfluenceGuard.cs" />
     <Compile Include="TCUtility\CookieLite.cs" />
     <Compile Include="TCDataType\TroopInfo.cs" />
@@ -188,6 +194,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

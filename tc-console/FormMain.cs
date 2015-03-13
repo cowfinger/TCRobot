@@ -1076,7 +1076,10 @@
             foreach (ListViewItem lvItem in this.listViewAccounts.CheckedItems)
             {
                 var account = lvItem.Tag as AccountInfo;
-                Task.Run(() => { this.QuitUnion(account.UserName); });
+                Task.Run(() =>
+                {
+                    TCPage.UnionDoOutUnionPage.Open(account);
+                });
             }
         }
 
@@ -1104,7 +1107,7 @@
                 accountList,
                 account =>
                 {
-                    this.ApplyUnion(account.Account.UserName, unionId);
+                    TCPage.UnionDoApplyUnionPage.Open(account.Account, unionId);
                     this.Invoke(new DoSomething(() => { account.lvItem.SubItems[2].Text = unionId.ToString(); }));
                 });
         }

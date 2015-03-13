@@ -14,30 +14,6 @@
             return this.HTTPRequest(url, account);
         }
 
-        private string OpenInfluenceCheckMemberPage(string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.check_member);
-            return this.HTTPRequest(url, account);
-        }
-
-        private string RefuseUnionJoin(int unionId, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Do,
-                TCFunc.check_member,
-                new TCRequestArgument(TCElement.action, "refuse"),
-                new TCRequestArgument(TCElement.union_id, unionId));
-            return this.HTTPRequest(url, account);
-        }
-
         private int GetAccountLevel(AccountInfo account)
         {
             const string pattern = @"<h4>提升等级至(\d+)：</h4>";
@@ -57,31 +33,6 @@
             }
 
             return -1;
-        }
-
-        private string QuitUnion(string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.union,
-                TCSubMod.union,
-                TCOperation.Do,
-                TCFunc.out_union);
-
-            return this.HTTPRequest(url, account);
-        }
-
-        private string ApplyUnion(string account, int unionId)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.union,
-                TCSubMod.union,
-                TCOperation.Do,
-                TCFunc.apply_union,
-                new TCRequestArgument(TCElement.union_id, unionId));
-
-            return this.HTTPRequest(url, account);
         }
 
         private void OpenAccountFirstCity(string account)
@@ -568,60 +519,6 @@
                 TCFunc.influence_city_detail,
                 new TCRequestArgument(TCElement.node_id, cityId));
             client.OpenUrl(url);
-        }
-
-        private string OpenCityWallPage(int cityNodeId, int wallLevel, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_build,
-                new TCRequestArgument(TCElement.build_id, 1002),
-                new TCRequestArgument(TCElement.node_id, cityNodeId),
-                new TCRequestArgument(TCElement.level, wallLevel),
-                new TCRequestArgument(TCElement.action, "repair"));
-            return this.HTTPRequest(url, account);
-        }
-
-        private string OpenCityBuildPage(int cityId, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.city_build,
-                new TCRequestArgument(TCElement.node_id, cityId));
-            return this.HTTPRequest(url, account);
-        }
-
-        private string RepairCityBuild(int cityId, int buildId, int brickNum, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Do,
-                TCFunc.build_repair,
-                new TCRequestArgument(TCElement.build_id, cityId),
-                new TCRequestArgument(TCElement.node_id, buildId),
-                new TCRequestArgument(TCElement.brick_num, brickNum)
-                );
-            return this.HTTPRequest(url, account);
-        }
-
-        private string OpenCityPage(int cityId, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_city_detail,
-                new TCRequestArgument(TCElement.node_id, cityId));
-            return this.HTTPRequest(url, account);
         }
 
         private string OpenCityShowAttackPage(string srccityid, string account)
