@@ -931,6 +931,24 @@
             this.listViewTasks.Items.Add(lvItemTask);
         }
 
+        private void DebugLog(string format, params object[] args)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new DoSomething(() =>
+                {
+                    this.DebugLog(format, args);
+                }));
+            }
+            else
+            {
+                string logLine = string.Format(format, args);
+                var lvItem = new ListViewItem(RemoteTime.ToString());
+                lvItem.SubItems.Add(logLine);
+                this.listViewDebugLog.Items.Add(lvItem);
+            }
+        }
+
         private void CreateShipTroopTasks(AccountInfo account, CityInfo targetCity, bool carryBrick)
         {
             var fromCityList = account.CityNameList.Where(c => c != targetCity.Name).ToList();

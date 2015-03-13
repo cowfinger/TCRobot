@@ -150,6 +150,12 @@
             this.repairCityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enlistTroopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
+            this.tabControlInfo = new System.Windows.Forms.TabControl();
+            this.tabPageOnlineTroops = new System.Windows.Forms.TabPage();
+            this.Log = new System.Windows.Forms.TabPage();
+            this.listViewDebugLog = new System.Windows.Forms.ListView();
+            this.columnHeader26 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader27 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -169,6 +175,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBrickNum)).BeginInit();
             this.tabPageAccountTask.SuspendLayout();
             this.menuStripMain.SuspendLayout();
+            this.tabControlInfo.SuspendLayout();
+            this.tabPageOnlineTroops.SuspendLayout();
+            this.Log.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -528,10 +537,10 @@
             this.columnHeader13});
             this.listViewCompletedTasks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewCompletedTasks.GridLines = true;
-            this.listViewCompletedTasks.Location = new System.Drawing.Point(0, 0);
+            this.listViewCompletedTasks.Location = new System.Drawing.Point(3, 3);
             this.listViewCompletedTasks.Margin = new System.Windows.Forms.Padding(0);
             this.listViewCompletedTasks.Name = "listViewCompletedTasks";
-            this.listViewCompletedTasks.Size = new System.Drawing.Size(465, 368);
+            this.listViewCompletedTasks.Size = new System.Drawing.Size(451, 336);
             this.listViewCompletedTasks.TabIndex = 51;
             this.listViewCompletedTasks.UseCompatibleStateImageBehavior = false;
             this.listViewCompletedTasks.View = System.Windows.Forms.View.Details;
@@ -615,7 +624,7 @@
             // 
             // splitContainer3.Panel2
             // 
-            this.splitContainer3.Panel2.Controls.Add(this.listViewCompletedTasks);
+            this.splitContainer3.Panel2.Controls.Add(this.tabControlInfo);
             this.splitContainer3.Size = new System.Drawing.Size(465, 734);
             this.splitContainer3.SplitterDistance = 362;
             this.splitContainer3.TabIndex = 55;
@@ -661,7 +670,7 @@
             this.tabPageHero.Location = new System.Drawing.Point(4, 22);
             this.tabPageHero.Name = "tabPageHero";
             this.tabPageHero.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageHero.Size = new System.Drawing.Size(457, 337);
+            this.tabPageHero.Size = new System.Drawing.Size(457, 336);
             this.tabPageHero.TabIndex = 2;
             this.tabPageHero.Text = "Hero";
             this.tabPageHero.UseVisualStyleBackColor = true;
@@ -677,7 +686,7 @@
             this.listViewAccountHero.GridLines = true;
             this.listViewAccountHero.Location = new System.Drawing.Point(3, 3);
             this.listViewAccountHero.Name = "listViewAccountHero";
-            this.listViewAccountHero.Size = new System.Drawing.Size(451, 331);
+            this.listViewAccountHero.Size = new System.Drawing.Size(451, 330);
             this.listViewAccountHero.TabIndex = 0;
             this.listViewAccountHero.UseCompatibleStateImageBehavior = false;
             this.listViewAccountHero.View = System.Windows.Forms.View.Details;
@@ -808,7 +817,7 @@
             this.tabPageMoveArmy.Location = new System.Drawing.Point(4, 22);
             this.tabPageMoveArmy.Name = "tabPageMoveArmy";
             this.tabPageMoveArmy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageMoveArmy.Size = new System.Drawing.Size(781, 336);
+            this.tabPageMoveArmy.Size = new System.Drawing.Size(781, 334);
             this.tabPageMoveArmy.TabIndex = 1;
             this.tabPageMoveArmy.Text = "Move Army";
             this.tabPageMoveArmy.UseVisualStyleBackColor = true;
@@ -880,7 +889,7 @@
             this.listBoxMovePath.ItemHeight = 12;
             this.listBoxMovePath.Location = new System.Drawing.Point(510, 76);
             this.listBoxMovePath.Name = "listBoxMovePath";
-            this.listBoxMovePath.Size = new System.Drawing.Size(120, 232);
+            this.listBoxMovePath.Size = new System.Drawing.Size(120, 220);
             this.listBoxMovePath.TabIndex = 27;
             // 
             // buttonConfirmMove
@@ -916,7 +925,7 @@
             this.listViewAccountArmy.Location = new System.Drawing.Point(190, 70);
             this.listViewAccountArmy.MultiSelect = false;
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(301, 283);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(301, 282);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -948,7 +957,7 @@
             this.listViewMoveHero.GridLines = true;
             this.listViewMoveHero.Location = new System.Drawing.Point(8, 70);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(176, 283);
+            this.listViewMoveHero.Size = new System.Drawing.Size(176, 282);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1051,7 +1060,7 @@
             this.tabPageAccountTask.Location = new System.Drawing.Point(4, 22);
             this.tabPageAccountTask.Name = "tabPageAccountTask";
             this.tabPageAccountTask.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAccountTask.Size = new System.Drawing.Size(783, 335);
+            this.tabPageAccountTask.Size = new System.Drawing.Size(781, 334);
             this.tabPageAccountTask.TabIndex = 2;
             this.tabPageAccountTask.Text = "Account Task";
             this.tabPageAccountTask.UseVisualStyleBackColor = true;
@@ -1296,35 +1305,35 @@
             // ToolStripMenuItemDonation
             // 
             this.ToolStripMenuItemDonation.Name = "ToolStripMenuItemDonation";
-            this.ToolStripMenuItemDonation.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItemDonation.Size = new System.Drawing.Size(148, 22);
             this.ToolStripMenuItemDonation.Text = "捐粮";
             this.ToolStripMenuItemDonation.Click += new System.EventHandler(this.ToolStripMenuItemDonation_Click);
             // 
             // ToolStripMenuItemReliveHero
             // 
             this.ToolStripMenuItemReliveHero.Name = "ToolStripMenuItemReliveHero";
-            this.ToolStripMenuItemReliveHero.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItemReliveHero.Size = new System.Drawing.Size(148, 22);
             this.ToolStripMenuItemReliveHero.Text = "复活武将";
             this.ToolStripMenuItemReliveHero.Click += new System.EventHandler(this.ToolStripMenuItemReliveHero_Click);
             // 
             // ToolStripMenuItemQuickReliveHero
             // 
             this.ToolStripMenuItemQuickReliveHero.Name = "ToolStripMenuItemQuickReliveHero";
-            this.ToolStripMenuItemQuickReliveHero.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItemQuickReliveHero.Size = new System.Drawing.Size(148, 22);
             this.ToolStripMenuItemQuickReliveHero.Text = "快速复活武将";
             this.ToolStripMenuItemQuickReliveHero.Click += new System.EventHandler(this.ToolStripMenuItemQuickReliveHero_Click);
             // 
             // 调动部队ToolStripMenuItem
             // 
             this.调动部队ToolStripMenuItem.Name = "调动部队ToolStripMenuItem";
-            this.调动部队ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.调动部队ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.调动部队ToolStripMenuItem.Text = "调动部队";
             // 
             // QuitUnionToolStripMenuItem
             // 
             this.QuitUnionToolStripMenuItem.Enabled = false;
             this.QuitUnionToolStripMenuItem.Name = "QuitUnionToolStripMenuItem";
-            this.QuitUnionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.QuitUnionToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.QuitUnionToolStripMenuItem.Text = "退出联盟";
             this.QuitUnionToolStripMenuItem.Click += new System.EventHandler(this.QuitUnionToolStripMenuItem_Click);
             // 
@@ -1332,21 +1341,21 @@
             // 
             this.joinUnionToolStripMenuItem.Enabled = false;
             this.joinUnionToolStripMenuItem.Name = "joinUnionToolStripMenuItem";
-            this.joinUnionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.joinUnionToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.joinUnionToolStripMenuItem.Text = "加入联盟";
             this.joinUnionToolStripMenuItem.Click += new System.EventHandler(this.joinUnionToolStripMenuItem_Click);
             // 
             // repairCityToolStripMenuItem
             // 
             this.repairCityToolStripMenuItem.Name = "repairCityToolStripMenuItem";
-            this.repairCityToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.repairCityToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.repairCityToolStripMenuItem.Text = "修理城市";
             this.repairCityToolStripMenuItem.Click += new System.EventHandler(this.repairCityToolStripMenuItem_Click);
             // 
             // enlistTroopToolStripMenuItem
             // 
             this.enlistTroopToolStripMenuItem.Name = "enlistTroopToolStripMenuItem";
-            this.enlistTroopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.enlistTroopToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.enlistTroopToolStripMenuItem.Text = "EnlistTroop";
             this.enlistTroopToolStripMenuItem.Click += new System.EventHandler(this.enlistTroopToolStripMenuItem_Click);
             // 
@@ -1357,6 +1366,60 @@
             this.statusStripMain.Size = new System.Drawing.Size(1264, 22);
             this.statusStripMain.TabIndex = 57;
             this.statusStripMain.Text = "statusStrip1";
+            // 
+            // tabControlInfo
+            // 
+            this.tabControlInfo.Controls.Add(this.tabPageOnlineTroops);
+            this.tabControlInfo.Controls.Add(this.Log);
+            this.tabControlInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlInfo.Location = new System.Drawing.Point(0, 0);
+            this.tabControlInfo.Name = "tabControlInfo";
+            this.tabControlInfo.SelectedIndex = 0;
+            this.tabControlInfo.Size = new System.Drawing.Size(465, 368);
+            this.tabControlInfo.TabIndex = 52;
+            // 
+            // tabPageOnlineTroops
+            // 
+            this.tabPageOnlineTroops.Controls.Add(this.listViewCompletedTasks);
+            this.tabPageOnlineTroops.Location = new System.Drawing.Point(4, 22);
+            this.tabPageOnlineTroops.Name = "tabPageOnlineTroops";
+            this.tabPageOnlineTroops.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageOnlineTroops.Size = new System.Drawing.Size(457, 342);
+            this.tabPageOnlineTroops.TabIndex = 1;
+            this.tabPageOnlineTroops.Text = "部队信息";
+            this.tabPageOnlineTroops.UseVisualStyleBackColor = true;
+            // 
+            // Log
+            // 
+            this.Log.Controls.Add(this.listViewDebugLog);
+            this.Log.Location = new System.Drawing.Point(4, 22);
+            this.Log.Name = "Log";
+            this.Log.Size = new System.Drawing.Size(457, 342);
+            this.Log.TabIndex = 2;
+            this.Log.Text = "Log";
+            this.Log.UseVisualStyleBackColor = true;
+            // 
+            // listViewDebugLog
+            // 
+            this.listViewDebugLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader26,
+            this.columnHeader27});
+            this.listViewDebugLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewDebugLog.GridLines = true;
+            this.listViewDebugLog.Location = new System.Drawing.Point(0, 0);
+            this.listViewDebugLog.Name = "listViewDebugLog";
+            this.listViewDebugLog.Size = new System.Drawing.Size(457, 342);
+            this.listViewDebugLog.TabIndex = 0;
+            this.listViewDebugLog.UseCompatibleStateImageBehavior = false;
+            this.listViewDebugLog.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader26
+            // 
+            this.columnHeader26.Text = "Time";
+            // 
+            // columnHeader27
+            // 
+            this.columnHeader27.Text = "Message";
             // 
             // FormMain
             // 
@@ -1396,6 +1459,9 @@
             this.tabPageAccountTask.PerformLayout();
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
+            this.tabControlInfo.ResumeLayout(false);
+            this.tabPageOnlineTroops.ResumeLayout(false);
+            this.Log.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1525,6 +1591,12 @@
         private System.Windows.Forms.CheckBox checkBoxAccountTaskOption;
         private System.Windows.Forms.ToolStripMenuItem repairCityToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enlistTroopToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControlInfo;
+        private System.Windows.Forms.TabPage tabPageOnlineTroops;
+        private System.Windows.Forms.TabPage Log;
+        private System.Windows.Forms.ListView listViewDebugLog;
+        private System.Windows.Forms.ColumnHeader columnHeader26;
+        private System.Windows.Forms.ColumnHeader columnHeader27;
     }
 }
 
