@@ -36,17 +36,15 @@ namespace TC.TCPage
 
         public CityBuild Road { get; private set; }
 
-        public static InfluenceShowCityBuildPage Open(AccountInfo account, int cityNodeId)
+        public static InfluenceShowCityBuildPage Open(RequestAgent agent, int cityNodeId)
         {
-            var url = RequestAgent.BuildUrl(
-                account.AccountType,
+            var url = agent.BuildUrl(
                 TCMod.influence,
                 TCSubMod.influence,
                 TCOperation.Show,
                 TCFunc.city_build,
                 new TCRequestArgument(TCElement.node_id, cityNodeId));
-            var webClient = new HttpClient(account.CookieStr);
-            var rawPage = webClient.OpenUrl(url);
+            var rawPage = agent.WebClient.OpenUrl(url);
             return new InfluenceShowCityBuildPage(rawPage);
         }
 

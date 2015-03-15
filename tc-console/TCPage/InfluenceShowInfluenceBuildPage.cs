@@ -27,13 +27,12 @@ namespace TC.TCPage
         public int CompleteRepairNeeds { get; private set; }
 
         public static InfluenceShowInfluenceBuildPage Open(
-            AccountInfo account,
+            RequestAgent agent,
             int cityNodeId,
             int buildId,
             int buildLevel)
         {
-            var url = RequestAgent.BuildUrl(
-                account.AccountType,
+            var url = agent.BuildUrl(
                 TCMod.influence,
                 TCSubMod.influence,
                 TCOperation.Show,
@@ -42,8 +41,7 @@ namespace TC.TCPage
                 new TCRequestArgument(TCElement.node_id, cityNodeId),
                 new TCRequestArgument(TCElement.level, buildLevel),
                 new TCRequestArgument(TCElement.action, "repair"));
-            var webClient = new HttpClient(account.CookieStr);
-            var rawPage = webClient.OpenUrl(url);
+            var rawPage = agent.WebClient.OpenUrl(url);
             return new InfluenceShowInfluenceBuildPage(rawPage);
         }
 

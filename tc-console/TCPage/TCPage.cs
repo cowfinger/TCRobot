@@ -15,18 +15,24 @@ namespace TC.TCPage
             private set;
         }
 
+        public HttpClient WebClient
+        {
+            get;
+            private set;
+        }
+
         public static T OpenUrl<T>(AccountInfo account, string url) where T : TCPage, new()
         {
             var webClient = new HttpClient(account.CookieStr);
             var rawPage = webClient.OpenUrl(url);
-            var page = new T();
+            var page = new T()
+            {
+                RawPage = rawPage,
+                WebClient = webClient,
+            };
+
             account.CookieStr = webClient.Cookie.CookieString;
             return page;
-        }
-
-        public TCPage(string rawPage)
-        {
-            this.RawPage = rawPage;
         }
     }
 }

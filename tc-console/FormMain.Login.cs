@@ -119,6 +119,7 @@
 
             var mainPage = this.RefreshHomePage(account.UserName);
             account.UnionId = this.ParseUnionIdFromMainPage(mainPage);
+            account.WebAgent = new RequestAgent(account);
 
             Task.Run(
                 () =>

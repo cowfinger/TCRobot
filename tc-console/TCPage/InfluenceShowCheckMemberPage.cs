@@ -24,16 +24,14 @@
 
         public IEnumerable<MemberInfo> RequestMemberList { get; private set; }
 
-        public static InfluenceShowCheckMemberPage Open(AccountInfo account)
+        public static InfluenceShowCheckMemberPage Open(RequestAgent agent)
         {
-            var url = RequestAgent.BuildUrl(
-                account.AccountType,
+            var url = agent.BuildUrl(
                 TCMod.influence,
                 TCSubMod.influence,
                 TCOperation.Show,
                 TCFunc.check_member);
-            var httpClient = new HttpClient(account.CookieStr);
-            var rawPage = httpClient.OpenUrl(url);
+            var rawPage = agent.WebClient.OpenUrl(url);
             return new InfluenceShowCheckMemberPage(rawPage);
         }
 

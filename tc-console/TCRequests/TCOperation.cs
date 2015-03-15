@@ -1,6 +1,6 @@
 namespace TC
 {
-    internal enum TCOperation
+    public enum TCOperation
     {
         Show,
 

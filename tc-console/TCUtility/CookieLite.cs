@@ -4,7 +4,7 @@
     using System.IO;
     using System.Text;
 
-    internal class CookieLite
+    public class CookieLite
     {
         private readonly Dictionary<string, string> cookieMap = new Dictionary<string, string>();
 

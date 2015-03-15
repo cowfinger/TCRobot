@@ -1,6 +1,6 @@
 namespace TC
 {
-    internal enum TCMod
+    public enum TCMod
     {
         city,
 

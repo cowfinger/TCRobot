@@ -13,18 +13,16 @@ namespace TC.TCPage
             pass, refuse,
         }
 
-        public static InfluenceDoCheckMemberPage Open(AccountInfo account, Action act, int unionId)
+        public static InfluenceDoCheckMemberPage Open(RequestAgent agent, Action act, int unionId)
         {
-            var url = RequestAgent.BuildUrl(
-                account.AccountType,
+            var url = agent.BuildUrl(
                 TCMod.influence,
                 TCSubMod.influence,
                 TCOperation.Do,
                 TCFunc.check_member,
                 new TCRequestArgument(TCElement.action, act.ToString()),
                 new TCRequestArgument(TCElement.union_id, unionId));
-            var webClient = new HttpClient(account.CookieStr);
-            var rawPage = webClient.OpenUrl(url);
+            var rawPage = agent.WebClient.OpenUrl(url);
             return new InfluenceDoCheckMemberPage(rawPage);
         }
 

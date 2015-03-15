@@ -8,16 +8,14 @@ namespace TC.TCPage
 {
     class UnionDoOutUnionPage
     {
-        public static UnionDoOutUnionPage Open(AccountInfo account)
+        public static UnionDoOutUnionPage Open(RequestAgent agent)
         {
-            var url = RequestAgent.BuildUrl(
-                account.AccountType,
+            var url = agent.BuildUrl(
                 TCMod.union,
                 TCSubMod.union,
                 TCOperation.Do,
                 TCFunc.out_union);
-            var webClient = new HttpClient(account.CookieStr);
-            var rawPage = webClient.OpenUrl(url);
+            var rawPage = agent.WebClient.OpenUrl(url);
             return new UnionDoOutUnionPage(rawPage);
         }
 

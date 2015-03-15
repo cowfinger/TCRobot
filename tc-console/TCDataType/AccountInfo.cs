@@ -29,5 +29,7 @@ namespace TC
         public int UnionId;
 
         public string UserName;
+
+        public RequestAgent WebAgent { get; set; }
     }
 }

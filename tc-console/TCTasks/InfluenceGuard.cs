@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 
 namespace TC.TCTasks
 {
     class InfluenceGuard : TCTask
     {
-        private const int CheckInterval = 3 * 1000;
+        private const int CheckInterval = 1 * 1000;
 
-        public List<string> recentRequstUnionList = null; 
+        public HashSet<int> UnionIdSet = new HashSet<int>();
+
+        public List<string> recentRequstUnionList = null;
+
+        public Timer RefuseTimer = null;
 
         public InfluenceGuard(AccountInfo account)
             : base(account, CheckInterval)

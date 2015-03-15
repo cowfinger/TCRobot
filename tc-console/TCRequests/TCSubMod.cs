@@ -1,6 +1,6 @@
 namespace TC
 {
-    internal enum TCSubMod
+    public enum TCSubMod
     {
         attack,
 

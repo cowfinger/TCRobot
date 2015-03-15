@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using System.Timers;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -541,7 +543,7 @@
         {
             var cityNodeId = task.NextCity.CityId;
             var fromCityId = task.NextCity.NodeId;
-            TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account, cityNodeId);
+            TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account.WebAgent, cityNodeId);
             var movePageFrom = this.ChangeMoveFromCity(task.Account.UserName, fromCityId.ToString());
 
 
@@ -580,7 +582,7 @@
         {
             var cityNodeId = task.CurrentCity.CityId;
 
-            TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account, cityNodeId);
+            TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account.WebAgent, cityNodeId);
             var moveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
             var moveTaskList = this.ParseMoveTaskList(moveQueuePage).ToList();
 
@@ -602,7 +604,7 @@
             for (var i = 0; i < 10; ++i)
             {
                 Thread.Sleep(2000);
-                TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account, task.NextCity.CityId);
+                TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account.WebAgent, task.NextCity.CityId);
                 var newMoveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
                 var newMoveTaskList = this.ParseMoveTaskList(newMoveQueuePage).ToList();
 
@@ -646,8 +648,8 @@
             if (!roadLevelCache.TryGetValue(from, out roadLevel))
             {
                 var accountInfo = this.accountTable[account];
-                TCPage.InfluenceShowInfluenceCityDetailPage.Open(accountInfo, fromCityId);
-                var page = TCPage.InfluenceShowCityBuildPage.Open(accountInfo, fromCityId);
+                TCPage.InfluenceShowInfluenceCityDetailPage.Open(accountInfo.WebAgent, fromCityId);
+                var page = TCPage.InfluenceShowCityBuildPage.Open(accountInfo.WebAgent, fromCityId);
                 roadLevelCache.Add(from, page.Road.Level);
             }
 
@@ -753,12 +755,12 @@
 
         private bool RepairCityWall(int cityId, AccountInfo account)
         {
-            TCPage.InfluenceShowInfluenceCityDetailPage.Open(account, cityId);
+            TCPage.InfluenceShowInfluenceCityDetailPage.Open(account.WebAgent, cityId);
 
-            var cityBuildPage = TCPage.InfluenceShowCityBuildPage.Open(account, cityId);
+            var cityBuildPage = TCPage.InfluenceShowCityBuildPage.Open(account.WebAgent, cityId);
 
             var cityRepairWallPage = TCPage.InfluenceShowInfluenceBuildPage.Open(
-                account,
+                account.WebAgent,
                 cityId,
                 (int)TCPage.CityBuildId.Wall,
                 cityBuildPage.Wall.Level);
@@ -774,7 +776,7 @@
             if (brickNumToUse > 0)
             {
                 TCPage.InfluenceDoBuildRepairPage.Open(
-                    account,
+                    account.WebAgent,
                     cityRepairWallPage.CityNodeId,
                     cityRepairWallPage.BuildId,
                     brickNumToUse);
@@ -931,19 +933,201 @@
             return activeTaskList;
         }
 
+        private void CreateSpyTask(AccountInfo account)
+        {
+            var task = new SpyTask(account);
+            task.TaskAction = obj =>
+            {
+                TCPage.InfluenceDoApplyInfluencePage.Open(account.WebAgent, 9);
+
+                var cityList = this.QueryInfluenceCityList(account.UserName);
+                var cityInfoList = new List<SpyTask.CityMilitaryInfo>();
+                Parallel.Dispatch(cityList, city =>
+                {
+                    var webAgent = new RequestAgent(account);
+                    var cityDetail = TCPage.InfluenceShowInfluenceCityDetailPage.Open(webAgent, city.CityId);
+                    var reserveArmyPage = TCPage.WorldWarShowReserveArmyInfoPage.Open(webAgent, 1);
+                    var attackTeamPage = TCPage.WorldWarShowTeamPage.Open(webAgent, 3);
+                    var defendTeamPage = TCPage.WorldWarShowTeamPage.Open(webAgent, 4);
+
+                    this.DebugLog("Inspect{0}:Fortress:{1},Wall:{2};ReserveArmy:{3},ReserveHero:{4}",
+                        cityDetail.CityName,
+                        cityDetail.FortressEndure,
+                        cityDetail.WallEndure,
+                        reserveArmyPage.ReserveArmyNum,
+                        reserveArmyPage.ReserveHeroNum);
+
+                    var cityMilitaryInfo = new SpyTask.CityMilitaryInfo()
+                    {
+                        Name = cityDetail.CityName,
+                        CityId = cityDetail.CityNodeId,
+                        FortressEndure = cityDetail.FortressEndure,
+                        MaxFortressEndure = cityDetail.MaxFortressEndure,
+                        WallEndure = cityDetail.WallEndure,
+                        MaxWallEndure = cityDetail.MaxWallEndure,
+                        TotalArmy = reserveArmyPage.ReserveArmyNum,
+                        TotalHeroNum = reserveArmyPage.ReserveHeroNum,
+                        AttackTroops = attackTeamPage.TeamList.Select(team =>
+                            new SpyTask.CityTroopInfo
+                            {
+                                HeroNum = team.HeroNum,
+                                AttackPower = team.AttackPower,
+                                DefendPower = team.DefendPower,
+                            }
+                        ).ToList(),
+                        DefendTroops = defendTeamPage.TeamList.Select(team =>
+                            new SpyTask.CityTroopInfo
+                            {
+                                HeroNum = team.HeroNum,
+                                AttackPower = team.AttackPower,
+                                DefendPower = team.DefendPower,
+                            }
+                        ).ToList(),
+                    };
+
+                    lock (cityInfoList)
+                    {
+                        cityInfoList.Add(cityMilitaryInfo);
+                    }
+                }).Wait();
+
+                TCPage.InfluenceDoCancelApplyInfluencePage.Open(account.WebAgent, 9);
+
+                if (task.EnemyCityList == null)
+                {
+                    var relatedItems = cityInfoList.Where(
+                        city =>
+                            city.FortressEndure != city.MaxFortressEndure ||
+                            city.WallEndure != city.MaxFortressEndure ||
+                            city.TotalArmy > 0 ||
+                            city.TotalHeroNum > 0 ||
+                            city.AttackTroops.Any() ||
+                            city.DefendTroops.Any()
+                        );
+                    foreach (var city in relatedItems)
+                    {
+                        var log = BuildCityMilitaryInfoString(city);
+                        this.Invoke(new DoSomething(() =>
+                        {
+                            var lvItem = new ListViewItem(RemoteTime.ToString());
+                            lvItem.SubItems.Add(city.Name);
+                            lvItem.SubItems.Add(log);
+                            city.UiItem = lvItem;
+                            this.listViewEnemyCityInfo.Items.Add(lvItem);
+                        }));
+                    }
+                }
+                else
+                {
+                    var lastCityMap = task.EnemyCityList.ToDictionary(city => city.CityId);
+                    foreach (var city in cityInfoList)
+                    {
+                        SpyTask.CityMilitaryInfo oldCity;
+                        if (!lastCityMap.TryGetValue(city.CityId, out oldCity))
+                        {
+                            var log = BuildCityMilitaryInfoString(city);
+                            var lvItem = new ListViewItem(RemoteTime.ToString());
+                            lvItem.SubItems.Add(city.Name);
+                            lvItem.SubItems.Add(log);
+                            city.UiItem = lvItem;
+                            this.listViewEnemyCityInfo.Items.Add(lvItem);
+                        }
+                        else
+                        {
+                            var log = BuildCityMilitaryInfoChangeString(city, oldCity);
+                            city.UiItem = oldCity.UiItem;
+                            city.UiItem.SubItems[0].Text = RemoteTime.ToString();
+                            city.UiItem.SubItems[2].Text = log;
+                        }
+                    }
+                }
+
+                task.EnemyCityList = cityInfoList;
+            };
+        }
+
+        private static string BuildCityMilitaryInfoChangeString(SpyTask.CityMilitaryInfo city, SpyTask.CityMilitaryInfo oldCity)
+        {
+            var logBuilder = new StringBuilder();
+
+            if (oldCity.FortressEndure != city.MaxFortressEndure)
+            {
+                logBuilder.AppendFormat("要塞:{0}=>{1}", oldCity.FortressEndure, city.FortressEndure);
+            }
+            if (oldCity.WallEndure != city.MaxWallEndure)
+            {
+                logBuilder.AppendFormat(",城墙:{0}=>{1}", oldCity.WallEndure, city.WallEndure);
+            }
+            if (oldCity.TotalArmy != city.TotalArmy)
+            {
+                logBuilder.AppendFormat(",后备部队:{0}=>{1}", oldCity.TotalArmy, city.TotalArmy);
+            }
+            if (oldCity.TotalHeroNum != city.TotalHeroNum)
+            {
+                logBuilder.AppendFormat(",后备将领:{0}=>{1}", oldCity.TotalHeroNum, city.TotalHeroNum);
+            }
+            if (oldCity.AttackTroops.Count != city.AttackTroops.Count)
+            {
+                logBuilder.AppendFormat(",攻击部队:{0}=>{1}", oldCity.AttackTroops.Count, city.AttackTroops.Count);
+            }
+            if (oldCity.DefendTroops.Count != city.AttackTroops.Count)
+            {
+                logBuilder.AppendFormat(",防御部队:{0}=>{1}", oldCity.DefendTroops.Count, city.DefendTroops.Count);
+            }
+            return string.Format("{0}:{1}", city.Name, logBuilder.ToString());
+        }
+
+        private static string BuildCityMilitaryInfoString(SpyTask.CityMilitaryInfo city)
+        {
+            var logBuilder = new StringBuilder();
+            if (city.FortressEndure != city.MaxFortressEndure)
+            {
+                logBuilder.AppendFormat("要塞:{0}/{1}", city.FortressEndure, city.MaxFortressEndure);
+            }
+            if (city.WallEndure != city.MaxWallEndure)
+            {
+                logBuilder.AppendFormat(",城墙:{0}/{1}", city.WallEndure, city.MaxWallEndure);
+            }
+            if (city.TotalArmy > 0)
+            {
+                logBuilder.AppendFormat(",后备部队:{0}", city.TotalArmy);
+            }
+            if (city.TotalHeroNum > 0)
+            {
+                logBuilder.AppendFormat(",后备将领:{0}", city.TotalHeroNum);
+            }
+            if (city.AttackTroops.Any())
+            {
+                logBuilder.AppendFormat(",攻击部队:{0}", city.AttackTroops.Count);
+            }
+            if (city.DefendTroops.Any())
+            {
+                logBuilder.AppendFormat(",防御部队:{0}", city.DefendTroops.Count);
+            }
+            return string.Format("{0}:{1}", city.Name, logBuilder.ToString());
+        }
+
         private void CreateInfluenceGuardTask(AccountInfo account)
         {
             var task = new InfluenceGuard(account);
             task.TaskAction = obj =>
                               {
-                                  var page = TCPage.InfluenceShowCheckMemberPage.Open(account);
+                                  var page = TCPage.InfluenceShowCheckMemberPage.Open(account.WebAgent);
                                   task.recentRequstUnionList = page.RequestMemberList.Select(item => item.UnionName).ToList();
-                                  foreach (var member in page.RequestMemberList)
+                                  // foreach (var unionId in task.UnionIdSet)
+                                  // {
+                                  //     TCPage.InfluenceDoCheckMemberPage.Open(
+                                  //         account.WebAgent,
+                                  //         TCPage.InfluenceDoCheckMemberPage.Action.refuse,
+                                  //         unionId);
+                                  // }
+
+                                  lock (task.UnionIdSet)
                                   {
-                                      TCPage.InfluenceDoCheckMemberPage.Open(
-                                          account,
-                                          TCPage.InfluenceDoCheckMemberPage.Action.refuse,
-                                          member.UnionId);
+                                      foreach (var member in page.RequestMemberList.Where(member => !task.UnionIdSet.Contains(member.UnionId)))
+                                      {
+                                          task.UnionIdSet.Add(member.UnionId);
+                                      }
                                   }
 
                                   if (page.RequestMemberList.Any())
@@ -955,6 +1139,24 @@
                                           item => string.Format("({0},{1})", item.UnionName, item.UnionId)).ToArray()));
                                   }
                               };
+            task.RefuseTimer = new System.Timers.Timer(500) { AutoReset = true };
+            task.RefuseTimer.Elapsed += new ElapsedEventHandler((sender, args) =>
+            {
+                List<int> unionIdList;
+                lock (task.UnionIdSet)
+                {
+                    unionIdList = task.UnionIdSet.ToList();
+                }
+
+                Parallel.Dispatch(unionIdList, unionId =>
+                {
+                    TCPage.InfluenceDoCheckMemberPage.Open(
+                        account.WebAgent,
+                        TCPage.InfluenceDoCheckMemberPage.Action.refuse,
+                        unionId);
+                });
+            });
+            task.RefuseTimer.Start();
 
             var lvItemTask = new ListViewItem { Tag = task };
             task.SyncToListViewItem(lvItemTask, RemoteTime);

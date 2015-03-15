@@ -93,12 +93,12 @@
                 return;
             }
 
-            if (!this.cityList.ContainsKey(cityName))
+            string cityId;
+            if (!this.cityList.TryGetValue(cityName, out cityId))
             {
                 return;
             }
 
-            var cityId = this.cityList[cityName];
             this.btnQuickCreateTroop.Enabled = false;
 
             var maxSoilderNumber = 0;
@@ -120,7 +120,7 @@
                     var heroList = ParseHerosInCreateTeamPage(page);
                     var soldierList = ParseSoldiersInCreateTeamPage(page).ToList();
 
-                    soldierList.Sort((x, y) => { return x.SoldierNumber.CompareTo(y.SoldierNumber); });
+                    soldierList.Sort((x, y) => x.SoldierNumber.CompareTo(y.SoldierNumber));
                     soldierList.Reverse();
 
                     if (this.radioButtonFullTroop.Checked)
@@ -990,6 +990,9 @@
                 case "拒绝联盟":
                     this.buttonAssignTask.Enabled = true;
                     break;
+                case "间谍":
+                    this.buttonAssignTask.Enabled = true;
+                    break;
             }
         }
 
@@ -1008,7 +1011,6 @@
 
             foreach (var account in accountList)
             {
-
                 CityInfo targetCity;
                 switch (this.comboBoxAccountTaskType.Text)
                 {
@@ -1028,6 +1030,9 @@
                         break;
                     case "拒绝联盟":
                         this.CreateInfluenceGuardTask(account);
+                        break;
+                    case "间谍":
+                        this.CreateSpyTask(account);
                         break;
                 }
             }
@@ -1078,7 +1083,7 @@
                 var account = lvItem.Tag as AccountInfo;
                 Task.Run(() =>
                 {
-                    TCPage.UnionDoOutUnionPage.Open(account);
+                    TCPage.UnionDoOutUnionPage.Open(account.WebAgent);
                 });
             }
         }
@@ -1107,7 +1112,7 @@
                 accountList,
                 account =>
                 {
-                    TCPage.UnionDoApplyUnionPage.Open(account.Account, unionId);
+                    TCPage.UnionDoApplyUnionPage.Open(account.Account.WebAgent, unionId);
                     this.Invoke(new DoSomething(() => { account.lvItem.SubItems[2].Text = unionId.ToString(); }));
                 });
         }

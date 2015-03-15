@@ -24,6 +24,8 @@ namespace TC
 
         hero_id,
 
+        influence_id,
+
         join_attack_type,
 
         level,

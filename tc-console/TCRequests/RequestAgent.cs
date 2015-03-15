@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    partial class RequestAgent
+    public partial class RequestAgent
     {
         private static readonly Random RandGen = new Random();
 
@@ -87,14 +87,6 @@
                 url += "&" + string.Join("&", argPairs);
             }
             return this.BuildUrl(url);
-        }
-
-        private IEnumerable<CityInfo> QueryInfluenceCityList()
-        {
-            this.OpenAccountFirstCity();
-            var content = this.OpenMoveTroopPage();
-
-            return this.ParseCityListFromMoveTroopPage(content);
         }
     }
 }

@@ -1,8 +1,10 @@
 namespace TC
 {
-    internal enum TCFunc
+    public enum TCFunc
     {
         allow_prop,
+
+        apply_influence,
 
         apply_union,
 
@@ -11,6 +13,8 @@ namespace TC
         attack_confirm,
 
         build_repair,
+
+        cancel_apply_influence,
 
         check_member,
 
@@ -60,7 +64,11 @@ namespace TC
 
         relive_hero,
 
+        reserve_army_info,
+
         science,
+
+        tab_id,
 
         team,
 

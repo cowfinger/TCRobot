@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TC</RootNamespace>
     <AssemblyName>TC</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -77,6 +77,8 @@
     <Compile Include="TCDataType\AttackTask.cs" />
     <Compile Include="TCDataType\BigMapCity.cs" />
     <Compile Include="TCDataType\CityInfo.cs" />
+    <Compile Include="TCPage\InfluenceDoApplyInfluencePage.cs" />
+    <Compile Include="TCPage\InfluenceDoCancelApplyInfluencePage.cs" />
     <Compile Include="TCPage\InfluenceDoCheckMemberPage.cs" />
     <Compile Include="TCPage\InfluenceShowCityBuildPage.cs" />
     <Compile Include="TCPage\InfluenceShowCheckMemberPage.cs" />
@@ -88,7 +90,10 @@
     <Compile Include="TCPage\TCPage.cs" />
     <Compile Include="TCPage\UnionDoApplyUnionPage.cs" />
     <Compile Include="TCPage\UnionDoOutUnionPage.cs" />
+    <Compile Include="TCPage\WorldWarShowReserveArmyInfoPage.cs" />
+    <Compile Include="TCPage\WorldWarShowTeamPage.cs" />
     <Compile Include="TCTasks\InfluenceGuard.cs" />
+    <Compile Include="TCTasks\SpyTask.cs" />
     <Compile Include="TCUtility\CookieLite.cs" />
     <Compile Include="TCDataType\TroopInfo.cs" />
     <Compile Include="TCDataType\DepotItem.cs" />
