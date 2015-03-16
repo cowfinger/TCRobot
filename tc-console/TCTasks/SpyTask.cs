@@ -9,7 +9,7 @@ namespace TC.TCTasks
 {
     class SpyTask : TCTask
     {
-        private const int CheckInterval = 30 * 1000;
+        private const int CheckInterval = 10 * 1000;
 
         public class CityTroopInfo
         {
@@ -41,10 +41,39 @@ namespace TC.TCTasks
 
             public List<CityTroopInfo> DefendTroops { get; set; }
 
+            public RequestAgent WebAgent { get; set; }
+
             public ListViewItem UiItem { get; set; }
+
+            public CityInfo RawData { get; set; }
+
+            public int Counter { get; set; }
         }
 
-        public List<CityMilitaryInfo> EnemyCityList = new List<CityMilitaryInfo>();
+        public Dictionary<string, CityMilitaryInfo> EnemyCityList = new Dictionary<string, CityMilitaryInfo>();
+
+        private readonly object enemyCityInfoListLock = new object();
+        private List<CityInfo> enemyCityInfoList = new List<CityInfo>();
+
+        public int Counter = 0;
+
+        public List<CityInfo> EnemyCityInfoList
+        {
+            get
+            {
+                lock (this.enemyCityInfoListLock)
+                {
+                    return this.enemyCityInfoList;
+                }
+            }
+            set
+            {
+                lock (this.enemyCityInfoListLock)
+                {
+                    this.enemyCityInfoList = value;
+                }
+            }
+        }
 
         public SpyTask(AccountInfo account)
             : base(account, CheckInterval)

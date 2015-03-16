@@ -97,6 +97,7 @@
             this.listViewEnemyCityInfo = new System.Windows.Forms.ListView();
             this.columnHeader28 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader30 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader29 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tabControlTask = new System.Windows.Forms.TabControl();
             this.tabPageAttack = new System.Windows.Forms.TabPage();
@@ -452,7 +453,7 @@
             this.listViewTasks.Location = new System.Drawing.Point(-2, 78);
             this.listViewTasks.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(1188, 473);
+            this.listViewTasks.Size = new System.Drawing.Size(1188, 469);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
@@ -822,14 +823,17 @@
             // listViewEnemyCityInfo
             // 
             this.listViewEnemyCityInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewEnemyCityInfo.CheckBoxes = true;
             this.listViewEnemyCityInfo.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader28,
-            this.columnHeader30});
+            this.columnHeader30,
+            this.columnHeader29});
             this.listViewEnemyCityInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewEnemyCityInfo.GridLines = true;
             this.listViewEnemyCityInfo.Location = new System.Drawing.Point(0, 0);
             this.listViewEnemyCityInfo.Name = "listViewEnemyCityInfo";
             this.listViewEnemyCityInfo.Size = new System.Drawing.Size(690, 523);
+            this.listViewEnemyCityInfo.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewEnemyCityInfo.TabIndex = 0;
             this.listViewEnemyCityInfo.UseCompatibleStateImageBehavior = false;
             this.listViewEnemyCityInfo.View = System.Windows.Forms.View.Details;
@@ -841,8 +845,13 @@
             // 
             // columnHeader30
             // 
-            this.columnHeader30.Text = "消息";
-            this.columnHeader30.Width = 596;
+            this.columnHeader30.Text = "城市";
+            this.columnHeader30.Width = 85;
+            // 
+            // columnHeader29
+            // 
+            this.columnHeader29.Text = "信息";
+            this.columnHeader29.Width = 459;
             // 
             // splitContainer2
             // 
@@ -1080,7 +1089,7 @@
             this.listViewAccountArmy.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountArmy.MultiSelect = false;
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 419);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 421);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -1113,7 +1122,7 @@
             this.listViewMoveHero.Location = new System.Drawing.Point(12, 105);
             this.listViewMoveHero.Margin = new System.Windows.Forms.Padding(4);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(262, 419);
+            this.listViewMoveHero.Size = new System.Drawing.Size(262, 421);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1224,7 +1233,7 @@
             this.tabPageAccountTask.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageAccountTask.Name = "tabPageAccountTask";
             this.tabPageAccountTask.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageAccountTask.Size = new System.Drawing.Size(1180, 510);
+            this.tabPageAccountTask.Size = new System.Drawing.Size(1178, 509);
             this.tabPageAccountTask.TabIndex = 2;
             this.tabPageAccountTask.Text = "Account Task";
             this.tabPageAccountTask.UseVisualStyleBackColor = true;
@@ -1350,7 +1359,7 @@
             this.listViewAccountActiveTask.Location = new System.Drawing.Point(466, 29);
             this.listViewAccountActiveTask.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountActiveTask.Name = "listViewAccountActiveTask";
-            this.listViewAccountActiveTask.Size = new System.Drawing.Size(776, 497);
+            this.listViewAccountActiveTask.Size = new System.Drawing.Size(778, 498);
             this.listViewAccountActiveTask.TabIndex = 2;
             this.listViewAccountActiveTask.UseCompatibleStateImageBehavior = false;
             this.listViewAccountActiveTask.View = System.Windows.Forms.View.Details;
@@ -1397,7 +1406,7 @@
             this.listViewTaskIdleAccount.Location = new System.Drawing.Point(0, 29);
             this.listViewTaskIdleAccount.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTaskIdleAccount.Name = "listViewTaskIdleAccount";
-            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 497);
+            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 498);
             this.listViewTaskIdleAccount.TabIndex = 0;
             this.listViewTaskIdleAccount.UseCompatibleStateImageBehavior = false;
             this.listViewTaskIdleAccount.View = System.Windows.Forms.View.Details;
@@ -1730,6 +1739,7 @@
         private System.Windows.Forms.ListView listViewEnemyCityInfo;
         private System.Windows.Forms.ColumnHeader columnHeader28;
         private System.Windows.Forms.ColumnHeader columnHeader30;
+        private System.Windows.Forms.ColumnHeader columnHeader29;
     }
 }
 

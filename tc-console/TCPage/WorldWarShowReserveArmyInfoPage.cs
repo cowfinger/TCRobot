@@ -18,7 +18,7 @@ namespace TC.TCPage
         public static WorldWarShowReserveArmyInfoPage Open(RequestAgent agent, int tabId)
         {
             var url = agent.BuildUrl(
-                TCMod.world,
+                TCMod.military,
                 TCSubMod.world_war,
                 TCOperation.Show,
                 TCFunc.reserve_army_info,

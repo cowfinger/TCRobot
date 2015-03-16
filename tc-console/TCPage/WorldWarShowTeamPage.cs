@@ -11,15 +11,15 @@ namespace TC.TCPage
     {
         public const string TeamLinePattern =
             @"<tr>\s*" +
-               @"<td>(?<accountName>.+?)</td>\s*" +
-               @"<td>(?<heroNum>\d+)</td>\s*" +
-               @"<td>(?<attackPower>\d+)</td>\s*" +
-               @"<td>(?<defendPower>\d+)</td>\s*" +
-               @"<td>(?<status>.+?)</td>\s*" +
-               @"<td>\s*" +
-               @"worldWarClass.showTeamDetail((?<teamId>\d+),4)\s*" +
-               @"</td>\s*" +
-            @"</tr>";
+            @"<td>(?<accountName>.+?)</td>\s*" +
+            @"<td>(?<heroNum>\d+)</td>\s*" +
+            @"<td>(?<attackPower>\d+)</td>\s*" +
+            @"<td>(?<defendPower>\d+)</td>\s*" +
+            @"<td>(?<status>.+?)</td>\s*" +
+            @"<td>\s*"; //+
+        //    @"worldWarClass.showTeamDetail((?<teamId>\d+),4)\s*" +
+        //    @"</td>\s*" +
+        // @"</tr>";
 
         public class TeamInfo
         {
@@ -53,12 +53,17 @@ namespace TC.TCPage
 
         public WorldWarShowTeamPage(string page)
         {
+            if (page.Contains("alert"))
+            {
+                this.TeamList = new List<TeamInfo>();
+                return;
+            }
             var teamLineMatches = Regex.Matches(page, TeamLinePattern, RegexOptions.Singleline);
             this.TeamList = from Match match in teamLineMatches
                             select new TeamInfo
                             {
                                 AccountName = match.Groups["accountName"].Value,
-                                TeamId = int.Parse(match.Groups["teamId"].Value),
+                                //TeamId = int.Parse(match.Groups["teamId"].Value),
                                 AttackPower = int.Parse(match.Groups["attackPower"].Value),
                                 DefendPower = int.Parse(match.Groups["defendPower"].Value),
                                 HeroNum = int.Parse(match.Groups["heroNum"].Value)
