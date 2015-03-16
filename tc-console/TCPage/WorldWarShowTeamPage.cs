@@ -16,10 +16,8 @@ namespace TC.TCPage
             @"<td>(?<attackPower>\d+)</td>\s*" +
             @"<td>(?<defendPower>\d+)</td>\s*" +
             @"<td>(?<status>.+?)</td>\s*" +
-            @"<td>\s*"; //+
-        //    @"worldWarClass.showTeamDetail((?<teamId>\d+),4)\s*" +
-        //    @"</td>\s*" +
-        // @"</tr>";
+            @"<td>\s*" +
+            @"<div.*?worldWarClass\.showTeamDetail\((?<teamId>\d+),\d+\)";
 
         public class TeamInfo
         {
@@ -63,7 +61,7 @@ namespace TC.TCPage
                             select new TeamInfo
                             {
                                 AccountName = match.Groups["accountName"].Value,
-                                //TeamId = int.Parse(match.Groups["teamId"].Value),
+                                TeamId = int.Parse(match.Groups["teamId"].Value),
                                 AttackPower = int.Parse(match.Groups["attackPower"].Value),
                                 DefendPower = int.Parse(match.Groups["defendPower"].Value),
                                 HeroNum = int.Parse(match.Groups["heroNum"].Value)

@@ -161,6 +161,8 @@
             this.repairCityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enlistTroopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPageFocusedEnemyCity = new System.Windows.Forms.TabPage();
+            this.listViewEnemyCityDetail = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -187,6 +189,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBrickNum)).BeginInit();
             this.tabPageAccountTask.SuspendLayout();
             this.menuStripMain.SuspendLayout();
+            this.tabPageFocusedEnemyCity.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -453,7 +456,7 @@
             this.listViewTasks.Location = new System.Drawing.Point(-2, 78);
             this.listViewTasks.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(1188, 469);
+            this.listViewTasks.Size = new System.Drawing.Size(1188, 467);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
@@ -754,6 +757,7 @@
             this.tabControlInfo.Controls.Add(this.tabPageOnlineTroops);
             this.tabControlInfo.Controls.Add(this.tabPageDebugLog);
             this.tabControlInfo.Controls.Add(this.tabPageEnemyAlert);
+            this.tabControlInfo.Controls.Add(this.tabPageFocusedEnemyCity);
             this.tabControlInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlInfo.Location = new System.Drawing.Point(0, 0);
             this.tabControlInfo.Margin = new System.Windows.Forms.Padding(4);
@@ -804,6 +808,7 @@
             // columnHeader26
             // 
             this.columnHeader26.Text = "Time";
+            this.columnHeader26.Width = 169;
             // 
             // columnHeader27
             // 
@@ -841,12 +846,12 @@
             // columnHeader28
             // 
             this.columnHeader28.Text = "时间";
-            this.columnHeader28.Width = 114;
+            this.columnHeader28.Width = 168;
             // 
             // columnHeader30
             // 
             this.columnHeader30.Text = "城市";
-            this.columnHeader30.Width = 85;
+            this.columnHeader30.Width = 67;
             // 
             // columnHeader29
             // 
@@ -1089,7 +1094,7 @@
             this.listViewAccountArmy.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountArmy.MultiSelect = false;
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 421);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 422);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -1122,7 +1127,7 @@
             this.listViewMoveHero.Location = new System.Drawing.Point(12, 105);
             this.listViewMoveHero.Margin = new System.Windows.Forms.Padding(4);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(262, 421);
+            this.listViewMoveHero.Size = new System.Drawing.Size(262, 422);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1359,7 +1364,7 @@
             this.listViewAccountActiveTask.Location = new System.Drawing.Point(466, 29);
             this.listViewAccountActiveTask.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountActiveTask.Name = "listViewAccountActiveTask";
-            this.listViewAccountActiveTask.Size = new System.Drawing.Size(778, 498);
+            this.listViewAccountActiveTask.Size = new System.Drawing.Size(780, 499);
             this.listViewAccountActiveTask.TabIndex = 2;
             this.listViewAccountActiveTask.UseCompatibleStateImageBehavior = false;
             this.listViewAccountActiveTask.View = System.Windows.Forms.View.Details;
@@ -1406,7 +1411,7 @@
             this.listViewTaskIdleAccount.Location = new System.Drawing.Point(0, 29);
             this.listViewTaskIdleAccount.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTaskIdleAccount.Name = "listViewTaskIdleAccount";
-            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 498);
+            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 499);
             this.listViewTaskIdleAccount.TabIndex = 0;
             this.listViewTaskIdleAccount.UseCompatibleStateImageBehavior = false;
             this.listViewTaskIdleAccount.View = System.Windows.Forms.View.Details;
@@ -1555,6 +1560,27 @@
             this.flushToolStripMenuItem.Text = "FlushServer";
             this.flushToolStripMenuItem.Click += new System.EventHandler(this.flushToolStripMenuItem_Click);
             // 
+            // tabPageFocusedEnemyCity
+            // 
+            this.tabPageFocusedEnemyCity.Controls.Add(this.listViewEnemyCityDetail);
+            this.tabPageFocusedEnemyCity.Location = new System.Drawing.Point(4, 28);
+            this.tabPageFocusedEnemyCity.Name = "tabPageFocusedEnemyCity";
+            this.tabPageFocusedEnemyCity.Size = new System.Drawing.Size(690, 523);
+            this.tabPageFocusedEnemyCity.TabIndex = 4;
+            this.tabPageFocusedEnemyCity.Text = "关注敌方城市";
+            this.tabPageFocusedEnemyCity.UseVisualStyleBackColor = true;
+            // 
+            // listViewEnemyCityDetail
+            // 
+            this.listViewEnemyCityDetail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewEnemyCityDetail.GridLines = true;
+            this.listViewEnemyCityDetail.Location = new System.Drawing.Point(0, 0);
+            this.listViewEnemyCityDetail.Name = "listViewEnemyCityDetail";
+            this.listViewEnemyCityDetail.Size = new System.Drawing.Size(690, 523);
+            this.listViewEnemyCityDetail.TabIndex = 0;
+            this.listViewEnemyCityDetail.UseCompatibleStateImageBehavior = false;
+            this.listViewEnemyCityDetail.View = System.Windows.Forms.View.Details;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -1600,6 +1626,7 @@
             this.tabPageAccountTask.PerformLayout();
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
+            this.tabPageFocusedEnemyCity.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1740,6 +1767,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader28;
         private System.Windows.Forms.ColumnHeader columnHeader30;
         private System.Windows.Forms.ColumnHeader columnHeader29;
+        private System.Windows.Forms.TabPage tabPageFocusedEnemyCity;
+        private System.Windows.Forms.ListView listViewEnemyCityDetail;
     }
 }
 
