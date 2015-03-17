@@ -68,31 +68,6 @@
             return this.HTTPRequest(url, account);
         }
 
-        private string ConfirmMoveTroop(
-            int fromCityId,
-            int toCityId,
-            string soldierString,
-            string heroString,
-            int brickCount,
-            string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Do,
-                TCFunc.move_army);
-
-            var body = string.Format(
-                "from_city_id={0}&to_city_id={1}&soldier={2}&hero={3}&brick_num={4}",
-                fromCityId,
-                toCityId,
-                soldierString,
-                heroString,
-                brickCount > 0 ? brickCount.ToString() : "");
-            return this.HTTPRequest(url, account, body);
-        }
-
         private string OpenMoveTroopPage(string account)
         {
             var url = RequestAgent.BuildUrl(
@@ -101,17 +76,6 @@
                 TCSubMod.world_war,
                 TCOperation.Show,
                 TCFunc.move_army);
-            return this.HTTPRequest(url, account);
-        }
-
-        private string OpenMoveTaskQueue(string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Show,
-                TCFunc.move_army_queue);
             return this.HTTPRequest(url, account);
         }
 

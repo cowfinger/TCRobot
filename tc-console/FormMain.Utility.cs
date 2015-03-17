@@ -578,13 +578,12 @@ namespace TC
             return true;
         }
 
-        private MoveTask MoveTroop(MoveTroopTask task)
+        private void MoveTroop(MoveTroopTask task)
         {
             var cityNodeId = task.CurrentCity.CityId;
 
             TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account.WebAgent, cityNodeId);
-            var moveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
-            var moveTaskList = this.ParseMoveTaskList(moveQueuePage).ToList();
+            var moveArmyQueue = TCPage.WorldWarShowMoveArmyQueuePage.Open(task.Account.WebAgent);
 
             var heroString = string.Join("%7C", task.HeroIdList.ToArray());
             var soldiers =
@@ -593,39 +592,36 @@ namespace TC
                     .ToArray();
             var soldierString = string.Join("%7c", soldiers);
 
-            this.ConfirmMoveTroop(
+            TCPage.WorldWarDoMoveArmyPage.Open(
+                task.Account.WebAgent,
                 task.CurrentCity.NodeId,
                 task.NextCity.NodeId,
                 soldierString,
                 heroString,
-                task.BrickNum,
-                task.Account.UserName);
+                task.BrickNum);
 
             for (var i = 0; i < 10; ++i)
             {
                 Thread.Sleep(2000);
                 TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account.WebAgent, task.NextCity.CityId);
-                var newMoveQueuePage = this.OpenMoveTaskQueue(task.Account.UserName);
-                var newMoveTaskList = this.ParseMoveTaskList(newMoveQueuePage).ToList();
+                var newMoveArmyQueue = TCPage.WorldWarShowMoveArmyQueuePage.Open(task.Account.WebAgent);
 
-                if (!newMoveTaskList.Any())
+                if (!newMoveArmyQueue.Items.Any())
                 {
                     continue;
                 }
 
-                var thisMoveTask =
-                    newMoveTaskList.Single(
-                        taskItem => !moveTaskList.Select(item => item.TaskId).Contains(taskItem.TaskId));
-                task.TaskId = thisMoveTask.TaskId;
-                task.ExecutionTime = thisMoveTask.EndTime.AddSeconds(2);
+                var thisMoveTask = newMoveArmyQueue.Items.Single(
+                        taskItem => !moveArmyQueue.Items.Select(
+                            item => item.TaskId).Contains(taskItem.TaskId));
+                task.TaskId = thisMoveTask.TaskId.ToString();
+                task.ExecutionTime = thisMoveTask.Eta.AddSeconds(2);
                 this.DebugLog("Troop is moving: {0}=>{1}, ETA={2}.",
                     task.CurrentCity.Name,
                     task.NextCity.Name,
-                    thisMoveTask.EndTime);
-                return thisMoveTask;
+                    thisMoveTask.Eta);
+                break;
             }
-
-            return null;
         }
 
         private int CalculateDistance(string from, string to, string account, Dictionary<string, int> roadLevelCache)
@@ -669,18 +665,16 @@ namespace TC
                                         DistanceCalculate = this.CalculateDistance,
                                         account = accountInfo.UserName
                                     };
+
             var initialPath = initialHelper.GetPath(fromCity.Name, toCity.Name, soldierList).ToList();
             initialPath.Reverse();
             var nextCity = accountInfo.InfluenceCityList[initialPath.First()];
 
             var moveTask = new MoveTroopTask(accountInfo, fromCity, nextCity, toCity, brickNum, "")
                                {
-                                   SoldierList =
-                                       soldierList,
-                                   HeroIdList =
-                                       heroList,
-                                   Path =
-                                       initialPath
+                                   SoldierList = soldierList,
+                                   HeroIdList = heroList,
+                                   Path = initialPath
                                };
 
             moveTask.TaskAction = obj =>
@@ -709,8 +703,7 @@ namespace TC
 
                     var helper = new DijstraHelper(accountInfo.InfluenceMap)
                                      {
-                                         DistanceCalculate =
-                                             this.CalculateDistance,
+                                         DistanceCalculate = this.CalculateDistance,
                                          account = accountInfo.UserName
                                      };
 

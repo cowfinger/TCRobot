@@ -90,6 +90,8 @@
     <Compile Include="TCPage\TCPage.cs" />
     <Compile Include="TCPage\UnionDoApplyUnionPage.cs" />
     <Compile Include="TCPage\UnionDoOutUnionPage.cs" />
+    <Compile Include="TCPage\WorldWarShowMoveArmyPage.cs" />
+    <Compile Include="TCPage\WorldWarShowMoveArmyQueuePage.cs" />
     <Compile Include="TCPage\WorldWarShowReserveArmyInfoPage.cs" />
     <Compile Include="TCPage\WorldWarShowTeamPage.cs" />
     <Compile Include="TCTasks\InfluenceGuard.cs" />
@@ -134,7 +136,6 @@
     <Compile Include="TCDataType\HeroInfo.cs" />
     <Compile Include="TCUtility\HttpClient.cs" />
     <Compile Include="TCUtility\LoginParam.cs" />
-    <Compile Include="TCDataType\MoveTask.cs" />
     <Compile Include="TCTasks\MoveTroopTask.cs" />
     <Compile Include="TCUtility\Parallel.cs" />
     <Compile Include="Program.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="TCDataType\TCResource.cs" />
     <Compile Include="TCRequests\TCSubMod.cs" />
     <Compile Include="TCTasks\TCTask.cs" />
+    <Compile Include="TCPage\WorldWarDoMoveArmyPage.cs" />
     <EmbeddedResource Include="FormChooseTroopHead.resx">
       <DependentUpon>FormChooseTroopHead.cs</DependentUpon>
     </EmbeddedResource>

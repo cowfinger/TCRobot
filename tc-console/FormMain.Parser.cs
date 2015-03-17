@@ -390,46 +390,12 @@
                            };
         }
 
-        private void QuickReliveHero(string heroId, AccountInfo account)
-        {
-            this.ReliveHero(heroId, account.UserName);
-            var tid = this.GetTid(account);
-            var reliveQueueId = this.QueryReliveQueueId(tid, account);
-            var reliveItem = this.QueryReliveItem(reliveQueueId, tid, account);
-            this.UserReliveItem(reliveItem, heroId, reliveQueueId, tid, account);
-        }
-
         private string GetTid(AccountInfo account)
         {
             var cookieMap = ParseCookieStr(account.CookieStr);
 
             string tmp_id;
             return !cookieMap.TryGetValue("tmp_mid", out tmp_id) ? string.Empty : tmp_id;
-        }
-
-        private IEnumerable<MoveTask> ParseMoveTaskList(string page)
-        {
-            const string eventPattern = "id=\"event_(?<taskId>\\d+)\"";
-            const string etaPattern = "预计于(?<eta>.+?)到达";
-
-            var eventMatches = Regex.Matches(page, eventPattern);
-            var etaMatches = Regex.Matches(page, etaPattern);
-
-            var eventIdList = (from Match eventId in eventMatches select eventId.Groups["taskId"].Value).ToList();
-
-            var etaList = (from Match eta in etaMatches select DateTime.Parse(eta.Groups["eta"].Value)).ToList();
-
-            for (var i = 0; i < eventIdList.Count; ++i)
-            {
-                yield return new MoveTask { EndTime = etaList[i], TaskId = eventIdList[i] };
-            }
-        }
-
-        private IEnumerable<string> ParseHeroIdListFromCityPage(string page)
-        {
-            const string pattern = "<li id=\"user_hero_(?<heroId>\\d+)\" style=\"display:block;\">";
-            var matches = Regex.Matches(page, pattern);
-            return from Match match in matches select match.Groups["heroId"].Value;
         }
 
         private IEnumerable<HeroInfo> ParseHeroInfoListFromMovePage(string page, string account)

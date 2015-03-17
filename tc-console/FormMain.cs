@@ -859,8 +859,11 @@
             var toCityName = this.comboBoxToCity.Text;
 
             var heroList =
-                (from ListViewItem lvItem in this.listViewMoveHero.CheckedItems select lvItem.SubItems[1].Text).ToList();
-            var soldierList = (from ListViewItem lvItem in this.listViewAccountArmy.CheckedItems
+                (from ListViewItem lvItem in this.listViewMoveHero.CheckedItems
+                 select lvItem.SubItems[1].Text).ToList();
+
+            var soldierList =
+                (from ListViewItem lvItem in this.listViewAccountArmy.CheckedItems
                                let soldier = lvItem.Tag as Soldier
                                let soldierNumber = int.Parse(lvItem.SubItems[2].Text)
                                where soldierNumber > 0
@@ -871,6 +874,7 @@
                                            SoldierType = soldier.SoldierType,
                                            SoldierNumber = soldierNumber,
                                        }).ToList();
+
             if (heroList.Count + soldierList.Count == 0)
             {
                 MessageBox.Show("必须选择部队或将领");
