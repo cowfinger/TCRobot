@@ -417,17 +417,21 @@ namespace TC
             }
         }
 
-        private void BatchDonate(int i, ref List<string> accountList)
+        private List<string> BatchDonate(int i, List<string> accountList)
         {
+            var toRemoveAccounts = new List<string>();
             foreach (var account in accountList)
             {
                 var influenceSciencePage = this.OpenInfluenceSciencePage(account);
                 var influenceRes = this.ParseInfluenceResource(influenceSciencePage).ToList();
                 var resNeeds = influenceRes.Select(resPair => resPair.Value - resPair.Key).ToList();
 
+                var resStr = string.Join(",", influenceRes.Select(resPair => string.Format("{0}/{1}", resPair.Key, resPair.Value)).ToArray());
+                this.DebugLog("Donate: Resouce:{0}", resStr);
                 if (resNeeds[3] < 1000000)
                 {
-                    accountList.Remove(account);
+                    this.DebugLog("Donate: Remote Account {0} since Influence Resouce box is full", account);
+                    toRemoveAccounts.Add(account);
                     continue;
                 }
 
@@ -436,22 +440,30 @@ namespace TC
                 {
                     if (!this.OpenResourceBox(account))
                     {
-                        accountList.Remove(account);
+                        this.DebugLog("Donate: Remote Account {0} since lack of resource box.", account);
+                        toRemoveAccounts.Add(account);
                         break;
                     }
-
                     accountRes = this.GetAccountResources(account).ToList();
+                    this.DebugLog("Donate: {0} Open Box: {1}", account, accountRes[3]);
                 }
 
                 var resToContribute = this.CalculateDonations(resNeeds, accountRes).ToList();
 
-                this.DonateResource(
+                this.DebugLog("Donate: {0} gives {1}", account, resToContribute[3]);
+                var donateResult = this.DonateResource(
                     account,
                     resToContribute[0],
                     resToContribute[1],
                     resToContribute[2],
                     resToContribute[3]);
+                if (!donateResult.Contains("成功"))
+                {
+                    this.DebugLog("Donate: Remote Account {0} since {1}", account, donateResult);
+                    toRemoveAccounts.Add(account);
+                }
             }
+            return toRemoveAccounts;
         }
 
         private void UpdateHeroTable(IEnumerable<HeroInfo> heroList)

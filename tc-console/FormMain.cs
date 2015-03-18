@@ -629,9 +629,13 @@
                 {
                     var accountList = this.accountTable.Keys.ToList();
 
-                    for (var i = 0; i < 1000 && accountList.Any(); ++i)
+                    for (var i = 0; i < 100 && accountList.Any(); ++i)
                     {
-                        this.BatchDonate(i, ref accountList);
+                        var toRemoveAccounts = this.BatchDonate(i, accountList);
+                        foreach (var account in toRemoveAccounts)
+                        {
+                            accountList.Remove(account);
+                        }
                     }
                 });
         }

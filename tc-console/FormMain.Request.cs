@@ -223,9 +223,9 @@
             return this.HTTPRequest(url, account);
         }
 
-        private void DonateResource(string account, long val1, long val2, long val3, long val4)
+        private string DonateResource(string account, long val1, long val2, long val3, long val4)
         {
-            var resValue = string.Format("{1}|{2}|{3}|{4}|0|0", val1, val2, val3, val4);
+            var resValue = string.Format("{0}|{1}|{2}|{3}|0|0", val1, val2, val3, val4);
             var url = RequestAgent.BuildUrl(
                 this.hostname,
                 TCMod.influence,
@@ -233,7 +233,7 @@
                 TCOperation.Do,
                 TCFunc.influence_donate,
                 new TCRequestArgument(TCElement.res, resValue));
-            this.HTTPRequest(url, account);
+            return this.HTTPRequest(url, account);
         }
 
         private IEnumerable<long> GetAccountResources(string account)
