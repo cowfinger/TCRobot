@@ -1,1 +1,5 @@
 Cookie/
+*.exe
+*.config
+*.pdb
+*.manifest
