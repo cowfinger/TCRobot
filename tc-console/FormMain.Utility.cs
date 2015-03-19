@@ -1232,7 +1232,11 @@ namespace TC
             }
             else
             {
-                string logLine = string.Format(format, args);
+                if (this.listViewDebugLog.Items.Count > 65535)
+                {
+                    this.listViewDebugLog.Items.RemoveAt(0);
+                }
+                var logLine = string.Format(format, args);
                 var lvItem = new ListViewItem(RemoteTime.ToString());
                 lvItem.SubItems.Add(logLine);
                 this.listViewDebugLog.Items.Add(lvItem);

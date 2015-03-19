@@ -77,6 +77,7 @@
     <Compile Include="TCDataType\AttackTask.cs" />
     <Compile Include="TCDataType\BigMapCity.cs" />
     <Compile Include="TCDataType\CityInfo.cs" />
+    <Compile Include="TCPage\HeroShowMyHeroesPage.cs" />
     <Compile Include="TCPage\InfluenceDoApplyInfluencePage.cs" />
     <Compile Include="TCPage\InfluenceDoCancelApplyInfluencePage.cs" />
     <Compile Include="TCPage\InfluenceDoCheckMemberPage.cs" />
@@ -87,6 +88,8 @@
     <Compile Include="TCPage\InnerBuildPage.cs" />
     <Compile Include="TCPage\MilitaryTrainPage.cs" />
     <Compile Include="TCPage\InfluenceShowInfluenceBuildPage.cs" />
+    <Compile Include="TCPage\PoliticsDoDraftPage.cs" />
+    <Compile Include="TCPage\PoliticsShowDraftPage.cs" />
     <Compile Include="TCPage\TCPage.cs" />
     <Compile Include="TCPage\UnionDoApplyUnionPage.cs" />
     <Compile Include="TCPage\UnionDoOutUnionPage.cs" />

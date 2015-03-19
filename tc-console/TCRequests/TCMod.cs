@@ -4,6 +4,8 @@ namespace TC
     {
         city,
 
+        civil,
+
         depot,
 
         hero,

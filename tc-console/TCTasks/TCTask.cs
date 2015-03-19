@@ -19,13 +19,13 @@
 
         private Timer timer;
 
-        public TCTask(AccountInfo account, DateTime executionTime)
+        protected TCTask(AccountInfo account, DateTime executionTime)
         {
             this.ExecutionTime = executionTime;
             this.Account = account;
         }
 
-        public TCTask(AccountInfo account, int intervalInMiliseconds, int randomSeed = 0)
+        protected TCTask(AccountInfo account, int intervalInMiliseconds, int randomSeed = 0)
         {
             this.Account = account;
 
@@ -88,7 +88,7 @@
 
             set
             {
-                SetExecutionTime(value);
+                this.SetExecutionTime(value);
             }
         }
 

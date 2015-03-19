@@ -12,6 +12,8 @@ namespace TC
 
         influence,
 
+        politics,
+
         prop,
 
         science,

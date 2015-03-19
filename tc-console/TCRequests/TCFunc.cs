@@ -28,6 +28,8 @@ namespace TC
 
         disband_group,
 
+        draft,
+
         get_node,
 
         group_detail,

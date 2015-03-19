@@ -23,18 +23,28 @@ namespace TC.TCTasks
 
         public HttpClient WebClient;
 
+        private static DateTime CalcActualExecutionTime(TroopInfo troop, DateTime arrivalTime)
+        {
+            var result = arrivalTime.AddSeconds(-(troop.Duration + OpenAttackPageTime));
+            if (!troop.isGroupTroop)
+            {
+                result = result.AddMilliseconds(300);
+            }
+            if (result <= FormMain.RemoteTime)
+            {
+                result = FormMain.RemoteTime.AddSeconds(10);
+            }
+            return result;
+        }
+
         public SendTroopTask(
             AccountInfo account,
             CityInfo fromCity,
             CityInfo toCity,
             TroopInfo data,
             DateTime arrivalTime)
-            : base(account, arrivalTime.AddSeconds(-(data.Duration + OpenAttackPageTime)))
+            : base(account, CalcActualExecutionTime(data, arrivalTime))
         {
-            if (!data.isGroupTroop)
-            {
-                this.ExecutionTime = this.ExecutionTime.AddMilliseconds(300);
-            }
 
             this.TaskData = data;
             this.fromCity = fromCity;

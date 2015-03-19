@@ -439,15 +439,8 @@
             }
 
             var diff = this.dateTimePickerArrival.Value - RemoteTime;
-            var selectedTroops = new List<TroopInfo>();
-            foreach (ListViewItem lvItem in this.listViewTroops.CheckedItems)
-            {
-                var troop = lvItem.Tag as TroopInfo;
-                if (troop != null)
-                {
-                    selectedTroops.Add(troop);
-                }
-            }
+            var selectedTroops = (from ListViewItem lvItem in this.listViewTroops.CheckedItems
+                                  select lvItem.Tag).OfType<TroopInfo>().ToList();
 
             var maxDuration = selectedTroops.Max(troop => troop.Duration);
 
@@ -868,16 +861,16 @@
 
             var soldierList =
                 (from ListViewItem lvItem in this.listViewAccountArmy.CheckedItems
-                               let soldier = lvItem.Tag as Soldier
-                               let soldierNumber = int.Parse(lvItem.SubItems[2].Text)
-                               where soldierNumber > 0
-                               select
-                                   new Soldier
-                                       {
-                                           Name = soldier.Name,
-                                           SoldierType = soldier.SoldierType,
-                                           SoldierNumber = soldierNumber,
-                                       }).ToList();
+                 let soldier = lvItem.Tag as Soldier
+                 let soldierNumber = int.Parse(lvItem.SubItems[2].Text)
+                 where soldierNumber > 0
+                 select
+                     new Soldier
+                         {
+                             Name = soldier.Name,
+                             SoldierType = soldier.SoldierType,
+                             SoldierNumber = soldierNumber,
+                         }).ToList();
 
             if (heroList.Count + soldierList.Count == 0)
             {
@@ -1178,7 +1171,54 @@
 
         private void enlistTroopToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Task.Run(
+                () =>
+                {
+                    foreach (var account in this.accountTable.Values)
+                    {
+                        var infoPage = TCPage.PoliticsShowDraftPage.Open(account.WebAgent);
+                        if (infoPage.LeftTimes <= 0)
+                        {
+                            this.DebugLog("Cannot Enlist since no Left times.");
+                            continue;
+                        }
 
+                        var soldierId = 0;
+                        var maxSpeed = 0;
+                        foreach (var soldier in SoldierTable.Values)
+                        {
+                            if (!infoPage.SoldierIdSet.Contains(soldier.SoldierId))
+                            {
+                                continue;
+                            }
+
+                            if (soldier.Speed > maxSpeed && soldier.Capacity > 0)
+                            {
+                                maxSpeed = soldier.Speed;
+                                soldierId = soldier.SoldierId;
+                            }
+                        }
+
+                        if (soldierId == 0)
+                        {
+                            break;
+                        }
+
+                        for (var i = 0; i < infoPage.LeftTimes; i++)
+                        {
+                            var doPage = TCPage.PoliticsDoDraftPage.Open(
+                                account.WebAgent,
+                                infoPage.EfficientHeroId,
+                                soldierId,
+                                2);
+                            if (!doPage.Success)
+                            {
+                                break;
+                            }
+                            this.DebugLog("Enlist {0}: {1}", account.UserName, KeyWordMap["soldier_" + soldierId]);
+                        }
+                    }
+                });
         }
 
         private void flushToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1213,6 +1253,5 @@
                     }
                 });
         }
-
     }
 }
