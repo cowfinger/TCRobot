@@ -659,6 +659,7 @@ namespace TC
                 TCPage.InfluenceShowInfluenceCityDetailPage.Open(accountInfo.WebAgent, fromCityId);
                 var page = TCPage.InfluenceShowCityBuildPage.Open(accountInfo.WebAgent, fromCityId);
                 roadLevelCache.Add(from, page.Road.Level);
+                roadLevel = page.Road.Level;
             }
 
             return RoadLevelToDistanceMap[roadLevel];
