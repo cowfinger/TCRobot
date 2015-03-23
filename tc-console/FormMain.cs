@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using System.Drawing;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -80,9 +82,9 @@
             this.LoadMultiLoginConf();
             this.LoadCityList();
             this.LoadCheckpoint();
-            this.LoadLangChs();
-            this.LoadSoldierInfo();
-            this.LoadRoadInfo();
+            LoadLangChs();
+            LoadSoldierInfo();
+            LoadRoadInfo();
         }
 
         private void btnQuickCreateTroop_Click(object sender, EventArgs e)
@@ -126,12 +128,12 @@
                     if (this.radioButtonFullTroop.Checked)
                     {
                         var totalSolderNumber = Math.Min(soldierList.Sum(x => x.SoldierNumber), maxSoilderNumber);
-                        var soldierString = this.BuildSoldierString(ref soldierList, totalSolderNumber);
+                        var soldierString = BuildSoldierString(ref soldierList, totalSolderNumber);
 
                         var heroRawList = heroList.ToList();
                         var headHero = heroRawList.First();
                         heroRawList.RemoveAt(0);
-                        var subHeroes = this.BuildSubHeroesString(ref heroRawList);
+                        var subHeroes = BuildSubHeroesString(ref heroRawList);
 
                         this.CreateTeam(
                             headHero,
@@ -144,7 +146,7 @@
                     {
                         foreach (var hero in heroList)
                         {
-                            var soldierString = this.BuildSoldierString(
+                            var soldierString = BuildSoldierString(
                                 ref soldierList,
                                 this.radioButtonSmallTroop.Checked ? 1000 : 0);
                             this.CreateTeam(
@@ -199,8 +201,7 @@
                 () =>
                 {
                     var targetCityNameList = this.QueryTargetCityList(cityId).ToList();
-                    var influnceCityNameList = this.Invoke(
-                        new DoSomething(
+                    this.Invoke(new DoSomething(
                             () =>
                             {
                                 this.listBoxDstCities.Items.Clear();
@@ -216,10 +217,11 @@
                 relatedAccountList,
                 account =>
                 {
-                    var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.UserName);
-                    var singleDefendTeams = this.GetActiveTroopInfo(cityId, "2", account.UserName);
+                    var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.UserName).ToList();
+                    var singleDefendTeams = this.GetActiveTroopInfo(cityId, "2", account.UserName).ToList();
                     var groupAttackteams = this.GetGroupTeamList(cityId, account.UserName);
-                    foreach (var troop in singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams))
+                    var teamList = singleAttackTeams.Concat(singleDefendTeams).Concat(groupAttackteams);
+                    foreach (var troop in teamList)
                     {
                         this.Invoke(
                             new DoSomething(

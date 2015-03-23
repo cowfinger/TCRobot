@@ -57,7 +57,7 @@ namespace TC.TCPage
                 @"&nbsp;&nbsp;&nbsp;<span>等级：.*?(?<level>\d+)/(?<maxLevel>\d+)</span>";
             const string FortressPattern = "fortress_descr" + BuildPattern;
             const string WallPattern = "wall_descr" + BuildPattern;
-            const string RoadPattern = @"<span>等级：(?<level>\d+)/(?<maxLevel>\d+)</span>";
+            const string RoadPattern = @"road_descr(.|\s)*?<span>等级：(?<level>\d+)/(?<maxLevel>\d+)</span>";
 
             var cityNameMatch = Regex.Match(page, CityNamePattern);
             this.CityName = cityNameMatch.Success ? cityNameMatch.Groups[1].Value : "";

@@ -173,7 +173,7 @@
                                         }
 
                                         var timeLeft = (int)((task.ExecutionTime - remoteTimeSnapshot).TotalSeconds);
-                                        lvItem.SubItems[4].Text = this.Time2Str(timeLeft);
+                                        lvItem.SubItems[4].Text = Time2Str(timeLeft);
 
                                         var hint = task.GetTaskHint();
                                         if (lvItem.SubItems[5].Text != hint)

@@ -176,7 +176,7 @@
                                 var tagAccount = lvItem.Tag as AccountInfo;
                                 if (tagAccount == account)
                                 {
-                                    lvItem.SubItems[1].Text = this.ConvertStatusStr(account.LoginStatus);
+                                    lvItem.SubItems[1].Text = ConvertStatusStr(account.LoginStatus);
                                     lvItem.SubItems[2].Text = account.UnionId.ToString();
                                     lvItem.SubItems[3].Text = account.Level.ToString();
                                     break;

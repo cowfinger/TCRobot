@@ -79,7 +79,7 @@ namespace TC
             }
         }
 
-        private string Time2Str(int timeval)
+        private static string Time2Str(int timeval)
         {
             var secs = timeval % 60;
             var mins = (timeval / 60) % 60;
@@ -88,7 +88,7 @@ namespace TC
             return string.Format(fmt, hours, mins, secs);
         }
 
-        private string CalcGroupType(TroopInfo team)
+        private static string CalcGroupType(TroopInfo team)
         {
             if (team.isGroupTroop)
             {
@@ -101,14 +101,6 @@ namespace TC
             }
 
             return "攻击";
-        }
-
-        private void SyncTroopInfoToUI(IEnumerable<TroopInfo> troopList)
-        {
-            foreach (var team in troopList)
-            {
-                this.TrySyncTroopInfoToUI(team);
-            }
         }
 
         private void TrySyncTroopInfoToUI(TroopInfo team)
@@ -131,17 +123,17 @@ namespace TC
                 lvItemTroop.SubItems[0].Text = team.AccountName;
                 lvItemTroop.SubItems.Add(team.TroopId);
                 lvItemTroop.SubItems.Add(team.PowerIndex.ToString());
-                lvItemTroop.SubItems.Add(this.Time2Str(team.Duration));
-                lvItemTroop.SubItems.Add(this.Time2Str(0));
+                lvItemTroop.SubItems.Add(Time2Str(team.Duration));
+                lvItemTroop.SubItems.Add(Time2Str(0));
                 lvItemTroop.SubItems.Add(team.GroupId);
-                lvItemTroop.SubItems.Add(this.CalcGroupType(team));
+                lvItemTroop.SubItems.Add(CalcGroupType(team));
 
                 this.listViewTroops.Items.Add(lvItemTroop);
             }
             else
             {
-                lvItemTroop.SubItems[3].Text = this.Time2Str(team.Duration);
-                lvItemTroop.SubItems[4].Text = this.Time2Str(0);
+                lvItemTroop.SubItems[3].Text = Time2Str(team.Duration);
+                lvItemTroop.SubItems[4].Text = Time2Str(0);
             }
         }
 
@@ -154,36 +146,29 @@ namespace TC
                 newli.SubItems[0].Text = team.AccountName;
                 newli.SubItems.Add(team.TroopId);
                 newli.SubItems.Add(team.PowerIndex.ToString());
-                newli.SubItems.Add(this.Time2Str(team.Duration));
-                newli.SubItems.Add(this.Time2Str(0));
+                newli.SubItems.Add(Time2Str(team.Duration));
+                newli.SubItems.Add(Time2Str(0));
                 newli.SubItems.Add(team.GroupId);
-                newli.SubItems.Add(this.CalcGroupType(team));
+                newli.SubItems.Add(CalcGroupType(team));
                 newli.Tag = team;
                 this.listViewTroops.Items.Add(newli);
             }
         }
 
-        private string ConvertStatusStr(string status)
+        private static string ConvertStatusStr(string status)
         {
-            if (status == "on-line")
+            switch (status)
             {
-                return "已登录";
-            }
-            if (status == "in-login")
-            {
-                return "登录中";
-            }
-            if (status == "login-failed")
-            {
-                return "登录失败";
-            }
-            if (status == "submitting")
-            {
-                return "提交中";
-            }
-            if (status == "sync-time")
-            {
-                return "同步系统时间中";
+                case "on-line":
+                    return "已登录";
+                case "in-login":
+                    return "登录中";
+                case "login-failed":
+                    return "登录失败";
+                case "submitting":
+                    return "提交中";
+                case "sync-time":
+                    return "同步系统时间中";
             }
             return "未登录";
         }
@@ -199,7 +184,7 @@ namespace TC
                 var newli = new ListViewItem();
                 {
                     newli.SubItems[0].Text = account.UserName;
-                    newli.SubItems.Add(this.ConvertStatusStr(account.LoginStatus));
+                    newli.SubItems.Add(ConvertStatusStr(account.LoginStatus));
                     newli.SubItems.Add("");
                     newli.SubItems.Add("");
                 }
@@ -270,7 +255,7 @@ namespace TC
             CityList = this.cityList;
         }
 
-        private void LoadRoadInfo()
+        private static void LoadRoadInfo()
         {
             using (var streamReader = new StreamReader("road.txt", Encoding.ASCII))
             {
@@ -288,7 +273,7 @@ namespace TC
             }
         }
 
-        private void LoadSoldierInfo()
+        private static void LoadSoldierInfo()
         {
             using (var streamReader = new StreamReader("soldier.txt", Encoding.ASCII))
             {
@@ -313,7 +298,7 @@ namespace TC
             }
         }
 
-        private void LoadLangChs()
+        private static void LoadLangChs()
         {
             const string pattern = @"'(?<key>.+?)':'(?<val>.+?)',";
             using (var streamReader = new StreamReader("lang_chs.txt", Encoding.UTF8))
@@ -369,27 +354,13 @@ namespace TC
             }
         }
 
-        private bool IsOwnCity(string name)
-        {
-            var cityId = this.cityList[name];
-            foreach (var account in this.accountTable.Values)
-            {
-                if (account.CityIDList.Contains(cityId))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private string BuildSubHeroesString(ref List<string> heroList)
+        private static string BuildSubHeroesString(ref List<string> heroList)
         {
             var validHeros = heroList.Where((hero, index) => index < 4);
             return string.Join("%7C", validHeros.ToArray());
         }
 
-        private string BuildSoldierString(ref List<Soldier> soldierList, int number)
+        private static string BuildSoldierString(ref List<Soldier> soldierList, int number)
         {
             if (number == 0)
             {
@@ -408,7 +379,7 @@ namespace TC
             return "";
         }
 
-        private IEnumerable<long> CalculateDonations(List<long> resNeeds, List<long> resHave)
+        private static IEnumerable<long> CalculateDonations(List<long> resNeeds, List<long> resHave)
         {
             for (var i = 0; i < 4; ++i)
             {
@@ -448,7 +419,7 @@ namespace TC
                     this.DebugLog("Donate: {0} Open Box: {1}", account, accountRes[3]);
                 }
 
-                var resToContribute = this.CalculateDonations(resNeeds, accountRes).ToList();
+                var resToContribute = CalculateDonations(resNeeds, accountRes).ToList();
 
                 this.DebugLog("Donate: {0} gives {1}", account, resToContribute[3]);
                 var donateResult = this.DonateResource(
