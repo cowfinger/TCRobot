@@ -220,13 +220,16 @@ namespace TC
         private IEnumerable<string> QueryTargetCityList(string cityId)
         {
             var relatedAccountList = this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId));
-            if (relatedAccountList.Any())
+            foreach (var account in relatedAccountList)
             {
-                var account = relatedAccountList.First();
                 var attackCityList = this.OpenAttackPage(cityId, account.UserName);
                 var greoupAttackCityList = this.GetGroupAttackTargetCity(cityId, account.UserName);
                 // var moveCityList = GetMoveTargetCities(cityId, account.UserName);
-                return attackCityList.Concat(greoupAttackCityList).Distinct();
+                var targetCityList = attackCityList.Concat(greoupAttackCityList).ToList();
+                if (targetCityList.Any())
+                {
+                    return targetCityList;
+                }
             }
             return new List<string>();
         }
