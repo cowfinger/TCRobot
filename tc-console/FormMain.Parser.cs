@@ -398,50 +398,6 @@
             return !cookieMap.TryGetValue("tmp_mid", out tmp_id) ? string.Empty : tmp_id;
         }
 
-        private IEnumerable<HeroInfo> ParseHeroInfoListFromMovePage(string page, string account)
-        {
-            const string NamePattern =
-                "<div class=\"name button1\"><a href=\"javascript:void\\(0\\)\"><span>(?<name>.+?)</span></a></div>";
-            const string IdPattern = "hero_id=\"(\\d+)\" hero_status=\"(\\d+)\"";
-
-            var nameMatches = Regex.Matches(page, NamePattern);
-            var nameList = (from Match match in nameMatches select match.Groups[1].Value).ToList();
-
-            var idMatches = Regex.Matches(page, IdPattern);
-            var idList = (from Match match in idMatches select match.Groups[1].Value).ToList();
-            var statusList = (from Match match in idMatches select match.Groups[2].Value).ToList();
-
-            for (var i = 0; i < Math.Min(nameList.Count, idList.Count); ++i)
-            {
-                yield return
-                    new HeroInfo
-                        {
-                            AccountName = account,
-                            Name = nameList[i],
-                            HeroId = idList[i],
-                            IsBusy = statusList[i] != "1"
-                        };
-            }
-        }
-
-        private IEnumerable<string> ParseHeroIdListFromMovePage(string page)
-        {
-            const string pattern = "hero_id=\"(\\d+)\" hero_status=\"(\\d+)\"";
-            var matches = Regex.Matches(page, pattern);
-            return from Match match in matches select match.Groups[1].Value;
-        }
-
-        private int ParseBrickNumberFromMovePage(string page)
-        {
-            const string pattern = "<span id=\"brick_num_max\">\\d+</span>/(\\d+)</span>\\)</span>";
-            var match = Regex.Match(page, pattern);
-            if (match.Success)
-            {
-                return int.Parse(match.Groups[1].Value);
-            }
-            return 0;
-        }
-
         private IEnumerable<CityInfo> QueryInfluenceCityList(string account)
         {
             this.OpenAccountFirstCity(account);

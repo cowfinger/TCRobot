@@ -310,12 +310,6 @@
             this.HTTPRequest(url, account, body);
         }
 
-        private IEnumerable<TroopInfo> GetTeamsInfo(string srccityid, string account)
-        {
-            var cityPage = this.OpenCityShowAttackPage(srccityid, account);
-            return this.ParseTeams(cityPage, account);
-        }
-
         private IEnumerable<TroopInfo> GetActiveTroopInfo(string cityId, string tabId, string account)
         {
             var url0 = RequestAgent.BuildUrl(
