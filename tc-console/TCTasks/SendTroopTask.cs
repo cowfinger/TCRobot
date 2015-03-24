@@ -23,6 +23,8 @@ namespace TC.TCTasks
 
         public RequestAgent WebAgent;
 
+        public DateTime ArrivalTime { get; private set; }
+
         private static DateTime CalcActualExecutionTime(TroopInfo troop, DateTime arrivalTime)
         {
             var result = arrivalTime.AddSeconds(-(troop.Duration + OpenAttackPageTime));
@@ -45,6 +47,7 @@ namespace TC.TCTasks
             DateTime arrivalTime)
             : base(account, CalcActualExecutionTime(data, arrivalTime))
         {
+            this.ArrivalTime = arrivalTime;
             this.TaskData = data;
             this.fromCity = fromCity;
             this.toCity = toCity;

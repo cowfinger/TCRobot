@@ -451,7 +451,9 @@ namespace TC
                 var minArrivalTime = RemoteTime.AddSeconds(maxDuration);
                 var result =
                     MessageBox.Show(
-                        string.Format("建议到达时间必须晚于{0}", minArrivalTime.AddSeconds(SendTroopTask.OpenAttackPageTime)),
+                        string.Format(
+                            "建议到达时间必须晚于{0}",
+                            minArrivalTime.AddSeconds(SendTroopTask.OpenAttackPageTime)),
                         "是否使用建议时间",
                         MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
@@ -465,11 +467,8 @@ namespace TC
 
         private void btnGroupTroop_Click(object sender, EventArgs e)
         {
-            var candidateTroops = new List<TroopInfo>();
-            foreach (ListViewItem item in this.listViewTroops.CheckedItems)
-            {
-                candidateTroops.Add(item.Tag as TroopInfo);
-            }
+            var candidateTroops = (from ListViewItem item in this.listViewTroops.CheckedItems
+                                   select item.Tag as TroopInfo).ToList();
 
             var dialog = new FormChooseTroopHead(candidateTroops);
             dialog.ShowDialog();

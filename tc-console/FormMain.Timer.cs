@@ -234,18 +234,22 @@
                         switch (task.Status)
                         {
                             case SendTroopTask.TaskStatus.OpenAttackPage:
-                                var requestPerfTimer = DateTime.Now;
-                                TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.WebAgent, toCity.CityId);
-                                var cost = DateTime.Now - requestPerfTimer;
-                                var attackTime = task.ExecutionTime.AddSeconds(SendTroopTask.OpenAttackPageTime);
-                                task.ExecutionTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
                                 task.Status = SendTroopTask.TaskStatus.ConfirmAttack;
+                                var requestPerfTimer = DateTime.Now;
+                                TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.WebAgent, fromCity.CityId);
+                                var cost = DateTime.Now - requestPerfTimer;
+                                var attackTime = task.ArrivalTime.AddSeconds(-task.TaskData.Duration);
+                                attackTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
+                                task.ExecutionTime = attackTime;
 
                                 this.DebugLog(
-                                    "Troop(Id={0}, isGroup={1}) Open Attack Page, Elapse={2} Miliseconds.",
+                                    "Troop(Id={0},isGroup={1}) OpenCityPage(Elapse={2}ms), AttackTime={3}={4}-{5}.",
                                     team.isGroupTroop ? team.GroupId : team.TroopId,
                                     team.isGroupTroop,
-                                    cost.TotalMilliseconds);
+                                    cost.TotalMilliseconds,
+                                    attackTime,
+                                    task.ArrivalTime,
+                                    task.TaskData.Duration);
                                 break;
 
                             case SendTroopTask.TaskStatus.ConfirmAttack:
