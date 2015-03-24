@@ -9,7 +9,7 @@ namespace TC.TCTasks
 {
     class SpyTask : TCTask
     {
-        private const int CheckInterval = 10 * 1000;
+        private const int CheckInterval = 2 * 1000;
 
         public class CityTroopInfo
         {

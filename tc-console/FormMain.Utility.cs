@@ -530,12 +530,11 @@ namespace TC
             var cityNodeId = task.NextCity.CityId;
             var fromCityId = task.NextCity.NodeId;
             TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.Account.WebAgent, cityNodeId);
-            var movePageFrom = this.ChangeMoveFromCity(task.Account.UserName, fromCityId.ToString());
-
+            var moveArmyPage = TCPage.WorldWarShowMoveArmyPage.Open(task.Account.WebAgent, fromCityId);
 
             if (task.HeroIdList.Count > 0)
             {
-                var heroes = this.ParseHeroIdListFromMovePage(movePageFrom).ToList();
+                var heroes = moveArmyPage.HeroList.Select(h => h.HeroId).ToList();
                 var heroMatchCount = task.HeroIdList.Sum(hero => heroes.Contains(hero) ? 1 : 0);
                 if (heroMatchCount != task.HeroIdList.Count)
                 {
@@ -545,7 +544,7 @@ namespace TC
 
             if (task.SoldierList.Count > 0)
             {
-                var troop = this.ParseSoldierListFromMovePage(movePageFrom).ToList();
+                var troop = moveArmyPage.Army.ToList();
                 foreach (var soldier in task.SoldierList)
                 {
                     if (soldier.SoldierNumber == 0)
@@ -598,8 +597,9 @@ namespace TC
                 }
 
                 var thisMoveTask = newMoveArmyQueue.Items.Single(
-                        taskItem => !moveArmyQueue.Items.Select(
-                            item => item.TaskId).Contains(taskItem.TaskId));
+                    taskItem =>
+                        !moveArmyQueue.Items.Select(item => item.TaskId).Contains(taskItem.TaskId)
+                        );
                 task.TaskId = thisMoveTask.TaskId.ToString();
                 task.ExecutionTime = thisMoveTask.Eta.AddSeconds(2);
                 this.DebugLog("Troop is moving: {0}=>{1}, ETA={2}.",
@@ -645,7 +645,8 @@ namespace TC
             CityInfo toCity,
             List<Soldier> soldierList,
             List<string> heroList,
-            int brickNum)
+            int brickNum,
+            bool sync = false)
         {
             var initialHelper = new DijstraHelper(accountInfo.InfluenceMap)
                                     {
@@ -722,13 +723,18 @@ namespace TC
                 this.listViewTasks.Items.Add(lvItemTask);
             }
 
-            Task.Run(
+            var threadTask = Task.Run(
                 () =>
                 {
                     moveTask.TryEnter();
                     this.MoveTroop(moveTask);
                     moveTask.Leave();
                 });
+
+            if (sync)
+            {
+                threadTask.Wait();
+            }
 
             return moveTask;
         }
@@ -824,8 +830,8 @@ namespace TC
                             return this.ShipBrickCreateMoveBrickTask(account, homeCity, targetCity);
                         }
 
-                        var cityMovePage = this.ChangeMoveFromCity(account.UserName, cityInfo.NodeId.ToString());
-                        var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
+                        var moveArmyPage = TCPage.WorldWarShowMoveArmyPage.Open(account.WebAgent, cityInfo.NodeId);
+                        var brickNum = moveArmyPage.BrickNum;
 
                         return brickNum == 0
                                    ? this.ShipBrickCreateMoveTroopTask(account, cityInfo, homeCity)
@@ -837,17 +843,17 @@ namespace TC
 
         private MoveTroopTask ShipBrickCreateMoveTroopTask(AccountInfo account, CityInfo fromCity, CityInfo toCity)
         {
-            var cityMovePage = this.ChangeMoveFromCity(account.UserName, fromCity.NodeId.ToString());
-            var troop = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
+            var moveArmyPage = TCPage.WorldWarShowMoveArmyPage.Open(account.WebAgent, fromCity.NodeId);
+            var troop = moveArmyPage.Army.ToList();
 
             return this.CreateMoveTroopTask(account, fromCity, toCity, troop, new List<string>(), 0);
         }
 
         private MoveTroopTask ShipBrickCreateMoveBrickTask(AccountInfo account, CityInfo fromCity, CityInfo toCity)
         {
-            var cityMovePage = this.ChangeMoveFromCity(account.UserName, fromCity.NodeId.ToString());
-            var soldiers = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
-            var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
+            var moveArmyPage = TCPage.WorldWarShowMoveArmyPage.Open(account.WebAgent, fromCity.NodeId);
+            var soldiers = moveArmyPage.Army.ToList();
+            var brickNum = moveArmyPage.BrickNum;
             var carryBrickNum = Math.Min(CalcCarryBrickNum(soldiers), brickNum);
             var troop = this.CalcCarryTroop(soldiers, carryBrickNum).ToList();
             if (carryBrickNum == 0)
@@ -921,11 +927,9 @@ namespace TC
                 var focusList = new List<CityInfo>();
                 this.Invoke(new DoSomething(() =>
                 {
-                    foreach (ListViewItem lvItem in this.listViewEnemyCityInfo.CheckedItems)
-                    {
-                        var city = lvItem.Tag as CityInfo;
-                        focusList.Add(city);
-                    }
+                    focusList.AddRange(
+                        from ListViewItem lvItem in this.listViewEnemyCityInfo.CheckedItems 
+                        select lvItem.Tag as CityInfo);
                 }));
                 TCPage.InfluenceDoApplyInfluencePage.Open(account.WebAgent, 9);
 
@@ -1227,17 +1231,16 @@ namespace TC
                 Task.Run(
                     () =>
                     {
-                        var cityMovePage = this.ChangeMoveFromCity(account.UserName, info.NodeId.ToString());
-                        var troop = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
-                        var heroes = this.ParseHeroIdListFromMovePage(cityMovePage).ToList();
+                        var moveArmyPage = TCPage.WorldWarShowMoveArmyPage.Open(account.WebAgent, info.NodeId);
+                        var troop = moveArmyPage.Army.ToList();
+                        var heroes = moveArmyPage.HeroList.Select(h => h.HeroId).ToList();
                         var carryBrickNum = 0;
                         if (carryBrick)
                         {
-                            var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
-                            carryBrickNum = Math.Min(CalcCarryBrickNum(troop), brickNum);
+                            carryBrickNum = Math.Min(CalcCarryBrickNum(troop), moveArmyPage.BrickNum);
                         }
 
-                        this.CreateMoveTroopTask(account, info, targetCity, troop, heroes, carryBrickNum);
+                        this.CreateMoveTroopTask(account, info, targetCity, troop, heroes, carryBrickNum, true);
                     });
             }
         }

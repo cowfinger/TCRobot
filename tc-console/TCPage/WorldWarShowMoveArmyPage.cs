@@ -8,11 +8,52 @@ namespace TC.TCPage
 {
     class WorldWarShowMoveArmyPage
     {
+        public const string CityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
+
+        public string RawPage { get; private set; }
+
         public int BrickNum { get; private set; }
 
-        public IEnumerable<int> HeroIdList { get; private set; }
-
         public IEnumerable<Soldier> Army { get; private set; }
+
+        public IEnumerable<HeroInfo> HeroList { get; private set; }
+
+        public int CityId { get; private set; }
+
+        public IEnumerable<CityInfo> MoveTargetCityList
+        {
+            get
+            {
+                var contentParts = this.RawPage.Split(new[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
+                if (contentParts.Count() < 2)
+                {
+                    yield break;
+                }
+
+                var toCityMatches = Regex.Matches(contentParts[1], CityPattern);
+                foreach (Match toCityMatch in toCityMatches)
+                {
+                    var cityName = toCityMatch.Groups["name"].Value;
+                    string nodeId;
+                    if (!FormMain.CityList.TryGetValue(cityName, out nodeId))
+                    {
+                        nodeId = "0";
+                    }
+
+                    yield return new CityInfo
+                    {
+                        CityId = int.Parse(toCityMatch.Groups["nodeId"].Value),
+                        Name = cityName,
+                        NodeId = int.Parse(nodeId)
+                    };
+                }
+            }
+        }
+
+        public IEnumerable<CityInfo> CityList
+        {
+            get { return ParseCityListFromMoveTroopPage(this.RawPage); }
+        }
 
         public static WorldWarShowMoveArmyPage Open(RequestAgent agent, int fromCityId)
         {
@@ -23,21 +64,15 @@ namespace TC.TCPage
                 TCFunc.move_army,
                 new TCRequestArgument(TCElement.from_city_id, fromCityId));
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new WorldWarShowMoveArmyPage(rawPage);
+            return new WorldWarShowMoveArmyPage(rawPage) { CityId = fromCityId };
         }
 
         public WorldWarShowMoveArmyPage(string page)
         {
+            this.RawPage = page;
             this.BrickNum = ParseBrickNumberFromMovePage(page);
-            this.HeroIdList = ParseHeroIdListFromMovePage(page);
             this.Army = ParseSoldierListFromMovePage(page);
-        }
-
-        private static IEnumerable<int> ParseHeroIdListFromMovePage(string page)
-        {
-            const string pattern = "hero_id=\"(\\d+)\" hero_status=\"(\\d+)\"";
-            var matches = Regex.Matches(page, pattern);
-            return from Match match in matches select int.Parse(match.Groups[1].Value);
+            this.HeroList = ParseHeroInfoListFromMovePage(page);
         }
 
         private static int ParseBrickNumberFromMovePage(string page)
@@ -58,6 +93,70 @@ namespace TC.TCPage
                                SoldierType = int.Parse(match.Groups[2].Value),
                                SoldierNumber = int.Parse(match.Groups[1].Value)
                            };
+        }
+
+        private static IEnumerable<HeroInfo> ParseHeroInfoListFromMovePage(string page)
+        {
+            const string NamePattern =
+                "<div class=\"name button1\"><a href=\"javascript:void\\(0\\)\"><span>(?<name>.+?)</span></a></div>";
+            const string IdPattern = "hero_id=\"(\\d+)\" hero_status=\"(\\d+)\"";
+
+            var nameMatches = Regex.Matches(page, NamePattern);
+            var nameList = (from Match match in nameMatches select match.Groups[1].Value).ToList();
+
+            var idMatches = Regex.Matches(page, IdPattern);
+            var idList = (from Match match in idMatches select match.Groups[1].Value).ToList();
+            var statusList = (from Match match in idMatches select match.Groups[2].Value).ToList();
+
+            for (var i = 0; i < Math.Min(nameList.Count, idList.Count); ++i)
+            {
+                yield return
+                    new HeroInfo
+                        {
+                            Name = nameList[i],
+                            HeroId = idList[i],
+                            IsBusy = statusList[i] != "1"
+                        };
+            }
+        }
+
+        private static IEnumerable<CityInfo> ParseCityListFromMoveTroopPage(string content)
+        {
+            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
+            const string selectedCityPattern = "<option value=\"(?<nodeId>\\d+)\" selected\\s*>(?<name>[^<]+)</option>";
+
+            var contentParts = content.Split(new[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
+            var fromCityMatches = Regex.Matches(contentParts[0], cityPattern);
+            var selectedCityMatch = Regex.Match(contentParts[0], selectedCityPattern);
+
+            if (selectedCityMatch.Success)
+            {
+                yield return
+                    new CityInfo
+                    {
+                        Name = selectedCityMatch.Groups["name"].Value,
+                        NodeId = int.Parse(selectedCityMatch.Groups["nodeId"].Value),
+                        CityId = int.Parse(FormMain.CityList[selectedCityMatch.Groups["name"].Value])
+                    };
+            }
+
+            foreach (Match cityMatch in fromCityMatches)
+            {
+                var cityName = cityMatch.Groups["name"].Value;
+                var cityId = "0";
+                if (!FormMain.CityList.TryGetValue(cityName, out cityId))
+                {
+                    cityId = "0";
+                }
+
+                yield return
+                    new CityInfo
+                    {
+                        Name = cityName,
+                        NodeId = int.Parse(cityMatch.Groups["nodeId"].Value),
+                        CityId = int.Parse(cityId)
+                    };
+            }
         }
     }
 }

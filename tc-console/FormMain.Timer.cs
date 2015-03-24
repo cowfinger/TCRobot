@@ -214,6 +214,7 @@
                 {
                     continue;
                 }
+
                 var account = this.accountTable[team.AccountName];
                 var fromCityName = this.listBoxSrcCities.SelectedItem.ToString();
                 var toCityName = this.listBoxDstCities.SelectedItem.ToString();
@@ -234,7 +235,7 @@
                         {
                             case SendTroopTask.TaskStatus.OpenAttackPage:
                                 var requestPerfTimer = DateTime.Now;
-                                this.OpenCityPage(team.ToCityNodeId, ref task.WebClient);
+                                TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.WebAgent, toCity.CityId);
                                 var cost = DateTime.Now - requestPerfTimer;
                                 var attackTime = task.ExecutionTime.AddSeconds(SendTroopTask.OpenAttackPageTime);
                                 task.ExecutionTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
@@ -251,11 +252,15 @@
                                 string result;
                                 if (team.isGroupTroop)
                                 {
-                                    result = this.GroupAttackTarget(team.GroupId, team.ToCityNodeId, ref task.WebClient);
+                                    result = TCPage.WorldWarDoJoinAttackPage.Open(
+                                        task.WebAgent, int.Parse(team.GroupId),
+                                        int.Parse(team.ToCityNodeId)).RawPage;
                                 }
                                 else
                                 {
-                                    result = this.TeamAttackTarget(team.TroopId, team.ToCityNodeId, ref task.WebClient);
+                                    result = TCPage.WorldWarDoAttackPage.Open(
+                                        task.WebAgent, int.Parse(team.TroopId),
+                                        int.Parse(team.ToCityNodeId)).RawPage;
                                 }
 
                                 this.DebugLog(

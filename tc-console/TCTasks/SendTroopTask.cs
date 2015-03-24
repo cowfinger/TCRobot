@@ -21,7 +21,7 @@ namespace TC.TCTasks
 
         public TroopInfo TaskData;
 
-        public HttpClient WebClient;
+        public RequestAgent WebAgent;
 
         private static DateTime CalcActualExecutionTime(TroopInfo troop, DateTime arrivalTime)
         {
@@ -45,11 +45,10 @@ namespace TC.TCTasks
             DateTime arrivalTime)
             : base(account, CalcActualExecutionTime(data, arrivalTime))
         {
-
             this.TaskData = data;
             this.fromCity = fromCity;
             this.toCity = toCity;
-            this.WebClient = new HttpClient(this.Account.CookieStr);
+            this.WebAgent = new RequestAgent(account);
         }
 
         public override string TaskId

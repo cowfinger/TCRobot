@@ -71,7 +71,7 @@ namespace TC.TCPage
             var roadMatch = Regex.Match(page, RoadPattern);
             if (roadMatch.Success)
             {
-                this.Road = new CityBuild()
+                this.Road = new CityBuild
                 {
                     Duration = 0,
                     MaxDuration = 0,
@@ -81,16 +81,23 @@ namespace TC.TCPage
             }
         }
 
-        private CityBuild ParseCityBuild(string page, string pattern)
+        private static CityBuild ParseCityBuild(string page, string pattern)
         {
             var match = Regex.Match(page, pattern, RegexOptions.Singleline);
-            return new CityBuild()
+            if (match.Success)
             {
-                Duration = int.Parse(match.Groups["duration"].Value),
-                MaxDuration = int.Parse(match.Groups["maxDuration"].Value),
-                Level = int.Parse(match.Groups["level"].Value),
-                MaxLevel = int.Parse(match.Groups["maxLevel"].Value),
-            };
+                return new CityBuild()
+                {
+                    Duration = int.Parse(match.Groups["duration"].Value),
+                    MaxDuration = int.Parse(match.Groups["maxDuration"].Value),
+                    Level = int.Parse(match.Groups["level"].Value),
+                    MaxLevel = int.Parse(match.Groups["maxLevel"].Value),
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

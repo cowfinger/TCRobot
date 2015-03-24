@@ -56,18 +56,6 @@
             }
         }
 
-        private string ChangeMoveFromCity(string account, string fromCityId)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Show,
-                TCFunc.move_army,
-                new TCRequestArgument(TCElement.from_city_id, fromCityId));
-            return this.HTTPRequest(url, account);
-        }
-
         private string OpenMoveTroopPage(string account)
         {
             var url = RequestAgent.BuildUrl(
@@ -267,20 +255,6 @@
             this.HTTPRequest(url, account, body);
         }
 
-        private IEnumerable<string> GetMoveTargetCities(string sourceCidyId, string account)
-        {
-            this.OpenCityShowAttackPage(sourceCidyId, account);
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Show,
-                TCFunc.move_army);
-            var content = this.HTTPRequest(url, account);
-
-            return this.ParseTargetCityList(content);
-        }
-
         private IEnumerable<string> GetAccountInflunceCityNameListWithArmy(string account)
         {
             var url = RequestAgent.BuildUrl(
@@ -473,18 +447,6 @@
             this.HTTPRequest(url, account, body);
         }
 
-        private void OpenCityPage(string cityId, ref HttpClient client)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_city_detail,
-                new TCRequestArgument(TCElement.node_id, cityId));
-            client.OpenUrl(url);
-        }
-
         private string OpenCityShowAttackPage(string srccityid, string account)
         {
             var url0 = RequestAgent.BuildUrl(
@@ -567,20 +529,6 @@
             return this.HTTPRequest(url, account);
         }
 
-        private string OpenGroupAttackPage(string groupId, string cityId, ref HttpClient httpClient)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Show,
-                TCFunc.join_attack_confirm,
-                new TCRequestArgument(TCElement.group_id, groupId),
-                new TCRequestArgument(TCElement.to_city_id, cityId),
-                new TCRequestArgument(TCElement.join_attack_type, 1));
-            return httpClient.OpenUrl(url);
-        }
-
         private string OpenGroupAttackPage(string groupId, string cityId, string account)
         {
             var url = RequestAgent.BuildUrl(
@@ -595,19 +543,6 @@
             return this.HTTPRequest(url, account);
         }
 
-        private string OpenTeamAttackPage(string teamid, string cityid, ref HttpClient httpClient)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Show,
-                TCFunc.attack_confirm,
-                new TCRequestArgument(TCElement.team_id, teamid),
-                new TCRequestArgument(TCElement.to_city_id, cityid));
-            return httpClient.OpenUrl(url);
-        }
-
         private string OpenTeamAttackPage(string teamid, string cityid, string account)
         {
             var url = RequestAgent.BuildUrl(
@@ -619,54 +554,6 @@
                 new TCRequestArgument(TCElement.team_id, teamid),
                 new TCRequestArgument(TCElement.to_city_id, cityid));
             return this.HTTPRequest(url, account);
-        }
-
-        private string TeamAttackTarget(string team_id, string city_id, ref HttpClient httpClient)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Do,
-                TCFunc.attack);
-            var body = string.Format("team_id={0}&to_city_id={1}", team_id, city_id);
-            return httpClient.OpenUrl(url, body);
-        }
-
-        private void TeamAttackTarget(string team_id, string city_id, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Do,
-                TCFunc.attack);
-            var body = string.Format("team_id={0}&to_city_id={1}", team_id, city_id);
-            this.HTTPRequest(url, account, body);
-        }
-
-        private string GroupAttackTarget(string groupId, string cityId, ref HttpClient httpClient)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Do,
-                TCFunc.join_attack);
-            var body = string.Format("group_id={0}&to_city_id={1}&join_attack_type=1", groupId, cityId);
-            return httpClient.OpenUrl(url, body);
-        }
-
-        private void GroupAttackTarget(string groupId, string cityId, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Do,
-                TCFunc.join_attack);
-            var body = string.Format("group_id={0}&to_city_id={1}&join_attack_type=1", groupId, cityId);
-            var ret = this.HTTPRequest(url, account, body);
         }
     }
 }

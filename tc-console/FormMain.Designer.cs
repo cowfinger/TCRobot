@@ -161,6 +161,7 @@
             this.repairCityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enlistTroopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -202,7 +203,7 @@
             // 
             this.btnAutoAttack.Enabled = false;
             this.btnAutoAttack.Location = new System.Drawing.Point(368, 105);
-            this.btnAutoAttack.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAutoAttack.Margin = new System.Windows.Forms.Padding(4);
             this.btnAutoAttack.Name = "btnAutoAttack";
             this.btnAutoAttack.Size = new System.Drawing.Size(112, 32);
             this.btnAutoAttack.TabIndex = 12;
@@ -227,7 +228,7 @@
             this.listViewTroops.FullRowSelect = true;
             this.listViewTroops.GridLines = true;
             this.listViewTroops.Location = new System.Drawing.Point(0, 256);
-            this.listViewTroops.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewTroops.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTroops.Name = "listViewTroops";
             this.listViewTroops.Size = new System.Drawing.Size(1177, 235);
             this.listViewTroops.TabIndex = 13;
@@ -271,7 +272,7 @@
             // 
             this.btnConfirmMainTroops.Enabled = false;
             this.btnConfirmMainTroops.Location = new System.Drawing.Point(489, 105);
-            this.btnConfirmMainTroops.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnConfirmMainTroops.Margin = new System.Windows.Forms.Padding(4);
             this.btnConfirmMainTroops.Name = "btnConfirmMainTroops";
             this.btnConfirmMainTroops.Size = new System.Drawing.Size(112, 32);
             this.btnConfirmMainTroops.TabIndex = 15;
@@ -284,7 +285,7 @@
             this.listBoxSrcCities.FormattingEnabled = true;
             this.listBoxSrcCities.ItemHeight = 18;
             this.listBoxSrcCities.Location = new System.Drawing.Point(16, 27);
-            this.listBoxSrcCities.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listBoxSrcCities.Margin = new System.Windows.Forms.Padding(4);
             this.listBoxSrcCities.Name = "listBoxSrcCities";
             this.listBoxSrcCities.Size = new System.Drawing.Size(151, 184);
             this.listBoxSrcCities.TabIndex = 16;
@@ -295,7 +296,7 @@
             this.listBoxDstCities.FormattingEnabled = true;
             this.listBoxDstCities.ItemHeight = 18;
             this.listBoxDstCities.Location = new System.Drawing.Point(177, 27);
-            this.listBoxDstCities.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listBoxDstCities.Margin = new System.Windows.Forms.Padding(4);
             this.listBoxDstCities.Name = "listBoxDstCities";
             this.listBoxDstCities.Size = new System.Drawing.Size(163, 184);
             this.listBoxDstCities.TabIndex = 17;
@@ -346,7 +347,7 @@
             this.listViewAccounts.FullRowSelect = true;
             this.listViewAccounts.GridLines = true;
             this.listViewAccounts.Location = new System.Drawing.Point(4, 27);
-            this.listViewAccounts.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewAccounts.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccounts.Name = "listViewAccounts";
             this.listViewAccounts.Size = new System.Drawing.Size(675, 459);
             this.listViewAccounts.TabIndex = 29;
@@ -375,7 +376,7 @@
             // webBrowserMain
             // 
             this.webBrowserMain.Location = new System.Drawing.Point(0, 42);
-            this.webBrowserMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.webBrowserMain.Margin = new System.Windows.Forms.Padding(4);
             this.webBrowserMain.MinimumSize = new System.Drawing.Size(30, 27);
             this.webBrowserMain.Name = "webBrowserMain";
             this.webBrowserMain.Size = new System.Drawing.Size(114, 81);
@@ -394,7 +395,7 @@
             // textBoxSysTime
             // 
             this.textBoxSysTime.Location = new System.Drawing.Point(316, 4);
-            this.textBoxSysTime.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxSysTime.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSysTime.Name = "textBoxSysTime";
             this.textBoxSysTime.ReadOnly = true;
             this.textBoxSysTime.Size = new System.Drawing.Size(240, 28);
@@ -405,7 +406,7 @@
             this.dateTimePickerArrival.CustomFormat = "MM/dd/yyyy HH:mm:ss";
             this.dateTimePickerArrival.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePickerArrival.Location = new System.Drawing.Point(525, 20);
-            this.dateTimePickerArrival.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePickerArrival.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePickerArrival.Name = "dateTimePickerArrival";
             this.dateTimePickerArrival.ShowUpDown = true;
             this.dateTimePickerArrival.Size = new System.Drawing.Size(298, 28);
@@ -415,7 +416,7 @@
             // 
             this.btnQuickCreateTroop.Enabled = false;
             this.btnQuickCreateTroop.Location = new System.Drawing.Point(610, 62);
-            this.btnQuickCreateTroop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnQuickCreateTroop.Margin = new System.Windows.Forms.Padding(4);
             this.btnQuickCreateTroop.Name = "btnQuickCreateTroop";
             this.btnQuickCreateTroop.Size = new System.Drawing.Size(112, 34);
             this.btnQuickCreateTroop.TabIndex = 38;
@@ -427,7 +428,7 @@
             // 
             this.btnDismissTroop.Enabled = false;
             this.btnDismissTroop.Location = new System.Drawing.Point(489, 62);
-            this.btnDismissTroop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDismissTroop.Margin = new System.Windows.Forms.Padding(4);
             this.btnDismissTroop.Name = "btnDismissTroop";
             this.btnDismissTroop.Size = new System.Drawing.Size(112, 34);
             this.btnDismissTroop.TabIndex = 39;
@@ -451,9 +452,9 @@
             this.listViewTasks.FullRowSelect = true;
             this.listViewTasks.GridLines = true;
             this.listViewTasks.Location = new System.Drawing.Point(-2, 78);
-            this.listViewTasks.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewTasks.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(1191, 466);
+            this.listViewTasks.Size = new System.Drawing.Size(1191, 460);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
@@ -490,7 +491,7 @@
             // 
             this.checkBoxSelectAllTasks.AutoSize = true;
             this.checkBoxSelectAllTasks.Location = new System.Drawing.Point(20, 224);
-            this.checkBoxSelectAllTasks.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxSelectAllTasks.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxSelectAllTasks.Name = "checkBoxSelectAllTasks";
             this.checkBoxSelectAllTasks.Size = new System.Drawing.Size(70, 22);
             this.checkBoxSelectAllTasks.TabIndex = 41;
@@ -502,7 +503,7 @@
             // 
             this.checkBoxDefend.AutoSize = true;
             this.checkBoxDefend.Location = new System.Drawing.Point(732, 66);
-            this.checkBoxDefend.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxDefend.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxDefend.Name = "checkBoxDefend";
             this.checkBoxDefend.Size = new System.Drawing.Size(106, 22);
             this.checkBoxDefend.TabIndex = 42;
@@ -513,7 +514,7 @@
             // 
             this.btnGroupTroop.Enabled = false;
             this.btnGroupTroop.Location = new System.Drawing.Point(368, 62);
-            this.btnGroupTroop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnGroupTroop.Margin = new System.Windows.Forms.Padding(4);
             this.btnGroupTroop.Name = "btnGroupTroop";
             this.btnGroupTroop.Size = new System.Drawing.Size(112, 34);
             this.btnGroupTroop.TabIndex = 47;
@@ -525,7 +526,7 @@
             // 
             this.radioButtonCenturion.AutoSize = true;
             this.radioButtonCenturion.Location = new System.Drawing.Point(369, 141);
-            this.radioButtonCenturion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonCenturion.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonCenturion.Name = "radioButtonCenturion";
             this.radioButtonCenturion.Size = new System.Drawing.Size(69, 22);
             this.radioButtonCenturion.TabIndex = 48;
@@ -537,7 +538,7 @@
             this.radioButtonSmallTroop.AutoSize = true;
             this.radioButtonSmallTroop.Checked = true;
             this.radioButtonSmallTroop.Location = new System.Drawing.Point(442, 141);
-            this.radioButtonSmallTroop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonSmallTroop.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonSmallTroop.Name = "radioButtonSmallTroop";
             this.radioButtonSmallTroop.Size = new System.Drawing.Size(69, 22);
             this.radioButtonSmallTroop.TabIndex = 49;
@@ -549,7 +550,7 @@
             // 
             this.radioButtonFullTroop.AutoSize = true;
             this.radioButtonFullTroop.Location = new System.Drawing.Point(518, 141);
-            this.radioButtonFullTroop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonFullTroop.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonFullTroop.Name = "radioButtonFullTroop";
             this.radioButtonFullTroop.Size = new System.Drawing.Size(69, 22);
             this.radioButtonFullTroop.TabIndex = 50;
@@ -560,7 +561,7 @@
             // btnCancelTasks
             // 
             this.btnCancelTasks.Location = new System.Drawing.Point(106, 4);
-            this.btnCancelTasks.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancelTasks.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancelTasks.Name = "btnCancelTasks";
             this.btnCancelTasks.Size = new System.Drawing.Size(112, 32);
             this.btnCancelTasks.TabIndex = 52;
@@ -583,7 +584,7 @@
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 35);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -602,7 +603,7 @@
             // 
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer3.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer3.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer3.Name = "splitContainer3";
             this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -624,7 +625,7 @@
             this.tabControlMainInfo.Controls.Add(this.tabPageHero);
             this.tabControlMainInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMainInfo.Location = new System.Drawing.Point(0, 0);
-            this.tabControlMainInfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControlMainInfo.Margin = new System.Windows.Forms.Padding(4);
             this.tabControlMainInfo.Name = "tabControlMainInfo";
             this.tabControlMainInfo.SelectedIndex = 0;
             this.tabControlMainInfo.Size = new System.Drawing.Size(695, 542);
@@ -636,9 +637,9 @@
             this.tabPageAccount.Controls.Add(this.checkBoxSelectAllInAccountTable);
             this.tabPageAccount.Controls.Add(this.listViewAccounts);
             this.tabPageAccount.Location = new System.Drawing.Point(4, 28);
-            this.tabPageAccount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageAccount.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageAccount.Name = "tabPageAccount";
-            this.tabPageAccount.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageAccount.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageAccount.Size = new System.Drawing.Size(687, 510);
             this.tabPageAccount.TabIndex = 0;
             this.tabPageAccount.Text = "账号";
@@ -648,7 +649,7 @@
             // 
             this.checkBoxSelectAllInAccountTable.AutoSize = true;
             this.checkBoxSelectAllInAccountTable.Location = new System.Drawing.Point(10, 4);
-            this.checkBoxSelectAllInAccountTable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxSelectAllInAccountTable.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxSelectAllInAccountTable.Name = "checkBoxSelectAllInAccountTable";
             this.checkBoxSelectAllInAccountTable.Size = new System.Drawing.Size(70, 22);
             this.checkBoxSelectAllInAccountTable.TabIndex = 30;
@@ -660,10 +661,10 @@
             // 
             this.tabPageHero.Controls.Add(this.listViewAccountHero);
             this.tabPageHero.Location = new System.Drawing.Point(4, 28);
-            this.tabPageHero.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageHero.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageHero.Name = "tabPageHero";
-            this.tabPageHero.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabPageHero.Size = new System.Drawing.Size(686, 510);
+            this.tabPageHero.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPageHero.Size = new System.Drawing.Size(687, 510);
             this.tabPageHero.TabIndex = 2;
             this.tabPageHero.Text = "将领";
             this.tabPageHero.UseVisualStyleBackColor = true;
@@ -678,9 +679,9 @@
             this.listViewAccountHero.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewAccountHero.GridLines = true;
             this.listViewAccountHero.Location = new System.Drawing.Point(4, 4);
-            this.listViewAccountHero.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewAccountHero.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountHero.Name = "listViewAccountHero";
-            this.listViewAccountHero.Size = new System.Drawing.Size(678, 502);
+            this.listViewAccountHero.Size = new System.Drawing.Size(679, 502);
             this.listViewAccountHero.TabIndex = 0;
             this.listViewAccountHero.UseCompatibleStateImageBehavior = false;
             this.listViewAccountHero.View = System.Windows.Forms.View.Details;
@@ -707,7 +708,7 @@
             this.tabControlInfo.Controls.Add(this.tabPageEnemyAlert);
             this.tabControlInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlInfo.Location = new System.Drawing.Point(0, 0);
-            this.tabControlInfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControlInfo.Margin = new System.Windows.Forms.Padding(4);
             this.tabControlInfo.Name = "tabControlInfo";
             this.tabControlInfo.SelectedIndex = 0;
             this.tabControlInfo.Size = new System.Drawing.Size(695, 557);
@@ -717,9 +718,9 @@
             // 
             this.tabPageOnlineTroops.Controls.Add(this.listViewCompletedTasks);
             this.tabPageOnlineTroops.Location = new System.Drawing.Point(4, 28);
-            this.tabPageOnlineTroops.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageOnlineTroops.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageOnlineTroops.Name = "tabPageOnlineTroops";
-            this.tabPageOnlineTroops.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageOnlineTroops.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageOnlineTroops.Size = new System.Drawing.Size(687, 525);
             this.tabPageOnlineTroops.TabIndex = 1;
             this.tabPageOnlineTroops.Text = "部队信息";
@@ -778,9 +779,9 @@
             // 
             this.tabPageDebugLog.Controls.Add(this.listViewDebugLog);
             this.tabPageDebugLog.Location = new System.Drawing.Point(4, 28);
-            this.tabPageDebugLog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageDebugLog.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageDebugLog.Name = "tabPageDebugLog";
-            this.tabPageDebugLog.Size = new System.Drawing.Size(686, 523);
+            this.tabPageDebugLog.Size = new System.Drawing.Size(687, 525);
             this.tabPageDebugLog.TabIndex = 2;
             this.tabPageDebugLog.Text = "日志";
             this.tabPageDebugLog.UseVisualStyleBackColor = true;
@@ -794,9 +795,9 @@
             this.listViewDebugLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewDebugLog.GridLines = true;
             this.listViewDebugLog.Location = new System.Drawing.Point(0, 0);
-            this.listViewDebugLog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewDebugLog.Margin = new System.Windows.Forms.Padding(4);
             this.listViewDebugLog.Name = "listViewDebugLog";
-            this.listViewDebugLog.Size = new System.Drawing.Size(686, 523);
+            this.listViewDebugLog.Size = new System.Drawing.Size(687, 525);
             this.listViewDebugLog.TabIndex = 0;
             this.listViewDebugLog.UseCompatibleStateImageBehavior = false;
             this.listViewDebugLog.View = System.Windows.Forms.View.Details;
@@ -816,7 +817,7 @@
             this.tabPageEnemyAlert.Controls.Add(this.listViewEnemyCityInfo);
             this.tabPageEnemyAlert.Location = new System.Drawing.Point(4, 28);
             this.tabPageEnemyAlert.Name = "tabPageEnemyAlert";
-            this.tabPageEnemyAlert.Size = new System.Drawing.Size(686, 523);
+            this.tabPageEnemyAlert.Size = new System.Drawing.Size(687, 525);
             this.tabPageEnemyAlert.TabIndex = 3;
             this.tabPageEnemyAlert.Text = "敌方信息";
             this.tabPageEnemyAlert.UseVisualStyleBackColor = true;
@@ -833,7 +834,7 @@
             this.listViewEnemyCityInfo.GridLines = true;
             this.listViewEnemyCityInfo.Location = new System.Drawing.Point(0, 0);
             this.listViewEnemyCityInfo.Name = "listViewEnemyCityInfo";
-            this.listViewEnemyCityInfo.Size = new System.Drawing.Size(686, 523);
+            this.listViewEnemyCityInfo.Size = new System.Drawing.Size(687, 525);
             this.listViewEnemyCityInfo.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewEnemyCityInfo.TabIndex = 0;
             this.listViewEnemyCityInfo.UseCompatibleStateImageBehavior = false;
@@ -859,7 +860,7 @@
             this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -889,7 +890,7 @@
             this.tabControlTask.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlTask.Enabled = false;
             this.tabControlTask.Location = new System.Drawing.Point(0, 0);
-            this.tabControlTask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControlTask.Margin = new System.Windows.Forms.Padding(4);
             this.tabControlTask.Name = "tabControlTask";
             this.tabControlTask.SelectedIndex = 0;
             this.tabControlTask.Size = new System.Drawing.Size(1191, 541);
@@ -918,9 +919,9 @@
             this.tabPageAttack.Controls.Add(this.btnGroupTroop);
             this.tabPageAttack.Controls.Add(this.radioButtonSmallTroop);
             this.tabPageAttack.Location = new System.Drawing.Point(4, 28);
-            this.tabPageAttack.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageAttack.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageAttack.Name = "tabPageAttack";
-            this.tabPageAttack.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageAttack.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageAttack.Size = new System.Drawing.Size(1183, 509);
             this.tabPageAttack.TabIndex = 0;
             this.tabPageAttack.Text = "压秒";
@@ -940,7 +941,7 @@
             // 
             this.textBoxMaxTroopNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxMaxTroopNumber.Location = new System.Drawing.Point(687, 136);
-            this.textBoxMaxTroopNumber.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxMaxTroopNumber.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxMaxTroopNumber.Name = "textBoxMaxTroopNumber";
             this.textBoxMaxTroopNumber.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.textBoxMaxTroopNumber.Size = new System.Drawing.Size(68, 28);
@@ -969,9 +970,9 @@
             this.tabPageMoveArmy.Controls.Add(this.comboBoxFromCity);
             this.tabPageMoveArmy.Controls.Add(this.comboBoxAccount);
             this.tabPageMoveArmy.Location = new System.Drawing.Point(4, 28);
-            this.tabPageMoveArmy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageMoveArmy.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageMoveArmy.Name = "tabPageMoveArmy";
-            this.tabPageMoveArmy.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageMoveArmy.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageMoveArmy.Size = new System.Drawing.Size(1183, 509);
             this.tabPageMoveArmy.TabIndex = 1;
             this.tabPageMoveArmy.Text = "移动部队";
@@ -981,7 +982,7 @@
             // 
             this.checkBoxSelecteAllMoveHeroes.AutoSize = true;
             this.checkBoxSelecteAllMoveHeroes.Location = new System.Drawing.Point(64, 81);
-            this.checkBoxSelecteAllMoveHeroes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxSelecteAllMoveHeroes.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxSelecteAllMoveHeroes.Name = "checkBoxSelecteAllMoveHeroes";
             this.checkBoxSelecteAllMoveHeroes.Size = new System.Drawing.Size(70, 22);
             this.checkBoxSelecteAllMoveHeroes.TabIndex = 33;
@@ -993,7 +994,7 @@
             // 
             this.checkBoxDirectTarget.AutoSize = true;
             this.checkBoxDirectTarget.Location = new System.Drawing.Point(828, 14);
-            this.checkBoxDirectTarget.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxDirectTarget.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxDirectTarget.Name = "checkBoxDirectTarget";
             this.checkBoxDirectTarget.Size = new System.Drawing.Size(151, 22);
             this.checkBoxDirectTarget.TabIndex = 32;
@@ -1004,7 +1005,7 @@
             // numericUpDownToMoveArmy
             // 
             this.numericUpDownToMoveArmy.Location = new System.Drawing.Point(549, 69);
-            this.numericUpDownToMoveArmy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownToMoveArmy.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownToMoveArmy.Name = "numericUpDownToMoveArmy";
             this.numericUpDownToMoveArmy.Size = new System.Drawing.Size(180, 28);
             this.numericUpDownToMoveArmy.TabIndex = 31;
@@ -1036,7 +1037,7 @@
             // numericUpDownBrickNum
             // 
             this.numericUpDownBrickNum.Location = new System.Drawing.Point(63, 45);
-            this.numericUpDownBrickNum.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownBrickNum.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownBrickNum.Name = "numericUpDownBrickNum";
             this.numericUpDownBrickNum.Size = new System.Drawing.Size(180, 28);
             this.numericUpDownBrickNum.TabIndex = 28;
@@ -1049,7 +1050,7 @@
             this.listBoxMovePath.FormattingEnabled = true;
             this.listBoxMovePath.ItemHeight = 18;
             this.listBoxMovePath.Location = new System.Drawing.Point(765, 114);
-            this.listBoxMovePath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listBoxMovePath.Margin = new System.Windows.Forms.Padding(4);
             this.listBoxMovePath.Name = "listBoxMovePath";
             this.listBoxMovePath.Size = new System.Drawing.Size(178, 310);
             this.listBoxMovePath.TabIndex = 27;
@@ -1057,7 +1058,7 @@
             // buttonConfirmMove
             // 
             this.buttonConfirmMove.Location = new System.Drawing.Point(765, 64);
-            this.buttonConfirmMove.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonConfirmMove.Margin = new System.Windows.Forms.Padding(4);
             this.buttonConfirmMove.Name = "buttonConfirmMove";
             this.buttonConfirmMove.Size = new System.Drawing.Size(112, 34);
             this.buttonConfirmMove.TabIndex = 26;
@@ -1087,13 +1088,14 @@
             this.listViewAccountArmy.FullRowSelect = true;
             this.listViewAccountArmy.GridLines = true;
             this.listViewAccountArmy.Location = new System.Drawing.Point(285, 105);
-            this.listViewAccountArmy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewAccountArmy.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountArmy.MultiSelect = false;
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 379);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 382);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
+            this.listViewAccountArmy.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listViewAccountArmy_ItemChecked);
             this.listViewAccountArmy.SelectedIndexChanged += new System.EventHandler(this.listViewAccountArmy_SelectedIndexChanged);
             // 
             // columnHeader16
@@ -1121,9 +1123,9 @@
             this.columnHeader15});
             this.listViewMoveHero.GridLines = true;
             this.listViewMoveHero.Location = new System.Drawing.Point(12, 105);
-            this.listViewMoveHero.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewMoveHero.Margin = new System.Windows.Forms.Padding(4);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(262, 379);
+            this.listViewMoveHero.Size = new System.Drawing.Size(262, 382);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1190,7 +1192,7 @@
             // 
             this.comboBoxToCity.FormattingEnabled = true;
             this.comboBoxToCity.Location = new System.Drawing.Point(638, 9);
-            this.comboBoxToCity.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxToCity.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxToCity.Name = "comboBoxToCity";
             this.comboBoxToCity.Size = new System.Drawing.Size(180, 26);
             this.comboBoxToCity.TabIndex = 12;
@@ -1200,7 +1202,7 @@
             // 
             this.comboBoxFromCity.FormattingEnabled = true;
             this.comboBoxFromCity.Location = new System.Drawing.Point(351, 9);
-            this.comboBoxFromCity.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxFromCity.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxFromCity.Name = "comboBoxFromCity";
             this.comboBoxFromCity.Size = new System.Drawing.Size(180, 26);
             this.comboBoxFromCity.TabIndex = 11;
@@ -1210,7 +1212,7 @@
             // 
             this.comboBoxAccount.FormattingEnabled = true;
             this.comboBoxAccount.Location = new System.Drawing.Point(62, 9);
-            this.comboBoxAccount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAccount.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAccount.Name = "comboBoxAccount";
             this.comboBoxAccount.Size = new System.Drawing.Size(180, 26);
             this.comboBoxAccount.TabIndex = 10;
@@ -1231,10 +1233,10 @@
             this.tabPageAccountTask.Controls.Add(this.label14);
             this.tabPageAccountTask.Controls.Add(this.listViewTaskIdleAccount);
             this.tabPageAccountTask.Location = new System.Drawing.Point(4, 28);
-            this.tabPageAccountTask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageAccountTask.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageAccountTask.Name = "tabPageAccountTask";
-            this.tabPageAccountTask.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabPageAccountTask.Size = new System.Drawing.Size(1178, 506);
+            this.tabPageAccountTask.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPageAccountTask.Size = new System.Drawing.Size(1181, 508);
             this.tabPageAccountTask.TabIndex = 2;
             this.tabPageAccountTask.Text = "账号任务";
             this.tabPageAccountTask.UseVisualStyleBackColor = true;
@@ -1243,7 +1245,7 @@
             // 
             this.checkBoxAccountTaskOption.AutoSize = true;
             this.checkBoxAccountTaskOption.Location = new System.Drawing.Point(320, 183);
-            this.checkBoxAccountTaskOption.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxAccountTaskOption.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxAccountTaskOption.Name = "checkBoxAccountTaskOption";
             this.checkBoxAccountTaskOption.Size = new System.Drawing.Size(187, 22);
             this.checkBoxAccountTaskOption.TabIndex = 11;
@@ -1255,7 +1257,7 @@
             // 
             this.checkBoxSelectAllTaskAccount.AutoSize = true;
             this.checkBoxSelectAllTaskAccount.Location = new System.Drawing.Point(94, 4);
-            this.checkBoxSelectAllTaskAccount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxSelectAllTaskAccount.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxSelectAllTaskAccount.Name = "checkBoxSelectAllTaskAccount";
             this.checkBoxSelectAllTaskAccount.Size = new System.Drawing.Size(70, 22);
             this.checkBoxSelectAllTaskAccount.TabIndex = 10;
@@ -1298,7 +1300,7 @@
             this.comboBoxAccountTaskTarget.Enabled = false;
             this.comboBoxAccountTaskTarget.FormattingEnabled = true;
             this.comboBoxAccountTaskTarget.Location = new System.Drawing.Point(312, 128);
-            this.comboBoxAccountTaskTarget.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAccountTaskTarget.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAccountTaskTarget.Name = "comboBoxAccountTaskTarget";
             this.comboBoxAccountTaskTarget.Size = new System.Drawing.Size(140, 26);
             this.comboBoxAccountTaskTarget.TabIndex = 6;
@@ -1308,7 +1310,7 @@
             // 
             this.buttonCancelAccountTask.Enabled = false;
             this.buttonCancelAccountTask.Location = new System.Drawing.Point(310, 260);
-            this.buttonCancelAccountTask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonCancelAccountTask.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancelAccountTask.Name = "buttonCancelAccountTask";
             this.buttonCancelAccountTask.Size = new System.Drawing.Size(144, 34);
             this.buttonCancelAccountTask.TabIndex = 5;
@@ -1326,7 +1328,7 @@
             "拒绝联盟",
             "间谍"});
             this.comboBoxAccountTaskType.Location = new System.Drawing.Point(312, 51);
-            this.comboBoxAccountTaskType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAccountTaskType.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAccountTaskType.Name = "comboBoxAccountTaskType";
             this.comboBoxAccountTaskType.Size = new System.Drawing.Size(142, 26);
             this.comboBoxAccountTaskType.TabIndex = 4;
@@ -1336,7 +1338,7 @@
             // 
             this.buttonAssignTask.Enabled = false;
             this.buttonAssignTask.Location = new System.Drawing.Point(310, 214);
-            this.buttonAssignTask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonAssignTask.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAssignTask.Name = "buttonAssignTask";
             this.buttonAssignTask.Size = new System.Drawing.Size(146, 34);
             this.buttonAssignTask.TabIndex = 3;
@@ -1358,9 +1360,9 @@
             this.listViewAccountActiveTask.FullRowSelect = true;
             this.listViewAccountActiveTask.GridLines = true;
             this.listViewAccountActiveTask.Location = new System.Drawing.Point(466, 28);
-            this.listViewAccountActiveTask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewAccountActiveTask.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountActiveTask.Name = "listViewAccountActiveTask";
-            this.listViewAccountActiveTask.Size = new System.Drawing.Size(792, 499);
+            this.listViewAccountActiveTask.Size = new System.Drawing.Size(801, 504);
             this.listViewAccountActiveTask.TabIndex = 2;
             this.listViewAccountActiveTask.UseCompatibleStateImageBehavior = false;
             this.listViewAccountActiveTask.View = System.Windows.Forms.View.Details;
@@ -1405,9 +1407,9 @@
             this.listViewTaskIdleAccount.FullRowSelect = true;
             this.listViewTaskIdleAccount.GridLines = true;
             this.listViewTaskIdleAccount.Location = new System.Drawing.Point(0, 28);
-            this.listViewTaskIdleAccount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listViewTaskIdleAccount.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTaskIdleAccount.Name = "listViewTaskIdleAccount";
-            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 499);
+            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 504);
             this.listViewTaskIdleAccount.TabIndex = 0;
             this.listViewTaskIdleAccount.UseCompatibleStateImageBehavior = false;
             this.listViewTaskIdleAccount.View = System.Windows.Forms.View.Details;
@@ -1422,7 +1424,7 @@
             // 
             this.checkBoxSelectAllActiveTask.AutoSize = true;
             this.checkBoxSelectAllActiveTask.Location = new System.Drawing.Point(21, 45);
-            this.checkBoxSelectAllActiveTask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxSelectAllActiveTask.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxSelectAllActiveTask.Name = "checkBoxSelectAllActiveTask";
             this.checkBoxSelectAllActiveTask.Size = new System.Drawing.Size(70, 22);
             this.checkBoxSelectAllActiveTask.TabIndex = 55;
@@ -1447,7 +1449,8 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItemLoadAccountFile,
             this.ToolStripMenuItemBatchLogin,
-            this.ToolStripMenuItemScan});
+            this.ToolStripMenuItemScan,
+            this.exportLogToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(62, 29);
             this.fileToolStripMenuItem.Text = "文件";
@@ -1455,7 +1458,7 @@
             // ToolStripMenuItemLoadAccountFile
             // 
             this.ToolStripMenuItemLoadAccountFile.Name = "ToolStripMenuItemLoadAccountFile";
-            this.ToolStripMenuItemLoadAccountFile.Size = new System.Drawing.Size(160, 30);
+            this.ToolStripMenuItemLoadAccountFile.Size = new System.Drawing.Size(198, 30);
             this.ToolStripMenuItemLoadAccountFile.Text = "载入账号";
             this.ToolStripMenuItemLoadAccountFile.Click += new System.EventHandler(this.ToolStripMenuItemLoadAccountFile_Click);
             // 
@@ -1463,7 +1466,7 @@
             // 
             this.ToolStripMenuItemBatchLogin.Enabled = false;
             this.ToolStripMenuItemBatchLogin.Name = "ToolStripMenuItemBatchLogin";
-            this.ToolStripMenuItemBatchLogin.Size = new System.Drawing.Size(160, 30);
+            this.ToolStripMenuItemBatchLogin.Size = new System.Drawing.Size(198, 30);
             this.ToolStripMenuItemBatchLogin.Text = "登陆所有";
             this.ToolStripMenuItemBatchLogin.Click += new System.EventHandler(this.ToolStripMenuItemBatchLogin_Click);
             // 
@@ -1471,7 +1474,7 @@
             // 
             this.ToolStripMenuItemScan.Enabled = false;
             this.ToolStripMenuItemScan.Name = "ToolStripMenuItemScan";
-            this.ToolStripMenuItemScan.Size = new System.Drawing.Size(160, 30);
+            this.ToolStripMenuItemScan.Size = new System.Drawing.Size(198, 30);
             this.ToolStripMenuItemScan.Text = "扫描";
             this.ToolStripMenuItemScan.Click += new System.EventHandler(this.ToolStripMenuItemScan_Click);
             // 
@@ -1557,6 +1560,13 @@
             this.flushToolStripMenuItem.Text = "FlushServer";
             this.flushToolStripMenuItem.Click += new System.EventHandler(this.flushToolStripMenuItem_Click);
             // 
+            // exportLogToolStripMenuItem
+            // 
+            this.exportLogToolStripMenuItem.Name = "exportLogToolStripMenuItem";
+            this.exportLogToolStripMenuItem.Size = new System.Drawing.Size(198, 30);
+            this.exportLogToolStripMenuItem.Text = "ExportLog";
+            this.exportLogToolStripMenuItem.Click += new System.EventHandler(this.exportLogToolStripMenuItem_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -1565,7 +1575,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStripMain);
             this.Controls.Add(this.webBrowserMain);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
             this.Text = "TC Console (2.0)";
             this.Load += new System.EventHandler(this.FormMain_Load);
@@ -1742,6 +1752,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader28;
         private System.Windows.Forms.ColumnHeader columnHeader30;
         private System.Windows.Forms.ColumnHeader columnHeader29;
+        private System.Windows.Forms.ToolStripMenuItem exportLogToolStripMenuItem;
     }
 }
 

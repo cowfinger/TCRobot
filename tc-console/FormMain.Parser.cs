@@ -442,24 +442,10 @@
             return 0;
         }
 
-        private IEnumerable<Soldier> ParseSoldierListFromMovePage(string page)
-        {
-            const string idPattern = "max_num=(\\d+) name=\"s_(\\d+)\"";
-            return from Match match in Regex.Matches(page, idPattern)
-                   select
-                       new Soldier
-                           {
-                               Name = KeyWordMap[string.Format("soldier_{0}", match.Groups[2].Value)],
-                               SoldierType = int.Parse(match.Groups[2].Value),
-                               SoldierNumber = int.Parse(match.Groups[1].Value)
-                           };
-        }
-
         private IEnumerable<CityInfo> QueryInfluenceCityList(string account)
         {
             this.OpenAccountFirstCity(account);
             var content = this.OpenMoveTroopPage(account);
-
             return this.ParseCityListFromMoveTroopPage(content);
         }
 
@@ -506,24 +492,16 @@
             IEnumerable<CityInfo> influenceCityList,
             string account)
         {
-            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
+            var accountInfo = this.accountTable[account];
 
             var map = new Dictionary<string, HashSet<string>>();
             foreach (var cityInfo in influenceCityList)
             {
-                var cityMovePage = this.ChangeMoveFromCity(account, cityInfo.NodeId.ToString());
-                var contentParts = cityMovePage.Split(new[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
-                if (contentParts.Count() < 2)
-                {
-                    continue;
-                }
-
-                var toCityMatches = Regex.Matches(contentParts[1], cityPattern);
-
+                var moveArmyPage = TCPage.WorldWarShowMoveArmyPage.Open(accountInfo.WebAgent, cityInfo.NodeId);
                 var toSet = new HashSet<string>();
-                foreach (Match toCityMatch in toCityMatches)
+                foreach (var city in moveArmyPage.MoveTargetCityList)
                 {
-                    toSet.Add(toCityMatch.Groups["name"].Value);
+                    toSet.Add(city.Name);
                 }
 
                 map.Add(cityInfo.Name, toSet);

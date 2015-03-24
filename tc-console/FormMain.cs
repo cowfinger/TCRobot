@@ -790,13 +790,10 @@ namespace TC
 
                     var cityId = accountInfo.InfluenceCityList[fromCity].NodeId;
 
-                    var cityMovePage = this.ChangeMoveFromCity(accountName, cityId.ToString());
-                    var heroList =
-                        this.ParseHeroInfoListFromMovePage(cityMovePage, accountName)
-                            .Where(hero => !hero.IsBusy)
-                            .ToList();
-                    var soldiers = this.ParseSoldierListFromMovePage(cityMovePage).ToList();
-                    var brickNum = this.ParseBrickNumberFromMovePage(cityMovePage);
+                    var moveArmyPage = TCPage.WorldWarShowMoveArmyPage.Open(accountInfo.WebAgent, cityId);
+                    var heroList = moveArmyPage.HeroList.Where(hero => !hero.IsBusy).ToList();
+                    var soldiers = moveArmyPage.Army.ToList();
+                    var brickNum = moveArmyPage.BrickNum;
 
                     this.Invoke(
                         new DoSomething(
@@ -805,8 +802,7 @@ namespace TC
                                 this.listViewAccountArmy.Items.Clear();
                                 foreach (var soldierInfo in soldiers)
                                 {
-                                    var lvItem = new ListViewItem();
-                                    lvItem.Tag = soldierInfo;
+                                    var lvItem = new ListViewItem { Tag = soldierInfo };
                                     lvItem.SubItems[0].Text = soldierInfo.Name;
                                     lvItem.SubItems.Add(soldierInfo.SoldierNumber.ToString());
                                     lvItem.SubItems.Add("0");
@@ -1254,6 +1250,37 @@ namespace TC
                         // ignored
                     }
                 });
+        }
+
+        private void listViewAccountArmy_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (e.Item.Checked)
+            {
+                e.Item.SubItems[2].Text = e.Item.SubItems[1].Text;
+            }
+        }
+
+        private void exportLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                using (var stream = new StreamWriter("debug_log.txt"))
+                {
+                    var logList = new List<string>();
+                    this.Invoke(new DoSomething(() =>
+                    {
+                        logList.AddRange(
+                            from ListViewItem logItem in this.listViewDebugLog.Items
+                            select logItem.SubItems[0].Text + ":" + logItem.SubItems[1].Text);
+                    }));
+
+                    foreach (var logLine in logList)
+                    {
+                        stream.WriteLine(logLine);
+                    }
+                    stream.Flush();
+                }
+            });
         }
     }
 }
