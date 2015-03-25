@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TC.TCPage
+﻿namespace TC.TCPage.Influence
 {
-    class InfluenceDoCheckMemberPage
+    class DoCheckMemberPage
     {
         public enum Action
         {
             pass, refuse,
         }
 
-        public static InfluenceDoCheckMemberPage Open(RequestAgent agent, Action act, int unionId)
+        public static DoCheckMemberPage Open(RequestAgent agent, Action act, int unionId)
         {
             var url = agent.BuildUrl(
                 TCMod.influence,
@@ -23,10 +17,10 @@ namespace TC.TCPage
                 new TCRequestArgument(TCElement.action, act.ToString()),
                 new TCRequestArgument(TCElement.union_id, unionId));
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new InfluenceDoCheckMemberPage(rawPage);
+            return new DoCheckMemberPage(rawPage);
         }
 
-        public InfluenceDoCheckMemberPage(string rawPage)
+        public DoCheckMemberPage(string rawPage)
         {
         }
     }

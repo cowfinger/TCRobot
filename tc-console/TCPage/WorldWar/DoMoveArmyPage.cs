@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TC.TCPage
+﻿namespace TC.TCPage.WorldWar
 {
-    class WorldWarDoMoveArmyPage
+    class DoMoveArmyPage
     {
         public bool Success { get; set; }
 
-        public static WorldWarDoMoveArmyPage Open(
+        public static DoMoveArmyPage Open(
             RequestAgent agent,
             int fromCityId,
             int toCityId,
@@ -31,10 +26,10 @@ namespace TC.TCPage
                 heroString,
                 brickCount > 0 ? brickCount.ToString() : "");
             var rawPage = agent.WebClient.OpenUrl(url, body);
-            return new WorldWarDoMoveArmyPage(rawPage);
+            return new DoMoveArmyPage(rawPage);
         }
 
-        public WorldWarDoMoveArmyPage(string page)
+        public DoMoveArmyPage(string page)
         {
             this.Success = !page.Contains("alert");
         }

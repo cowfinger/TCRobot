@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TC.TCPage
+﻿namespace TC.TCPage.WorldWar
 {
-    class WorldWarDoJoinAttackPage
+    class DoJoinAttackPage
     {
         public string RawPage { get; private set; }
 
-        public static WorldWarDoJoinAttackPage Open(RequestAgent agent, int groupId, int toCityId, int attackType = 1)
+        public static DoJoinAttackPage Open(RequestAgent agent, int groupId, int toCityId, int attackType = 1)
         {
             var url = agent.BuildUrl(
                 TCMod.military,
@@ -18,10 +13,10 @@ namespace TC.TCPage
                 TCFunc.join_attack);
             var body = string.Format("group_id={0}&to_city_id={1}&join_attack_type={2}", groupId, toCityId, attackType);
             var page = agent.WebClient.OpenUrl(url, body);
-            return new WorldWarDoJoinAttackPage(page);
+            return new DoJoinAttackPage(page);
         }
 
-        public WorldWarDoJoinAttackPage(string page)
+        public DoJoinAttackPage(string page)
         {
             this.RawPage = page;
         }

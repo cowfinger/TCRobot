@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
-namespace TC.TCPage
+namespace TC.TCPage.Influence
 {
-    class InfluenceShowInfluenceCityDetailPage
+    class ShowInfluenceCityDetailPage
     {
         public const string CityNamePattern = "<!--开始-->\\s*<div class=\"title\">(.+?)</div>";
 
@@ -29,7 +24,7 @@ namespace TC.TCPage
 
         public int MaxWallEndure { get; private set; }
 
-        public static InfluenceShowInfluenceCityDetailPage Open(RequestAgent agent, int cityNodeId)
+        public static ShowInfluenceCityDetailPage Open(RequestAgent agent, int cityNodeId)
         {
             var url = agent.BuildUrl(
                 TCMod.influence,
@@ -38,10 +33,10 @@ namespace TC.TCPage
                 TCFunc.influence_city_detail,
                 new TCRequestArgument(TCElement.node_id, cityNodeId));
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new InfluenceShowInfluenceCityDetailPage(rawPage);
+            return new ShowInfluenceCityDetailPage(rawPage);
         }
 
-        public InfluenceShowInfluenceCityDetailPage(string page)
+        public ShowInfluenceCityDetailPage(string page)
         {
             var cityNameMatch = Regex.Match(page, CityNamePattern, RegexOptions.Singleline);
             if (cityNameMatch.Success)

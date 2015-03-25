@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace TC.TCPage
+namespace TC.TCPage.WorldWar
 {
-    class WorldWarShowTeamPage
+    class ShowTeamPage
     {
         public const string TeamLinePattern =
             @"<tr>\s*" +
@@ -36,7 +33,7 @@ namespace TC.TCPage
 
         public IEnumerable<TeamInfo> TeamList { get; private set; }
 
-        public static WorldWarShowTeamPage Open(RequestAgent agent, int tabId)
+        public static ShowTeamPage Open(RequestAgent agent, int tabId)
         {
             var url = agent.BuildUrl(
                 TCMod.military,
@@ -46,10 +43,10 @@ namespace TC.TCPage
                 new TCRequestArgument(TCElement.tab_id, tabId),
                 new TCRequestArgument(TCElement.user_nickname));
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new WorldWarShowTeamPage(rawPage);
+            return new ShowTeamPage(rawPage);
         }
 
-        public WorldWarShowTeamPage(string page)
+        public ShowTeamPage(string page)
         {
             if (page.Contains("alert"))
             {

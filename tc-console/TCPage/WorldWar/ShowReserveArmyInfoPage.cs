@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
-namespace TC.TCPage
+namespace TC.TCPage.WorldWar
 {
-    class WorldWarShowReserveArmyInfoPage
+    class ShowReserveArmyInfoPage
     {
         public const string ReserveArmySumPattern = @"本城后备军总兵数：(\d+)\s*<span>本城后备将领总数：(\d+)</span>";
 
@@ -15,7 +10,7 @@ namespace TC.TCPage
 
         public int ReserveHeroNum { get; set; }
 
-        public static WorldWarShowReserveArmyInfoPage Open(RequestAgent agent, int tabId)
+        public static ShowReserveArmyInfoPage Open(RequestAgent agent, int tabId)
         {
             var url = agent.BuildUrl(
                 TCMod.military,
@@ -25,10 +20,10 @@ namespace TC.TCPage
                 new TCRequestArgument(TCElement.tab_id, tabId),
                 new TCRequestArgument(TCElement.user_nickname, ""));
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new WorldWarShowReserveArmyInfoPage(rawPage);
+            return new ShowReserveArmyInfoPage(rawPage);
         }
 
-        public WorldWarShowReserveArmyInfoPage(string page)
+        public ShowReserveArmyInfoPage(string page)
         {
             var reserveArmySumMatch = Regex.Match(page, ReserveArmySumPattern, RegexOptions.Singleline);
             if (reserveArmySumMatch.Success)

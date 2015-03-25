@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using TC.TCPage.Union;
+using TC.TCPage.WorldWar;
 using TC.TCUtility;
 
 namespace TC
@@ -791,7 +793,7 @@ namespace TC
 
                     var cityId = accountInfo.InfluenceCityList[fromCity].NodeId;
 
-                    var moveArmyPage = TCPage.WorldWarShowMoveArmyPage.Open(accountInfo.WebAgent, cityId);
+                    var moveArmyPage = ShowMoveArmyPage.Open(accountInfo.WebAgent, cityId);
                     var heroList = moveArmyPage.HeroList.Where(hero => !hero.IsBusy).ToList();
                     var soldiers = moveArmyPage.Army.ToList();
                     var brickNum = moveArmyPage.BrickNum;
@@ -1082,7 +1084,7 @@ namespace TC
                 var account = lvItem.Tag as AccountInfo;
                 Task.Run(() =>
                 {
-                    TCPage.UnionDoOutUnionPage.Open(account.WebAgent);
+                    DoOutUnionPage.Open(account.WebAgent);
                 });
             }
         }
@@ -1111,7 +1113,7 @@ namespace TC
                 accountList,
                 account =>
                 {
-                    TCPage.UnionDoApplyUnionPage.Open(account.Account.WebAgent, unionId);
+                    DoApplyUnionPage.Open(account.Account.WebAgent, unionId);
                     this.Invoke(new DoSomething(() => { account.lvItem.SubItems[2].Text = unionId.ToString(); }));
                 });
         }

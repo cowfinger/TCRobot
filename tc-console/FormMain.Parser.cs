@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using TC.TCPage.WorldWar;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -373,7 +375,7 @@
             var map = new Dictionary<string, HashSet<string>>();
             foreach (var cityInfo in influenceCityList)
             {
-                var moveArmyPage = TCPage.WorldWarShowMoveArmyPage.Open(accountInfo.WebAgent, cityInfo.NodeId);
+                var moveArmyPage = ShowMoveArmyPage.Open(accountInfo.WebAgent, cityInfo.NodeId);
                 var toSet = new HashSet<string>();
                 foreach (var city in moveArmyPage.MoveTargetCityList)
                 {

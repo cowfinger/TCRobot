@@ -1,25 +1,9 @@
-﻿URL,Protocol,Method,Result,Type,Received,Taken (ms),Initiator,Wait‎‎,Start‎‎,Request‎‎,Response‎‎,Cache read‎‎,Gap‎‎
-http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=inner_build_list&pid=0&bt=2&r=0.9169327846568097,HTTP,GET,200,text/html,3.93 KB,0.73 s,,0,0,391,343,0,62282
-http://static.tc.9wee.com//arrow_19_13_0.gif,HTTP,GET,200,image/gif,0.50 KB,375 ms,<img>,734,0,375,0,0,61907
-http://static.tc.9wee.com//arrow_9_20_0.gif,HTTP,GET,200,image/gif,0.88 KB,391 ms,<img>,734,0,391,0,0,61891
-http://static.tc.9wee.com//arrow_9_14_1.gif,HTTP,GET,200,image/gif,0.51 KB,438 ms,<img>,734,0,422,16,0,61844
-http://static.tc.9wee.com//arrow_9_8_1.gif,HTTP,GET,200,image/gif,0.60 KB,407 ms,<img>,734,16,375,16,0,61875
-http://static.tc.9wee.com//arrow_14_18_1.gif,HTTP,GET,200,image/gif,464 B,0.54 s,<img>,750,0,547,0,0,61719
-http://static.tc.9wee.com//arrow_18_21_0.gif,HTTP,GET,200,image/gif,464 B,0.54 s,<img>,750,172,375,0,0,61719
-http://static.tc.9wee.com//arrow_18_20_0.gif,HTTP,GET,200,image/gif,478 B,0.54 s,<img>,750,172,375,0,0,61719
-http://static.tc.9wee.com//arrow_8_18_0.gif,HTTP,GET,200,image/gif,0.64 KB,0.54 s,<img>,750,172,375,0,0,61719
-http://static.tc.9wee.com//arrow_20_51_0.gif,HTTP,GET,200,image/gif,464 B,0.71 s,<img>,750,172,547,0,0,61547
-http://i.9wee.com/interface/api_webim.php?_t=0.7909257896273394&act=getSysMsg&callback=fun_994054695033638445,HTTP,GET,200,text/html,500 B,453 ms,<script>,3828,0,453,0,0,58735
-http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=viewbuild&pid=1&bt=2&bid=12&r=0.7614745372776804,HTTP,GET,200,text/html,2.06 KB,0.56 s,,4078,0,375,188,0,58375
-http://static.tc.9wee.com//build/build_thumb/12.gif,HTTP,GET,200,image/gif,12.38 KB,375 ms,<img>,4641,0,187,188,0,58000
-http://static.tc.9wee.com//build/wall/wall_build_1.gif,HTTP,GET,200,image/gif,7.01 KB,375 ms,<img>,4641,0,203,172,0,58000
-http://static.tc.9wee.com//build/wall/wall_build_2.gif,HTTP,GET,200,image/gif,7.25 KB,375 ms,<img>,4641,0,203,172,0,58000
-http://static.tc.9wee.com//build/wall/wall_build_3.gif,HTTP,GET,200,image/gif,6.73 KB,375 ms,<img>,4641,0,203,172,0,58000
-http://static.tc.9wee.com//build/wall/wall_build_4.gif,HTTP,GET,200,image/gif,8.49 KB,375 ms,<img>,4641,0,203,172,0,58000
-http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=wall_build&bid=1&r=0.5754195909462103,HTTP,GET,200,text/html,1.57 KB,421 ms,,4641,0,375,46,0,57954
-http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=build&pid=1&bt=2&bid=12&r=0.30979500926029085,HTTP,GET,200,text/html,0.52 KB,0.56 s,,8125,0,391,171,0,54329
-http://yw1.tc.9wee.com/index.php?mod=city/build&op=do&func=build&r=0.6462057197642093,HTTP,POST,200,text/html,3.33 KB,0.61 s,,10859,16,0,422,172,51547
-http://yw1.tc.9wee.com/index.php?mod=get_data&op=do&r=0.6233833361168477,HTTP,POST,200,text/html,0.55 KB,0.98 s,,51172,0,0,984,0,10860
-http://yw1.tc.9wee.com/index.php?mod=get_data&op=do&r=0.14384689552709867,HTTP,POST,200,text/html,0.55 KB,422 ms,,56172,0,15,407,0,6422
-http://yw1.tc.9wee.com/index.php?mod=city/city&op=do&func=get_user_flag&r=0.5543269466074526,HTTP,GET,200,text/html,0.83 KB,0.92 s,,56172,0,922,0,0,5922
-http://i.9wee.com/interface/api_webim.php?_t=0.8821182169531931&act=getSysMsg&callback=fun_7264905177709613094,HTTP,GET,200,text/html,501 B,454 ms,<script>,62562,0,454,0,0,0
+URL	Protocol	Method	Result	Type	Received	Taken (ms)	Initiator	Wait??	Start??	Request??	Response??	Cache read??	Gap??
+http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=inner_build_list&pid=0&bt=2&r=0.9169327846568097	HTTP	GET	200	text/html	3.93 KB	0.73 s		0	0	391	343	0	62282
+http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=viewbuild&pid=1&bt=2&bid=12&r=0.7614745372776804	HTTP	GET	200	text/html	2.06 KB	0.56 s		4078	0	375	188	0	58375
+http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=wall_build&bid=1&r=0.5754195909462103	HTTP	GET	200	text/html	1.57 KB	421 ms		4641	0	375	46	0	57954
+http://yw1.tc.9wee.com/index.php?mod=city/build&op=show&func=build&pid=1&bt=2&bid=12&r=0.30979500926029085	HTTP	GET	200	text/html	0.52 KB	0.56 s		8125	0	391	171	0	54329
+http://yw1.tc.9wee.com/index.php?mod=city/build&op=do&func=build&r=0.6462057197642093	HTTP	POST	200	text/html	3.33 KB	0.61 s		10859	16	0	422	172	51547
+http://yw1.tc.9wee.com/index.php?mod=get_data&op=do&r=0.6233833361168477	HTTP	POST	200	text/html	0.55 KB	0.98 s		51172	0	0	984	0	10860
+http://yw1.tc.9wee.com/index.php?mod=get_data&op=do&r=0.14384689552709867	HTTP	POST	200	text/html	0.55 KB	422 ms		56172	0	15	407	0	6422
+http://yw1.tc.9wee.com/index.php?mod=city/city&op=do&func=get_user_flag&r=0.5543269466074526	HTTP	GET	200	text/html	0.83 KB	0.92 s		56172	0	922	0	0	5922

@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using TC.TCPage.Influence;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -51,8 +53,8 @@
             int roadLevel;
             if (!roadLevelCache.TryGetValue(from, out roadLevel))
             {
-                TCPage.InfluenceShowInfluenceCityDetailPage.Open(accountInfo.WebAgent, fromCityId);
-                var page = TCPage.InfluenceShowCityBuildPage.Open(accountInfo.WebAgent, fromCityId);
+                ShowInfluenceCityDetailPage.Open(accountInfo.WebAgent, fromCityId);
+                var page = ShowCityBuildPage.Open(accountInfo.WebAgent, fromCityId);
                 roadLevelCache.Add(from, page.Road.Level);
                 roadLevel = page.Road.Level;
             }

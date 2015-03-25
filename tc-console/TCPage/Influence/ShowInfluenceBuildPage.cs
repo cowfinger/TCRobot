@@ -1,13 +1,8 @@
-﻿
-namespace TC.TCPage
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-    class InfluenceShowInfluenceBuildPage
+namespace TC.TCPage.Influence
+{
+    class ShowInfluenceBuildPage
     {
         public const string DurationPattern = @"<th>耐久度</th>.*?<td>(?<duration>\d+)/(?<maxDuration>\d+)</td>";
         public const string BrickNumPattern = @"<th>携带砖数</th>.*?<th>(\d+)</th>";
@@ -26,7 +21,7 @@ namespace TC.TCPage
 
         public int CompleteRepairNeeds { get; private set; }
 
-        public static InfluenceShowInfluenceBuildPage Open(
+        public static ShowInfluenceBuildPage Open(
             RequestAgent agent,
             int cityNodeId,
             int buildId,
@@ -42,10 +37,10 @@ namespace TC.TCPage
                 new TCRequestArgument(TCElement.level, buildLevel),
                 new TCRequestArgument(TCElement.action, "repair"));
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new InfluenceShowInfluenceBuildPage(rawPage);
+            return new ShowInfluenceBuildPage(rawPage);
         }
 
-        public InfluenceShowInfluenceBuildPage(string page)
+        public ShowInfluenceBuildPage(string page)
         {
             var matchDuration = Regex.Match(page, DurationPattern, RegexOptions.Singleline);
             var matchBrickNum = Regex.Match(page, BrickNumPattern, RegexOptions.Singleline);

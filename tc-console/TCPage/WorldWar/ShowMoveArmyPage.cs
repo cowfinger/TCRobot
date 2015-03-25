@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
-namespace TC.TCPage
+namespace TC.TCPage.WorldWar
 {
-    class WorldWarShowMoveArmyPage
+    class ShowMoveArmyPage
     {
         public const string CityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
 
@@ -55,7 +54,7 @@ namespace TC.TCPage
             get { return ParseCityListFromMoveTroopPage(this.RawPage); }
         }
 
-        public static WorldWarShowMoveArmyPage Open(RequestAgent agent, int fromCityId)
+        public static ShowMoveArmyPage Open(RequestAgent agent, int fromCityId)
         {
             var url = agent.BuildUrl(
                 TCMod.military,
@@ -64,10 +63,10 @@ namespace TC.TCPage
                 TCFunc.move_army,
                 new TCRequestArgument(TCElement.from_city_id, fromCityId));
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new WorldWarShowMoveArmyPage(rawPage) { CityId = fromCityId };
+            return new ShowMoveArmyPage(rawPage) { CityId = fromCityId };
         }
 
-        public WorldWarShowMoveArmyPage(string page)
+        public ShowMoveArmyPage(string page)
         {
             this.RawPage = page;
             this.BrickNum = ParseBrickNumberFromMovePage(page);

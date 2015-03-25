@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TC.TCPage
+﻿namespace TC.TCPage.Influence
 {
-    class InfluenceDoBuildRepairPage
+    class DoBuildRepairPage
     {
-        public static InfluenceDoBuildRepairPage Open(
+        public static DoBuildRepairPage Open(
             RequestAgent agent,
             int cityId,
             int buildId,
@@ -23,10 +17,10 @@ namespace TC.TCPage
                 new TCRequestArgument(TCElement.node_id, buildId),
                 new TCRequestArgument(TCElement.brick_num, brickNum));
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new InfluenceDoBuildRepairPage(rawPage);
+            return new DoBuildRepairPage(rawPage);
         }
 
-        public InfluenceDoBuildRepairPage(string page)
+        public DoBuildRepairPage(string page)
         {
         }
     }

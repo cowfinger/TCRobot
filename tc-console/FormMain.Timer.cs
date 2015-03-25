@@ -1,4 +1,6 @@
-﻿using TC.TCUtility;
+﻿using TC.TCPage.Influence;
+using TC.TCPage.WorldWar;
+using TC.TCUtility;
 
 namespace TC
 {
@@ -238,7 +240,7 @@ namespace TC
                             case SendTroopTask.TaskStatus.OpenAttackPage:
                                 task.Status = SendTroopTask.TaskStatus.ConfirmAttack;
                                 var requestPerfTimer = DateTime.Now;
-                                TCPage.InfluenceShowInfluenceCityDetailPage.Open(task.WebAgent, fromCity.CityId);
+                                ShowInfluenceCityDetailPage.Open(task.WebAgent, fromCity.CityId);
                                 var cost = DateTime.Now - requestPerfTimer;
                                 var attackTime = task.ArrivalTime.AddSeconds(-task.TaskData.Duration);
                                 attackTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
@@ -258,13 +260,13 @@ namespace TC
                                 string result;
                                 if (task.TaskData.isGroupTroop)
                                 {
-                                    result = TCPage.WorldWarDoJoinAttackPage.Open(
+                                    result = DoJoinAttackPage.Open(
                                         task.WebAgent, int.Parse(task.TaskData.GroupId),
                                         int.Parse(task.TaskData.ToCityNodeId)).RawPage;
                                 }
                                 else
                                 {
-                                    result = TCPage.WorldWarDoAttackPage.Open(
+                                    result = DoAttackPage.Open(
                                         task.WebAgent, int.Parse(task.TaskData.TroopId),
                                         int.Parse(task.TaskData.ToCityNodeId)).RawPage;
                                 }

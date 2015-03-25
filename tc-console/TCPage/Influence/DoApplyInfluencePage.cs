@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TC.TCPage
+namespace TC.TCPage.Influence
 {
-    class InfluenceDoApplyInfluencePage
+    class DoApplyInfluencePage
     {
         public bool Success { get; private set; }
 
-        public static InfluenceDoApplyInfluencePage Open(RequestAgent agent, int influenceId)
+        public static DoApplyInfluencePage Open(RequestAgent agent, int influenceId)
         {
             var url = agent.BuildUrl(
                 TCMod.influence,
@@ -19,10 +19,10 @@ namespace TC.TCPage
                 TCFunc.apply_influence,
                 new TCRequestArgument(TCElement.influence_id, influenceId));
             var page = agent.WebClient.OpenUrl(url);
-            return new InfluenceDoApplyInfluencePage(page);
+            return new DoApplyInfluencePage(page);
         }
 
-        public InfluenceDoApplyInfluencePage(string page)
+        public DoApplyInfluencePage(string page)
         {
             this.Success = page.Contains("wee.lang('yes')");
         }

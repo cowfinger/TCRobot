@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
-namespace TC.TCPage
+namespace TC.TCPage.WorldWar
 {
-    class WorldWarShowMoveArmyQueuePage
+    class ShowMoveArmyQueuePage
     {
         const string EventPattern = "id=\"event_(?<taskId>\\d+)\"";
         const string EtaPattern = "预计于(?<eta>.+?)到达";
@@ -20,7 +19,7 @@ namespace TC.TCPage
 
         public IEnumerable<MoveArmyQueueItem> Items;
 
-        public static WorldWarShowMoveArmyQueuePage Open(RequestAgent agent)
+        public static ShowMoveArmyQueuePage Open(RequestAgent agent)
         {
             var url = agent.BuildUrl(
                 TCMod.military,
@@ -28,10 +27,10 @@ namespace TC.TCPage
                 TCOperation.Show,
                 TCFunc.move_army_queue);
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new WorldWarShowMoveArmyQueuePage(rawPage);
+            return new ShowMoveArmyQueuePage(rawPage);
         }
 
-        public WorldWarShowMoveArmyQueuePage(string page)
+        public ShowMoveArmyQueuePage(string page)
         {
             var eventMatches = Regex.Matches(page, EventPattern);
             var etaMatches = Regex.Matches(page, EtaPattern);

@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using System.Diagnostics;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -81,14 +83,8 @@
                         return;
                     }
 
-                    if (this.SubmitLoginRequest(loginpara))
-                    {
-                        account.LoginStatus = "submitting";
-                    }
-                    else
-                    {
-                        account.LoginStatus = "login-failed";
-                    }
+                    account.LoginStatus = this.SubmitLoginRequest(loginpara) ?
+                        "submitting" : "login-failed";
                     break;
                 case "submitting":
                     if (this.webBrowserMain.Document.Title.Contains(loginpara.HomeTitle))

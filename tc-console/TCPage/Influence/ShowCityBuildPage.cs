@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace TC.TCPage
+namespace TC.TCPage.Influence
 {
     enum CityBuildId
     {
@@ -13,7 +9,7 @@ namespace TC.TCPage
         Road = 1003,
     }
 
-    class InfluenceShowCityBuildPage
+    class ShowCityBuildPage
     {
         public class CityBuild
         {
@@ -36,7 +32,7 @@ namespace TC.TCPage
 
         public CityBuild Road { get; private set; }
 
-        public static InfluenceShowCityBuildPage Open(RequestAgent agent, int cityNodeId)
+        public static ShowCityBuildPage Open(RequestAgent agent, int cityNodeId)
         {
             var url = agent.BuildUrl(
                 TCMod.influence,
@@ -45,10 +41,10 @@ namespace TC.TCPage
                 TCFunc.city_build,
                 new TCRequestArgument(TCElement.node_id, cityNodeId));
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new InfluenceShowCityBuildPage(rawPage);
+            return new ShowCityBuildPage(rawPage);
         }
 
-        public InfluenceShowCityBuildPage(string page)
+        public ShowCityBuildPage(string page)
         {
             const string CityNamePattern = "<div class=\"title\">(.+?)</div>";
             const string NodeIdPattern = @"node_id=(\d+)";
