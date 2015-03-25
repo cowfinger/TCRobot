@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using TC.TCUtility;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -242,10 +244,10 @@
                                 attackTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
                                 task.ExecutionTime = attackTime;
 
-                                this.DebugLog(
+                                Logger.Verbose(
                                     "Troop(Id={0},isGroup={1}) OpenCityPage(Elapse={2}ms), AttackTime={3}={4}-{5}.",
-                                    team.isGroupTroop ? team.GroupId : team.TroopId,
-                                    team.isGroupTroop,
+                                    task.TaskData.isGroupTroop ? task.TaskData.GroupId : task.TaskData.TroopId,
+                                    task.TaskData.isGroupTroop,
                                     cost.TotalMilliseconds,
                                     attackTime,
                                     task.ArrivalTime,
@@ -254,23 +256,23 @@
 
                             case SendTroopTask.TaskStatus.ConfirmAttack:
                                 string result;
-                                if (team.isGroupTroop)
+                                if (task.TaskData.isGroupTroop)
                                 {
                                     result = TCPage.WorldWarDoJoinAttackPage.Open(
-                                        task.WebAgent, int.Parse(team.GroupId),
-                                        int.Parse(team.ToCityNodeId)).RawPage;
+                                        task.WebAgent, int.Parse(task.TaskData.GroupId),
+                                        int.Parse(task.TaskData.ToCityNodeId)).RawPage;
                                 }
                                 else
                                 {
                                     result = TCPage.WorldWarDoAttackPage.Open(
-                                        task.WebAgent, int.Parse(team.TroopId),
-                                        int.Parse(team.ToCityNodeId)).RawPage;
+                                        task.WebAgent, int.Parse(task.TaskData.TroopId),
+                                        int.Parse(task.TaskData.ToCityNodeId)).RawPage;
                                 }
 
-                                this.DebugLog(
+                                Logger.Verbose(
                                     "Troop(Id={0}, isGroup={1}) Sent, result={2}.",
-                                    team.isGroupTroop ? team.GroupId : team.TroopId,
-                                    team.isGroupTroop,
+                                    task.TaskData.isGroupTroop ? task.TaskData.GroupId : task.TaskData.TroopId,
+                                    task.TaskData.isGroupTroop,
                                     result);
                                 task.IsCompleted = true;
                                 break;
@@ -343,7 +345,7 @@
                         account =>
                         {
                             var heroPage = this.OpenHeroPage(account.UserName);
-                            var heroList = this.ParseHeroList(heroPage, account.UserName).ToList();
+                            var heroList = ParseHeroList(heroPage, account.UserName).ToList();
                             if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
                             {
                                 this.UpdateHeroTable(heroList);

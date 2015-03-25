@@ -20,7 +20,8 @@
 
                 if (!string.IsNullOrEmpty(accountInfo.CookieStr))
                 {
-                    if (!this.RefreshHomePage(account).Contains("登录超时"))
+                    var homePage = this.RefreshHomePage(account);
+                    if (!homePage.Contains("登录超时"))
                     {
                         accountInfo.LoginStatus = "on-line";
                         this.OnLoginCompleted(accountInfo);
@@ -118,7 +119,7 @@
                 this.accountTable.Values.Sum(a => a.LoginStatus == "on-line" || a.LoginStatus == "login-failed" ? 1 : 0);
 
             var mainPage = this.RefreshHomePage(account.UserName);
-            account.UnionId = this.ParseUnionIdFromMainPage(mainPage);
+            account.UnionId = ParseUnionIdFromMainPage(mainPage);
             account.WebAgent = new RequestAgent(account);
 
             Task.Run(

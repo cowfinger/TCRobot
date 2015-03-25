@@ -1,5 +1,4 @@
 ﻿using System.Timers;
-using TC.TCUtility;
 
 namespace TC
 {
@@ -398,7 +397,7 @@ namespace TC
             foreach (var account in accountList)
             {
                 var influenceSciencePage = this.OpenInfluenceSciencePage(account);
-                var influenceRes = ParseInfluenceResource(influenceSciencePage).ToList();
+                var influenceRes = this.ParseInfluenceResource(influenceSciencePage).ToList();
                 var resNeeds = influenceRes.Select(resPair => resPair.Value - resPair.Key).ToList();
 
                 var resStr = string.Join(",", influenceRes.Select(resPair => string.Format("{0}/{1}", resPair.Key, resPair.Value)).ToArray());
@@ -526,7 +525,7 @@ namespace TC
                     }));
         }
 
-        private static bool HasTroopArrived(MoveTroopTask task)
+        private bool HasTroopArrived(MoveTroopTask task)
         {
             var cityNodeId = task.NextCity.CityId;
             var fromCityId = task.NextCity.NodeId;
@@ -564,7 +563,7 @@ namespace TC
             return true;
         }
 
-        private static void MoveTroop(MoveTroopTask task)
+        private void MoveTroop(MoveTroopTask task)
         {
             var cityNodeId = task.CurrentCity.CityId;
 
@@ -603,12 +602,41 @@ namespace TC
                         );
                 task.TaskId = thisMoveTask.TaskId.ToString();
                 task.ExecutionTime = thisMoveTask.Eta.AddSeconds(2);
-                Logger.Verbose("Troop is moving: {0}=>{1}, ETA={2}.",
+                this.DebugLog("Troop is moving: {0}=>{1}, ETA={2}.",
                     task.CurrentCity.Name,
                     task.NextCity.Name,
                     thisMoveTask.Eta);
                 break;
             }
+        }
+
+        private int CalculateDistance(string from, string to, string account, Dictionary<string, int> roadLevelCache)
+        {
+            string fromCityIdValue;
+            if (!this.cityList.TryGetValue(from, out fromCityIdValue))
+            {
+                return 2;
+            }
+            int fromCityId = int.Parse(fromCityIdValue);
+
+            string toCityIdValue;
+            if (!this.cityList.TryGetValue(to, out toCityIdValue))
+            {
+                return 120;
+            }
+            int toCityId = int.Parse(toCityIdValue);
+
+            int roadLevel;
+            if (!roadLevelCache.TryGetValue(from, out roadLevel))
+            {
+                var accountInfo = this.accountTable[account];
+                TCPage.InfluenceShowInfluenceCityDetailPage.Open(accountInfo.WebAgent, fromCityId);
+                var page = TCPage.InfluenceShowCityBuildPage.Open(accountInfo.WebAgent, fromCityId);
+                roadLevelCache.Add(from, page.Road.Level);
+                roadLevel = page.Road.Level;
+            }
+
+            return RoadLevelToDistanceMap[roadLevel];
         }
 
         private MoveTroopTask CreateMoveTroopTask(
@@ -622,7 +650,8 @@ namespace TC
         {
             var initialHelper = new DijstraHelper(accountInfo.InfluenceMap)
                                     {
-                                        Account = accountInfo
+                                        DistanceCalculate = this.CalculateDistance,
+                                        account = accountInfo.UserName
                                     };
 
             var initialPath = initialHelper.GetPath(fromCity.Name, toCity.Name, soldierList).ToList();
@@ -638,7 +667,7 @@ namespace TC
 
             moveTask.TaskAction = obj =>
                 {
-                    if (!HasTroopArrived(moveTask))
+                    if (!this.HasTroopArrived(moveTask))
                     {
                         ++moveTask.RetryCount;
                         if (moveTask.RetryCount < 3)
@@ -652,7 +681,7 @@ namespace TC
                         return;
                     }
 
-                    Logger.Verbose("Troop Arrived: {0}.", moveTask.NextCity.Name);
+                    this.DebugLog("Troop Arrived: {0}.", moveTask.NextCity.Name);
 
                     if (moveTask.NextCity == moveTask.TerminalCity)
                     {
@@ -662,7 +691,8 @@ namespace TC
 
                     var helper = new DijstraHelper(accountInfo.InfluenceMap)
                                      {
-                                         Account = accountInfo
+                                         DistanceCalculate = this.CalculateDistance,
+                                         account = accountInfo.UserName
                                      };
 
                     var path = helper.GetPath(moveTask.NextCity.Name, moveTask.TerminalCity.Name, soldierList).ToList();
@@ -672,16 +702,32 @@ namespace TC
                     moveTask.CurrentCity = moveTask.NextCity;
                     moveTask.NextCity = moveTask.Account.InfluenceCityList[path.First()];
 
-                    MoveTroop(moveTask);
+                    this.MoveTroop(moveTask);
                 };
 
-            this.AddTaskToListView(moveTask);
+            if (this.InvokeRequired)
+            {
+                this.Invoke(
+                    new DoSomething(
+                        () =>
+                        {
+                            var lvItemTask = new ListViewItem { Tag = moveTask };
+                            moveTask.SyncToListViewItem(lvItemTask, RemoteTime);
+                            this.listViewTasks.Items.Add(lvItemTask);
+                        }));
+            }
+            else
+            {
+                var lvItemTask = new ListViewItem { Tag = moveTask };
+                moveTask.SyncToListViewItem(lvItemTask, RemoteTime);
+                this.listViewTasks.Items.Add(lvItemTask);
+            }
 
             var threadTask = Task.Run(
                 () =>
                 {
                     moveTask.TryEnter();
-                    MoveTroop(moveTask);
+                    this.MoveTroop(moveTask);
                     moveTask.Leave();
                 });
 
@@ -693,28 +739,7 @@ namespace TC
             return moveTask;
         }
 
-        private void AddTaskToListView(TCTask moveTask)
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(
-                    new DoSomething(
-                        () =>
-                        {
-                            var lvItemTask = new ListViewItem {Tag = moveTask};
-                            moveTask.SyncToListViewItem(lvItemTask, RemoteTime);
-                            this.listViewTasks.Items.Add(lvItemTask);
-                        }));
-            }
-            else
-            {
-                var lvItemTask = new ListViewItem {Tag = moveTask};
-                moveTask.SyncToListViewItem(lvItemTask, RemoteTime);
-                this.listViewTasks.Items.Add(lvItemTask);
-            }
-        }
-
-        private static bool RepairCityWall(int cityId, AccountInfo account)
+        private bool RepairCityWall(int cityId, AccountInfo account)
         {
             TCPage.InfluenceShowInfluenceCityDetailPage.Open(account.WebAgent, cityId);
 
@@ -728,7 +753,7 @@ namespace TC
 
             if (cityRepairWallPage.CompleteRepairNeeds == 0)
             {
-                Logger.Verbose("Repair Wall at {0} canceled: No Need.", cityBuildPage.CityName);
+                this.DebugLog("Repair Wall at {0} canceled: No Need.", cityBuildPage.CityName);
                 return false;
             }
 
@@ -741,19 +766,19 @@ namespace TC
                     cityRepairWallPage.CityNodeId,
                     cityRepairWallPage.BuildId,
                     brickNumToUse);
-                Logger.Verbose("Repair Wall at {0} Ok", cityBuildPage.CityName);
+                this.DebugLog("Repair Wall at {0} Ok", cityBuildPage.CityName);
             }
             else
             {
-                Logger.Verbose("Repair Wall at {0} canceled: No Brick.", cityBuildPage.CityName);
+                this.DebugLog("Repair Wall at {0} canceled: No Brick.", cityBuildPage.CityName);
             }
 
             return true;
         }
 
-        private static void ShipBrickMonitorCityWall(ShipBrickTask task)
+        private void ShipBrickMonitorCityWall(ShipBrickTask task)
         {
-            RepairCityWall(task.TargetCity.CityId, task.Account);
+            this.RepairCityWall(task.TargetCity.CityId, task.Account);
         }
 
         private void ShipBrickScheSubTask(ShipBrickTask task)
@@ -762,7 +787,7 @@ namespace TC
             var homeCity = account.InfluenceCityList.Values.First(city => city.CityId == 0);
             var targetCity = task.TargetCity;
 
-            ShipBrickMonitorCityWall(task);
+            this.ShipBrickMonitorCityWall(task);
 
             var completedTasks = task.SubTasks.Where(t => t.IsCompleted).ToList();
             if (completedTasks.Any())
@@ -833,11 +858,11 @@ namespace TC
             var troop = this.CalcCarryTroop(soldiers, carryBrickNum).ToList();
             if (carryBrickNum == 0)
             {
-                Logger.Verbose("Move Brick {0}=>{1}: Canceld: No Brick.", fromCity.Name, toCity.Name);
+                this.DebugLog("Move Brick {0}=>{1}: Canceld: No Brick.", fromCity.Name, toCity.Name);
                 return null;
             }
 
-            Logger.Verbose("Move Brick {0}=>{1}: Task Created {2} Bricks.",
+            this.DebugLog("Move Brick {0}=>{1}: Task Created {2} Bricks.",
                 fromCity.Name, toCity.Name, carryBrickNum);
             return this.CreateMoveTroopTask(account, fromCity, toCity, troop, new List<string>(), carryBrickNum);
         }
@@ -923,7 +948,7 @@ namespace TC
                     focusList :
                     (from t in cityInfoList where this.randGen.NextDouble() > 0.2 select t).ToList();
 
-                var cityMilitaryInfoList = ParallelScanEnemyCityList(
+                var cityMilitaryInfoList = this.ParallelScanEnemyCityList(
                     account,
                     toHandleList,
                     task.EnemyCityList,
@@ -964,7 +989,7 @@ namespace TC
             };
         }
 
-        private static List<SpyTask.CityMilitaryInfo> ParallelScanEnemyCityList(
+        private List<SpyTask.CityMilitaryInfo> ParallelScanEnemyCityList(
             AccountInfo account,
             List<CityInfo> cityIdList,
             Dictionary<string, SpyTask.CityMilitaryInfo> oldCityTable,
@@ -1034,7 +1059,7 @@ namespace TC
                     var attackTeamPage = TCPage.WorldWarShowTeamPage.Open(webAgent, 3);
                     var defendTeamPage = TCPage.WorldWarShowTeamPage.Open(webAgent, 4);
 
-                    Logger.Verbose("Inspect{0}:Fortress:{1},Wall:{2};ReserveArmy:{3},ReserveHero:{4}",
+                    this.DebugLog("Inspect{0}:Fortress:{1},Wall:{2};ReserveArmy:{3},ReserveHero:{4}",
                         cityDetail.CityName,
                         cityDetail.FortressEndure,
                         cityDetail.WallEndure,
@@ -1144,7 +1169,7 @@ namespace TC
 
                                   if (page.RequestMemberList.Any())
                                   {
-                                      Logger.Verbose(
+                                      this.DebugLog(
                                           "Refuse {0}.",
                                           string.Join(",",
                                           page.RequestMemberList.Select(
@@ -1175,7 +1200,7 @@ namespace TC
             this.listViewTasks.Items.Add(lvItemTask);
         }
 
-        public void DebugLog(string format, params object[] args)
+        private void DebugLog(string format, params object[] args)
         {
             if (this.InvokeRequired)
             {

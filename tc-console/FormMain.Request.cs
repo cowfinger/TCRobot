@@ -265,7 +265,7 @@
                 TCFunc.influence_city_army);
             var resp = this.HTTPRequest(url, account);
 
-            var pattern = new Regex("<td width=\"12%\">(.*)</td>");
+            var pattern = new Regex(@"<td width=""12%"">(.*)</td>");
             var matches = pattern.Matches(resp);
             return from Match match in matches select match.Groups[1].Value;
         }
@@ -378,7 +378,7 @@
         private IEnumerable<string> GetGroupAttackTargetCity(string cityId, string account)
         {
             var response = this.OpenGroupTeamListPage(cityId, account);
-            return this.ParseTargetCityList(response);
+            return ParseTargetCityList(response);
         }
 
         private string OpenCreateTeamPage(string cityId, string account)
@@ -414,7 +414,7 @@
             var matches = pattern.Matches(content);
             var tempHeroList = (from Match match in matches select match.Groups[1].Value).ToList();
 
-            var statusPattern = new Regex("<p class=\"trans_70\">(.*)</p>");
+            var statusPattern = new Regex(@"<p class=""trans_70"">(.*)</p>");
             var statusMatches = statusPattern.Matches(content);
             var statusList = (from Match match in statusMatches select match.Groups[1].Value).ToList();
 
@@ -495,19 +495,6 @@
                 TCSubMod.world_war,
                 TCOperation.Show,
                 TCFunc.join_attack);
-            return this.HTTPRequest(url, account);
-        }
-
-        private string OpenTeamDetailPage(string teamId, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Show,
-                TCFunc.team_detail,
-                new TCRequestArgument(TCElement.team_id, teamId),
-                new TCRequestArgument(TCElement.from_address, 1));
             return this.HTTPRequest(url, account);
         }
 

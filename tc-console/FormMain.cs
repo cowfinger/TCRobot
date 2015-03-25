@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using TC.TCUtility;
 
 namespace TC
 {
@@ -85,6 +86,7 @@ namespace TC
             LoadLangChs();
             LoadSoldierInfo();
             LoadRoadInfo();
+            Logger.Initialize(new FormMainLogger(this));
         }
 
         private void btnQuickCreateTroop_Click(object sender, EventArgs e)
@@ -386,12 +388,12 @@ namespace TC
                 team =>
                 {
                     var cityPage = this.OpenCityShowAttackPage(srcCityID, team.AccountName);
-                    var destCityID = this.ParseTargetCityID(cityPage, dstCityName);
+                    var destCityID = ParseTargetCityId(cityPage, dstCityName);
 
                     if (string.IsNullOrEmpty(destCityID))
                     {
                         var groupAttackPage = this.OpenGroupTeamListPage(srcCityID, team.AccountName);
-                        destCityID = this.ParseTargetCityID(groupAttackPage, dstCityName);
+                        destCityID = ParseTargetCityId(groupAttackPage, dstCityName);
                         if (string.IsNullOrEmpty(destCityID))
                         {
                             return;
@@ -408,8 +410,8 @@ namespace TC
                         return;
                     }
 
-                    var durationString = this.ParseAttackDuration(attackPage);
-                    team.Duration = this.TimeStr2Sec(durationString);
+                    var durationString = ParseAttackDuration(attackPage);
+                    team.Duration = TimeStr2Sec(durationString);
 
                     this.Invoke(new DoSomething(() => { this.TrySyncTroopInfoToUI(team); }));
                 }).Then(
@@ -646,7 +648,7 @@ namespace TC
                 account =>
                 {
                     var heroPage = this.OpenHeroPage(account.UserName);
-                    var heroList = this.ParseHeroList(heroPage, account.UserName).ToList();
+                    var heroList = ParseHeroList(heroPage, account.UserName).ToList();
 
                     this.Invoke(
                         new DoSomething(
@@ -680,7 +682,7 @@ namespace TC
                             this.ReliveHero(toReliveHero.HeroId, account.UserName);
                         }
 
-                        var tid = this.GetTid(account);
+                        var tid = GetTid(account);
                         var reliveQueueId = this.QueryReliveQueueId(tid, account);
                         var reliveItem = this.QueryReliveItem(reliveQueueId, tid, account);
                         if (reliveItem == null)
@@ -832,8 +834,7 @@ namespace TC
 
             var helper = new DijstraHelper(account.InfluenceMap)
                              {
-                                 DistanceCalculate = this.CalculateDistance,
-                                 account = accountName
+                                 Account = account
                              };
 
             var path = helper.GetPath(fromCity, toCity, null).ToList();
@@ -1125,45 +1126,47 @@ namespace TC
             };
             dlg.ShowDialog();
 
-            if (dlg.IsOk)
+            if (!dlg.IsOk)
             {
-                var cityList = dlg.CityList;
-                var accountList = this.accountTable.Values.ToList();
+                return;
+            }
 
-                var cityAccountTable = from city in cityList
-                                       from account in accountList
-                                       where account.InfluenceCityList.ContainsKey(city)
-                                       select new { city, account };
-                var cityAccountGroups = cityAccountTable.GroupBy(item => item.city).ToList();
-                if (!cityAccountGroups.Any())
+            var list = dlg.CityList;
+            var accountList = this.accountTable.Values.ToList();
+
+            var cityAccountTable = from city in list
+                from account in accountList
+                where account.InfluenceCityList.ContainsKey(city)
+                select new { city, account };
+            var cityAccountGroups = cityAccountTable.GroupBy(item => item.city).ToList();
+            if (!cityAccountGroups.Any())
+            {
+                return;
+            }
+
+            this.repairCityToolStripMenuItem.Enabled = false;
+            Parallel.Dispatch(cityAccountGroups, group =>
+            {
+                string cityIdStr;
+                if (!this.cityList.TryGetValue(@group.Key, out cityIdStr))
                 {
                     return;
                 }
 
-                this.repairCityToolStripMenuItem.Enabled = false;
-                Parallel.Dispatch(cityAccountGroups, group =>
+                var cityId = int.Parse(cityIdStr);
+                foreach (var account in @group)
                 {
-                    string cityIdStr;
-                    if (!this.cityList.TryGetValue(group.Key, out cityIdStr))
+                    if (!RepairCityWall(cityId, account.account))
                     {
                         return;
                     }
-
-                    var cityId = int.Parse(cityIdStr);
-                    foreach (var account in group)
-                    {
-                        if (!this.RepairCityWall(cityId, account.account))
-                        {
-                            return;
-                        }
-                        Thread.Sleep(1000);
-                    }
-                }).Then(() =>
-                {
-                    MessageBox.Show("所有城市修理完毕.");
-                    this.Invoke(new DoSomething(() => { this.repairCityToolStripMenuItem.Enabled = true; }));
-                });
-            }
+                    Thread.Sleep(1000);
+                }
+            }).Then(() =>
+            {
+                MessageBox.Show("所有城市修理完毕.");
+                this.Invoke(new DoSomething(() => { this.repairCityToolStripMenuItem.Enabled = true; }));
+            });
         }
 
         private void enlistTroopToolStripMenuItem_Click(object sender, EventArgs e)

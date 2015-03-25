@@ -16,9 +16,7 @@
 
         private readonly HashSet<string> uNodes = new HashSet<string>();
 
-        public string account = "";
-
-        public Func<string, string, string, Dictionary<string, int>, int> DistanceCalculate = null;
+        public AccountInfo Account { get; set; }
 
         public DijstraHelper(Dictionary<string, HashSet<string>> map)
         {
@@ -27,13 +25,39 @@
 
         public int GetDistance(string from, string to, int speed)
         {
-            if (this.DistanceCalculate == null)
+            var dist = CalculateDistance(from, to, this.Account, this.roadLevelCache);
+            return dist * 24 / speed;
+        }
+
+        private static int CalculateDistance(
+            string from,
+            string to,
+            AccountInfo accountInfo,
+            IDictionary<string, int> roadLevelCache)
+        {
+            string fromCityIdValue;
+            if (!FormMain.CityList.TryGetValue(from, out fromCityIdValue))
             {
-                return 1;
+                return 2;
+            }
+            var fromCityId = int.Parse(fromCityIdValue);
+
+            string toCityIdValue;
+            if (!FormMain.CityList.TryGetValue(to, out toCityIdValue))
+            {
+                return 120;
             }
 
-            var dist = this.DistanceCalculate(@from, to, this.account, this.roadLevelCache);
-            return dist * 24 / speed;
+            int roadLevel;
+            if (!roadLevelCache.TryGetValue(from, out roadLevel))
+            {
+                TCPage.InfluenceShowInfluenceCityDetailPage.Open(accountInfo.WebAgent, fromCityId);
+                var page = TCPage.InfluenceShowCityBuildPage.Open(accountInfo.WebAgent, fromCityId);
+                roadLevelCache.Add(from, page.Road.Level);
+                roadLevel = page.Road.Level;
+            }
+
+            return FormMain.RoadLevelToDistanceMap[roadLevel];
         }
 
         public IEnumerable<string> GetPath(string from, string to, IEnumerable<Soldier> army)

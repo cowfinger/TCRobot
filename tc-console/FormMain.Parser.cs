@@ -7,13 +7,6 @@
 
     partial class FormMain
     {
-        private static int ParseRoadLevelFromCityBuildPage(string page)
-        {
-            const string pattern = @"<span>等级：(\d+)/10</span>";
-            var match = Regex.Match(page, pattern);
-            return match.Success ? int.Parse(match.Groups[1].Value) : 6;
-        }
-
         private static IEnumerable<string> ParseAttribute(
             string content,
             string headPattern,
@@ -57,28 +50,12 @@
         private IEnumerable<string> OpenAttackPage(string cityId, string account)
         {
             var page = this.OpenCityShowAttackPage(cityId, account);
-            return this.ParseTargetCityList(page);
+            return ParseTargetCityList(page);
         }
 
-        private DateTime ParseSysTimeFromHomePage(string content)
+        private static string ParseTargetCityId(string content, string keyword)
         {
-            var re = new Regex("wee\\.timer\\.set_time\\( [0-9]+ \\);");
-
-            var ms = re.Matches(content);
-            foreach (Match m in ms)
-            {
-                var timestr = m.Value.Split('(', ')')[1];
-                var ret = new DateTime(1970, 1, 1);
-                var sec = Int32.Parse(timestr.Trim(' '));
-                ret = ret.AddSeconds(sec);
-                return ret.ToLocalTime();
-            }
-            return DateTime.MinValue;
-        }
-
-        private string ParseTargetCityID(string content, string keyword)
-        {
-            var re = new Regex("<option value=\\\"([0-9]+)\\\">([^<]*)</option>");
+            var re = new Regex(@"<option value=\""([0-9]+)\"">([^<]*)</option>");
 
             var ms = re.Matches(content);
             foreach (Match m in ms)
@@ -91,7 +68,7 @@
             return "";
         }
 
-        private string ParseAttackDuration(string content)
+        private static string ParseAttackDuration(string content)
         {
             const string durationPattern = "<td colspan='4'>需要 <span class=\"yell\">(\\d+):(\\d+):(\\d+)</span>";
             var match = Regex.Match(content, durationPattern);
@@ -103,7 +80,7 @@
             return "";
         }
 
-        private int TimeStr2Sec(string input)
+        private static int TimeStr2Sec(string input)
         {
             var strs = input.Split(':');
             if (strs.Length == 3)
@@ -115,7 +92,7 @@
 
         private IEnumerable<TroopInfo> ParseGroupTeams(string content, string account, bool isHead)
         {
-            const string teamIdPattern = "worldWarClass\\.showTeamDetail\\((\\d+),\\d+\\)";
+            const string teamIdPattern = @"worldWarClass\.showTeamDetail\((\d+),\d+\)";
             const string groupIdPattern = @"worldWarClass\.doDisbandGroup\((\d+),\d+\)";
             var matches = Regex.Matches(content, groupIdPattern);
             foreach (Match match in matches)
@@ -143,62 +120,10 @@
             }
         }
 
-        private IEnumerable<TroopInfo> ParseTeams(string content, string account)
+        private static IEnumerable<string> ParseTargetCityList(string content)
         {
-            var re = new Regex("worldWarClass\\.changeMyAttackTeam\\([0-9]+,[0-9]+,[0-9]+\\)");
-            var heroPattern =
-                new Regex("<img src=\"http://static\\.tc\\.9wee\\.com/hero/\\d+/\\d+\\.gif\" titleContent=\"(.*)\"/>");
-
-            var ms = re.Matches(content);
-            foreach (Match m in ms)
-            {
-                var team = new TroopInfo();
-                team.TroopId = m.Value.Split('(', ',')[1];
-                team.isGroupTroop = false;
-                team.isDefendTroop = false;
-
-                var teamDetailPage = this.OpenTeamDetailPage(team.TroopId, account);
-                var match = heroPattern.Match(teamDetailPage);
-                if (match.Success)
-                {
-                    team.Leader = match.Groups[1].Value;
-                }
-
-                team.AccountName = account;
-                yield return team;
-            }
-        }
-
-        private IEnumerable<TroopInfo> ParseAttackTeams(string content, string dstcityid, string account)
-        {
-            var re = new Regex("worldWarClass\\.changeMyAttackTeam\\([0-9]+,[0-9]+,[0-9]+\\)");
-
-            var ms = re.Matches(content);
-            var team_no = 1;
-            foreach (Match m in ms)
-            {
-                var team = new TroopInfo();
-                team.TroopId = m.Value.Split('(', ',')[1];
-                team.isGroupTroop = false;
-                team.isDefendTroop = false;
-                team.Leader = team_no.ToString(); //temporary solution
-                var rsp = this.OpenTeamAttackPage(team.TroopId, dstcityid, account);
-                team.Duration = this.TimeStr2Sec(this.ParseAttackDuration(rsp));
-
-                team.AccountName = account;
-
-                if (team.Duration > 0)
-                {
-                    yield return team;
-                    team_no++;
-                }
-            }
-        }
-
-        private IEnumerable<string> ParseTargetCityList(string content)
-        {
-            var targetBeginLine = "目的地";
-            var targetPattern = new Regex("<option value=\"\\d+\">(.*)</option>");
+            const string targetBeginLine = "目的地";
+            var targetPattern = new Regex(@"<option value=""\d+"">(.*)</option>");
             var lines = content.Split('\r');
             var status = 0;
             foreach (var line in lines)
@@ -223,9 +148,9 @@
             }
         }
 
-        private IEnumerable<KeyValuePair<long, long>> ParseInfluenceResource(string page)
+        private static IEnumerable<KeyValuePair<long, long>> ParseInfluenceResource(string page)
         {
-            const string pattern = "<div class=\"num\">(\\d+)/(\\d+)</div>";
+            const string pattern = @"<div class=""num\"">(\d+)/(\d+)</div>";
             var matches = Regex.Matches(page, pattern);
             foreach (Match match in matches)
             {
@@ -235,7 +160,7 @@
             }
         }
 
-        private IEnumerable<DepotItem> ParseDepotItems(string page)
+        private static IEnumerable<DepotItem> ParseDepotItems(string page)
         {
             const string Pattern = @"prop\.use_prop\((\d+), (\d+), (\d+), (\d+)\)";
             var matches = Regex.Matches(page, Pattern);
@@ -249,16 +174,11 @@
                            };
         }
 
-        private int ParseMaxPageID(string page)
+        private static int ParseMaxPageId(string page)
         {
-            const string Pattern = "<span class=\"page_on\">\\d+/(\\d+)</span>";
-            var match = Regex.Match(page, Pattern);
-            if (match.Success)
-            {
-                return int.Parse(match.Groups[1].Value);
-            }
-
-            return 0;
+            const string pattern = @"<span class=""page_on"">\d+/(\d+)</span>";
+            var match = Regex.Match(page, pattern);
+            return match.Success ? int.Parse(match.Groups[1].Value) : 0;
         }
 
         private IEnumerable<DepotItem> EnumDepotItems(string account)
@@ -268,9 +188,9 @@
             do
             {
                 var page = this.OpenAccountDepot(account, 1, curPage);
-                maxPage = this.ParseMaxPageID(page);
+                maxPage = ParseMaxPageId(page);
 
-                var items = this.ParseDepotItems(page);
+                var items = ParseDepotItems(page);
                 foreach (var item in items)
                 {
                     yield return item;
@@ -371,10 +291,10 @@
         {
             var content = this.OpenHeroPage(account);
 
-            return this.ParseHeroList(content, account);
+            return ParseHeroList(content, account);
         }
 
-        private IEnumerable<HeroInfo> ParseHeroList(string content, string account)
+        private static IEnumerable<HeroInfo> ParseHeroList(string content, string account)
         {
             const string pattern = "<li id=\"li_hero_my(?<heroid>\\d+)\" hname=\"(?<heroname>.+)\" die=(?<isdead>\\d)>";
 
@@ -390,12 +310,12 @@
                            };
         }
 
-        private string GetTid(AccountInfo account)
+        private static string GetTid(AccountInfo account)
         {
             var cookieMap = ParseCookieStr(account.CookieStr);
 
-            string tmp_id;
-            return !cookieMap.TryGetValue("tmp_mid", out tmp_id) ? string.Empty : tmp_id;
+            string tmpId;
+            return !cookieMap.TryGetValue("tmp_mid", out tmpId) ? string.Empty : tmpId;
         }
 
         private IEnumerable<CityInfo> QueryInfluenceCityList(string account)
@@ -466,29 +386,7 @@
             return map;
         }
 
-        private IEnumerable<Soldier> ParseSoldierInfoFromCityPage(string page)
-        {
-            const string pattern =
-                "<li><img src=\"http://.+?/soldier/(?<typeId>\\d+)\\.gif\" titleContent=\"(?<name>.+?)\"/><span>(?<count>\\d+)</span></li>";
-            var matches = Regex.Matches(page, pattern);
-            return from Match match in matches
-                   select
-                       new Soldier
-                           {
-                               Name = match.Groups["name"].Value,
-                               SoldierType = int.Parse(match.Groups["typeId"].Value),
-                               SoldierNumber = int.Parse(match.Groups["count"].Value)
-                           };
-        }
-
-        private IEnumerable<string> ParseHeroNameListFromCityPage(string page)
-        {
-            const string pattern = "<div class=\"name\">(?<heroName>.+?)</div>";
-            var matches = Regex.Matches(page, pattern);
-            return from Match match in matches select match.Groups["heroName"].Value;
-        }
-
-        private int ParseUnionIdFromMainPage(string page)
+        private static int ParseUnionIdFromMainPage(string page)
         {
             const string pattern = @"union_id=(?<unionId>\d+)";
             var match = Regex.Match(page, pattern);

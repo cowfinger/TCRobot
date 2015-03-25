@@ -13,20 +13,20 @@
 
         private bool isCompleted = false;
 
-        private int randomSeed = 0;
-
         private int interval = 0;
 
         private Timer timer;
 
         protected TCTask(AccountInfo account, DateTime executionTime)
         {
+            this.RandomSeed = 0;
             this.ExecutionTime = executionTime;
             this.Account = account;
         }
 
         protected TCTask(AccountInfo account, int intervalInMiliseconds, int randomSeed = 0)
         {
+            this.RandomSeed = 0;
             this.Account = account;
 
             var nextDueTime = FormMain.RemoteTime.AddMilliseconds(intervalInMiliseconds);
@@ -41,24 +41,13 @@
                 return DateTime.MinValue;
             }
 
-            var nextExecution = this.interval + randGen.NextDouble() * this.randomSeed;
+            var nextExecution = this.interval + randGen.NextDouble() * this.RandomSeed;
             return FormMain.RemoteTime.AddMilliseconds(nextExecution);
         }
 
         public TCTask ParaentTask { get; set; }
 
-        public int RandomSeed
-        {
-            get
-            {
-                return this.randomSeed;
-            }
-
-            set
-            {
-                this.randomSeed = value;
-            }
-        }
+        public int RandomSeed { get; set; }
 
         public int IntervalMiliseconds
         {
@@ -75,7 +64,7 @@
                 }
 
                 this.interval = value;
-                this.SetExecutionTime(CalcNextExecutionTime());
+                this.SetExecutionTime(this.CalcNextExecutionTime());
             }
         }
 
@@ -160,7 +149,7 @@
             var secs = timeval % 60;
             var mins = (timeval / 60) % 60;
             var hours = timeval / 3600;
-            var fmt = "{0:D2}:{1:D2}:{2:D2}";
+            const string fmt = "{0:D2}:{1:D2}:{2:D2}";
             return string.Format(fmt, hours, mins, secs);
         }
 

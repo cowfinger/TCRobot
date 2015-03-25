@@ -14,21 +14,21 @@ namespace TC.TCTasks
 
         public List<Soldier> SoldierList = new List<Soldier>();
 
-        private string taskId = "";
+        private string taskId;
 
         public MoveTroopTask(
             AccountInfo account,
             CityInfo from,
             CityInfo next,
             CityInfo terminal,
-            int BrickNum,
+            int brickNum,
             string taskId)
             : base(account, FormMain.RemoteTime.AddMinutes(2))
         {
             this.CurrentCity = from;
             this.NextCity = next;
             this.TerminalCity = terminal;
-            this.BrickNum = BrickNum;
+            this.BrickNum = brickNum;
             this.taskId = taskId;
         }
 

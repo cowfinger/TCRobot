@@ -140,6 +140,7 @@
     </Compile>
     <Compile Include="TCDataType\HeroInfo.cs" />
     <Compile Include="TCUtility\HttpClient.cs" />
+    <Compile Include="TCUtility\Logger.cs" />
     <Compile Include="TCUtility\LoginParam.cs" />
     <Compile Include="TCTasks\MoveTroopTask.cs" />
     <Compile Include="TCUtility\Parallel.cs" />
