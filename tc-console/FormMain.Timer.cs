@@ -240,7 +240,7 @@ namespace TC
                             case SendTroopTask.TaskStatus.OpenAttackPage:
                                 task.Status = SendTroopTask.TaskStatus.ConfirmAttack;
                                 var requestPerfTimer = DateTime.Now;
-                                ShowInfluenceCityDetailPage.Open(task.WebAgent, fromCity.CityId);
+                                ShowInfluenceCityDetail.Open(task.WebAgent, fromCity.CityId);
                                 var cost = DateTime.Now - requestPerfTimer;
                                 var attackTime = task.ArrivalTime.AddSeconds(-task.TaskData.Duration);
                                 attackTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
@@ -260,13 +260,13 @@ namespace TC
                                 string result;
                                 if (task.TaskData.isGroupTroop)
                                 {
-                                    result = DoJoinAttackPage.Open(
+                                    result = DoJoinAttack.Open(
                                         task.WebAgent, int.Parse(task.TaskData.GroupId),
                                         int.Parse(task.TaskData.ToCityNodeId)).RawPage;
                                 }
                                 else
                                 {
-                                    result = DoAttackPage.Open(
+                                    result = DoAttack.Open(
                                         task.WebAgent, int.Parse(task.TaskData.TroopId),
                                         int.Parse(task.TaskData.ToCityNodeId)).RawPage;
                                 }

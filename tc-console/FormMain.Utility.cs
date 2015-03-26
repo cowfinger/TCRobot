@@ -532,8 +532,8 @@ namespace TC
         {
             var cityNodeId = task.NextCity.CityId;
             var fromCityId = task.NextCity.NodeId;
-            ShowInfluenceCityDetailPage.Open(task.Account.WebAgent, cityNodeId);
-            var moveArmyPage = ShowMoveArmyPage.Open(task.Account.WebAgent, fromCityId);
+            ShowInfluenceCityDetail.Open(task.Account.WebAgent, cityNodeId);
+            var moveArmyPage = ShowMoveArmy.Open(task.Account.WebAgent, fromCityId);
 
             if (task.HeroIdList.Count > 0)
             {
@@ -570,8 +570,8 @@ namespace TC
         {
             var cityNodeId = task.CurrentCity.CityId;
 
-            ShowInfluenceCityDetailPage.Open(task.Account.WebAgent, cityNodeId);
-            var moveArmyQueue = ShowMoveArmyQueuePage.Open(task.Account.WebAgent);
+            ShowInfluenceCityDetail.Open(task.Account.WebAgent, cityNodeId);
+            var moveArmyQueue = ShowMoveArmyQueue.Open(task.Account.WebAgent);
 
             var heroString = string.Join("%7C", task.HeroIdList.ToArray());
             var soldiers =
@@ -580,7 +580,7 @@ namespace TC
                     .ToArray();
             var soldierString = string.Join("%7c", soldiers);
 
-            DoMoveArmyPage.Open(
+            DoMoveArmy.Open(
                 task.Account.WebAgent,
                 task.CurrentCity.NodeId,
                 task.NextCity.NodeId,
@@ -591,8 +591,8 @@ namespace TC
             for (var i = 0; i < 10; ++i)
             {
                 Thread.Sleep(2000);
-                ShowInfluenceCityDetailPage.Open(task.Account.WebAgent, task.NextCity.CityId);
-                var newMoveArmyQueue = ShowMoveArmyQueuePage.Open(task.Account.WebAgent);
+                ShowInfluenceCityDetail.Open(task.Account.WebAgent, task.NextCity.CityId);
+                var newMoveArmyQueue = ShowMoveArmyQueue.Open(task.Account.WebAgent);
 
                 if (!newMoveArmyQueue.Items.Any())
                 {
@@ -718,11 +718,11 @@ namespace TC
 
         private static bool RepairCityWall(int cityId, AccountInfo account)
         {
-            ShowInfluenceCityDetailPage.Open(account.WebAgent, cityId);
+            ShowInfluenceCityDetail.Open(account.WebAgent, cityId);
 
-            var cityBuildPage = ShowCityBuildPage.Open(account.WebAgent, cityId);
+            var cityBuildPage = ShowCityBuild.Open(account.WebAgent, cityId);
 
-            var cityRepairWallPage = ShowInfluenceBuildPage.Open(
+            var cityRepairWallPage = ShowInfluenceBuild.Open(
                 account.WebAgent,
                 cityId,
                 (int)CityBuildId.Wall,
@@ -738,7 +738,7 @@ namespace TC
 
             if (brickNumToUse > 0)
             {
-                DoBuildRepairPage.Open(
+                DoBuildRepair.Open(
                     account.WebAgent,
                     cityRepairWallPage.CityNodeId,
                     cityRepairWallPage.BuildId,
@@ -807,7 +807,7 @@ namespace TC
                             return this.ShipBrickCreateMoveBrickTask(account, homeCity, targetCity);
                         }
 
-                        var moveArmyPage = ShowMoveArmyPage.Open(account.WebAgent, cityInfo.NodeId);
+                        var moveArmyPage = ShowMoveArmy.Open(account.WebAgent, cityInfo.NodeId);
                         var brickNum = moveArmyPage.BrickNum;
 
                         return brickNum == 0
@@ -820,7 +820,7 @@ namespace TC
 
         private MoveTroopTask ShipBrickCreateMoveTroopTask(AccountInfo account, CityInfo fromCity, CityInfo toCity)
         {
-            var moveArmyPage = ShowMoveArmyPage.Open(account.WebAgent, fromCity.NodeId);
+            var moveArmyPage = ShowMoveArmy.Open(account.WebAgent, fromCity.NodeId);
             var troop = moveArmyPage.Army.ToList();
 
             return this.CreateMoveTroopTask(account, fromCity, toCity, troop, new List<string>(), 0);
@@ -828,7 +828,7 @@ namespace TC
 
         private MoveTroopTask ShipBrickCreateMoveBrickTask(AccountInfo account, CityInfo fromCity, CityInfo toCity)
         {
-            var moveArmyPage = ShowMoveArmyPage.Open(account.WebAgent, fromCity.NodeId);
+            var moveArmyPage = ShowMoveArmy.Open(account.WebAgent, fromCity.NodeId);
             var soldiers = moveArmyPage.Army.ToList();
             var brickNum = moveArmyPage.BrickNum;
             var carryBrickNum = Math.Min(CalcCarryBrickNum(soldiers), brickNum);
@@ -908,7 +908,7 @@ namespace TC
                         from ListViewItem lvItem in this.listViewEnemyCityInfo.CheckedItems 
                         select lvItem.Tag as CityInfo);
                 }));
-                TCPage.Influence.DoApplyInfluencePage.Open(account.WebAgent, 9);
+                TCPage.Influence.DoApplyInfluence.Open(account.WebAgent, 9);
 
                 List<CityInfo> cityInfoList;
                 if (!task.EnemyCityInfoList.Any())
@@ -933,7 +933,7 @@ namespace TC
 
                 ++task.Counter;
 
-                DoCancelApplyInfluencePage.Open(account.WebAgent, 9);
+                DoCancelApplyInfluence.Open(account.WebAgent, 9);
 
                 foreach (var city in cityMilitaryInfoList)
                 {
@@ -986,7 +986,7 @@ namespace TC
                 if (oldCityTable.TryGetValue(city.Name, out oldCity))
                 {
                     webAgent = oldCity.WebAgent;
-                    var cityDetail = ShowInfluenceCityDetailPage.Open(webAgent, city.CityId);
+                    var cityDetail = ShowInfluenceCityDetail.Open(webAgent, city.CityId);
                     oldCity.WallEndure = cityDetail.WallEndure;
                     oldCity.MaxWallEndure = cityDetail.MaxWallEndure;
                     oldCity.FortressEndure = cityDetail.FortressEndure;
@@ -994,14 +994,14 @@ namespace TC
 
                     if (oldCity.TotalArmy == 0 || oldCity.TotalHeroNum == 0 || counter - oldCity.Counter > 10)
                     {
-                        var reserveArmyPage = ShowReserveArmyInfoPage.Open(webAgent, 1);
+                        var reserveArmyPage = ShowReserveArmyInfo.Open(webAgent, 1);
                         oldCity.TotalArmy = reserveArmyPage.ReserveArmyNum;
                         oldCity.TotalHeroNum = reserveArmyPage.ReserveHeroNum;
                     }
 
                     if (!oldCity.AttackTroops.Any() || counter - oldCity.Counter > 10)
                     {
-                        var attackTeamPage = ShowTeamPage.Open(webAgent, 3);
+                        var attackTeamPage = ShowTeam.Open(webAgent, 3);
                         oldCity.AttackTroops = attackTeamPage.TeamList.Select(team =>
                             new SpyTask.CityTroopInfo
                             {
@@ -1014,7 +1014,7 @@ namespace TC
 
                     if (!oldCity.DefendTroops.Any() || counter - oldCity.Counter > 10)
                     {
-                        var defendTeamPage = ShowTeamPage.Open(webAgent, 4);
+                        var defendTeamPage = ShowTeam.Open(webAgent, 4);
                         oldCity.DefendTroops = defendTeamPage.TeamList.Select(team =>
                             new SpyTask.CityTroopInfo
                             {
@@ -1031,10 +1031,10 @@ namespace TC
                 else
                 {
                     webAgent = new RequestAgent(account);
-                    var cityDetail = ShowInfluenceCityDetailPage.Open(webAgent, city.CityId);
-                    var reserveArmyPage = ShowReserveArmyInfoPage.Open(webAgent, 1);
-                    var attackTeamPage = ShowTeamPage.Open(webAgent, 3);
-                    var defendTeamPage = ShowTeamPage.Open(webAgent, 4);
+                    var cityDetail = ShowInfluenceCityDetail.Open(webAgent, city.CityId);
+                    var reserveArmyPage = ShowReserveArmyInfo.Open(webAgent, 1);
+                    var attackTeamPage = ShowTeam.Open(webAgent, 3);
+                    var defendTeamPage = ShowTeam.Open(webAgent, 4);
 
                     Logger.Verbose("Inspect{0}:Fortress:{1},Wall:{2};ReserveArmy:{3},ReserveHero:{4}",
                         cityDetail.CityName,
@@ -1133,7 +1133,7 @@ namespace TC
             var task = new InfluenceGuard(account);
             task.TaskAction = obj =>
                               {
-                                  var page = ShowCheckMemberPage.Open(account.WebAgent);
+                                  var page = ShowCheckMember.Open(account.WebAgent);
                                   task.recentRequstUnionList = page.RequestMemberList.Select(item => item.UnionName).ToList();
 
                                   lock (task.UnionIdSet)
@@ -1164,9 +1164,9 @@ namespace TC
 
                 Parallel.Dispatch(unionIdList, unionId =>
                 {
-                    DoCheckMemberPage.Open(
+                    DoCheckMember.Open(
                         account.WebAgent,
-                        DoCheckMemberPage.Action.refuse,
+                        DoCheckMember.Action.refuse,
                         unionId);
                 });
             });
@@ -1208,7 +1208,7 @@ namespace TC
                 Task.Run(
                     () =>
                     {
-                        var moveArmyPage = ShowMoveArmyPage.Open(account.WebAgent, info.NodeId);
+                        var moveArmyPage = ShowMoveArmy.Open(account.WebAgent, info.NodeId);
                         var troop = moveArmyPage.Army.ToList();
                         var heroes = moveArmyPage.HeroList.Select(h => h.HeroId).ToList();
                         var carryBrickNum = 0;

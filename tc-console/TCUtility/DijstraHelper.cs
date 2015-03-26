@@ -53,8 +53,8 @@ namespace TC
             int roadLevel;
             if (!roadLevelCache.TryGetValue(from, out roadLevel))
             {
-                ShowInfluenceCityDetailPage.Open(accountInfo.WebAgent, fromCityId);
-                var page = ShowCityBuildPage.Open(accountInfo.WebAgent, fromCityId);
+                ShowInfluenceCityDetail.Open(accountInfo.WebAgent, fromCityId);
+                var page = ShowCityBuild.Open(accountInfo.WebAgent, fromCityId);
                 roadLevelCache.Add(from, page.Road.Level);
                 roadLevel = page.Road.Level;
             }

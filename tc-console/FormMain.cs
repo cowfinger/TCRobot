@@ -13,6 +13,7 @@ namespace TC
     using System.Threading;
     using System.Windows.Forms;
 
+    using TC.TCPage.Politics;
     using TC.TCTasks;
 
     public partial class FormMain : Form
@@ -793,7 +794,7 @@ namespace TC
 
                     var cityId = accountInfo.InfluenceCityList[fromCity].NodeId;
 
-                    var moveArmyPage = ShowMoveArmyPage.Open(accountInfo.WebAgent, cityId);
+                    var moveArmyPage = ShowMoveArmy.Open(accountInfo.WebAgent, cityId);
                     var heroList = moveArmyPage.HeroList.Where(hero => !hero.IsBusy).ToList();
                     var soldiers = moveArmyPage.Army.ToList();
                     var brickNum = moveArmyPage.BrickNum;
@@ -1084,7 +1085,7 @@ namespace TC
                 var account = lvItem.Tag as AccountInfo;
                 Task.Run(() =>
                 {
-                    DoOutUnionPage.Open(account.WebAgent);
+                    DoOutUnion.Open(account.WebAgent);
                 });
             }
         }
@@ -1113,7 +1114,7 @@ namespace TC
                 accountList,
                 account =>
                 {
-                    DoApplyUnionPage.Open(account.Account.WebAgent, unionId);
+                    DoApplyUnion.Open(account.Account.WebAgent, unionId);
                     this.Invoke(new DoSomething(() => { account.lvItem.SubItems[2].Text = unionId.ToString(); }));
                 });
         }
@@ -1178,7 +1179,7 @@ namespace TC
                 {
                     foreach (var account in this.accountTable.Values)
                     {
-                        var infoPage = TCPage.PoliticsShowDraftPage.Open(account.WebAgent);
+                        var infoPage = ShowDraft.Open(account.WebAgent);
                         if (infoPage.LeftTimes <= 0)
                         {
                             this.DebugLog("Cannot Enlist since no Left times.");
@@ -1208,7 +1209,7 @@ namespace TC
 
                         for (var i = 0; i < infoPage.LeftTimes; i++)
                         {
-                            var doPage = TCPage.PoliticsDoDraftPage.Open(
+                            var doPage = DoDraft.Open(
                                 account.WebAgent,
                                 infoPage.EfficientHeroId,
                                 soldierId,

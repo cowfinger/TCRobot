@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TC.TCPage
+﻿namespace TC.TCPage.Politics
 {
-    using System.Security.Policy;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
-    class PoliticsShowDraftPage
+    class ShowDraft
     {
         public const string LeftTimesPattern = @"<tr>\s*<td>今日剩余次数</td>\s*<td>(\d+)</td>\s*</tr>";
 
@@ -22,14 +18,14 @@ namespace TC.TCPage
 
         public HashSet<int> SoldierIdSet { get; private set; }
 
-        public static PoliticsShowDraftPage Open(RequestAgent agent)
+        public static ShowDraft Open(RequestAgent agent)
         {
             var url = agent.BuildUrl(TCMod.civil, TCSubMod.politics, TCOperation.Show, TCFunc.draft);
             var rawPage = agent.WebClient.OpenUrl(url);
-            return new PoliticsShowDraftPage(rawPage);
+            return new ShowDraft(rawPage);
         }
 
-        public PoliticsShowDraftPage(string page)
+        public ShowDraft(string page)
         {
             var timesLeftMatch = Regex.Match(page, LeftTimesPattern, RegexOptions.Singleline);
             this.LeftTimes = timesLeftMatch.Success ? int.Parse(timesLeftMatch.Groups[1].Value) : 0;
