@@ -23,22 +23,6 @@ namespace TC.TCTasks
 
         public RequestAgent WebAgent;
 
-        public DateTime ArrivalTime { get; private set; }
-
-        private static DateTime CalcActualExecutionTime(TroopInfo troop, DateTime arrivalTime)
-        {
-            var result = arrivalTime.AddSeconds(-(troop.Duration + OpenAttackPageTime));
-            if (!troop.isGroupTroop)
-            {
-                result = result.AddMilliseconds(300);
-            }
-            if (result <= FormMain.RemoteTime)
-            {
-                result = FormMain.RemoteTime.AddSeconds(10);
-            }
-            return result;
-        }
-
         public SendTroopTask(
             AccountInfo account,
             CityInfo fromCity,
@@ -54,6 +38,8 @@ namespace TC.TCTasks
             this.WebAgent = new RequestAgent(account);
         }
 
+        public DateTime ArrivalTime { get; private set; }
+
         public override string TaskId
         {
             get
@@ -64,6 +50,20 @@ namespace TC.TCTasks
             {
                 throw new NotImplementedException();
             }
+        }
+
+        private static DateTime CalcActualExecutionTime(TroopInfo troop, DateTime arrivalTime)
+        {
+            var result = arrivalTime.AddSeconds(-(troop.Duration + OpenAttackPageTime));
+            if (!troop.isGroupTroop)
+            {
+                result = result.AddMilliseconds(300);
+            }
+            if (result <= FormMain.RemoteTime)
+            {
+                result = FormMain.RemoteTime.AddSeconds(10);
+            }
+            return result;
         }
 
         public override string GetTaskHint()

@@ -1,44 +1,16 @@
-﻿using System.Text.RegularExpressions;
-
-namespace TC.TCPage.Influence
+﻿namespace TC.TCPage.Influence
 {
-    class ShowInfluenceBuild
+    using System.Text.RegularExpressions;
+
+    internal class ShowInfluenceBuild
     {
         public const string DurationPattern = @"<th>耐久度</th>.*?<td>(?<duration>\d+)/(?<maxDuration>\d+)</td>";
+
         public const string BrickNumPattern = @"<th>携带砖数</th>.*?<th>(\d+)</th>";
+
         public const string MaxBrickPattern = @"if \( brick_num>(\d+) \)";
+
         public const string NodeIdPattern = @"build_id=(?<buildId>\d+)&node_id=(?<nodeId>\d+)";
-
-        public int BuildId { get; private set; }
-
-        public int CityNodeId { get; private set; }
-
-        public int WallDuration { get; private set; }
-
-        public int WallMaxDuration { get; private set; }
-
-        public int BrickNum { get; private set; }
-
-        public int CompleteRepairNeeds { get; private set; }
-
-        public static ShowInfluenceBuild Open(
-            RequestAgent agent,
-            int cityNodeId,
-            int buildId,
-            int buildLevel)
-        {
-            var url = agent.BuildUrl(
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_build,
-                new TCRequestArgument(TCElement.build_id, buildId),
-                new TCRequestArgument(TCElement.node_id, cityNodeId),
-                new TCRequestArgument(TCElement.level, buildLevel),
-                new TCRequestArgument(TCElement.action, "repair"));
-            var rawPage = agent.WebClient.OpenUrl(url);
-            return new ShowInfluenceBuild(rawPage);
-        }
 
         public ShowInfluenceBuild(string page)
         {
@@ -53,6 +25,33 @@ namespace TC.TCPage.Influence
             this.WallMaxDuration = matchDuration.Success ? int.Parse(matchDuration.Groups["maxDuration"].Value) : 0;
             this.BrickNum = matchBrickNum.Success ? int.Parse(matchBrickNum.Groups[1].Value) : 0;
             this.CompleteRepairNeeds = matchMaxBrick.Success ? int.Parse(matchMaxBrick.Groups[1].Value) : 0;
+        }
+
+        public int BuildId { get; private set; }
+
+        public int CityNodeId { get; private set; }
+
+        public int WallDuration { get; private set; }
+
+        public int WallMaxDuration { get; private set; }
+
+        public int BrickNum { get; private set; }
+
+        public int CompleteRepairNeeds { get; private set; }
+
+        public static ShowInfluenceBuild Open(RequestAgent agent, int cityNodeId, int buildId, int buildLevel)
+        {
+            var url = agent.BuildUrl(
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.influence_build,
+                new TCRequestArgument(TCElement.build_id, buildId),
+                new TCRequestArgument(TCElement.node_id, cityNodeId),
+                new TCRequestArgument(TCElement.level, buildLevel),
+                new TCRequestArgument(TCElement.action, "repair"));
+            var rawPage = agent.WebClient.OpenUrl(url);
+            return new ShowInfluenceBuild(rawPage);
         }
     }
 }

@@ -1,11 +1,13 @@
-﻿using TC.TCPage.WorldWar;
-
-namespace TC
+﻿namespace TC
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
+
+    using TC.TCPage.Depot;
+    using TC.TCPage.Prop;
+    using TC.TCPage.WorldWar;
 
     partial class FormMain
     {
@@ -82,7 +84,7 @@ namespace TC
             return "";
         }
 
-        private static int TimeStr2Sec(string input)
+        public static int TimeStr2Sec(string input)
         {
             var strs = input.Split(':');
             if (strs.Length == 3)
@@ -162,55 +164,19 @@ namespace TC
             }
         }
 
-        private static IEnumerable<DepotItem> ParseDepotItems(string page)
-        {
-            const string Pattern = @"prop\.use_prop\((\d+), (\d+), (\d+), (\d+)\)";
-            var matches = Regex.Matches(page, Pattern);
-            return from Match match in matches
-                   select
-                       new DepotItem
-                           {
-                               PropertyID = int.Parse(match.Groups[1].Value),
-                               UserPropertyID = int.Parse(match.Groups[3].Value),
-                               GoodsType = int.Parse(match.Groups[2].Value)
-                           };
-        }
-
-        private static int ParseMaxPageId(string page)
-        {
-            const string pattern = @"<span class=""page_on"">\d+/(\d+)</span>";
-            var match = Regex.Match(page, pattern);
-            return match.Success ? int.Parse(match.Groups[1].Value) : 0;
-        }
-
-        private IEnumerable<DepotItem> EnumDepotItems(string account)
-        {
-            var maxPage = 1;
-            var curPage = 1;
-            do
-            {
-                var page = this.OpenAccountDepot(account, 1, curPage);
-                maxPage = ParseMaxPageId(page);
-
-                var items = ParseDepotItems(page);
-                foreach (var item in items)
-                {
-                    yield return item;
-                }
-
-                ++curPage;
-            }
-            while (curPage <= maxPage);
-        }
-
         private bool OpenResourceBox(string account)
         {
-            var resBoxes = this.EnumDepotItems(account).Where(item => item.PropertyID == 207401).ToList();
+            var accountInfo = this.accountTable[account];
+            var resBoxes =
+                ShowMyDepot.EnumDepotItems(accountInfo.WebAgent)
+                    .Where(prop => prop.PropertyId == (int)DepotItem.PropId.ResourceBox)
+                    .ToList();
             if (!resBoxes.Any())
             {
                 return false;
             }
-            this.UseDepotItems(account, resBoxes.First(), 1);
+            var firstBox = resBoxes.First();
+            DoUseProp.Open(accountInfo.WebAgent, firstBox.PropertyId, firstBox.UserPropertyId, 1);
             return true;
         }
 
@@ -268,7 +234,7 @@ namespace TC
                 {
                     if (accountInfo.InfluenceCityList == null)
                     {
-                        var accountCityList = this.QueryInfluenceCityList(account).ToList();
+                        var accountCityList = QueryInfluenceCityList(accountInfo).ToList();
                         accountInfo.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
                         accountInfo.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account);
                         accountInfo.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
@@ -320,50 +286,19 @@ namespace TC
             return !cookieMap.TryGetValue("tmp_mid", out tmpId) ? string.Empty : tmpId;
         }
 
-        private IEnumerable<CityInfo> QueryInfluenceCityList(string account)
+        private static IEnumerable<CityInfo> QueryInfluenceCityList(AccountInfo account)
         {
-            this.OpenAccountFirstCity(account);
-            var content = this.OpenMoveTroopPage(account);
-            return this.ParseCityListFromMoveTroopPage(content);
-        }
+            var agent = new RequestAgent(account);
 
-        private IEnumerable<CityInfo> ParseCityListFromMoveTroopPage(string content)
-        {
-            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
-            const string selectedCityPattern = "<option value=\"(?<nodeId>\\d+)\" selected\\s*>(?<name>[^<]+)</option>";
-
-            var contentParts = content.Split(new[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
-            var fromCityMatches = Regex.Matches(contentParts[0], cityPattern);
-            var selectedCityMatch = Regex.Match(contentParts[0], selectedCityPattern);
-
-            if (selectedCityMatch.Success)
+            var cityPage = TCPage.Influence.ShowInfluenceCity.Open(agent);
+            if (!cityPage.Citys.Any())
             {
-                yield return
-                    new CityInfo
-                        {
-                            Name = selectedCityMatch.Groups["name"].Value,
-                            NodeId = int.Parse(selectedCityMatch.Groups["nodeId"].Value),
-                            CityId = int.Parse(this.cityList[selectedCityMatch.Groups["name"].Value])
-                        };
+                return new List<CityInfo>();
             }
 
-            foreach (Match cityMatch in fromCityMatches)
-            {
-                var cityName = cityMatch.Groups["name"].Value;
-                var cityId = "0";
-                if (!this.cityList.TryGetValue(cityName, out cityId))
-                {
-                    cityId = "0";
-                }
-
-                yield return
-                    new CityInfo
-                        {
-                            Name = cityName,
-                            NodeId = int.Parse(cityMatch.Groups["nodeId"].Value),
-                            CityId = int.Parse(cityId)
-                        };
-            }
+            TCPage.Influence.ShowInfluenceCityDetail.Open(agent, cityPage.Citys.First());
+            var moveArmyPage = TCPage.WorldWar.ShowMoveArmy.Open(agent);
+            return moveArmyPage.CityList;
         }
 
         private Dictionary<string, HashSet<string>> BuildInfluenceCityMap(

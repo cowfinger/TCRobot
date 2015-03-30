@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TC.TCPage.Influence
+﻿namespace TC.TCPage.Influence
 {
-    class DoApplyInfluence
+    internal class DoApplyInfluence
     {
+        public DoApplyInfluence(string page)
+        {
+            this.Success = page.Contains("wee.lang('yes')");
+        }
+
         public bool Success { get; private set; }
 
         public static DoApplyInfluence Open(RequestAgent agent, int influenceId)
@@ -20,11 +19,6 @@ namespace TC.TCPage.Influence
                 new TCRequestArgument(TCElement.influence_id, influenceId));
             var page = agent.WebClient.OpenUrl(url);
             return new DoApplyInfluence(page);
-        }
-
-        public DoApplyInfluence(string page)
-        {
-            this.Success = page.Contains("wee.lang('yes')");
         }
     }
 }

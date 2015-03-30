@@ -1,7 +1,11 @@
 ﻿namespace TC.TCPage.Union
 {
-    class DoApplyUnion
+    internal class DoApplyUnion
     {
+        public DoApplyUnion(string page)
+        {
+        }
+
         public static DoApplyUnion Open(RequestAgent agent, int unionId)
         {
             var url = agent.BuildUrl(
@@ -12,10 +16,6 @@
                 new TCRequestArgument(TCElement.union_id, unionId));
             var rawPage = agent.WebClient.OpenUrl(url);
             return new DoApplyUnion(rawPage);
-        }
-
-        public DoApplyUnion(string page)
-        {
         }
     }
 }

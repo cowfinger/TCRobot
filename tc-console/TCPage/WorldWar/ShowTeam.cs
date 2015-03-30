@@ -1,34 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-
-namespace TC.TCPage.WorldWar
+﻿namespace TC.TCPage.WorldWar
 {
-    class ShowTeam
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
+    internal class ShowTeam
     {
         public const string TeamLinePattern =
-            @"<tr>\s*" +
-            @"<td>(?<accountName>.+?)</td>\s*" +
-            @"<td>(?<heroNum>\d+)</td>\s*" +
-            @"<td>(?<attackPower>\d+)</td>\s*" +
-            @"<td>(?<defendPower>\d+)</td>\s*" +
-            @"<td>(?<status>.+?)</td>\s*" +
-            @"<td>\s*" +
-            @"<div.*?worldWarClass\.showTeamDetail\((?<teamId>\d+),\d+\)";
+            @"<tr>\s*" + @"<td>(?<accountName>.+?)</td>\s*" + @"<td>(?<heroNum>\d+)</td>\s*"
+            + @"<td>(?<attackPower>\d+)</td>\s*" + @"<td>(?<defendPower>\d+)</td>\s*" + @"<td>(?<status>.+?)</td>\s*"
+            + @"<td>\s*" + @"<div.*?worldWarClass\.showTeamDetail\((?<teamId>\d+),\d+\)";
 
-        public class TeamInfo
+        public ShowTeam(string page)
         {
-            public string AccountName { get; set; }
-
-            public int HeroNum { get; set; }
-
-            public int AttackPower { get; set; }
-
-            public int DefendPower { get; set; }
-
-            public string Status { get; set; }
-
-            public int TeamId { get; set; }
+            if (page.Contains("alert"))
+            {
+                this.TeamList = new List<TeamInfo>();
+                return;
+            }
+            var teamLineMatches = Regex.Matches(page, TeamLinePattern, RegexOptions.Singleline);
+            this.TeamList = from Match match in teamLineMatches
+                            select
+                                new TeamInfo
+                                    {
+                                        AccountName = match.Groups["accountName"].Value,
+                                        TeamId = int.Parse(match.Groups["teamId"].Value),
+                                        AttackPower = int.Parse(match.Groups["attackPower"].Value),
+                                        DefendPower = int.Parse(match.Groups["defendPower"].Value),
+                                        HeroNum = int.Parse(match.Groups["heroNum"].Value)
+                                    };
         }
 
         public IEnumerable<TeamInfo> TeamList { get; private set; }
@@ -46,23 +46,19 @@ namespace TC.TCPage.WorldWar
             return new ShowTeam(rawPage);
         }
 
-        public ShowTeam(string page)
+        public class TeamInfo
         {
-            if (page.Contains("alert"))
-            {
-                this.TeamList = new List<TeamInfo>();
-                return;
-            }
-            var teamLineMatches = Regex.Matches(page, TeamLinePattern, RegexOptions.Singleline);
-            this.TeamList = from Match match in teamLineMatches
-                            select new TeamInfo
-                            {
-                                AccountName = match.Groups["accountName"].Value,
-                                TeamId = int.Parse(match.Groups["teamId"].Value),
-                                AttackPower = int.Parse(match.Groups["attackPower"].Value),
-                                DefendPower = int.Parse(match.Groups["defendPower"].Value),
-                                HeroNum = int.Parse(match.Groups["heroNum"].Value)
-                            };
+            public string AccountName { get; set; }
+
+            public int HeroNum { get; set; }
+
+            public int AttackPower { get; set; }
+
+            public int DefendPower { get; set; }
+
+            public string Status { get; set; }
+
+            public int TeamId { get; set; }
         }
     }
 }

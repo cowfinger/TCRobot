@@ -1,8 +1,8 @@
-﻿using System.Text.RegularExpressions;
-
-namespace TC.TCPage.Influence
+﻿namespace TC.TCPage.Influence
 {
-    class ShowInfluenceCityDetail
+    using System.Text.RegularExpressions;
+
+    internal class ShowInfluenceCityDetail
     {
         public const string CityNamePattern = "<!--开始-->\\s*<div class=\"title\">(.+?)</div>";
 
@@ -11,30 +11,6 @@ namespace TC.TCPage.Influence
         public const string FortressEndurePattern = @"<td>要塞耐久度</td>\s*<td>(\d+)/(\d+)</td>";
 
         public const string WallEndurePattern = @"<td>城墙耐久度</td>\s*<td>(\d+)/(\d+)</td>";
-
-        public string CityName { get; private set; }
-
-        public int CityNodeId { get; private set; }
-
-        public int FortressEndure { get; private set; }
-
-        public int MaxFortressEndure { get; private set; }
-
-        public int WallEndure { get; private set; }
-
-        public int MaxWallEndure { get; private set; }
-
-        public static ShowInfluenceCityDetail Open(RequestAgent agent, int cityNodeId)
-        {
-            var url = agent.BuildUrl(
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_city_detail,
-                new TCRequestArgument(TCElement.node_id, cityNodeId));
-            var rawPage = agent.WebClient.OpenUrl(url);
-            return new ShowInfluenceCityDetail(rawPage);
-        }
 
         public ShowInfluenceCityDetail(string page)
         {
@@ -63,6 +39,30 @@ namespace TC.TCPage.Influence
                 this.WallEndure = int.Parse(wallEndureMatch.Groups[1].Value);
                 this.MaxWallEndure = int.Parse(wallEndureMatch.Groups[2].Value);
             }
+        }
+
+        public string CityName { get; private set; }
+
+        public int CityNodeId { get; private set; }
+
+        public int FortressEndure { get; private set; }
+
+        public int MaxFortressEndure { get; private set; }
+
+        public int WallEndure { get; private set; }
+
+        public int MaxWallEndure { get; private set; }
+
+        public static ShowInfluenceCityDetail Open(RequestAgent agent, int cityNodeId)
+        {
+            var url = agent.BuildUrl(
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.influence_city_detail,
+                new TCRequestArgument(TCElement.node_id, cityNodeId));
+            var rawPage = agent.WebClient.OpenUrl(url);
+            return new ShowInfluenceCityDetail(rawPage);
         }
     }
 }

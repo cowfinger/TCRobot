@@ -1,15 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace TC.TCTasks
+﻿namespace TC.TCTasks
 {
-    class SpyTask : TCTask
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
+
+    internal class SpyTask : TCTask
     {
         private const int CheckInterval = 2 * 1000;
+
+        private readonly object enemyCityInfoListLock = new object();
+
+        public int Counter = 0;
+
+        private List<CityInfo> enemyCityInfoList = new List<CityInfo>();
+
+        public Dictionary<string, CityMilitaryInfo> EnemyCityList = new Dictionary<string, CityMilitaryInfo>();
+
+        public SpyTask(AccountInfo account)
+            : base(account, CheckInterval)
+        {
+        }
+
+        public List<CityInfo> EnemyCityInfoList
+        {
+            get
+            {
+                lock (this.enemyCityInfoListLock)
+                {
+                    return this.enemyCityInfoList;
+                }
+            }
+            set
+            {
+                lock (this.enemyCityInfoListLock)
+                {
+                    this.enemyCityInfoList = value;
+                }
+            }
+        }
+
+        public override string TaskId
+        {
+            get
+            {
+                return "spy";
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override string GetTaskHint()
+        {
+            return "spy";
+        }
 
         public class CityTroopInfo
         {
@@ -27,6 +72,7 @@ namespace TC.TCTasks
             public int CityId { get; set; }
 
             public int FortressEndure { get; set; }
+
             public int MaxFortressEndure { get; set; }
 
             public int WallEndure { get; set; }
@@ -48,53 +94,6 @@ namespace TC.TCTasks
             public CityInfo RawData { get; set; }
 
             public int Counter { get; set; }
-        }
-
-        public Dictionary<string, CityMilitaryInfo> EnemyCityList = new Dictionary<string, CityMilitaryInfo>();
-
-        private readonly object enemyCityInfoListLock = new object();
-        private List<CityInfo> enemyCityInfoList = new List<CityInfo>();
-
-        public int Counter = 0;
-
-        public List<CityInfo> EnemyCityInfoList
-        {
-            get
-            {
-                lock (this.enemyCityInfoListLock)
-                {
-                    return this.enemyCityInfoList;
-                }
-            }
-            set
-            {
-                lock (this.enemyCityInfoListLock)
-                {
-                    this.enemyCityInfoList = value;
-                }
-            }
-        }
-
-        public SpyTask(AccountInfo account)
-            : base(account, CheckInterval)
-        {
-        }
-
-        public override string TaskId
-        {
-            get
-            {
-                return "spy";
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override string GetTaskHint()
-        {
-            return "spy";
         }
     }
 }

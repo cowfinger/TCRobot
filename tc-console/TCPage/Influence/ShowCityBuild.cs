@@ -1,25 +1,49 @@
-﻿using System.Text.RegularExpressions;
-
-namespace TC.TCPage.Influence
+﻿namespace TC.TCPage.Influence
 {
-    enum CityBuildId
+    using System.Text.RegularExpressions;
+
+    internal enum CityBuildId
     {
         Fortress = 1001,
+
         Wall = 1002,
-        Road = 1003,
+
+        Road = 1003
     }
 
-    class ShowCityBuild
+    internal class ShowCityBuild
     {
-        public class CityBuild
+        public ShowCityBuild(string page)
         {
-            public int Duration { get; set; }
+            const string CityNamePattern = "<div class=\"title\">(.+?)</div>";
+            const string NodeIdPattern = @"node_id=(\d+)";
+            const string BuildPattern =
+                @".*?<span>耐久度：(?<duration>\d+)/(?<maxDuration>\d+)</span>"
+                + @"&nbsp;&nbsp;&nbsp;<span>等级：.*?(?<level>\d+)/(?<maxLevel>\d+)</span>";
+            const string FortressPattern = "fortress_descr" + BuildPattern;
+            const string WallPattern = "wall_descr" + BuildPattern;
+            const string RoadPattern = @"road_descr(.|\s)*?<span>等级：(?<level>\d+)/(?<maxLevel>\d+)</span>";
 
-            public int MaxDuration { get; set; }
+            var cityNameMatch = Regex.Match(page, CityNamePattern);
+            this.CityName = cityNameMatch.Success ? cityNameMatch.Groups[1].Value : "";
 
-            public int Level { get; set; }
+            var nodeIdMatch = Regex.Match(page, NodeIdPattern);
+            this.CityNodeId = nodeIdMatch.Success ? int.Parse(nodeIdMatch.Groups[1].Value) : 0;
 
-            public int MaxLevel { get; set; }
+            this.Fortress = ParseCityBuild(page, FortressPattern);
+            this.Wall = ParseCityBuild(page, WallPattern);
+
+            var roadMatch = Regex.Match(page, RoadPattern);
+            if (roadMatch.Success)
+            {
+                this.Road = new CityBuild
+                                {
+                                    Duration = 0,
+                                    MaxDuration = 0,
+                                    Level = int.Parse(roadMatch.Groups["level"].Value),
+                                    MaxLevel = int.Parse(roadMatch.Groups["maxLevel"].Value)
+                                };
+            }
         }
 
         public string CityName { get; private set; }
@@ -44,56 +68,31 @@ namespace TC.TCPage.Influence
             return new ShowCityBuild(rawPage);
         }
 
-        public ShowCityBuild(string page)
-        {
-            const string CityNamePattern = "<div class=\"title\">(.+?)</div>";
-            const string NodeIdPattern = @"node_id=(\d+)";
-            const string BuildPattern =
-                @".*?<span>耐久度：(?<duration>\d+)/(?<maxDuration>\d+)</span>" +
-                @"&nbsp;&nbsp;&nbsp;<span>等级：.*?(?<level>\d+)/(?<maxLevel>\d+)</span>";
-            const string FortressPattern = "fortress_descr" + BuildPattern;
-            const string WallPattern = "wall_descr" + BuildPattern;
-            const string RoadPattern = @"road_descr(.|\s)*?<span>等级：(?<level>\d+)/(?<maxLevel>\d+)</span>";
-
-            var cityNameMatch = Regex.Match(page, CityNamePattern);
-            this.CityName = cityNameMatch.Success ? cityNameMatch.Groups[1].Value : "";
-
-            var nodeIdMatch = Regex.Match(page, NodeIdPattern);
-            this.CityNodeId = nodeIdMatch.Success ? int.Parse(nodeIdMatch.Groups[1].Value) : 0;
-
-            this.Fortress = ParseCityBuild(page, FortressPattern);
-            this.Wall = ParseCityBuild(page, WallPattern);
-
-            var roadMatch = Regex.Match(page, RoadPattern);
-            if (roadMatch.Success)
-            {
-                this.Road = new CityBuild
-                {
-                    Duration = 0,
-                    MaxDuration = 0,
-                    Level = int.Parse(roadMatch.Groups["level"].Value),
-                    MaxLevel = int.Parse(roadMatch.Groups["maxLevel"].Value),
-                };
-            }
-        }
-
         private static CityBuild ParseCityBuild(string page, string pattern)
         {
             var match = Regex.Match(page, pattern, RegexOptions.Singleline);
             if (match.Success)
             {
-                return new CityBuild()
-                {
-                    Duration = int.Parse(match.Groups["duration"].Value),
-                    MaxDuration = int.Parse(match.Groups["maxDuration"].Value),
-                    Level = int.Parse(match.Groups["level"].Value),
-                    MaxLevel = int.Parse(match.Groups["maxLevel"].Value),
-                };
+                return new CityBuild
+                           {
+                               Duration = int.Parse(match.Groups["duration"].Value),
+                               MaxDuration = int.Parse(match.Groups["maxDuration"].Value),
+                               Level = int.Parse(match.Groups["level"].Value),
+                               MaxLevel = int.Parse(match.Groups["maxLevel"].Value)
+                           };
             }
-            else
-            {
-                return null;
-            }
+            return null;
+        }
+
+        public class CityBuild
+        {
+            public int Duration { get; set; }
+
+            public int MaxDuration { get; set; }
+
+            public int Level { get; set; }
+
+            public int MaxLevel { get; set; }
         }
     }
 }

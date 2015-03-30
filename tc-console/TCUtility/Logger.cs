@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TC.TCUtility
+﻿namespace TC.TCUtility
 {
-    interface ILogger
+    internal interface ILogger
     {
         void Verbose(string format, params object[] args);
     }
 
-    class FormMainLogger : ILogger
+    internal class FormMainLogger : ILogger
     {
         private readonly FormMain formMain;
 
@@ -25,9 +20,9 @@ namespace TC.TCUtility
         }
     }
 
-    static class Logger
+    internal static class Logger
     {
-        private static ILogger LoggerInst = null;
+        private static ILogger LoggerInst;
 
         public static void Initialize(ILogger logger)
         {

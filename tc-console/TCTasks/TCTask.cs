@@ -7,13 +7,13 @@
 
     internal abstract class TCTask
     {
-        private static Random randGen = new Random();
+        private static readonly Random randGen = new Random();
 
         private DateTime executionTime;
 
-        private bool isCompleted = false;
+        private int interval;
 
-        private int interval = 0;
+        private bool isCompleted;
 
         private Timer timer;
 
@@ -32,17 +32,6 @@
             var nextDueTime = FormMain.RemoteTime.AddMilliseconds(intervalInMiliseconds);
             this.ExecutionTime = nextDueTime;
             this.IntervalMiliseconds = intervalInMiliseconds;
-        }
-
-        private DateTime CalcNextExecutionTime()
-        {
-            if (this.interval == 0)
-            {
-                return DateTime.MinValue;
-            }
-
-            var nextExecution = this.interval + randGen.NextDouble() * this.RandomSeed;
-            return FormMain.RemoteTime.AddMilliseconds(nextExecution);
         }
 
         public TCTask ParaentTask { get; set; }
@@ -81,6 +70,42 @@
             }
         }
 
+        public bool IsCompleted
+        {
+            get
+            {
+                return this.isCompleted;
+            }
+
+            set
+            {
+                if (value)
+                {
+                    this.timer.Stop();
+                }
+                this.isCompleted = value;
+            }
+        }
+
+        public AccountInfo Account { get; private set; }
+
+        public bool Executing { get; set; }
+
+        public Action<object> TaskAction { get; set; }
+
+        public abstract string TaskId { get; set; }
+
+        private DateTime CalcNextExecutionTime()
+        {
+            if (this.interval == 0)
+            {
+                return DateTime.MinValue;
+            }
+
+            var nextExecution = this.interval + randGen.NextDouble() * this.RandomSeed;
+            return FormMain.RemoteTime.AddMilliseconds(nextExecution);
+        }
+
         private void SetExecutionTime(DateTime value)
         {
             var diff = value - FormMain.RemoteTime;
@@ -113,31 +138,6 @@
             this.timer.Interval = diff.TotalMilliseconds;
             this.timer.Start();
         }
-
-        public bool IsCompleted
-        {
-            get
-            {
-                return this.isCompleted;
-            }
-
-            set
-            {
-                if (value)
-                {
-                    this.timer.Stop();
-                }
-                this.isCompleted = value;
-            }
-        }
-
-        public AccountInfo Account { get; private set; }
-
-        public bool Executing { get; set; }
-
-        public Action<object> TaskAction { get; set; }
-
-        public abstract string TaskId { get; set; }
 
         public static string Time2Str(int timeval)
         {

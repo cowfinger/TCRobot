@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace TC
+﻿namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -83,8 +81,7 @@ namespace TC
                         return;
                     }
 
-                    account.LoginStatus = this.SubmitLoginRequest(loginpara) ?
-                        "submitting" : "login-failed";
+                    account.LoginStatus = this.SubmitLoginRequest(loginpara) ? "submitting" : "login-failed";
                     break;
                 case "submitting":
                     if (this.webBrowserMain.Document.Title.Contains(loginpara.HomeTitle))
@@ -125,7 +122,7 @@ namespace TC
                         account.CityNameList = cityNameList;
                         account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]).ToList();
 
-                        var accountCityList = this.QueryInfluenceCityList(account.UserName).ToList();
+                        var accountCityList = QueryInfluenceCityList(account).ToList();
                         account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
                         account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
 

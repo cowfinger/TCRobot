@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
 
@@ -35,38 +34,6 @@
             return -1;
         }
 
-        private void OpenAccountFirstCity(string account)
-        {
-            const string pattern = @"mod=influence/influence&op=show&func=influence_city_detail&node_id=(\d+)";
-
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_city);
-
-            var page = this.HTTPRequest(url, account);
-
-            var match = Regex.Match(page, pattern);
-            if (match.Success)
-            {
-                var cityUrl = RequestAgent.BuildUrl(this.hostname, match.Value);
-                this.HTTPRequest(cityUrl, account);
-            }
-        }
-
-        private string OpenMoveTroopPage(string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Show,
-                TCFunc.move_army);
-            return this.HTTPRequest(url, account);
-        }
-
         private string QueryReliveQueueId(string tid, AccountInfo account)
         {
             var url = RequestAgent.BuildUrl(this.hostname, "mod=get_data&op=do");
@@ -88,8 +55,8 @@
                 TCSubMod.prop,
                 TCOperation.Do,
                 TCFunc.use_prop,
-                new TCRequestArgument(TCElement.prop_id, item.PropertyID),
-                new TCRequestArgument(TCElement.user_prop_id, item.UserPropertyID),
+                new TCRequestArgument(TCElement.prop_id, item.PropertyId),
+                new TCRequestArgument(TCElement.user_prop_id, item.UserPropertyId),
                 new TCRequestArgument(TCElement.hero_id, heroId),
                 new TCRequestArgument(TCElement.queue_id, queueId),
                 new TCRequestArgument(TCElement.call_back, callBack));
@@ -121,8 +88,8 @@
             return new DepotItem
                        {
                            GoodsType = 29,
-                           PropertyID = int.Parse(match.Groups["prop_id"].Value),
-                           UserPropertyID = int.Parse(match.Groups["user_prop_id"].Value)
+                           PropertyId = int.Parse(match.Groups["prop_id"].Value),
+                           UserPropertyId = int.Parse(match.Groups["user_prop_id"].Value)
                        };
         }
 
@@ -167,37 +134,6 @@
                 TCFunc.disband_group);
             var body = string.Format("group_id={0}&from_address=1", groupId);
             this.HTTPRequest(url, account, body);
-        }
-
-        private void UseDepotItems(string account, DepotItem item, int count)
-        {
-            const string callBack = "shop.reflash_res_depot(5,%201)";
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.prop,
-                TCSubMod.prop,
-                TCOperation.Do,
-                TCFunc.use_prop,
-                new TCRequestArgument(TCElement.p_type, 7),
-                new TCRequestArgument(TCElement.prop_id, item.PropertyID),
-                new TCRequestArgument(TCElement.prop_num, count),
-                new TCRequestArgument(TCElement.user_prop_id, item.UserPropertyID),
-                new TCRequestArgument(TCElement.from, 1),
-                new TCRequestArgument(TCElement.call_back, callBack));
-            this.HTTPRequest(url, account);
-        }
-
-        private string OpenAccountDepot(string account, int type, int page)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.depot,
-                TCSubMod.depot,
-                TCOperation.Show,
-                TCFunc.my_depot,
-                new TCRequestArgument(TCElement.goods_type, type),
-                new TCRequestArgument(TCElement.page, page));
-            return this.HTTPRequest(url, account);
         }
 
         private string OpenInfluenceSciencePage(string account)

@@ -4,26 +4,13 @@
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    class ShowDraft
+    internal class ShowDraft
     {
         public const string LeftTimesPattern = @"<tr>\s*<td>今日剩余次数</td>\s*<td>(\d+)</td>\s*</tr>";
 
         public const string HeroEfficencyPattern = "\"(?<heroId>\\d+)\":\\{\"army\":\\{\"\\d+\":(?<soldierNum>\\d+),";
 
         public const string SoldierIdPattern = @"civil_draft_soldier_radio_(\d+)";
-
-        public int LeftTimes { get; private set; }
-
-        public int EfficientHeroId { get; private set; }
-
-        public HashSet<int> SoldierIdSet { get; private set; }
-
-        public static ShowDraft Open(RequestAgent agent)
-        {
-            var url = agent.BuildUrl(TCMod.civil, TCSubMod.politics, TCOperation.Show, TCFunc.draft);
-            var rawPage = agent.WebClient.OpenUrl(url);
-            return new ShowDraft(rawPage);
-        }
 
         public ShowDraft(string page)
         {
@@ -36,7 +23,7 @@
                                     let soldierNum = int.Parse(match.Groups["soldierNum"].Value)
                                     select new { heroId, soldierNum };
 
-            int maxSoldier = 0;
+            var maxSoldier = 0;
             foreach (var heroInfo in heroEfficencyList)
             {
                 if (heroInfo.soldierNum > maxSoldier)
@@ -50,12 +37,25 @@
             var soldierIdMatches = Regex.Matches(page, SoldierIdPattern, RegexOptions.Singleline);
             foreach (Match soldier in soldierIdMatches)
             {
-                int soldierId = int.Parse(soldier.Groups[1].Value);
+                var soldierId = int.Parse(soldier.Groups[1].Value);
                 if (!this.SoldierIdSet.Contains(soldierId))
                 {
                     this.SoldierIdSet.Add(soldierId);
                 }
             }
+        }
+
+        public int LeftTimes { get; private set; }
+
+        public int EfficientHeroId { get; private set; }
+
+        public HashSet<int> SoldierIdSet { get; private set; }
+
+        public static ShowDraft Open(RequestAgent agent)
+        {
+            var url = agent.BuildUrl(TCMod.civil, TCSubMod.politics, TCOperation.Show, TCFunc.draft);
+            var rawPage = agent.WebClient.OpenUrl(url);
+            return new ShowDraft(rawPage);
         }
     }
 }

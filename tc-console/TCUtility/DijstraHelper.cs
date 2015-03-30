@@ -1,10 +1,9 @@
-﻿using TC.TCPage.Influence;
-
-namespace TC
+﻿namespace TC
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using TC.TCPage.Influence;
 
     internal class DijstraHelper
     {
@@ -18,12 +17,12 @@ namespace TC
 
         private readonly HashSet<string> uNodes = new HashSet<string>();
 
-        public AccountInfo Account { get; set; }
-
         public DijstraHelper(Dictionary<string, HashSet<string>> map)
         {
             this.map = map;
         }
+
+        public AccountInfo Account { get; set; }
 
         public int GetDistance(string from, string to, int speed)
         {

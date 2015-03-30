@@ -1,10 +1,21 @@
-﻿using System.Text.RegularExpressions;
-
-namespace TC.TCPage.WorldWar
+﻿namespace TC.TCPage.WorldWar
 {
-    class ShowReserveArmyInfo
+    using System.Text.RegularExpressions;
+
+    internal class ShowReserveArmyInfo
     {
         public const string ReserveArmySumPattern = @"本城后备军总兵数：(\d+)\s*<span>本城后备将领总数：(\d+)</span>";
+
+        public ShowReserveArmyInfo(string page)
+        {
+            var reserveArmySumMatch = Regex.Match(page, ReserveArmySumPattern, RegexOptions.Singleline);
+            if (!reserveArmySumMatch.Success)
+            {
+                return;
+            }
+            this.ReserveArmyNum = int.Parse(reserveArmySumMatch.Groups[1].Value);
+            this.ReserveHeroNum = int.Parse(reserveArmySumMatch.Groups[2].Value);
+        }
 
         public int ReserveArmyNum { get; set; }
 
@@ -21,17 +32,6 @@ namespace TC.TCPage.WorldWar
                 new TCRequestArgument(TCElement.user_nickname, ""));
             var rawPage = agent.WebClient.OpenUrl(url);
             return new ShowReserveArmyInfo(rawPage);
-        }
-
-        public ShowReserveArmyInfo(string page)
-        {
-            var reserveArmySumMatch = Regex.Match(page, ReserveArmySumPattern, RegexOptions.Singleline);
-            if (!reserveArmySumMatch.Success)
-            {
-                return;
-            }
-            this.ReserveArmyNum = int.Parse(reserveArmySumMatch.Groups[1].Value);
-            this.ReserveHeroNum = int.Parse(reserveArmySumMatch.Groups[2].Value);
         }
     }
 }

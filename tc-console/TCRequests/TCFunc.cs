@@ -12,6 +12,8 @@ namespace TC
 
         attack_confirm,
 
+        build,
+
         build_repair,
 
         cancel_apply_influence,

@@ -1,7 +1,12 @@
 ﻿namespace TC.TCPage.Influence
 {
-    class DoCancelApplyInfluence
+    internal class DoCancelApplyInfluence
     {
+        public DoCancelApplyInfluence(string page)
+        {
+            this.Success = page.Contains("wee.lang('yes')");
+        }
+
         public bool Success { get; private set; }
 
         public static DoCancelApplyInfluence Open(RequestAgent agent, int influenceId)
@@ -14,11 +19,6 @@
                 new TCRequestArgument(TCElement.influence_id, influenceId));
             var page = agent.WebClient.OpenUrl(url);
             return new DoCancelApplyInfluence(page);
-        }
-
-        public DoCancelApplyInfluence(string page)
-        {
-            this.Success = page.Contains("wee.lang('yes')");
         }
     }
 }

@@ -1,10 +1,16 @@
 ﻿namespace TC.TCPage.Influence
 {
-    class DoCheckMember
+    internal class DoCheckMember
     {
         public enum Action
         {
-            pass, refuse,
+            pass,
+
+            refuse
+        }
+
+        public DoCheckMember(string rawPage)
+        {
         }
 
         public static DoCheckMember Open(RequestAgent agent, Action act, int unionId)
@@ -18,10 +24,6 @@
                 new TCRequestArgument(TCElement.union_id, unionId));
             var rawPage = agent.WebClient.OpenUrl(url);
             return new DoCheckMember(rawPage);
-        }
-
-        public DoCheckMember(string rawPage)
-        {
         }
     }
 }

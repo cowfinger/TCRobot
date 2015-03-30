@@ -1,13 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-
-namespace TC.TCPage.WorldWar
+﻿namespace TC.TCPage.WorldWar
 {
-    class ShowMoveArmy
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
+    internal class ShowMoveArmy
     {
         public const string CityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
+
+        public ShowMoveArmy(string page)
+        {
+            this.RawPage = page;
+            this.BrickNum = ParseBrickNumberFromMovePage(page);
+            this.Army = ParseSoldierListFromMovePage(page);
+            this.HeroList = ParseHeroInfoListFromMovePage(page);
+        }
 
         public string RawPage { get; private set; }
 
@@ -39,19 +47,34 @@ namespace TC.TCPage.WorldWar
                         nodeId = "0";
                     }
 
-                    yield return new CityInfo
-                    {
-                        CityId = int.Parse(toCityMatch.Groups["nodeId"].Value),
-                        Name = cityName,
-                        NodeId = int.Parse(nodeId)
-                    };
+                    yield return
+                        new CityInfo
+                            {
+                                CityId = int.Parse(toCityMatch.Groups["nodeId"].Value),
+                                Name = cityName,
+                                NodeId = int.Parse(nodeId)
+                            };
                 }
             }
         }
 
         public IEnumerable<CityInfo> CityList
         {
-            get { return ParseCityListFromMoveTroopPage(this.RawPage); }
+            get
+            {
+                return ParseCityListFromMoveTroopPage(this.RawPage);
+            }
+        }
+
+        public static ShowMoveArmy Open(RequestAgent agent)
+        {
+            var url = agent.BuildUrl(
+                TCMod.military,
+                TCSubMod.world_war,
+                TCOperation.Show,
+                TCFunc.move_army);
+            var rawPage = agent.WebClient.OpenUrl(url);
+            return new ShowMoveArmy(rawPage);
         }
 
         public static ShowMoveArmy Open(RequestAgent agent, int fromCityId)
@@ -66,25 +89,17 @@ namespace TC.TCPage.WorldWar
             return new ShowMoveArmy(rawPage) { CityId = fromCityId };
         }
 
-        public ShowMoveArmy(string page)
-        {
-            this.RawPage = page;
-            this.BrickNum = ParseBrickNumberFromMovePage(page);
-            this.Army = ParseSoldierListFromMovePage(page);
-            this.HeroList = ParseHeroInfoListFromMovePage(page);
-        }
-
         private static int ParseBrickNumberFromMovePage(string page)
         {
-            const string pattern = "<span id=\"brick_num_max\">\\d+</span>/(\\d+)</span>\\)</span>";
-            var match = Regex.Match(page, pattern);
+            const string Pattern = "<span id=\"brick_num_max\">\\d+</span>/(\\d+)</span>\\)</span>";
+            var match = Regex.Match(page, Pattern);
             return match.Success ? int.Parse(match.Groups[1].Value) : 0;
         }
 
         private static IEnumerable<Soldier> ParseSoldierListFromMovePage(string page)
         {
-            const string idPattern = "max_num=(\\d+) name=\"s_(\\d+)\"";
-            return from Match match in Regex.Matches(page, idPattern)
+            const string IdPattern = "max_num=(\\d+) name=\"s_(\\d+)\"";
+            return from Match match in Regex.Matches(page, IdPattern)
                    select
                        new Soldier
                            {
@@ -109,34 +124,28 @@ namespace TC.TCPage.WorldWar
 
             for (var i = 0; i < Math.Min(nameList.Count, idList.Count); ++i)
             {
-                yield return
-                    new HeroInfo
-                        {
-                            Name = nameList[i],
-                            HeroId = idList[i],
-                            IsBusy = statusList[i] != "1"
-                        };
+                yield return new HeroInfo { Name = nameList[i], HeroId = idList[i], IsBusy = statusList[i] != "1" };
             }
         }
 
         private static IEnumerable<CityInfo> ParseCityListFromMoveTroopPage(string content)
         {
-            const string cityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
-            const string selectedCityPattern = "<option value=\"(?<nodeId>\\d+)\" selected\\s*>(?<name>[^<]+)</option>";
+            const string CityPattern = "<option value=\"(?<nodeId>\\d+)\"\\s*>(?<name>[^<]+)</option>";
+            const string SelectedCityPattern = "<option value=\"(?<nodeId>\\d+)\" selected\\s*>(?<name>[^<]+)</option>";
 
             var contentParts = content.Split(new[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
-            var fromCityMatches = Regex.Matches(contentParts[0], cityPattern);
-            var selectedCityMatch = Regex.Match(contentParts[0], selectedCityPattern);
+            var fromCityMatches = Regex.Matches(contentParts[0], CityPattern);
+            var selectedCityMatch = Regex.Match(contentParts[0], SelectedCityPattern);
 
             if (selectedCityMatch.Success)
             {
                 yield return
                     new CityInfo
-                    {
-                        Name = selectedCityMatch.Groups["name"].Value,
-                        NodeId = int.Parse(selectedCityMatch.Groups["nodeId"].Value),
-                        CityId = int.Parse(FormMain.CityList[selectedCityMatch.Groups["name"].Value])
-                    };
+                        {
+                            Name = selectedCityMatch.Groups["name"].Value,
+                            NodeId = int.Parse(selectedCityMatch.Groups["nodeId"].Value),
+                            CityId = int.Parse(FormMain.CityList[selectedCityMatch.Groups["name"].Value])
+                        };
             }
 
             foreach (Match cityMatch in fromCityMatches)
@@ -150,11 +159,11 @@ namespace TC.TCPage.WorldWar
 
                 yield return
                     new CityInfo
-                    {
-                        Name = cityName,
-                        NodeId = int.Parse(cityMatch.Groups["nodeId"].Value),
-                        CityId = int.Parse(cityId)
-                    };
+                        {
+                            Name = cityName,
+                            NodeId = int.Parse(cityMatch.Groups["nodeId"].Value),
+                            CityId = int.Parse(cityId)
+                        };
             }
         }
     }

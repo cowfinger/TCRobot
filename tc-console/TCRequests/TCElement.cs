@@ -4,6 +4,8 @@ namespace TC
     {
         action,
 
+        bid,
+
         brick_num,
 
         bt,
