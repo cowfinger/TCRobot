@@ -625,65 +625,12 @@
             int brickNum,
             bool sync = false)
         {
-            var initialHelper = new DijstraHelper(accountInfo.InfluenceMap) { Account = accountInfo };
-
-            var initialPath = initialHelper.GetPath(fromCity.Name, toCity.Name, soldierList).ToList();
-            initialPath.Reverse();
-            var nextCity = accountInfo.InfluenceCityList[initialPath.First()];
-
-            var moveTask = new MoveTroopTask(accountInfo, fromCity, nextCity, toCity, brickNum, "")
-                               {
-                                   SoldierList =
-                                       soldierList,
-                                   HeroIdList =
-                                       heroList,
-                                   Path =
-                                       initialPath
-                               };
-
-            moveTask.TaskAction = obj =>
-                {
-                    if (!HasTroopArrived(moveTask))
-                    {
-                        ++moveTask.RetryCount;
-                        if (moveTask.RetryCount < 3)
-                        {
-                            moveTask.ExecutionTime = moveTask.ExecutionTime.AddSeconds(10);
-                        }
-                        else
-                        {
-                            moveTask.IsCompleted = true;
-                        }
-                        return;
-                    }
-
-                    Logger.Verbose("Troop Arrived: {0}.", moveTask.NextCity.Name);
-
-                    if (moveTask.NextCity == moveTask.TerminalCity)
-                    {
-                        moveTask.IsCompleted = true;
-                        return;
-                    }
-
-                    var helper = new DijstraHelper(accountInfo.InfluenceMap) { Account = accountInfo };
-
-                    var path = helper.GetPath(moveTask.NextCity.Name, moveTask.TerminalCity.Name, soldierList).ToList();
-                    path.Reverse();
-
-                    moveTask.Path = path;
-                    moveTask.CurrentCity = moveTask.NextCity;
-                    moveTask.NextCity = moveTask.Account.InfluenceCityList[path.First()];
-
-                    MoveTroop(moveTask);
-                };
-
-            this.AddTaskToListView(moveTask);
-
+            var moveTask = new MoveTroopTask(accountInfo, fromCity, toCity, soldierList, heroList, brickNum);
             var threadTask = Task.Run(
                 () =>
                     {
                         moveTask.TryEnter();
-                        MoveTroop(moveTask);
+                        moveTask.MoveTroop();
                         moveTask.Leave();
                     });
 
@@ -692,6 +639,7 @@
                 threadTask.Wait();
             }
 
+            this.AddTaskToListView(moveTask);
             return moveTask;
         }
 
@@ -897,9 +845,10 @@
 
         private void CreateSpyTask(AccountInfo account)
         {
-            var task = new SpyTask(account);
-            task.TaskAction = obj =>
-                {
+            var task = new SpyTask(
+                account,
+                () =>
+                    {
                     var focusList = new List<CityInfo>();
                     this.Invoke(
                         new DoSomething(
@@ -909,37 +858,10 @@
                                         from ListViewItem lvItem in this.listViewEnemyCityInfo.CheckedItems
                                         select lvItem.Tag as CityInfo);
                                 }));
-                    DoApplyInfluence.Open(account.WebAgent, 9);
-
-                    List<CityInfo> cityInfoList;
-                    if (!task.EnemyCityInfoList.Any())
+                        return focusList;
+                    },
+                (city, log) =>
                     {
-                        cityInfoList = QueryInfluenceCityList(account).ToList();
-                        task.EnemyCityInfoList = cityInfoList;
-                    }
-                    else
-                    {
-                        cityInfoList = task.EnemyCityInfoList;
-                    }
-
-                    var toHandleList = focusList.Any()
-                                           ? focusList
-                                           : (from t in cityInfoList where this.randGen.NextDouble() > 0.2 select t)
-                                                 .ToList();
-
-                    var cityMilitaryInfoList = ParallelScanEnemyCityList(
-                        account,
-                        toHandleList,
-                        task.EnemyCityList,
-                        task.Counter);
-
-                    ++task.Counter;
-
-                    DoCancelApplyInfluence.Open(account.WebAgent, 9);
-
-                    foreach (var city in cityMilitaryInfoList)
-                    {
-                        var log = BuildCityMilitaryInfoString(city);
                         if (city.UiItem == null)
                         {
                             this.Invoke(
@@ -964,12 +886,7 @@
                                             lvItem.SubItems[2].Text = log;
                                         }));
                         }
-                        if (!string.IsNullOrEmpty(city.Name) && !task.EnemyCityList.ContainsKey(city.Name))
-                        {
-                            task.EnemyCityList.Add(city.Name, city);
-                        }
-                    }
-                };
+                    });
         }
 
         private static List<SpyTask.CityMilitaryInfo> ParallelScanEnemyCityList(
@@ -1169,33 +1086,7 @@
 
         private void CreateInfluenceGuardTask(AccountInfo account)
         {
-            var task = new InfluenceGuard(account);
-            task.TaskAction = obj =>
-                {
-                    var page = ShowCheckMember.Open(account.WebAgent);
-                    task.recentRequstUnionList = page.RequestMemberList.Select(item => item.UnionName).ToList();
-
-                    lock (task.UnionIdSet)
-                    {
-                        foreach (
-                            var member in
-                                page.RequestMemberList.Where(member => !task.UnionIdSet.Contains(member.UnionId)))
-                        {
-                            task.UnionIdSet.Add(member.UnionId);
-                        }
-                    }
-
-                    if (page.RequestMemberList.Any())
-                    {
-                        Logger.Verbose(
-                            "Refuse {0}.",
-                            string.Join(
-                                ",",
-                                page.RequestMemberList.Select(
-                                    item => string.Format("({0},{1})", item.UnionName, item.UnionId)).ToArray()));
-                    }
-                };
-            task.RefuseTimer = new Timer(500) { AutoReset = true };
+            var task = new InfluenceGuard(account) { RefuseTimer = new Timer(500) { AutoReset = true } };
             task.RefuseTimer.Elapsed += (sender, args) =>
                 {
                     List<int> unionIdList;
@@ -1260,7 +1151,6 @@
         private void CreateShipBrickTask(AccountInfo account, CityInfo targetCity)
         {
             var task = new ShipBrickTask(account, targetCity);
-            task.TaskAction = obj => { this.ShipBrickScheSubTask(task); };
 
             var lvItem = new ListViewItem();
             lvItem.SubItems[0].Text = task.Account.UserName;

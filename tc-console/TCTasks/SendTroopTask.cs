@@ -2,6 +2,10 @@ namespace TC.TCTasks
 {
     using System;
 
+    using TC.TCPage.Influence;
+    using TC.TCPage.WorldWar;
+    using TC.TCUtility;
+
     internal class SendTroopTask : TCTask
     {
         public enum TaskStatus
@@ -73,6 +77,58 @@ namespace TC.TCTasks
                 this.fromCity.Name,
                 this.toCity.Name,
                 this.TaskData.Duration);
+        }
+
+        public override void TaskWorker()
+        {
+            switch (this.Status)
+            {
+                case TaskStatus.OpenAttackPage:
+                    this.Status = TaskStatus.ConfirmAttack;
+                    var requestPerfTimer = DateTime.Now;
+                    ShowInfluenceCityDetail.Open(this.WebAgent, this.fromCity.CityId);
+                    var cost = DateTime.Now - requestPerfTimer;
+                    var attackTime = this.ArrivalTime.AddSeconds(-this.TaskData.Duration);
+                    attackTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
+                    this.ExecutionTime = attackTime;
+
+                    Logger.Verbose(
+                        "Troop(Id={0},isGroup={1}) OpenCityPage(Elapse={2}ms), AttackTime={3}={4}-{5}.",
+                        this.TaskData.isGroupTroop ? this.TaskData.GroupId : this.TaskData.TroopId,
+                        this.TaskData.isGroupTroop,
+                        cost.TotalMilliseconds,
+                        attackTime,
+                        this.ArrivalTime,
+                        this.TaskData.Duration);
+                    break;
+
+                case TaskStatus.ConfirmAttack:
+                    string result;
+                    if (this.TaskData.isGroupTroop)
+                    {
+                        result =
+                            DoJoinAttack.Open(
+                                this.WebAgent,
+                                int.Parse(this.TaskData.GroupId),
+                                int.Parse(this.TaskData.ToCityNodeId)).RawPage;
+                    }
+                    else
+                    {
+                        result =
+                            DoAttack.Open(
+                                this.WebAgent,
+                                int.Parse(this.TaskData.TroopId),
+                                int.Parse(this.TaskData.ToCityNodeId)).RawPage;
+                    }
+
+                    Logger.Verbose(
+                        "Troop(Id={0}, isGroup={1}) Sent, result={2}.",
+                        this.TaskData.isGroupTroop ? this.TaskData.GroupId : this.TaskData.TroopId,
+                        this.TaskData.isGroupTroop,
+                        result);
+                    this.IsCompleted = true;
+                    break;
+            }
         }
     }
 }

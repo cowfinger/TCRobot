@@ -232,58 +232,6 @@
 
                 var task = new SendTroopTask(account, fromCity, toCity, team, arrivalTime);
 
-                task.TaskAction = obj =>
-                    {
-                        switch (task.Status)
-                        {
-                            case SendTroopTask.TaskStatus.OpenAttackPage:
-                                task.Status = SendTroopTask.TaskStatus.ConfirmAttack;
-                                var requestPerfTimer = DateTime.Now;
-                                ShowInfluenceCityDetail.Open(task.WebAgent, fromCity.CityId);
-                                var cost = DateTime.Now - requestPerfTimer;
-                                var attackTime = task.ArrivalTime.AddSeconds(-task.TaskData.Duration);
-                                attackTime = attackTime.AddMilliseconds(-(cost.TotalMilliseconds / 2));
-                                task.ExecutionTime = attackTime;
-
-                                Logger.Verbose(
-                                    "Troop(Id={0},isGroup={1}) OpenCityPage(Elapse={2}ms), AttackTime={3}={4}-{5}.",
-                                    task.TaskData.isGroupTroop ? task.TaskData.GroupId : task.TaskData.TroopId,
-                                    task.TaskData.isGroupTroop,
-                                    cost.TotalMilliseconds,
-                                    attackTime,
-                                    task.ArrivalTime,
-                                    task.TaskData.Duration);
-                                break;
-
-                            case SendTroopTask.TaskStatus.ConfirmAttack:
-                                string result;
-                                if (task.TaskData.isGroupTroop)
-                                {
-                                    result =
-                                        DoJoinAttack.Open(
-                                            task.WebAgent,
-                                            int.Parse(task.TaskData.GroupId),
-                                            int.Parse(task.TaskData.ToCityNodeId)).RawPage;
-                                }
-                                else
-                                {
-                                    result =
-                                        DoAttack.Open(
-                                            task.WebAgent,
-                                            int.Parse(task.TaskData.TroopId),
-                                            int.Parse(task.TaskData.ToCityNodeId)).RawPage;
-                                }
-
-                                Logger.Verbose(
-                                    "Troop(Id={0}, isGroup={1}) Sent, result={2}.",
-                                    task.TaskData.isGroupTroop ? task.TaskData.GroupId : task.TaskData.TroopId,
-                                    task.TaskData.isGroupTroop,
-                                    result);
-                                task.IsCompleted = true;
-                                break;
-                        }
-                    };
-
                 var lvItemTask = new ListViewItem { Tag = task };
                 task.SyncToListViewItem(lvItemTask, timeSnapshot);
                 this.listViewTasks.Items.Add(lvItemTask);

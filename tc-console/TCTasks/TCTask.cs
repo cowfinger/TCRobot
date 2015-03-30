@@ -91,8 +91,6 @@
 
         public bool Executing { get; set; }
 
-        public Action<object> TaskAction { get; set; }
-
         public abstract string TaskId { get; set; }
 
         private DateTime CalcNextExecutionTime()
@@ -125,10 +123,7 @@
                             return;
                         }
 
-                        if (this.TaskAction != null)
-                        {
-                            this.TaskAction(this);
-                        }
+                        this.TaskWorker();
 
                         this.SetExecutionTime(this.CalcNextExecutionTime());
                         this.Leave();
@@ -188,5 +183,7 @@
         }
 
         public abstract string GetTaskHint();
+
+        public abstract void TaskWorker();
     }
 }
