@@ -6,6 +6,8 @@ namespace TC
 
         brick_num,
 
+        bt,
+
         build_id,
 
         call_back,
@@ -37,6 +39,8 @@ namespace TC
         page,
 
         pet_id,
+
+        pid,
 
         prop_id,
 

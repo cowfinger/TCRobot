@@ -44,6 +44,8 @@ namespace TC
 
         influence_donate,
 
+        inner_build_list,
+
         join_attack,
 
         join_attack_confirm,

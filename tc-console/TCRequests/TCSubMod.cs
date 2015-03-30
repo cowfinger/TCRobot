@@ -4,6 +4,8 @@ namespace TC
     {
         attack,
 
+        build,
+
         city,
 
         depot,

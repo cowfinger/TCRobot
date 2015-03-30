@@ -1,0 +1,11 @@
+﻿<li class="build_12">
+				<div class="img01"><img id="task_build_tree_12" class="click" src="http://static.tc.9wee.com//build/build_tree/a_12.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_12')]] [[jslang('level', 2)]]</h3><div class="items_des"><p>[[jslang('build_12_intro')]]</p><p><span class="dt">[[jslang("endure")]]:</span><span class="zb_color2">2440</span><span class="dt">/2440</span></p><div style="color:#06F917"><p>[[jslang('now_lv_func', jslang('build_tool_w', "4"))]]</p><p>[[jslang('up_lv_func', jslang('build_tool_w', "6"))]]</p></div></div><div class="line"></div><h4>升级需求资源</h4><div class="ziyuan con"><ul><li class="re_m"><span>3750</span></li><li class="re_s"><span>1880</span></li><li class="re_t"><span>1500</span></li><li class="re_l"><span>1130</span></li></ul></div><div class="time">升级所需基础时间：00:01:08</div><div class="line"></div><div class="change_value"><h4>升级后属性变化</h4><div class="con"><p><span class="dt">繁荣度</span><span class="value">39</span><span class="change"><strong>↑</strong>5</span></p><p><span class="dt">耐久度</span><span class="value">2980</span><span class="change"><strong>↑</strong>540</span></p><p><span class="dt">城池防御</span><span class="value">260</span><span class="change"><strong>↑</strong>30</span></p></div></div></div>' onclick="wee.window.fopen( 'index.php?mod=city/build&op=show&func=viewbuild&pid=1&bt=2&bid=12', 1 );wee.window.close();" /></div>
+				<div class="name">[[jslang('build_12')]] 等级2</div>
+			</li>
+
+
+<li class="build_17 disabled">
+				<div class="img01"><img id="task_build_tree_17" src="http://static.tc.9wee.com//build/build_tree/d_17.gif" titleContent='<div class="build_tip"><h3 class="build_name zb_color1">[[jslang('build_17')]] [[jslang('level', 0)]]</h3><div class="items_des"><p>[[jslang('build_17_intro')]]</p></div><div class="line"></div><h4>[[jslang('up_pre')]]</h4><ul><li class="red">[[jslang('city_lv')]] Lv.3<li><li>[[jslang('build_16')]] [[jslang('level',3)]]</li></ul></div>' /></div>
+				<div class="name">[[jslang('build_17')]] 等级0</div>
+			</li>
+	
