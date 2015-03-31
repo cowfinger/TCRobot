@@ -6,7 +6,7 @@
 
         public int Duration = 0;
 
-        public string GroupId = "";
+        public int GroupId = 0;
 
         public bool isDefendTroop = false;
 

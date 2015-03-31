@@ -81,6 +81,8 @@
     <Compile Include="TCPage\Build\ShowBuild.cs" />
     <Compile Include="TCPage\Build\ShowInnerBuildList.cs" />
     <Compile Include="TCPage\Depot\ShowMyDepot.cs" />
+    <Compile Include="TCPage\DoGetData.cs" />
+    <Compile Include="TCPage\Hero\DoReliveHero.cs" />
     <Compile Include="TCPage\Hero\ShowMyHeroes.cs" />
     <Compile Include="TCPage\Influence\DoApplyInfluence.cs" />
     <Compile Include="TCPage\Influence\DoCancelApplyInfluence.cs" />
@@ -95,10 +97,12 @@
     <Compile Include="TCPage\Politics\DoDraft.cs" />
     <Compile Include="TCPage\Politics\ShowDraft.cs" />
     <Compile Include="TCPage\Prop\DoUseProp.cs" />
+    <Compile Include="TCPage\Prop\ShowAllowProp.cs" />
     <Compile Include="TCPage\TCPage.cs" />
     <Compile Include="TCPage\Union\DoApplyUnion.cs" />
     <Compile Include="TCPage\Union\DoOutUnion.cs" />
     <Compile Include="TCPage\WorldWar\DoAttack.cs" />
+    <Compile Include="TCPage\WorldWar\DoDisbandGroup.cs" />
     <Compile Include="TCPage\WorldWar\DoJoinAttack.cs" />
     <Compile Include="TCPage\WorldWar\ShowMoveArmy.cs" />
     <Compile Include="TCPage\WorldWar\ShowMoveArmyQueue.cs" />

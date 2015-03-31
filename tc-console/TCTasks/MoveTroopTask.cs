@@ -150,7 +150,7 @@ namespace TC.TCTasks
             if (this.HeroIdList.Count > 0)
             {
                 var heroes = moveArmyPage.HeroList.Select(h => h.HeroId).ToList();
-                var heroMatchCount = this.HeroIdList.Sum(hero => heroes.Contains(hero) ? 1 : 0);
+                var heroMatchCount = this.HeroIdList.Sum(hero => heroes.Contains(int.Parse(hero)) ? 1 : 0);
                 if (heroMatchCount != this.HeroIdList.Count)
                 {
                     return false;

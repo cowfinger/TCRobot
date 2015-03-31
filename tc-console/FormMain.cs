@@ -307,11 +307,12 @@
                     {
                         foreach (var troop in targetTroops)
                         {
+                            var account = this.accountTable[troop.AccountName];
                             if (troop.isGroupTroop)
                             {
                                 if (troop.IsGroupHead)
                                 {
-                                    this.DismissGroup(troop.GroupId, troop.AccountName);
+                                    DoDisbandGroup.Open(account.WebAgent, troop.GroupId);
                                 }
                             }
                             else
@@ -647,8 +648,8 @@
                 this.accountTable.Values,
                 account =>
                     {
-                        var heroPage = this.OpenHeroPage(account.UserName);
-                        var heroList = ParseHeroList(heroPage, account.UserName).ToList();
+                        var heroPage = TCPage.Hero.ShowMyHeroes.Open(account.WebAgent);
+                        var heroList = heroPage.Heroes.ToList();
 
                         this.Invoke(
                             new DoSomething(
@@ -672,58 +673,64 @@
                             if (status == 0) // relive running now.
                             {
                                 status = 1;
-                                if (!heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                                if (heroList.Sum(hero => hero.Status == 8 ? 1 : 0) == 0) // relive running now.
                                 {
-                                    this.ReliveHero(toReliveHero.HeroId, account.UserName);
+                                    TCPage.Hero.DoReliveHero.Open(account.WebAgent, toReliveHero.HeroId);
                                 }
                             }
                             else
                             {
-                                this.ReliveHero(toReliveHero.HeroId, account.UserName);
+                                TCPage.Hero.DoReliveHero.Open(account.WebAgent, toReliveHero.HeroId);
                             }
 
-                            var tid = GetTid(account);
-                            var reliveQueueId = this.QueryReliveQueueId(tid, account);
-                            var reliveItem = this.QueryReliveItem(reliveQueueId, tid, account);
+                            var reliveQueueId = this.QueryReliveQueueId(account.Tid, account);
+                            var allowPropPage = TCPage.Prop.ShowAllowProp.Open(account.WebAgent, account.Tid, reliveQueueId);
+                            var reliveItem = allowPropPage.Item;
                             if (reliveItem == null)
                             {
                                 MessageBox.Show(string.Format("复活药用完了."));
                                 return;
                             }
 
-                            this.UserReliveItem(reliveItem, toReliveHero.HeroId, reliveQueueId, tid, account);
+                            TCPage.Prop.DoUseProp.Open(
+                                account.WebAgent,
+                                reliveItem.PropertyId,
+                                reliveItem.UserPropertyId,
+                                toReliveHero.HeroId,
+                                reliveQueueId,
+                                account.Tid);
                         }
                     }).Then(() => { MessageBox.Show(string.Format("复活武将完成")); });
         }
 
         private void tabControlMainInfo_Selected(object sender, TabControlEventArgs e)
         {
-            if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
+            if (this.tabControlMainInfo.SelectedTab.Name != "tabPageHero")
             {
-                this.listViewAccountHero.Items.Clear();
-
-                Parallel.Dispatch(
-                    this.accountTable.Values,
-                    account =>
-                        {
-                            var heroList = this.QueryHeroList(account.UserName).ToList();
-
-                            this.Invoke(
-                                new DoSomething(
-                                    () =>
-                                        {
-                                            foreach (var hero in heroList)
-                                            {
-                                                var lvItem = new ListViewItem();
-                                                lvItem.Tag = hero;
-                                                lvItem.SubItems[0].Text = hero.AccountName;
-                                                lvItem.SubItems.Add(hero.Name);
-                                                lvItem.SubItems.Add(hero.IsDead.ToString());
-                                                this.listViewAccountHero.Items.Add(lvItem);
-                                            }
-                                        }));
-                        });
+                return;
             }
+
+            this.listViewAccountHero.Items.Clear();
+            Parallel.Dispatch(
+                this.accountTable.Values,
+                account =>
+                {
+                    var heroList = TCPage.Hero.ShowMyHeroes.Open(account.WebAgent).Heroes.ToList();
+
+                    this.Invoke(
+                        new DoSomething(
+                            () =>
+                            {
+                                foreach (var hero in heroList)
+                                {
+                                    var lvItem = new ListViewItem {Tag = hero};
+                                    lvItem.SubItems[0].Text = account.UserName;
+                                    lvItem.SubItems.Add(hero.Name);
+                                    lvItem.SubItems.Add(hero.IsDead.ToString());
+                                    this.listViewAccountHero.Items.Add(lvItem);
+                                }
+                            }));
+                });
         }
 
         private void tabControlTask_Selected(object sender, TabControlEventArgs e)
@@ -815,7 +822,7 @@
                                         {
                                             var lvItem = new ListViewItem();
                                             lvItem.SubItems[0].Text = heroList[i].Name;
-                                            lvItem.SubItems.Add(heroList[i].HeroId);
+                                            lvItem.SubItems.Add(heroList[i].HeroId.ToString());
                                             this.listViewMoveHero.Items.Add(lvItem);
                                         }
 

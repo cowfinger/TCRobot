@@ -458,8 +458,9 @@
                                 foreach (ListViewItem lvItem in this.listViewAccountHero.Items)
                                 {
                                     var tabHero = lvItem.Tag as HeroInfo;
-                                    if (tabHero != null && tabHero.HeroId == hero.HeroId
-                                        && tabHero.IsDead != hero.IsDead)
+                                    if (tabHero != null &&
+                                        tabHero.HeroId == hero.HeroId &&
+                                        tabHero.IsDead != hero.IsDead)
                                     {
                                         lvItem.Tag = hero;
                                         break;
@@ -542,7 +543,7 @@
             if (task.HeroIdList.Count > 0)
             {
                 var heroes = moveArmyPage.HeroList.Select(h => h.HeroId).ToList();
-                var heroMatchCount = task.HeroIdList.Sum(hero => heroes.Contains(hero) ? 1 : 0);
+                var heroMatchCount = task.HeroIdList.Sum(hero => heroes.Contains(int.Parse(hero)) ? 1 : 0);
                 if (heroMatchCount != task.HeroIdList.Count)
                 {
                     return false;
@@ -1137,7 +1138,7 @@
                         {
                             var moveArmyPage = ShowMoveArmy.Open(account.WebAgent, info.NodeId);
                             var troop = moveArmyPage.Army.ToList();
-                            var heroes = moveArmyPage.HeroList.Select(h => h.HeroId).ToList();
+                            var heroes = moveArmyPage.HeroList.Select(h => h.HeroId.ToString()).ToList();
                             var carryBrickNum = 0;
                             if (carryBrick)
                             {

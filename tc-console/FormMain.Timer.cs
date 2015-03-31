@@ -289,16 +289,15 @@
                 return;
             }
 
-            this.reliveHeroTimer = new Timer(60 * 1000);
-            this.reliveHeroTimer.AutoReset = true;
+            this.reliveHeroTimer = new Timer(60*1000) {AutoReset = true};
             this.reliveHeroTimer.Elapsed += (obj, evn) =>
                 {
                     Parallel.Dispatch(
                         this.accountTable.Values,
                         account =>
                             {
-                                var heroPage = this.OpenHeroPage(account.UserName);
-                                var heroList = ParseHeroList(heroPage, account.UserName).ToList();
+                                var heroPage = TCPage.Hero.ShowMyHeroes.Open(account.WebAgent);
+                                var heroList = heroPage.Heroes.ToList();
                                 if (this.tabControlMainInfo.SelectedTab.Name == "tabPageHero")
                                 {
                                     this.UpdateHeroTable(heroList);
@@ -311,12 +310,12 @@
                                     return;
                                 }
 
-                                if (heroPage.Contains("[[jslang('hero_status_8')]")) // relive running now.
+                                if (heroList.Any(hero => hero.Status == 8)) // relive running now.
                                 {
                                     return;
                                 }
                                 var toReliveHero = deadHeroList.First();
-                                this.ReliveHero(toReliveHero.HeroId, account.UserName);
+                                TCPage.Hero.DoReliveHero.Open(account.WebAgent, toReliveHero.HeroId);
                             });
                 };
             this.reliveHeroTimer.Start();

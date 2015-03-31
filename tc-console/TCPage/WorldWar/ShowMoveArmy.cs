@@ -124,7 +124,7 @@
 
             for (var i = 0; i < Math.Min(nameList.Count, idList.Count); ++i)
             {
-                yield return new HeroInfo { Name = nameList[i], HeroId = idList[i], IsBusy = statusList[i] != "1" };
+                yield return new HeroInfo { Name = nameList[i], HeroId = int.Parse(idList[i]), IsBusy = statusList[i] != "1" };
             }
         }
 

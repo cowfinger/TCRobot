@@ -1,0 +1,6 @@
+Key	Value
+Request	POST /index.php?mod=get_data&op=do&r=0.9962613547736634 HTTP/1.1
+
+module=%7B%22re%22%3A%5B1329869%5D%2C%22task%22%3A%5B1329869%2C1%5D%7D
+
+{"re":{"1329869":{"hoard":"9620:400|9630:400|9670:400|9890:600|1427759167","max_hoard":"10000|10000|10000|10000"},"warpoint":"0"},"task":{"1329869":{"1":[{"build_id":9,"level":2,"build_type":2,"tid":53434,"dictate":1,"starttime":0,"endtime":1427759194}]}}}

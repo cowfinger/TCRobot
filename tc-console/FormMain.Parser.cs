@@ -114,7 +114,7 @@
                 yield return
                     new TroopInfo
                         {
-                            GroupId = match.Groups[1].Value,
+                            GroupId = int.Parse(match.Groups[1].Value),
                             TroopId = teamId,
                             isGroupTroop = true,
                             IsGroupHead = isHead,
@@ -254,41 +254,6 @@
                             EndTime = DateTime.Parse(etaMatch.Groups["eta"].Value)
                         };
             }
-        }
-
-        private IEnumerable<HeroInfo> QueryHeroList(string account)
-        {
-            var content = this.OpenHeroPage(account);
-
-            return ParseHeroList(content, account);
-        }
-
-        private static IEnumerable<HeroInfo> ParseHeroList(string content, string account)
-        {
-            const string pattern = "<li id=\"li_hero_my(?<heroid>\\d+)\" hname=\"(?<heroname>.+)\" die=(?<isdead>\\d)>";
-
-            var matches = Regex.Matches(content, pattern);
-            return from Match match in matches
-                   select
-                       new HeroInfo
-                           {
-                               AccountName = account,
-                               HeroId = match.Groups["heroid"].Value,
-                               Name = match.Groups["heroname"].Value,
-                               IsDead = match.Groups["isdead"].Value == "1"
-                           };
-        }
-
-        private static string GetTid(AccountInfo account)
-        {
-            if (account.WebAgent == null)
-            {
-                return "";
-            }
-
-            var url = new Uri(string.Format("http://{0}/", account.AccountType));
-            var cookie = account.WebAgent.WebClient.Cookies.GetCookies(url)["tmp_mid"];
-            return cookie != null ? cookie.Value : "";
         }
 
         private static IEnumerable<CityInfo> QueryInfluenceCityList(AccountInfo account)

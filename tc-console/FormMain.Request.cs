@@ -34,7 +34,7 @@
             return -1;
         }
 
-        private string QueryReliveQueueId(string tid, AccountInfo account)
+        private int QueryReliveQueueId(int tid, AccountInfo account)
         {
             var url = RequestAgent.BuildUrl(this.hostname, "mod=get_data&op=do");
             var body = string.Format("module=%7B%22task%22%3A%5B{0}%2C2%5D%7D", tid);
@@ -43,66 +43,7 @@
             const string taskPattern = "\"tid\":(?<tid>\\d+)";
             var taskIdMatch = Regex.Match(taskData, taskPattern);
 
-            return taskIdMatch.Success ? taskIdMatch.Groups["tid"].Value : string.Empty;
-        }
-
-        private void UserReliveItem(DepotItem item, string heroId, string queueId, string tid, AccountInfo account)
-        {
-            var callBack = string.Format("get_build_task_queue%28undefined%2C+{0}%2C+true%29", tid);
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.prop,
-                TCSubMod.prop,
-                TCOperation.Do,
-                TCFunc.use_prop,
-                new TCRequestArgument(TCElement.prop_id, item.PropertyId),
-                new TCRequestArgument(TCElement.user_prop_id, item.UserPropertyId),
-                new TCRequestArgument(TCElement.hero_id, heroId),
-                new TCRequestArgument(TCElement.queue_id, queueId),
-                new TCRequestArgument(TCElement.call_back, callBack));
-            this.HTTPRequest(url, account.UserName);
-        }
-
-        private DepotItem QueryReliveItem(string reliveQueueId, string tid, AccountInfo account)
-        {
-            var callBack = string.Format("get_build_task_queue(undefined,%20{0},%20true)", tid);
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.prop,
-                TCSubMod.prop,
-                TCOperation.Show,
-                TCFunc.allow_prop,
-                new TCRequestArgument(TCElement.type, 29),
-                new TCRequestArgument(TCElement.queue_id, reliveQueueId),
-                new TCRequestArgument(TCElement.call_back, callBack));
-            var data = this.HTTPRequest(url, account.UserName);
-
-            const string pattern =
-                "<li onclick=\"shop\\.choose_prop\\((?<prop_id>\\d+), (?<user_prop_id>\\d+), 29\\);\">";
-            var match = Regex.Match(data, pattern);
-            if (!match.Success)
-            {
-                return null;
-            }
-
-            return new DepotItem
-                       {
-                           GoodsType = 29,
-                           PropertyId = int.Parse(match.Groups["prop_id"].Value),
-                           UserPropertyId = int.Parse(match.Groups["user_prop_id"].Value)
-                       };
-        }
-
-        private void ReliveHero(string heroId, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.hero,
-                TCSubMod.hero,
-                TCOperation.Do,
-                TCFunc.relive_hero,
-                new TCRequestArgument(TCElement.hero_id, heroId));
-            this.HTTPRequest(url, account);
+            return taskIdMatch.Success ? int.Parse(taskIdMatch.Groups["tid"].Value) : 0;
         }
 
         private IEnumerable<AttackTask> QueryOnlineTroopList(string eventType, string account)
@@ -116,24 +57,6 @@
                 new TCRequestArgument(TCElement.type, eventType));
             var content = this.HTTPRequest(url, account);
             return this.ParseOnlineTroopList(content, account);
-        }
-
-        private string OpenHeroPage(string account)
-        {
-            var url = RequestAgent.BuildUrl(this.hostname, TCMod.hero, TCSubMod.hero, TCOperation.Show, TCFunc.my_heros);
-            return this.HTTPRequest(url, account);
-        }
-
-        private void DismissGroup(string groupId, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Do,
-                TCFunc.disband_group);
-            var body = string.Format("group_id={0}&from_address=1", groupId);
-            this.HTTPRequest(url, account, body);
         }
 
         private string OpenInfluenceSciencePage(string account)

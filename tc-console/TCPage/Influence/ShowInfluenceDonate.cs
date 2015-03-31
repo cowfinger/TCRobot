@@ -11,7 +11,11 @@
 
         public static ShowInfluenceDonate Open(RequestAgent agent)
         {
-            var url = agent.BuildUrl(TCMod.influence, TCSubMod.influence, TCOperation.Show, TCFunc.influence_donate);
+            var url = agent.BuildUrl(
+                TCMod.influence,
+                TCSubMod.influence,
+                TCOperation.Show,
+                TCFunc.influence_donate);
             return new ShowInfluenceDonate(agent.WebClient.OpenUrl(url));
         }
     }
