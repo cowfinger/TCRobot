@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     public class RequestAgent
     {
@@ -16,7 +17,14 @@
             }
 
             this.Account = account;
-            this.WebClient = new HttpClient(account.CookieStr);
+            if (account.WebAgent != null && account.WebAgent.WebClient != null)
+            {
+                this.WebClient = new HttpClient(account.WebAgent.WebClient.Cookies);
+            }
+            else
+            {
+                this.WebClient = new HttpClient();
+            }
         }
 
         public AccountInfo Account { get; private set; }
@@ -87,6 +95,35 @@
                 url += "&" + string.Join("&", argPairs);
             }
             return this.BuildUrl(url);
+        }
+
+        public bool Login()
+        {
+            const string redirectUrlPattern = "window.location = '(.*?)'";
+            const string LoginUrl = "https://passport.9wee.com/login";
+            var loginBody = string.Format(
+                "_REFERER=http%3A%2F%2Fyw1.tc.9wee.com%2Findex.php%3Fmod%3Dlogin%26refresh&username={0}&password={1}",
+                this.Account.UserName,
+                this.Account.Password);
+
+            this.WebClient.Referer = "http://yw1.tc.9wee.com/index.php?mod=login";
+            var loginResp = this.WebClient.OpenUrl(LoginUrl, loginBody);
+            var redirectUrlMatch = Regex.Match(loginResp, redirectUrlPattern);
+            if (!redirectUrlMatch.Success)
+            {
+                return false;
+            }
+
+            var url = redirectUrlMatch.Groups[1].Value;
+            var mainPage = this.WebClient.OpenUrl(url);
+
+            return this.IsMainPageLoaded(mainPage);
+        }
+
+        public bool IsMainPageLoaded(string page)
+        {
+            const string Pattern = @"game\.city_id = \d+;";
+            return Regex.Match(page, Pattern).Success;
         }
     }
 }

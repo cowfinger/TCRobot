@@ -10,8 +10,6 @@ namespace TC
 
         public List<string> CityNameList = new List<string>();
 
-        public string CookieStr;
-
         public string FirstStepCityID;
 
         public Dictionary<string, CityInfo> InfluenceCityList = null;

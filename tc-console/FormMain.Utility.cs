@@ -52,7 +52,8 @@
             {
                 var request = (HttpWebRequest)WebRequest.Create(url);
                 request.UserAgent = UserAgent;
-                request.Headers.Add("Cookie", this.GetAccountCookie(account));
+                //request.Headers.Add("Cookie", this.GetAccountCookie(account));
+                request.CookieContainer = this.GetAccountCookies(account);
 
                 if (!string.IsNullOrEmpty(body))
                 {
@@ -65,7 +66,7 @@
 
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
-                    this.SetAccountCookie(account, response.Headers["Set-Cookie"]);
+                    this.SetAccountCookie(account, request.CookieContainer);
 
                     var content = string.Empty;
                     using (var reader = new StreamReader(response.GetResponseStream()))

@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net;
+    using System.Security.Policy;
     using System.Threading;
     using System.Windows.Forms;
 
@@ -18,92 +20,37 @@
                 this.activeAccount = account;
                 var accountInfo = this.accountTable[this.activeAccount];
 
-                if (!string.IsNullOrEmpty(accountInfo.CookieStr))
+                // if (!string.IsNullOrEmpty(accountInfo.CookieStr))
+                // {
+                //     var homePage = this.RefreshHomePage(account);
+                //     if (homePage.Contains("wee.timer.set_time"))
+                //     {
+                //         accountInfo.LoginStatus = "on-line";
+                //         this.OnLoginCompleted(accountInfo);
+                //         this.loginLock.Set();
+                //         return;
+                //     }
+                // }
+
+                accountInfo.WebAgent = new RequestAgent(accountInfo);
+                if (accountInfo.WebAgent.Login())
                 {
-                    var homePage = this.RefreshHomePage(account);
-                    if (!homePage.Contains("登录超时"))
-                    {
-                        accountInfo.LoginStatus = "on-line";
-                        this.OnLoginCompleted(accountInfo);
-                        this.loginLock.Set();
-                        return;
-                    }
+                    accountInfo.LoginStatus = "on-line";
+                    this.OnLoginCompleted(accountInfo);
+                    this.loginLock.Set();
                 }
-
-                accountInfo.LoginStatus = "in-login";
-                var loginurl = this.multiLoginConf[accountInfo.AccountType].LoginURL;
-
-                this.webBrowserMain.Navigate(loginurl);
-
-                this.webBrowserMain.DocumentCompleted += this.webBrowserMain_DocumentCompleted;
-            }
-        }
-
-        private bool SubmitLoginRequest(LoginParam loginconf)
-        {
-            var webDoc = this.webBrowserMain.Document;
-            if (webDoc.GetElementById(loginconf.UsernameElmID) == null)
-            {
-                return false;
-            }
-
-            webDoc.GetElementById(loginconf.UsernameElmID).InnerText = this.activeAccount;
-            webDoc.GetElementById(loginconf.PasswordElmID).InnerText = this.accountTable[this.activeAccount].Password;
-
-            Thread.Sleep(1000);
-            foreach (HtmlElement he in webDoc.GetElementsByTagName("input"))
-            {
-                if (he.GetAttribute("type") == "submit")
+                else
                 {
-                    he.InvokeMember("Click");
-                    return true;
+                    accountInfo.LoginStatus = "failed";
+                    this.loginLock.Set();
                 }
+                // accountInfo.LoginStatus = "in-login";
+                // var loginurl = this.multiLoginConf[accountInfo.AccountType].LoginURL;
+
+                // this.webBrowserMain.Navigate(loginurl);
+
+                // this.webBrowserMain.DocumentCompleted += this.webBrowserMain_DocumentCompleted;
             }
-
-            return false;
-        }
-
-        private void webBrowserMain_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            var account = this.accountTable[this.activeAccount];
-
-            if (!this.multiLoginConf.ContainsKey(account.AccountType))
-            {
-                return;
-            }
-
-            var loginpara = this.multiLoginConf[account.AccountType];
-            switch (account.LoginStatus)
-            {
-                case "in-login":
-                    if (!this.webBrowserMain.Document.Title.Contains(loginpara.LoginTitle))
-                    {
-                        return;
-                    }
-
-                    account.LoginStatus = this.SubmitLoginRequest(loginpara) ? "submitting" : "login-failed";
-                    break;
-                case "submitting":
-                    if (this.webBrowserMain.Document.Title.Contains(loginpara.HomeTitle))
-                    {
-                        this.SetAccountCookie(this.activeAccount, this.webBrowserMain.Document.Cookie);
-                        account.LoginStatus = "on-line";
-                    }
-                    else
-                    {
-                        account.LoginStatus = "login-failed";
-                    }
-                    break;
-            }
-
-            if (account.LoginStatus == "on-line")
-            {
-                this.webBrowserMain.DocumentCompleted -= this.webBrowserMain_DocumentCompleted;
-
-                this.loginLock.Set();
-            }
-
-            this.OnLoginCompleted(account);
         }
 
         private void OnLoginCompleted(AccountInfo account)
@@ -113,7 +60,11 @@
 
             var mainPage = this.RefreshHomePage(account.UserName);
             account.UnionId = ParseUnionIdFromMainPage(mainPage);
-            account.WebAgent = new RequestAgent(account);
+
+            if (account.WebAgent == null)
+            {
+                account.WebAgent = new RequestAgent(account);
+            }
 
             Task.Run(
                 () =>
@@ -187,7 +138,7 @@
                         }));
         }
 
-        private void SetAccountCookie(string account, string val)
+        private void SetAccountCookie(string account, CookieContainer cookie)
         {
             AccountInfo accountInfo;
             lock (this.accountTable)
@@ -200,34 +151,25 @@
 
             lock (accountInfo)
             {
-                var oldcookiestr = accountInfo.CookieStr;
-                if (oldcookiestr.Length == 0)
-                {
-                    accountInfo.CookieStr = val;
-                }
-                else
-                {
-                    var setcookies = ParseCookieStr(val);
-                    var oldcookies = ParseCookieStr(oldcookiestr);
-
-                    foreach (var key in setcookies.Keys)
-                    {
-                        oldcookies[key] = setcookies[key];
-                    }
-
-                    accountInfo.CookieStr = ComposeCookieStr(oldcookies);
-                }
-
+                accountInfo.WebAgent.WebClient.Cookies = cookie;
                 TrySaveAccountCookie(accountInfo);
             }
         }
 
-        private string GetAccountCookie(string account)
+        private CookieContainer GetAccountCookies(string account)
         {
+            AccountInfo accountInfo;
             lock (this.accountTable)
             {
-                return this.accountTable[account].CookieStr;
+                accountInfo = this.accountTable[account];
             }
+
+            if (accountInfo.WebAgent != null)
+            {
+                return accountInfo.WebAgent.WebClient.Cookies;
+            }
+
+            return new CookieContainer();
         }
 
         private static Dictionary<string, string> ParseCookieStr(string cookiestr)
@@ -291,36 +233,36 @@
 
         private static void TrySaveAccountCookie(AccountInfo account)
         {
-            if (!Directory.Exists(CookieFolder))
-            {
-                Directory.CreateDirectory(CookieFolder);
-            }
+            // if (!Directory.Exists(CookieFolder))
+            // {
+            //     Directory.CreateDirectory(CookieFolder);
+            // }
 
-            var accountCookieFileName = Path.Combine(CookieFolder, account.UserName);
-            if (File.Exists(accountCookieFileName))
-            {
-                File.Delete(accountCookieFileName);
-            }
+            // var accountCookieFileName = Path.Combine(CookieFolder, account.UserName);
+            // if (File.Exists(accountCookieFileName))
+            // {
+            //     File.Delete(accountCookieFileName);
+            // }
 
-            using (var streamWriter = new StreamWriter(accountCookieFileName))
-            {
-                streamWriter.Write(account.CookieStr);
-                streamWriter.Flush();
-            }
+            // using (var streamWriter = new StreamWriter(accountCookieFileName))
+            // {
+            //     streamWriter.Write(account.CookieStr);
+            //     streamWriter.Flush();
+            // }
         }
 
         private static void TryLoadAccountCookie(AccountInfo account)
         {
-            var accountCookieFileName = Path.Combine(CookieFolder, account.UserName);
-            if (!File.Exists(accountCookieFileName))
-            {
-                return;
-            }
+            // var accountCookieFileName = Path.Combine(CookieFolder, account.UserName);
+            // if (!File.Exists(accountCookieFileName))
+            // {
+            //     return;
+            // }
 
-            using (var streamReader = new StreamReader(accountCookieFileName))
-            {
-                account.CookieStr = streamReader.ReadToEnd();
-            }
+            // using (var streamReader = new StreamReader(accountCookieFileName))
+            // {
+            //     account.CookieStr = streamReader.ReadToEnd();
+            // }
         }
     }
 }

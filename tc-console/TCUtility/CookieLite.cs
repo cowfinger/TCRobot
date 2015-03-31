@@ -2,14 +2,16 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Net;
     using System.Text;
 
     public class CookieLite
     {
-        private readonly Dictionary<string, string> cookieMap = new Dictionary<string, string>();
+        public Dictionary<string, string> CookieMap { get; private set; }
 
         public CookieLite(string cookie = "")
         {
+            this.CookieMap = new Dictionary<string, string>();
             if (!string.IsNullOrEmpty(cookie))
             {
                 this.SetCookie(cookie);
@@ -20,9 +22,9 @@
         {
             get
             {
-                lock (this.cookieMap)
+                lock (this.CookieMap)
                 {
-                    return ComposeCookieString(this.cookieMap);
+                    return ComposeCookieString(this.CookieMap);
                 }
             }
         }
@@ -35,24 +37,22 @@
                 return result;
             }
 
-            var strs = cookieString.Split(';');
+            var strs = cookieString.Split(',');
             foreach (var i in strs)
             {
                 var key = "";
                 var val = "";
 
-                var seppos = i.IndexOf('=');
-                if (seppos == -1)
+                var pairs = i.Split(new[] { '=', ';' });
+                if (pairs.Length < 2)
                 {
-                    key = i.Trim(' ');
-                }
-                else
-                {
-                    key = i.Substring(0, seppos).Trim(' ');
-                    val = i.Substring(seppos + 1);
+                    continue;
                 }
 
-                if (string.IsNullOrEmpty(key))
+                key = pairs[0].Trim(' ');
+                val = pairs[1].Trim(' ');
+
+                if (string.IsNullOrEmpty(key) || key == "expires" || key == "path" || key.Contains(" "))
                 {
                     continue;
                 }
@@ -75,11 +75,6 @@
             var cookieBuilder = new StringBuilder();
             foreach (var i in cookie)
             {
-                if (string.Compare(i.Key, "path", true) == 0)
-                {
-                    continue;
-                }
-
                 if (!string.IsNullOrEmpty(i.Value))
                 {
                     cookieBuilder.AppendFormat("{0}={1};", i.Key, i.Value);
@@ -89,22 +84,48 @@
             return cookieBuilder.ToString();
         }
 
+        public void SetCookie(CookieCollection cookies)
+        {
+            foreach (Cookie cookie in cookies)
+            {
+                lock (this.CookieMap)
+                {
+                    this.SetCookie(cookie.Name, cookie.Value);
+                }
+            }
+        }
+
         public void SetCookie(string cookieString)
         {
             var setCookies = ParseCookieString(cookieString);
 
             foreach (var cookie in setCookies)
             {
-                lock (this.cookieMap)
+                lock (this.CookieMap)
                 {
-                    if (this.cookieMap.ContainsKey(cookie.Key))
-                    {
-                        this.cookieMap[cookie.Key] = cookie.Value;
-                    }
-                    else
-                    {
-                        this.cookieMap.Add(cookie.Key, cookie.Value);
-                    }
+                    this.SetCookie(cookie.Key, cookie.Value);
+                }
+            }
+        }
+
+        private void SetCookie(string key, string value)
+        {
+            if (this.CookieMap.ContainsKey(key))
+            {
+                if (value.StartsWith("delete"))
+                {
+                    this.CookieMap.Remove(key);
+                }
+                else
+                {
+                    this.CookieMap[key] = value;
+                }
+            }
+            else
+            {
+                if (!value.StartsWith("delete"))
+                {
+                    this.CookieMap.Add(key, value);
                 }
             }
         }

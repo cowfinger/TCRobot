@@ -563,7 +563,6 @@
                             accountinfo.AccountType = "tianya";
                         }
 
-                        accountinfo.CookieStr = "";
                         accountinfo.LoginStatus = "off-line";
                     }
 
@@ -1221,7 +1220,7 @@
 
                         try
                         {
-                            var webClient = new HttpClient(account.CookieStr);
+                            var webClient = new HttpClient(account.WebAgent.WebClient.Cookies);
                             Parallel.Dispatch(
                                 loopTable,
                                 ch =>

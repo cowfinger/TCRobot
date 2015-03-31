@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Text.RegularExpressions;
 
     using TC.TCPage.Depot;
@@ -280,10 +281,14 @@
 
         private static string GetTid(AccountInfo account)
         {
-            var cookieMap = ParseCookieStr(account.CookieStr);
+            if (account.WebAgent == null)
+            {
+                return "";
+            }
 
-            string tmpId;
-            return !cookieMap.TryGetValue("tmp_mid", out tmpId) ? string.Empty : tmpId;
+            var url = new Uri(string.Format("http://{0}/", account.AccountType));
+            var cookie = account.WebAgent.WebClient.Cookies.GetCookies(url)["tmp_mid"];
+            return cookie != null ? cookie.Value : "";
         }
 
         private static IEnumerable<CityInfo> QueryInfluenceCityList(AccountInfo account)
