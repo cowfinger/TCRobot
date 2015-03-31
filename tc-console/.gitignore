@@ -1,5 +1,8 @@
-obj/
+./obj/
 *.exe
 *.config
 *.pdb
 *.manifest
+*.cache
+*.suo
+
