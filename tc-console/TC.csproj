@@ -106,6 +106,7 @@
     <Compile Include="TCPage\WorldWar\ShowTeam.cs" />
     <Compile Include="TCTasks\InfluenceGuard.cs" />
     <Compile Include="TCTasks\SpyTask.cs" />
+    <Compile Include="TCTasks\UpgradeBuildDog.cs" />
     <Compile Include="TCUtility\CookieLite.cs" />
     <Compile Include="TCDataType\TroopInfo.cs" />
     <Compile Include="TCDataType\DepotItem.cs" />

@@ -7,7 +7,7 @@
 
     internal abstract class TCTask
     {
-        private static readonly Random randGen = new Random();
+        private static readonly Random RandGen = new Random();
 
         private DateTime executionTime;
 
@@ -16,6 +16,8 @@
         private bool isCompleted;
 
         private Timer timer;
+
+        private ListViewItem uiItem = null;
 
         protected TCTask(AccountInfo account, DateTime executionTime)
         {
@@ -26,7 +28,7 @@
 
         protected TCTask(AccountInfo account, int intervalInMiliseconds, int randomSeed = 0)
         {
-            this.RandomSeed = 0;
+            this.RandomSeed = randomSeed;
             this.Account = account;
 
             var nextDueTime = FormMain.RemoteTime.AddMilliseconds(intervalInMiliseconds);
@@ -100,7 +102,7 @@
                 return DateTime.MinValue;
             }
 
-            var nextExecution = this.interval + randGen.NextDouble() * this.RandomSeed;
+            var nextExecution = this.interval + RandGen.NextDouble() * this.RandomSeed;
             return FormMain.RemoteTime.AddMilliseconds(nextExecution);
         }
 
@@ -150,14 +152,25 @@
 
         public void SyncToListViewItem(ListViewItem lvItem, DateTime now)
         {
-            lvItem.SubItems.Add(this.Account.UserName);
-            lvItem.SubItems.Add(this.ExecutionTime.ToString());
-            lvItem.SubItems.Add(this.ExecutionTime.ToString());
-
             var totalSeconds = (int)(now - this.ExecutionTime).TotalSeconds;
             var etaString = totalSeconds >= 0 ? totalSeconds.ToString() : "N/A";
-            lvItem.SubItems.Add(etaString);
-            lvItem.SubItems.Add(this.GetTaskHint());
+
+            if (this.uiItem != lvItem)
+            {
+                lvItem.Tag = this;
+                this.uiItem = lvItem;
+                lvItem.SubItems.Add(this.Account.UserName);
+                lvItem.SubItems.Add(this.ExecutionTime.ToString());
+                lvItem.SubItems.Add(this.ExecutionTime.ToString());
+
+                lvItem.SubItems.Add(etaString);
+                lvItem.SubItems.Add(this.GetTaskHint());
+            }
+            else
+            {
+                lvItem.SubItems[3].Text = etaString;
+                lvItem.SubItems[4].Text = this.GetTaskHint();
+            }
         }
 
         public bool TryEnter()
