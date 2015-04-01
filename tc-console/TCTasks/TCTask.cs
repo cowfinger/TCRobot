@@ -13,8 +13,6 @@
 
         private int interval;
 
-        private bool isCompleted;
-
         private Timer timer;
 
         private ListViewItem uiItem = null;
@@ -23,6 +21,7 @@
         {
             this.RandomSeed = 0;
             this.ExecutionTime = executionTime;
+            this.IsCompleted = false;
             this.Account = account;
         }
 
@@ -34,6 +33,7 @@
             var nextDueTime = FormMain.RemoteTime.AddMilliseconds(intervalInMiliseconds);
             this.ExecutionTime = nextDueTime;
             this.IntervalMiliseconds = intervalInMiliseconds;
+            this.IsCompleted = false;
         }
 
         public TCTask ParaentTask { get; set; }
@@ -72,22 +72,7 @@
             }
         }
 
-        public bool IsCompleted
-        {
-            get
-            {
-                return this.isCompleted;
-            }
-
-            set
-            {
-                if (value)
-                {
-                    this.timer.Stop();
-                }
-                this.isCompleted = value;
-            }
-        }
+        public bool IsCompleted { get; protected set; }
 
         public AccountInfo Account { get; private set; }
 
@@ -127,7 +112,14 @@
 
                         this.TaskWorker();
 
-                        this.SetExecutionTime(this.CalcNextExecutionTime());
+                        if (this.IsCompleted)
+                        {
+                            this.timer.Stop();
+                        }
+                        else
+                        {
+                            this.SetExecutionTime(this.CalcNextExecutionTime());
+                        }
                         this.Leave();
                     };
             }

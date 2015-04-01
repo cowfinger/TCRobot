@@ -157,7 +157,7 @@
             return name;
         }
 
-        private void JoinGroup(string groupTroopId, string subTroopId, string account)
+        private void JoinGroup(int groupTroopId, string subTroopId, string account)
         {
             var url = RequestAgent.BuildUrl(
                 this.hostname,
@@ -369,7 +369,7 @@
             return this.HTTPRequest(url, account);
         }
 
-        private string OpenGroupAttackPage(string groupId, string cityId, string account)
+        private string OpenGroupAttackPage(int groupId, string cityId, string account)
         {
             var url = RequestAgent.BuildUrl(
                 this.hostname,

@@ -153,18 +153,6 @@
             }
         }
 
-        private static IEnumerable<KeyValuePair<long, long>> ParseInfluenceResource(string page)
-        {
-            const string pattern = @"<div class=""num\"">(\d+)/(\d+)</div>";
-            var matches = Regex.Matches(page, pattern);
-            foreach (Match match in matches)
-            {
-                var Key = long.Parse(match.Groups[1].Value);
-                var Value = long.Parse(match.Groups[2].Value);
-                yield return new KeyValuePair<long, long>(Key, Value);
-            }
-        }
-
         private bool OpenResourceBox(string account)
         {
             var accountInfo = this.accountTable[account];

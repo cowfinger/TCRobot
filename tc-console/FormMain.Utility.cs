@@ -130,7 +130,7 @@
                 lvItemTroop.SubItems.Add(team.PowerIndex.ToString());
                 lvItemTroop.SubItems.Add(Time2Str(team.Duration));
                 lvItemTroop.SubItems.Add(Time2Str(0));
-                lvItemTroop.SubItems.Add(team.GroupId);
+                lvItemTroop.SubItems.Add(team.GroupId.ToString());
                 lvItemTroop.SubItems.Add(CalcGroupType(team));
 
                 this.listViewTroops.Items.Add(lvItemTroop);
@@ -153,7 +153,7 @@
                 newli.SubItems.Add(team.PowerIndex.ToString());
                 newli.SubItems.Add(Time2Str(team.Duration));
                 newli.SubItems.Add(Time2Str(0));
-                newli.SubItems.Add(team.GroupId);
+                newli.SubItems.Add(team.GroupId.ToString());
                 newli.SubItems.Add(CalcGroupType(team));
                 newli.Tag = team;
                 this.listViewTroops.Items.Add(newli);
@@ -396,24 +396,27 @@
             }
         }
 
-        private List<string> BatchDonate(int i, List<string> accountList)
+        private List<string> BatchDonate(List<string> accountList)
         {
             var toRemoveAccounts = new List<string>();
             foreach (var account in accountList)
             {
-                var influenceSciencePage = this.OpenInfluenceSciencePage(account);
-                var influenceRes = ParseInfluenceResource(influenceSciencePage).ToList();
-                var resNeeds = influenceRes.Select(resPair => resPair.Value - resPair.Key).ToList();
+                var accountInfo = this.accountTable[account];
+                var influenceSciencePage = TCPage.Science.ShowScience.Open(accountInfo.WebAgent);
+                var resNeeds = influenceSciencePage.MaxFood + influenceSciencePage.MaxIron
+                               + influenceSciencePage.MaxWood + influenceSciencePage.MaxMud
+                               - influenceSciencePage.MaxFood - influenceSciencePage.MaxIron
+                               - influenceSciencePage.MaxWood - influenceSciencePage.MaxMud;
 
-                var resStr = string.Join(
-                    ",",
-                    influenceRes.Select(resPair => string.Format("{0}/{1}", resPair.Key, resPair.Value)).ToArray());
-                this.DebugLog("Donate: Resouce:{0}", resStr);
-                if (resNeeds[3] < 1000000)
+                this.DebugLog("Donate: Resouce:wood({0}/{1}),mud({2}/{3}),iron({4}/{5}),food({6}/{7})",
+                               influenceSciencePage.Wood, influenceSciencePage.MaxWood,
+                               influenceSciencePage.Mud, influenceSciencePage.MaxMud,
+                               influenceSciencePage.Iron, influenceSciencePage.MaxIron,
+                               influenceSciencePage.Food, influenceSciencePage.MaxFood);
+
+                if (resNeeds < 1000000)
                 {
-                    this.DebugLog("Donate: Remote Account {0} since Influence Resouce box is full", account);
-                    toRemoveAccounts.Add(account);
-                    continue;
+                    return accountList;
                 }
 
                 var accountRes = this.GetAccountResources(account).ToList();

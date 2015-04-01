@@ -98,6 +98,7 @@
     <Compile Include="TCPage\Politics\ShowDraft.cs" />
     <Compile Include="TCPage\Prop\DoUseProp.cs" />
     <Compile Include="TCPage\Prop\ShowAllowProp.cs" />
+    <Compile Include="TCPage\Science\ShowScience.cs" />
     <Compile Include="TCPage\TCPage.cs" />
     <Compile Include="TCPage\Union\DoApplyUnion.cs" />
     <Compile Include="TCPage\Union\DoOutUnion.cs" />
