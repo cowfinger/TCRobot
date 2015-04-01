@@ -23,7 +23,7 @@ namespace TC
     {
         public static Dictionary<string, string> KeyWordMap = new Dictionary<string, string>();
 
-        private string HTTPRequest(string url)
+        private static string HTTPRequest(string url)
         {
             try
             {
@@ -125,8 +125,7 @@ namespace TC
 
             if (lvItemTroop == null)
             {
-                lvItemTroop = new ListViewItem();
-                lvItemTroop.Tag = team;
+                lvItemTroop = new ListViewItem {Tag = team};
                 lvItemTroop.SubItems[0].Text = team.AccountName;
                 lvItemTroop.SubItems.Add(team.TroopId);
                 lvItemTroop.SubItems.Add(team.PowerIndex.ToString());
@@ -144,7 +143,7 @@ namespace TC
             }
         }
 
-        private void RefreshTroopInfoToUI(IEnumerable<TroopInfo> troopList)
+        private void RefreshTroopInfoToUi(IEnumerable<TroopInfo> troopList)
         {
             this.listViewTroops.Items.Clear();
             foreach (var team in troopList)
@@ -214,7 +213,7 @@ namespace TC
 
         private IEnumerable<TroopInfo> QueryCityTroops(string cityId)
         {
-            return this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId)).Select(
+            return this.accountTable.Values.Where(account => account.CityIdList.Contains(cityId)).Select(
                 account =>
                     {
                         var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.UserName);
@@ -226,7 +225,7 @@ namespace TC
 
         private IEnumerable<string> QueryTargetCityList(string cityId)
         {
-            var relatedAccountList = this.accountTable.Values.Where(account => account.CityIDList.Contains(cityId));
+            var relatedAccountList = this.accountTable.Values.Where(account => account.CityIdList.Contains(cityId));
             foreach (var account in relatedAccountList)
             {
                 var attackCityList = this.OpenAttackPage(cityId, account.UserName);
@@ -505,19 +504,21 @@ namespace TC
                 this.accountTable.Values,
                 account =>
                     {
-                        if (account.InfluenceCityList == null)
+                        if (account.InfluenceCityList != null)
                         {
-                            var accountCityList = QueryInfluenceCityList(account).ToList();
-                            account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
-
-                            if (!accountCityList.Any())
-                            {
-                                return;
-                            }
-
-                            account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
-                            account.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
+                            return;
                         }
+
+                        var accountCityList = TCDataType.InfluenceMap.QueryCityList(account).ToList();
+                        account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
+
+                        if (!accountCityList.Any())
+                        {
+                            return;
+                        }
+
+                        account.InfluenceMap = TCDataType.InfluenceMap.BuildMap(accountCityList, account);
+                        account.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
                     }).Then(
                         () =>
                             {

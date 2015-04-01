@@ -59,19 +59,6 @@
             return this.ParseOnlineTroopList(content, account);
         }
 
-        private string DonateResource(string account, long val1, long val2, long val3, long val4)
-        {
-            var resValue = string.Format("{0}|{1}|{2}|{3}|0|0", val1, val2, val3, val4);
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Do,
-                TCFunc.influence_donate,
-                new TCRequestArgument(TCElement.res, resValue));
-            return this.HTTPRequest(url, account);
-        }
-
         private void DismissTeam(string teamId, string account)
         {
             var url = RequestAgent.BuildUrl(
@@ -82,21 +69,6 @@
                 TCFunc.disband_team);
             var body = string.Format("team_id={0}&from_address=1&detail_flag=0", teamId);
             this.HTTPRequest(url, account, body);
-        }
-
-        private IEnumerable<string> GetAccountInflunceCityNameListWithArmy(string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_city_army);
-            var resp = this.HTTPRequest(url, account);
-
-            var pattern = new Regex(@"<td width=""12%"">(.*)</td>");
-            var matches = pattern.Matches(resp);
-            return from Match match in matches select match.Groups[1].Value;
         }
 
         private DateTime QueryRemoteSysTime(string accountName)

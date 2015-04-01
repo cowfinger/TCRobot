@@ -8,11 +8,11 @@ namespace TC
     {
         public string AccountType;
 
-        public List<string> CityIDList = new List<string>();
+        public List<string> CityIdList = new List<string>();
 
         public List<string> CityNameList = new List<string>();
 
-        public string FirstStepCityID;
+        public string FirstStepCityId;
 
         public Dictionary<string, CityInfo> InfluenceCityList = null;
 

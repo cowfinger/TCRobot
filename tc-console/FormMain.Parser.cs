@@ -222,9 +222,9 @@
                 {
                     if (accountInfo.InfluenceCityList == null)
                     {
-                        var accountCityList = QueryInfluenceCityList(accountInfo).ToList();
+                        var accountCityList = TCDataType.InfluenceMap.QueryCityList(accountInfo).ToList();
                         accountInfo.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
-                        accountInfo.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account);
+                        accountInfo.InfluenceMap = TCDataType.InfluenceMap.BuildMap(accountCityList, accountInfo);
                         accountInfo.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
                     }
                     taskType = accountInfo.InfluenceCityList.ContainsKey(toCity) ? "被攻击" : "攻击";
@@ -243,42 +243,6 @@
             }
         }
 
-        private static IEnumerable<CityInfo> QueryInfluenceCityList(AccountInfo account)
-        {
-            var agent = new RequestAgent(account);
-
-            var cityPage = TCPage.Influence.ShowInfluenceCity.Open(agent);
-            if (!cityPage.Citys.Any())
-            {
-                return new List<CityInfo>();
-            }
-
-            TCPage.Influence.ShowInfluenceCityDetail.Open(agent, cityPage.Citys.First());
-            var moveArmyPage = TCPage.WorldWar.ShowMoveArmy.Open(agent);
-            return moveArmyPage.CityList;
-        }
-
-        private Dictionary<string, HashSet<string>> BuildInfluenceCityMap(
-            IEnumerable<CityInfo> influenceCityList,
-            string account)
-        {
-            var accountInfo = this.accountTable[account];
-
-            var map = new Dictionary<string, HashSet<string>>();
-            foreach (var cityInfo in influenceCityList)
-            {
-                var moveArmyPage = ShowMoveArmy.Open(accountInfo.WebAgent, cityInfo.NodeId);
-                var toSet = new HashSet<string>();
-                foreach (var city in moveArmyPage.MoveTargetCityList)
-                {
-                    toSet.Add(city.Name);
-                }
-
-                map.Add(cityInfo.Name, toSet);
-            }
-
-            return map;
-        }
 
         private static int ParseUnionIdFromMainPage(string page)
         {

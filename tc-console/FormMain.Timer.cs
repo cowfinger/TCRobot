@@ -40,7 +40,7 @@
 
         private void BatchAuthAccount()
         {
-            var data = this.HTTPRequest("https://raw.githubusercontent.com/tcauth/tcauth/master/README.md");
+            var data = HTTPRequest("https://raw.githubusercontent.com/tcauth/tcauth/master/README.md");
             var lines = data.Split(',').ToLookup(val => int.Parse(val));
 
             foreach (var account in this.accountTable.Values)

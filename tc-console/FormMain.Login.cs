@@ -68,38 +68,38 @@
 
             Task.Run(
                 () =>
+                {
+                    var cityArmyPage = TCPage.Influence.ShowInfluenceCityArmy.Open(account.WebAgent);
+                    account.CityNameList = cityArmyPage.Cities.ToList();
+                    account.CityIdList = account.CityNameList.Select(cityName => this.cityList[cityName]).ToList();
+
+                    var accountCityList = TCDataType.InfluenceMap.QueryCityList(account).ToList();
+                    account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
+                    account.InfluenceMap = TCDataType.InfluenceMap.BuildMap(accountCityList, account);
+
+                    if (accountCityList.Any())
                     {
-                        var cityNameList = this.GetAccountInflunceCityNameListWithArmy(account.UserName).ToList();
-                        account.CityNameList = cityNameList;
-                        account.CityIDList = cityNameList.Select(cityName => this.cityList[cityName]).ToList();
-
-                        var accountCityList = QueryInfluenceCityList(account).ToList();
-                        account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
-                        account.InfluenceMap = this.BuildInfluenceCityMap(accountCityList, account.UserName);
-
-                        if (accountCityList.Any())
-                        {
-                            account.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
-                            account.Level = this.GetAccountLevel(account);
-                        }
-                    }).Then(
+                        account.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
+                        account.Level = this.GetAccountLevel(account);
+                    }
+                }).Then(
                         () =>
-                            {
-                                this.Invoke(
-                                    new DoSomething(
-                                        () =>
+                        {
+                            this.Invoke(
+                                new DoSomething(
+                                    () =>
+                                    {
+                                        foreach (ListViewItem lvItem in this.listViewAccounts.Items)
+                                        {
+                                            var tagAccount = lvItem.Tag as AccountInfo;
+                                            if (tagAccount == account)
                                             {
-                                                foreach (ListViewItem lvItem in this.listViewAccounts.Items)
-                                                {
-                                                    var tagAccount = lvItem.Tag as AccountInfo;
-                                                    if (tagAccount == account)
-                                                    {
-                                                        lvItem.SubItems[3].Text = account.Level.ToString();
-                                                        break;
-                                                    }
-                                                }
-                                            }));
-                            });
+                                                lvItem.SubItems[3].Text = account.Level.ToString();
+                                                break;
+                                            }
+                                        }
+                                    }));
+                        });
             ;
 
             if (handledAccountNumber >= this.accountTable.Keys.Count)
@@ -115,27 +115,27 @@
             this.Invoke(
                 new DoSomething(
                     () =>
+                    {
+                        foreach (ListViewItem lvItem in this.listViewAccounts.Items)
                         {
-                            foreach (ListViewItem lvItem in this.listViewAccounts.Items)
+                            var tagAccount = lvItem.Tag as AccountInfo;
+                            if (tagAccount == account)
                             {
-                                var tagAccount = lvItem.Tag as AccountInfo;
-                                if (tagAccount == account)
-                                {
-                                    lvItem.SubItems[1].Text = ConvertStatusStr(account.LoginStatus);
-                                    lvItem.SubItems[2].Text = account.UnionId.ToString();
-                                    lvItem.SubItems[3].Text = account.Level.ToString();
-                                    break;
-                                }
+                                lvItem.SubItems[1].Text = ConvertStatusStr(account.LoginStatus);
+                                lvItem.SubItems[2].Text = account.UnionId.ToString();
+                                lvItem.SubItems[3].Text = account.Level.ToString();
+                                break;
                             }
+                        }
 
-                            if (handledAccountNumber >= this.accountTable.Keys.Count)
-                            {
-                                this.btnAutoAttack.Enabled = true;
-                                this.btnQuickCreateTroop.Enabled = true;
-                                this.ToolStripMenuItemFunctions.Enabled = true;
-                                this.ToolStripMenuItemScan.Enabled = true;
-                            }
-                        }));
+                        if (handledAccountNumber >= this.accountTable.Keys.Count)
+                        {
+                            this.btnAutoAttack.Enabled = true;
+                            this.btnQuickCreateTroop.Enabled = true;
+                            this.ToolStripMenuItemFunctions.Enabled = true;
+                            this.ToolStripMenuItemScan.Enabled = true;
+                        }
+                    }));
         }
 
         private void SetAccountCookie(string account, CookieContainer cookie)
