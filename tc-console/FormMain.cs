@@ -628,7 +628,7 @@
 
                         for (var i = 0; i < 100 && accountList.Any(); ++i)
                         {
-                            var toRemoveAccounts = this.BatchDonate(i, accountList);
+                            var toRemoveAccounts = this.BatchDonate(accountList);
                             foreach (var account in toRemoveAccounts)
                             {
                                 accountList.Remove(account);

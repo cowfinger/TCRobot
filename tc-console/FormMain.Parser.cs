@@ -153,11 +153,10 @@
             }
         }
 
-        private bool OpenResourceBox(string account)
+        private bool OpenResourceBox(AccountInfo account)
         {
-            var accountInfo = this.accountTable[account];
             var resBoxes =
-                ShowMyDepot.EnumDepotItems(accountInfo.WebAgent)
+                ShowMyDepot.EnumDepotItems(account.WebAgent)
                     .Where(prop => prop.PropertyId == (int)DepotItem.PropId.ResourceBox)
                     .ToList();
             if (!resBoxes.Any())
@@ -165,7 +164,7 @@
                 return false;
             }
             var firstBox = resBoxes.First();
-            DoUseProp.Open(accountInfo.WebAgent, firstBox.PropertyId, firstBox.UserPropertyId, 1);
+            DoUseProp.Open(account.WebAgent, firstBox.PropertyId, firstBox.UserPropertyId, 1);
             return true;
         }
 

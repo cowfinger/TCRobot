@@ -59,17 +59,6 @@
             return this.ParseOnlineTroopList(content, account);
         }
 
-        private string OpenInfluenceSciencePage(string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.science,
-                TCOperation.Show,
-                TCFunc.science);
-            return this.HTTPRequest(url, account);
-        }
-
         private string DonateResource(string account, long val1, long val2, long val3, long val4)
         {
             var resValue = string.Format("{0}|{1}|{2}|{3}|0|0", val1, val2, val3, val4);
@@ -81,25 +70,6 @@
                 TCFunc.influence_donate,
                 new TCRequestArgument(TCElement.res, resValue));
             return this.HTTPRequest(url, account);
-        }
-
-        private IEnumerable<long> GetAccountResources(string account)
-        {
-            const string pattern = "value=this\\.innerHTML;\">(\\d+)</span>\\)";
-
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_donate);
-            var page = this.HTTPRequest(url, account);
-
-            var matches = Regex.Matches(page, pattern);
-            foreach (Match match in matches)
-            {
-                yield return long.Parse(match.Groups[1].Value);
-            }
         }
 
         private void DismissTeam(string teamId, string account)

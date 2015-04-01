@@ -25,6 +25,10 @@ namespace TC.TCPage.Science
 
         public long MaxFood { get; private set; }
 
+        public IList<long> ResourceTable { get; private set; }
+
+        public IList<long> MaxResourceTable { get; private set; }
+
         public static ShowScience Open(RequestAgent agent)
         {
             var url = agent.BuildUrl(
@@ -39,6 +43,9 @@ namespace TC.TCPage.Science
             : base(page)
         {
             var resList = ParseInfluenceResource(page).ToList();
+            this.ResourceTable = resList.Select(r => r.Key).ToList();
+            this.MaxResourceTable = resList.Select(r => r.Value).ToList();
+
             this.Wood = resList[0].Key;
             this.MaxWood = resList[0].Value;
             this.Mud = resList[1].Key;

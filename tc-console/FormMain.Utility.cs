@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -387,7 +389,7 @@
             return "";
         }
 
-        private static IEnumerable<long> CalculateDonations(List<long> resNeeds, List<long> resHave)
+        private static IEnumerable<long> CalculateDonations(IList<long> resNeeds, IList<long> resHave)
         {
             for (var i = 0; i < 4; ++i)
             {
@@ -403,10 +405,10 @@
             {
                 var accountInfo = this.accountTable[account];
                 var influenceSciencePage = TCPage.Science.ShowScience.Open(accountInfo.WebAgent);
-                var resNeeds = influenceSciencePage.MaxFood + influenceSciencePage.MaxIron
-                               + influenceSciencePage.MaxWood + influenceSciencePage.MaxMud
-                               - influenceSciencePage.MaxFood - influenceSciencePage.MaxIron
-                               - influenceSciencePage.MaxWood - influenceSciencePage.MaxMud;
+                var resNeedTable = influenceSciencePage.ResourceTable.Zip(
+                    influenceSciencePage.MaxResourceTable,
+                    (x, y) => y - x
+                    ).ToList();
 
                 this.DebugLog("Donate: Resouce:wood({0}/{1}),mud({2}/{3}),iron({4}/{5}),food({6}/{7})",
                                influenceSciencePage.Wood, influenceSciencePage.MaxWood,
@@ -414,38 +416,40 @@
                                influenceSciencePage.Iron, influenceSciencePage.MaxIron,
                                influenceSciencePage.Food, influenceSciencePage.MaxFood);
 
+                var resNeeds = influenceSciencePage.MaxFood + influenceSciencePage.MaxIron
+                               + influenceSciencePage.MaxWood + influenceSciencePage.MaxMud
+                               - influenceSciencePage.MaxFood - influenceSciencePage.MaxIron
+                               - influenceSciencePage.MaxWood - influenceSciencePage.MaxMud;
                 if (resNeeds < 1000000)
                 {
                     return accountList;
                 }
 
-                var accountRes = this.GetAccountResources(account).ToList();
-                while (accountRes[3] < 10000)
+                var donatePage = ShowInfluenceDonate.Open(accountInfo.WebAgent);
+                while (donatePage.Food < 10000)
                 {
-                    if (!this.OpenResourceBox(account))
+                    if (!this.OpenResourceBox(accountInfo))
                     {
                         this.DebugLog("Donate: Remote Account {0} since lack of resource box.", account);
                         toRemoveAccounts.Add(account);
                         break;
                     }
-                    accountRes = this.GetAccountResources(account).ToList();
-                    this.DebugLog("Donate: {0} Open Box: {1}", account, accountRes[3]);
+
+                    donatePage = ShowInfluenceDonate.Open(accountInfo.WebAgent);
+                    this.DebugLog("Donate: {0} Open Box: {1}", account, donatePage.Food);
                 }
 
-                var resToContribute = CalculateDonations(resNeeds, accountRes).ToList();
+                var resToContribute = CalculateDonations(resNeedTable , donatePage.ResourcsTable).ToList();
 
                 this.DebugLog("Donate: {0} gives {1}", account, resToContribute[3]);
-                var donateResult = this.DonateResource(
-                    account,
-                    resToContribute[0],
-                    resToContribute[1],
-                    resToContribute[2],
-                    resToContribute[3]);
-                if (!donateResult.Contains("成功"))
+                var doDonatePage = DoInfluenceDonate.Open(accountInfo.WebAgent, resToContribute);
+                if (doDonatePage.Success)
                 {
-                    this.DebugLog("Donate: Remote Account {0} since {1}", account, donateResult);
-                    toRemoveAccounts.Add(account);
+                    continue;
                 }
+
+                this.DebugLog("Donate: Remote Account {0} since {1}", account, doDonatePage.RawPage);
+                toRemoveAccounts.Add(account);
             }
             return toRemoveAccounts;
         }

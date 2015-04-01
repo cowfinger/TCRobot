@@ -1,4 +1,7 @@
-﻿namespace TC.TCPage.Influence
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace TC.TCPage.Influence
 {
     using System.Text.RegularExpressions;
 
@@ -8,38 +11,23 @@
 
         public long Wood { get; private set; }
 
-        public long MaxWood { get; private set; }
-
         public long Mud { get; private set; }
-
-        public long MaxMud { get; private set; }
 
         public long Iron { get; private set; }
 
-        public long MaxIron { get; private set; }
-
         public long Food { get; private set; }
 
-        public long MaxFood { get; private set; }
-
+        public IList<long> ResourcsTable { get; private set; }
 
         public ShowInfluenceDonate(string page)
             : base(page)
         {
-            var matches = Regex.Matches(page, pattern);
-
-            foreach (Match match in matches)
-            {
-                yield return long.Parse(match.Groups[1].Value);
-            }
-            this.Wood = resList[0].Key;
-            this.MaxWood = resList[0].Value;
-            this.Mud = resList[1].Key;
-            this.MaxMud = resList[1].Value;
-            this.Iron = resList[2].Key;
-            this.MaxIron = resList[2].Value;
-            this.Food = resList[3].Key;
-            this.MaxFood = resList[3].Value;
+            var matches = Regex.Matches(page, ResourcePattern);
+            this.ResourcsTable = (from Match match in matches select long.Parse(match.Groups[1].Value)).ToList();
+            this.Wood = this.ResourcsTable[0];
+            this.Mud = this.ResourcsTable[1];
+            this.Iron = this.ResourcsTable[2];
+            this.Food = this.ResourcsTable[3];
         }
 
         public static ShowInfluenceDonate Open(RequestAgent agent)
