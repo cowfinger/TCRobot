@@ -19,12 +19,13 @@ namespace TC.TCPage
 
         public const string RequestString = "mod=get_data&op=do";
 
-        public int BuildEndTime
+        public DateTime BuildEndTime
         {
             get
             {
                 var match = Regex.Match(this.RawPage, BuildTaskEndTimePattern);
-                return match.Success ? int.Parse(match.Groups[1].Value) : 0;
+                var elapse = match.Success ? int.Parse(match.Groups[1].Value) : 0;
+                return DateTime.FromFileTimeUtc(elapse);
             }
         }
 

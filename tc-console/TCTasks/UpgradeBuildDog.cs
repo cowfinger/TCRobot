@@ -8,9 +8,28 @@ namespace TC.TCTasks
 {
     class UpgradeBuildDog : TCTask
     {
+
         public const int DefaultInterval = 5 * 1000;
 
-        public string TargetBuildName { get; set; }
+        private string taskHint = "";
+
+        private enum DogAction
+        {
+            CollectResource,
+            UpgradeBuild,
+            UpgradeCity,
+            Completed
+        }
+
+        private int buildId = 0;
+
+        private int heroId = 0;
+
+        private int pid = 0;
+
+        private List<int> requiredResource = null;
+
+        public int TargetBuildId { get; set; }
 
         public int TargetBuildLevel { get; set; }
 
@@ -21,13 +40,13 @@ namespace TC.TCTasks
 
         public override string TaskId
         {
-            get { throw new NotImplementedException(); }
+            get { return "Upgrade Build Dog"; }
             set { throw new NotImplementedException(); }
         }
 
         public override string GetTaskHint()
         {
-            throw new NotImplementedException();
+            return this.taskHint;
         }
 
         public override void TaskWorker()
@@ -38,23 +57,37 @@ namespace TC.TCTasks
                 return;
             }
 
-            var toBuild = this.PickValidBuild();
-            if (toBuild == null)
+            var dogTask = this.PickValidBuild();
+            switch (dogTask)
             {
-                return;
+                case DogAction.CollectResource:
+                    this.DoCollectBuildResource(this.requiredResource);
+                    break;
+                case DogAction.UpgradeBuild:
+                    this.DoUpgradeBuild(this.buildId, this.heroId);
+                    break;
+                case DogAction.UpgradeCity:
+                    this.DoUpgradeCity(this.heroId);
+                    break;
+                case DogAction.Completed:
+                    this.IsCompleted = true;
+                    break;
+            }
+        }
+
+        private DogAction PickValidBuild()
+        {
+            var buildPage = ShowInnerBuildList.Open(this.Account.WebAgent);
+            var buildList = buildPage.BuildList.ToList();
+
+            if (buildList.Any(b => b.BuildId == this.TargetBuildId && b.BuildLevel == this.TargetBuildLevel))
+            {
+                return DogAction.Completed;
             }
 
-            this.DoBuildTask(toBuild);
-        }
 
-        private ShowInnerBuildList.Build PickValidBuild()
-        {
-            throw new NotImplementedException();
-        }
 
-        private void DoBuildTask(ShowInnerBuildList.Build build)
-        {
-            throw new NotImplementedException();
+            return DogAction.UpgradeBuild;
         }
 
         private int PickOnlineBuildTaskTime()
@@ -62,7 +95,17 @@ namespace TC.TCTasks
             throw new NotImplementedException();
         }
 
-        private bool CollectBuildResource(ShowInnerBuildList.Build build)
+        private bool DoCollectBuildResource(IList<int> requireRes)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool DoUpgradeBuild(int buildId, int heroId)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool DoUpgradeCity(int heroId)
         {
             throw new NotImplementedException();
         }
