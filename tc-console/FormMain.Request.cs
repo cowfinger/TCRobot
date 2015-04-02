@@ -59,18 +59,6 @@
             return this.ParseOnlineTroopList(content, account);
         }
 
-        private void DismissTeam(string teamId, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Do,
-                TCFunc.disband_team);
-            var body = string.Format("team_id={0}&from_address=1&detail_flag=0", teamId);
-            this.HTTPRequest(url, account, body);
-        }
-
         private DateTime QueryRemoteSysTime(string accountName)
         {
             var url = RequestAgent.GetTimeUrl(this.hostname);
@@ -83,33 +71,6 @@
                        : DateTime.MinValue;
         }
 
-        private string CreateGroupHead(string cityId, string teamId, string account)
-        {
-            this.OpenCityShowAttackPage(cityId, account);
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Do,
-                TCFunc.create_group);
-
-            var name = this.randGen.Next(100000, 999999).ToString();
-            var body = string.Format("team_id={0}&group_name={1}", teamId, name);
-            this.HTTPRequest(url, account, body);
-            return name;
-        }
-
-        private void JoinGroup(int groupTroopId, string subTroopId, string account)
-        {
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.military,
-                TCSubMod.world_war,
-                TCOperation.Do,
-                TCFunc.join_group);
-            var body = string.Format("team_id={0}&group_id={1}&from_address=1", subTroopId, groupTroopId);
-            this.HTTPRequest(url, account, body);
-        }
 
         private IEnumerable<TroopInfo> GetActiveTroopInfo(string cityId, string tabId, string account)
         {
@@ -152,7 +113,7 @@
                 yield return
                     new TroopInfo
                         {
-                            TroopId = match.Groups[1].Value,
+                            TroopId = int.Parse(match.Groups[1].Value),
                             AccountName = account,
                             PowerIndex = int.Parse(attackPowerList[i]),
                             isGroupTroop = false,
@@ -325,7 +286,7 @@
             return this.HTTPRequest(url, account);
         }
 
-        private string OpenTeamAttackPage(string teamid, string cityid, string account)
+        private string OpenTeamAttackPage(int teamid, string cityid, string account)
         {
             var url = RequestAgent.BuildUrl(
                 this.hostname,

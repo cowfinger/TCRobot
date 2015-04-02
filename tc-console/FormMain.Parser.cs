@@ -115,7 +115,7 @@
                     new TroopInfo
                         {
                             GroupId = int.Parse(match.Groups[1].Value),
-                            TroopId = teamId,
+                            TroopId = int.Parse(teamId),
                             isGroupTroop = true,
                             IsGroupHead = isHead,
                             isDefendTroop = false,

@@ -22,6 +22,6 @@
 
         public string ToCityNodeId;
 
-        public string TroopId = "";
+        public int TroopId = 0;
     }
 }

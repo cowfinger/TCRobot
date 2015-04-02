@@ -127,7 +127,7 @@ namespace TC
             {
                 lvItemTroop = new ListViewItem {Tag = team};
                 lvItemTroop.SubItems[0].Text = team.AccountName;
-                lvItemTroop.SubItems.Add(team.TroopId);
+                lvItemTroop.SubItems.Add(team.TroopId.ToString());
                 lvItemTroop.SubItems.Add(team.PowerIndex.ToString());
                 lvItemTroop.SubItems.Add(Time2Str(team.Duration));
                 lvItemTroop.SubItems.Add(Time2Str(0));
@@ -150,7 +150,7 @@ namespace TC
             {
                 var newli = new ListViewItem();
                 newli.SubItems[0].Text = team.AccountName;
-                newli.SubItems.Add(team.TroopId);
+                newli.SubItems.Add(team.TroopId.ToString());
                 newli.SubItems.Add(team.PowerIndex.ToString());
                 newli.SubItems.Add(Time2Str(team.Duration));
                 newli.SubItems.Add(Time2Str(0));

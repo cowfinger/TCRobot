@@ -105,9 +105,14 @@
     <Compile Include="TCPage\TCPage.cs" />
     <Compile Include="TCPage\Union\DoApplyUnion.cs" />
     <Compile Include="TCPage\Union\DoOutUnion.cs" />
+    <Compile Include="TCPage\Union\ShowUnionMember.cs" />
     <Compile Include="TCPage\WorldWar\DoAttack.cs" />
+    <Compile Include="TCPage\WorldWar\DoCreateGroup.cs" />
     <Compile Include="TCPage\WorldWar\DoDisbandGroup.cs" />
+    <Compile Include="TCPage\WorldWar\DoDisbandTeam.cs" />
     <Compile Include="TCPage\WorldWar\DoJoinAttack.cs" />
+    <Compile Include="TCPage\WorldWar\DoJoinGroup.cs" />
+    <Compile Include="TCPage\WorldWar\ShowJoinAttack.cs" />
     <Compile Include="TCPage\WorldWar\ShowMoveArmy.cs" />
     <Compile Include="TCPage\WorldWar\ShowMoveArmyQueue.cs" />
     <Compile Include="TCPage\WorldWar\ShowReserveArmyInfo.cs" />

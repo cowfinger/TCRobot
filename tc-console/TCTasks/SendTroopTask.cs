@@ -50,7 +50,7 @@ namespace TC.TCTasks
             {
                 return this.TaskData.isGroupTroop ?
                     this.TaskData.GroupId.ToString() :
-                    this.TaskData.TroopId;
+                    this.TaskData.TroopId.ToString();
             }
             set
             {
@@ -96,7 +96,7 @@ namespace TC.TCTasks
 
                     Logger.Verbose(
                         "Troop(Id={0},isGroup={1}) OpenCityPage(Elapse={2}ms), AttackTime={3}={4}-{5}.",
-                        this.TaskData.isGroupTroop ? this.TaskData.GroupId.ToString() : this.TaskData.TroopId,
+                        this.TaskData.isGroupTroop ? this.TaskData.GroupId.ToString() : this.TaskData.TroopId.ToString(),
                         this.TaskData.isGroupTroop,
                         cost.TotalMilliseconds,
                         attackTime,
@@ -119,14 +119,13 @@ namespace TC.TCTasks
                         result =
                             DoAttack.Open(
                                 this.WebAgent,
-                                int.Parse(this.TaskData.TroopId),
+                                this.TaskData.TroopId,
                                 int.Parse(this.TaskData.ToCityNodeId)).RawPage;
                     }
 
                     Logger.Verbose(
                         "Troop(Id={0}, isGroup={1}) Sent, result={2}.",
-                        this.TaskData.isGroupTroop ?
-                        this.TaskData.GroupId.ToString() : this.TaskData.TroopId,
+                        this.TaskData.isGroupTroop ? this.TaskData.GroupId : this.TaskData.TroopId,
                         this.TaskData.isGroupTroop,
                         result);
                     this.IsCompleted = true;

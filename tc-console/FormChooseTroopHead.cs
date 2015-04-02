@@ -16,7 +16,7 @@
                 var lvItem = new ListViewItem();
                 lvItem.SubItems.Add(team.AccountName);
                 lvItem.SubItems.Add(team.PowerIndex.ToString());
-                lvItem.SubItems.Add(team.TroopId);
+                lvItem.SubItems.Add(team.TroopId.ToString());
                 lvItem.Tag = team;
                 this.listViewTroop.Items.Add(lvItem);
             }

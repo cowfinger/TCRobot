@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TC.TCPage.Build;
 
 namespace TC.TCTasks
 {
     class UpgradeBuildDog : TCTask
     {
-        public const int DefaultInterval = 5*1000;
+        public const int DefaultInterval = 5 * 1000;
 
-        private enum TaskStatus
-        {
-            Initialized,
-            WaitBuild
-        }
+        public string TargetBuildName { get; set; }
 
-        private TaskStatus Status { get; set; }
+        public int TargetBuildLevel { get; set; }
 
         public UpgradeBuildDog(AccountInfo account)
             : base(account, DefaultInterval)
         {
-            this.Status = TaskStatus.Initialized;
         }
 
         public override string TaskId
@@ -36,14 +32,39 @@ namespace TC.TCTasks
 
         public override void TaskWorker()
         {
-            switch (this.Status)
+            var duration = this.PickOnlineBuildTaskTime();
+            if (duration > 0)
             {
-                case TaskStatus.Initialized:
-
-                    break;
-                case TaskStatus.WaitBuild:
-                    break;
+                return;
             }
+
+            var toBuild = this.PickValidBuild();
+            if (toBuild == null)
+            {
+                return;
+            }
+
+            this.DoBuildTask(toBuild);
+        }
+
+        private ShowInnerBuildList.Build PickValidBuild()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DoBuildTask(ShowInnerBuildList.Build build)
+        {
+            throw new NotImplementedException();
+        }
+
+        private int PickOnlineBuildTaskTime()
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CollectBuildResource(ShowInnerBuildList.Build build)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -49,7 +49,6 @@
             this.columnHeaderLoginStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader18 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader25 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.webBrowserMain = new System.Windows.Forms.WebBrowser();
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxSysTime = new System.Windows.Forms.TextBox();
             this.dateTimePickerArrival = new System.Windows.Forms.DateTimePicker();
@@ -151,6 +150,7 @@
             this.ToolStripMenuItemLoadAccountFile = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemBatchLogin = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemScan = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemFunctions = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemDonation = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemReliveHero = new System.Windows.Forms.ToolStripMenuItem();
@@ -161,7 +161,6 @@
             this.repairCityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enlistTroopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -373,15 +372,6 @@
             // 
             this.columnHeader25.Text = "等级";
             // 
-            // webBrowserMain
-            // 
-            this.webBrowserMain.Location = new System.Drawing.Point(0, 42);
-            this.webBrowserMain.Margin = new System.Windows.Forms.Padding(4);
-            this.webBrowserMain.MinimumSize = new System.Drawing.Size(30, 27);
-            this.webBrowserMain.Name = "webBrowserMain";
-            this.webBrowserMain.Size = new System.Drawing.Size(114, 81);
-            this.webBrowserMain.TabIndex = 0;
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -454,7 +444,7 @@
             this.listViewTasks.Location = new System.Drawing.Point(-2, 78);
             this.listViewTasks.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(1191, 460);
+            this.listViewTasks.Size = new System.Drawing.Size(1191, 456);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
@@ -973,7 +963,7 @@
             this.tabPageMoveArmy.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageMoveArmy.Name = "tabPageMoveArmy";
             this.tabPageMoveArmy.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageMoveArmy.Size = new System.Drawing.Size(1183, 509);
+            this.tabPageMoveArmy.Size = new System.Drawing.Size(1181, 508);
             this.tabPageMoveArmy.TabIndex = 1;
             this.tabPageMoveArmy.Text = "移动部队";
             this.tabPageMoveArmy.UseVisualStyleBackColor = true;
@@ -1091,7 +1081,7 @@
             this.listViewAccountArmy.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountArmy.MultiSelect = false;
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 382);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 383);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -1125,7 +1115,7 @@
             this.listViewMoveHero.Location = new System.Drawing.Point(12, 105);
             this.listViewMoveHero.Margin = new System.Windows.Forms.Padding(4);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(262, 382);
+            this.listViewMoveHero.Size = new System.Drawing.Size(262, 383);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1362,7 +1352,7 @@
             this.listViewAccountActiveTask.Location = new System.Drawing.Point(466, 28);
             this.listViewAccountActiveTask.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountActiveTask.Name = "listViewAccountActiveTask";
-            this.listViewAccountActiveTask.Size = new System.Drawing.Size(801, 504);
+            this.listViewAccountActiveTask.Size = new System.Drawing.Size(805, 506);
             this.listViewAccountActiveTask.TabIndex = 2;
             this.listViewAccountActiveTask.UseCompatibleStateImageBehavior = false;
             this.listViewAccountActiveTask.View = System.Windows.Forms.View.Details;
@@ -1409,7 +1399,7 @@
             this.listViewTaskIdleAccount.Location = new System.Drawing.Point(0, 28);
             this.listViewTaskIdleAccount.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTaskIdleAccount.Name = "listViewTaskIdleAccount";
-            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 504);
+            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 506);
             this.listViewTaskIdleAccount.TabIndex = 0;
             this.listViewTaskIdleAccount.UseCompatibleStateImageBehavior = false;
             this.listViewTaskIdleAccount.View = System.Windows.Forms.View.Details;
@@ -1458,7 +1448,7 @@
             // ToolStripMenuItemLoadAccountFile
             // 
             this.ToolStripMenuItemLoadAccountFile.Name = "ToolStripMenuItemLoadAccountFile";
-            this.ToolStripMenuItemLoadAccountFile.Size = new System.Drawing.Size(198, 30);
+            this.ToolStripMenuItemLoadAccountFile.Size = new System.Drawing.Size(165, 30);
             this.ToolStripMenuItemLoadAccountFile.Text = "载入账号";
             this.ToolStripMenuItemLoadAccountFile.Click += new System.EventHandler(this.ToolStripMenuItemLoadAccountFile_Click);
             // 
@@ -1466,7 +1456,7 @@
             // 
             this.ToolStripMenuItemBatchLogin.Enabled = false;
             this.ToolStripMenuItemBatchLogin.Name = "ToolStripMenuItemBatchLogin";
-            this.ToolStripMenuItemBatchLogin.Size = new System.Drawing.Size(198, 30);
+            this.ToolStripMenuItemBatchLogin.Size = new System.Drawing.Size(165, 30);
             this.ToolStripMenuItemBatchLogin.Text = "登陆所有";
             this.ToolStripMenuItemBatchLogin.Click += new System.EventHandler(this.ToolStripMenuItemBatchLogin_Click);
             // 
@@ -1474,9 +1464,16 @@
             // 
             this.ToolStripMenuItemScan.Enabled = false;
             this.ToolStripMenuItemScan.Name = "ToolStripMenuItemScan";
-            this.ToolStripMenuItemScan.Size = new System.Drawing.Size(198, 30);
+            this.ToolStripMenuItemScan.Size = new System.Drawing.Size(165, 30);
             this.ToolStripMenuItemScan.Text = "扫描";
             this.ToolStripMenuItemScan.Click += new System.EventHandler(this.ToolStripMenuItemScan_Click);
+            // 
+            // exportLogToolStripMenuItem
+            // 
+            this.exportLogToolStripMenuItem.Name = "exportLogToolStripMenuItem";
+            this.exportLogToolStripMenuItem.Size = new System.Drawing.Size(165, 30);
+            this.exportLogToolStripMenuItem.Text = "ExportLog";
+            this.exportLogToolStripMenuItem.Click += new System.EventHandler(this.exportLogToolStripMenuItem_Click);
             // 
             // ToolStripMenuItemFunctions
             // 
@@ -1532,7 +1529,6 @@
             // 
             // joinUnionToolStripMenuItem
             // 
-            this.joinUnionToolStripMenuItem.Enabled = false;
             this.joinUnionToolStripMenuItem.Name = "joinUnionToolStripMenuItem";
             this.joinUnionToolStripMenuItem.Size = new System.Drawing.Size(198, 30);
             this.joinUnionToolStripMenuItem.Text = "加入联盟";
@@ -1560,13 +1556,6 @@
             this.flushToolStripMenuItem.Text = "FlushServer";
             this.flushToolStripMenuItem.Click += new System.EventHandler(this.flushToolStripMenuItem_Click);
             // 
-            // exportLogToolStripMenuItem
-            // 
-            this.exportLogToolStripMenuItem.Name = "exportLogToolStripMenuItem";
-            this.exportLogToolStripMenuItem.Size = new System.Drawing.Size(198, 30);
-            this.exportLogToolStripMenuItem.Text = "ExportLog";
-            this.exportLogToolStripMenuItem.Click += new System.EventHandler(this.exportLogToolStripMenuItem_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -1574,7 +1563,6 @@
             this.ClientSize = new System.Drawing.Size(1896, 1142);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStripMain);
-            this.Controls.Add(this.webBrowserMain);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
             this.Text = "TC Console (2.0)";
@@ -1628,8 +1616,7 @@
 		private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.ListView listViewAccounts;
-        private System.Windows.Forms.WebBrowser webBrowserMain;
+        private System.Windows.Forms.ListView listViewAccounts;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.TextBox textBoxSysTime;
         private System.Windows.Forms.DateTimePicker dateTimePickerArrival;

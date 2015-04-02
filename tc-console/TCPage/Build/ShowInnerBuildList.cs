@@ -1,4 +1,6 @@
-﻿namespace TC.TCPage.Build
+﻿using System.Security.Policy;
+
+namespace TC.TCPage.Build
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -26,13 +28,17 @@
 
         public const string DisabledBuildIdPattern = @"<li class=""build_(?<buildId>\d+) disabled"">";
 
-        public const string BuildPrePattern =
+        public const string DisabledBuildEndPattern = @"<div class=""name"">[[jslang('build_\d+')]] 等级0</div>";
+
+        public const string BuildPreCityPattern =
             @"<h4>[[jslang('up_pre')]]</h4>" + @"<ul>"
-            + @"<li class=""red"">\[\[jslang\('city_lv'\)\]\] Lv\.(?<cityLevel>\d+)<li>"
-            + @"<li>\[\[jslang\('build_(?<preBuildId>\d+)'\)\]\] "
+            + @"<li class=""red"">\[\[jslang\('city_lv'\)\]\] Lv\.(?<cityLevel>\d+)<li>";
+
+        public const string BuildPreBuildPattern =
+            @"<li>\[\[jslang\('build_(?<preBuildId>\d+)'\)\]\] "
             + @"\[\[jslang\('level',(?<prdBuildLevel>\d+)\)\]\]</li>" + @"</ul>";
 
-        public const string DisabledBuildPattern = DisabledBuildIdPattern + ".*?" + BuildPrePattern;
+        public const string DisabledBuildPattern = DisabledBuildIdPattern + "(?<content>.*?)" + DisabledBuildEndPattern;
 
         public const string CityLevelPattern = @"mod:city/city|func:update_level|op:do|now_level:(?<cityLevel>\d+)";
 
@@ -80,15 +86,29 @@
             get
             {
                 var matches = Regex.Matches(this.RawPage, DisabledBuildIdPattern, RegexOptions.Singleline);
-                return from Match match in matches
-                       select
-                           new DisabledBuild
-                               {
-                                   BuildId = int.Parse(match.Groups["buildId"].Value),
-                                   CityLevel = int.Parse(match.Groups["cityLevel"].Value),
-                                   PreBuildId = int.Parse(match.Groups["preBuildId"].Value),
-                                   PreBuildLevel = int.Parse(match.Groups["preBuildLevel"].Value)
-                               };
+                var buildList = from Match match in matches
+                                select new
+                                {
+                                    buildId = int.Parse(match.Groups["buildId"].Value),
+                                    content = match.Groups["content"].Value
+                                };
+
+                return buildList.Select(item =>
+                {
+                    var cityPreMatch = Regex.Match(item.content, BuildPreCityPattern, RegexOptions.Singleline);
+                    var buildPreMatches = Regex.Matches(item.content, BuildPreBuildPattern, RegexOptions.Singleline);
+                    return new DisabledBuild
+                        {
+                            BuildId = item.buildId,
+                            CityLevel = int.Parse(cityPreMatch.Groups["cityLevel"].Value),
+                            PreBuilds = from Match match in buildPreMatches
+                                        select new PreBuild
+                                        {
+                                            PreBuildId = int.Parse(match.Groups["preBuildId"].Value),
+                                            PreBuildLevel = int.Parse(match.Groups["preBuildLevel"].Value)
+                                        }
+                        };
+                });
             }
         }
 
@@ -127,15 +147,21 @@
             public int UpgradeRequiredMud { get; set; }
         }
 
+        public class PreBuild
+        {
+            public int PreBuildId { get; set; }
+
+            public int PreBuildLevel { get; set; }
+
+        }
+
         public class DisabledBuild
         {
             public int BuildId { get; set; }
 
             public int CityLevel { get; set; }
 
-            public int PreBuildId { get; set; }
-
-            public int PreBuildLevel { get; set; }
+            public IEnumerable<PreBuild> PreBuilds { get; set; }
         }
     }
 }

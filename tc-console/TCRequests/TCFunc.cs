@@ -80,6 +80,9 @@ namespace TC
 
         team_detail,
 
+        union_member,
+
         use_prop
+
     }
 }

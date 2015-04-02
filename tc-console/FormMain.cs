@@ -317,7 +317,7 @@
                         }
                         else
                         {
-                            this.DismissTeam(troop.TroopId, troop.AccountName);
+                            DoDisbandTeam.Open(account.WebAgent, troop.TroopId);
                         }
 
                         this.Invoke(
@@ -485,6 +485,7 @@
             candidateTroops.Remove(headTroop);
 
             var cityId = this.cityList[this.listBoxSrcCities.SelectedItem.ToString()];
+            var cityIdValue = int.Parse(cityId);
 
             this.btnGroupTroop.Enabled = false;
             Task.Run(
@@ -499,11 +500,17 @@
                         return;
                     }
 
+                    var headAccount = this.accountTable[headTroop.AccountName];
+
                     if (!headTroop.isGroupTroop)
                     {
-                        var groupName = this.CreateGroupHead(cityId, headTroop.TroopId, headTroop.AccountName);
+                        var groupName = this.randGen.Next(1000000, 9999999).ToString();
+                        TCPage.Influence.ShowInfluenceCityDetail.Open(
+                            headAccount.WebAgent, cityIdValue);
+                        TCPage.WorldWar.DoCreateGroup.Open(
+                            headAccount.WebAgent, headTroop.TroopId, groupName);
                         var groupTroops = this.GetGroupTeamList(cityId, headTroop.AccountName);
-                        headTroop = groupTroops.Where(troop => troop.Name == groupName).FirstOrDefault();
+                        headTroop = groupTroops.FirstOrDefault(troop => troop.Name == groupName);
                         if (headTroop == null || headTroop.Name != groupName)
                         {
                             return;
@@ -512,7 +519,8 @@
 
                     foreach (var troop in troopGroup)
                     {
-                        this.JoinGroup(headTroop.GroupId, troop.TroopId, troop.AccountName);
+                        var account = this.accountTable[troop.AccountName];
+                        DoJoinGroup.Open(account.WebAgent, troop.TroopId, troop.GroupId);
                     }
 
                     var troopList = this.QueryCityTroops(cityId).ToList();
