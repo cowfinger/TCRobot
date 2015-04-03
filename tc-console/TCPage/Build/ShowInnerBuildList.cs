@@ -145,6 +145,20 @@ namespace TC.TCPage.Build
             public int UpgradeRequiredIron { get; set; }
 
             public int UpgradeRequiredMud { get; set; }
+
+            public IList<int> RequiredResourceTable
+            {
+                get
+                {
+                    return new List<int>()
+                    {
+                        this.UpgradeRequiredWood,
+                        this.UpgradeRequiredMud,
+                        this.UpgradeRequiredIron,
+                        this.UpgradeRequiredFood
+                    };
+                }
+            }
         }
 
         public class PreBuild

@@ -444,7 +444,7 @@
             this.listViewTasks.Location = new System.Drawing.Point(-2, 78);
             this.listViewTasks.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(1191, 456);
+            this.listViewTasks.Size = new System.Drawing.Size(1191, 454);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
@@ -1081,7 +1081,7 @@
             this.listViewAccountArmy.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountArmy.MultiSelect = false;
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 383);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(450, 384);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -1115,7 +1115,7 @@
             this.listViewMoveHero.Location = new System.Drawing.Point(12, 105);
             this.listViewMoveHero.Margin = new System.Windows.Forms.Padding(4);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(262, 383);
+            this.listViewMoveHero.Size = new System.Drawing.Size(262, 384);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1226,7 +1226,7 @@
             this.tabPageAccountTask.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageAccountTask.Name = "tabPageAccountTask";
             this.tabPageAccountTask.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageAccountTask.Size = new System.Drawing.Size(1181, 508);
+            this.tabPageAccountTask.Size = new System.Drawing.Size(1183, 509);
             this.tabPageAccountTask.TabIndex = 2;
             this.tabPageAccountTask.Text = "账号任务";
             this.tabPageAccountTask.UseVisualStyleBackColor = true;
@@ -1316,7 +1316,8 @@
             "运砖",
             "调兵",
             "拒绝联盟",
-            "间谍"});
+            "间谍",
+            "小号练级"});
             this.comboBoxAccountTaskType.Location = new System.Drawing.Point(312, 51);
             this.comboBoxAccountTaskType.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAccountTaskType.Name = "comboBoxAccountTaskType";
@@ -1352,7 +1353,7 @@
             this.listViewAccountActiveTask.Location = new System.Drawing.Point(466, 28);
             this.listViewAccountActiveTask.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountActiveTask.Name = "listViewAccountActiveTask";
-            this.listViewAccountActiveTask.Size = new System.Drawing.Size(805, 506);
+            this.listViewAccountActiveTask.Size = new System.Drawing.Size(809, 508);
             this.listViewAccountActiveTask.TabIndex = 2;
             this.listViewAccountActiveTask.UseCompatibleStateImageBehavior = false;
             this.listViewAccountActiveTask.View = System.Windows.Forms.View.Details;
@@ -1399,7 +1400,7 @@
             this.listViewTaskIdleAccount.Location = new System.Drawing.Point(0, 28);
             this.listViewTaskIdleAccount.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTaskIdleAccount.Name = "listViewTaskIdleAccount";
-            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 506);
+            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(300, 508);
             this.listViewTaskIdleAccount.TabIndex = 0;
             this.listViewTaskIdleAccount.UseCompatibleStateImageBehavior = false;
             this.listViewTaskIdleAccount.View = System.Windows.Forms.View.Details;

@@ -82,7 +82,11 @@ namespace TC
 
         union_member,
 
-        use_prop
+        update_city,
+
+        use_prop,
+
+        user_survey
 
     }
 }

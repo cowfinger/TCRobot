@@ -22,6 +22,8 @@ namespace TC
 
         union,
 
+        user_info,
+
         world,
 
         world_war

@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using System.Net;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -117,13 +119,17 @@
             var url = redirectUrlMatch.Groups[1].Value;
             var mainPage = this.WebClient.OpenUrl(url);
 
-            return this.IsMainPageLoaded(mainPage);
-        }
+            const string MainCityPattern = @"game\.city_id = (\d+);";
+            var match = Regex.Match(mainPage, MainCityPattern);
+            if (match.Success)
+            {
+                this.Account.Tid = int.Parse(match.Groups[1].Value);
+                // var uri = new Uri(string.Format("http://{0}/", this.Account.AccountType));
+                this.WebClient.Cookies.Add(
+                    new Cookie("tmp_mid", this.Account.Tid.ToString(), "/", this.Account.AccountType));
+            }
 
-        public bool IsMainPageLoaded(string page)
-        {
-            const string Pattern = @"game\.city_id = \d+;";
-            return Regex.Match(page, Pattern).Success;
+            return match.Success;
         }
     }
 }

@@ -853,6 +853,15 @@ namespace TC
             return activeTaskList;
         }
 
+        private void CreateBuildDogTask(AccountInfo account)
+        {
+            var task = new UpgradeBuildDog(account)
+            {
+                TargetBuildId = 20,
+                TargetBuildLevel = 1,
+            };
+        }
+
         private void CreateSpyTask(AccountInfo account)
         {
             var task = new SpyTask(

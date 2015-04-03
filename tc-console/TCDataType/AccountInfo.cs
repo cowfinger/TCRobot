@@ -32,19 +32,6 @@ namespace TC
 
         public RequestAgent WebAgent { get; set; }
 
-        public int Tid
-        {
-            get
-            {
-                if (this.WebAgent == null)
-                {
-                    return 0;
-                }
-
-                var url = new Uri(string.Format("http://{0}/", this.AccountType));
-                var cookie = this.WebAgent.WebClient.Cookies.GetCookies(url)["tmp_mid"];
-                return int.Parse(cookie != null ? cookie.Value : "0");
-            }
-        }
+        public int Tid { get; set; }
     }
 }

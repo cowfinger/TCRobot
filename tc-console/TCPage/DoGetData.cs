@@ -11,7 +11,7 @@ namespace TC.TCPage
     {
         public const string ResPattern = 
             @"""hoard"":" +
-            @"""(?\d+):\d+\|(?\d+):\d\|(?\d+):\d+\|(?\d+):\d+\|\d+""";
+            @"""(\d+):\d+\|(\d+):\d\|(\d+):\d+\|(\d+):(\d+)\|\d+""";
 
         public const string MaxResPattern = @"""max_hoard"":""(\d+)\|(\d+)\|(\d+)\|(\d+)""";
 

@@ -18,6 +18,8 @@ namespace TC
 
         union,
 
+        user_relation,
+
         world
     }
 }

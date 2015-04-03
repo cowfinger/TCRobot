@@ -999,6 +999,9 @@
                 case "间谍":
                     this.buttonAssignTask.Enabled = true;
                     break;
+                case "小号练级":
+                    this.buttonAssignTask.Enabled = true;
+                    break;
             }
         }
 
@@ -1038,6 +1041,9 @@
                         break;
                     case "间谍":
                         this.CreateSpyTask(account);
+                        break;
+                    case "小号练级":
+                        this.CreateBuildDogTask(account);
                         break;
                 }
             }

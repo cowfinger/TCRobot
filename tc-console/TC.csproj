@@ -81,6 +81,7 @@
     <Compile Include="TCPage\Build\DoBuild.cs" />
     <Compile Include="TCPage\Build\ShowBuild.cs" />
     <Compile Include="TCPage\Build\ShowInnerBuildList.cs" />
+    <Compile Include="TCPage\City\ShowUpdateCity.cs" />
     <Compile Include="TCPage\Depot\ShowMyDepot.cs" />
     <Compile Include="TCPage\DoGetData.cs" />
     <Compile Include="TCPage\Hero\DoReliveHero.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="TCPage\Union\DoApplyUnion.cs" />
     <Compile Include="TCPage\Union\DoOutUnion.cs" />
     <Compile Include="TCPage\Union\ShowUnionMember.cs" />
+    <Compile Include="TCPage\UserInfo\ShowUserSurvey.cs" />
     <Compile Include="TCPage\WorldWar\DoAttack.cs" />
     <Compile Include="TCPage\WorldWar\DoCreateGroup.cs" />
     <Compile Include="TCPage\WorldWar\DoDisbandGroup.cs" />
