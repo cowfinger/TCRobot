@@ -22,7 +22,7 @@
                 TCSubMod.influence,
                 TCOperation.Show,
                 TCFunc.load_city,
-                new TCRequestArgument(TCElement.cid, account.MainCity.NodeId),
+                new TCRequestArgument(TCElement.cid, account.Tid),
                 new TCRequestArgument(TCElement.mt, 1));
             var page = this.HTTPRequest(url, account.UserName);
             var match = Regex.Match(page, pattern);

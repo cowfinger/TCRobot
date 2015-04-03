@@ -8,6 +8,10 @@ using TC.TCPage.City;
 
 namespace TC.TCTasks
 {
+    using TC.TCPage.Depot;
+    using TC.TCPage.Prop;
+    using TC.TCUtility;
+
     class UpgradeBuildDog : TCTask
     {
 
@@ -32,15 +36,19 @@ namespace TC.TCTasks
             public int buildLevel = 0;
 
             public List<int> requiredResource = null;
+
+            public ShowInnerBuildList.Build actualBuild;
         }
 
         private int buildId = 0;
 
-        private int heroId = 0;
-
         private int pid = 0;
 
+        private int heroId = 0;
+
         private List<int> requiredResource = null;
+
+        private bool waiting = false;
 
         public int TargetBuildId { get; set; }
 
@@ -64,24 +72,36 @@ namespace TC.TCTasks
 
         public override void TaskWorker()
         {
-            if (this.HasOnlineTask())
+            var dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+            if (dataPage.BuildEndTimeHex > 0)
             {
+                if (!this.waiting)
+                {
+                    Logger.Verbose("BuildDog:Wait {0}/{1}", dataPage.BuildEndTime, FormMain.RemoteTime);
+                    this.waiting = true;
+                }
                 return;
             }
+
+            this.waiting = false;
 
             var dogTask = this.PickValidBuild();
             switch (dogTask)
             {
                 case DogAction.CollectResource:
+                    Logger.Verbose("BuildDog:Action{0}, {1}", dogTask, string.Join("|", this.requiredResource));
                     this.DoCollectBuildResource(this.requiredResource);
                     break;
                 case DogAction.UpgradeBuild:
-                    this.DoUpgradeBuild(this.buildId, this.heroId);
+                    Logger.Verbose("BuildDog:Action{0}, buildId={1},name={2}", dogTask, this.buildId, FormMain.KeyWordMap["build_" + this.buildId]);
+                    this.DoUpgradeBuild(this.buildId, this.pid, this.heroId);
                     break;
                 case DogAction.UpgradeCity:
+                    Logger.Verbose("BuildDog:Action{0}", dogTask);
                     this.DoUpgradeCity(this.heroId);
                     break;
                 case DogAction.Completed:
+                    Logger.Verbose("BuildDog:Completed");
                     this.IsCompleted = true;
                     break;
             }
@@ -90,7 +110,8 @@ namespace TC.TCTasks
         private DogAction PickValidBuild()
         {
             var buildPage = ShowInnerBuildList.Open(this.Account.WebAgent);
-            var cityPage = ShowUpdateCity.Open(this.Account.WebAgent);
+            // var cityLoadPage = ShowLoadCity.Open(this.Account.WebAgent, this.Account.Tid);
+            var cityUpdatePage = ShowUpdateCity.Open(this.Account.WebAgent, this.Account.Tid);
             var dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
             var buildPack = new BuildPack()
             {
@@ -99,7 +120,7 @@ namespace TC.TCTasks
                 buildLevel = this.TargetBuildLevel
             };
 
-            var result = this.GetDepBuildPack(buildPack, buildPage, cityPage, dataPage);
+            var result = this.GetDepBuildPack(buildPack, buildPage, cityUpdatePage, dataPage);
             if (result == null)
             {
                 return DogAction.Completed;
@@ -112,13 +133,14 @@ namespace TC.TCTasks
                     break;
                 case DogAction.UpgradeBuild:
                     this.buildId = result.buildId;
-                    var showBuildPage = ShowBuild.Open(this.Account.WebAgent, 0, 0, this.buildId);
+                    var showBuildPage = ShowBuild.Open(this.Account.WebAgent, 1, result.buildId, this.buildId);
                     var heroList = showBuildPage.HeroBuildTimes.ToList();
-                    heroList.Sort((x, y) => y.BuildTimeInSeconds.CompareTo(x));
+                    heroList.Sort((x, y) => y.BuildTimeInSeconds.CompareTo(x.BuildTimeInSeconds));
                     this.heroId = heroList.First().HeroId;
+                    this.pid = result.actualBuild.Pid;
                     break;
                 case DogAction.UpgradeCity:
-                    this.heroId = cityPage.EfficientHeroId;
+                    this.heroId = cityUpdatePage.EfficientHeroId;
                     break;
             }
             return result.Action;
@@ -139,7 +161,7 @@ namespace TC.TCTasks
                     if (targetBuilds.Any())
                     {
                         var targetBuild = targetBuilds.First();
-                        if (targetBuild.BuildLevel <= pack.buildId)
+                        if (targetBuild.BuildLevel >= pack.buildLevel)
                         {
                             return null;
                         }
@@ -151,7 +173,12 @@ namespace TC.TCTasks
                         };
 
                         var resPackResult = this.GetDepBuildPack(resPack, buildPage, cityPage, dataPage);
-                        return resPackResult ?? pack;
+                        if (resPackResult != null)
+                        {
+                            return resPackResult;
+                        }
+                        pack.actualBuild = targetBuild;
+                        return pack;
                     }
 
                     var disabledBuilds = buildPage.DisabledBuildList.Where(b => b.BuildId == pack.buildId).ToList();
@@ -198,7 +225,7 @@ namespace TC.TCTasks
                     }
 
                     var userInfoPage = TCPage.UserInfo.ShowUserSurvey.Open(this.Account.WebAgent);
-                    if (cityPage.RequiredCreditPoint < userInfoPage.CreditPoint)
+                    if (cityPage.RequiredCreditPoint > userInfoPage.CreditPoint)
                     {
                         foreach (var build in buildPage.BuildList)
                         {
@@ -258,17 +285,48 @@ namespace TC.TCTasks
         private bool HasOnlineTask()
         {
             var dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
-            return dataPage.BuildEndTime > FormMain.RemoteTime;
+            return dataPage.BuildEndTimeHex > 0;
         }
 
         private bool DoCollectBuildResource(IList<int> requireRes)
         {
-            throw new NotImplementedException();
+            var dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+            while (!this.CompareResourceTable(dataPage.ResourceTabe, requireRes))
+            {
+                if (!OpenResourceBox(this.Account))
+                {
+                    break;
+                }
+
+                dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+            }
+
+            return true;
         }
 
-        private bool DoUpgradeBuild(int buildId, int heroId)
+        public static bool OpenResourceBox(AccountInfo account)
         {
-            throw new NotImplementedException();
+            var resBoxes =
+                ShowMyDepot.EnumDepotItems(account.WebAgent)
+                    .Where(prop => prop.PropertyId == (int)DepotItem.PropId.ResourceBox)
+                    .ToList();
+            if (!resBoxes.Any())
+            {
+                return false;
+            }
+            var firstBox = resBoxes.First();
+            DoUseProp.Open(account.WebAgent, firstBox.PropertyId, firstBox.UserPropertyId, 1);
+            return true;
+        }
+
+        private bool DoUpgradeBuild(int buildId, int pid, int heroId)
+        {
+            if (pid == 0)
+            {
+                pid = RandGen.Next(0, 999);
+            }
+            var page = DoBuild.Open(this.Account.WebAgent, pid, buildId, heroId);
+            return page.Success;
         }
 
         private bool DoUpgradeCity(int heroId)

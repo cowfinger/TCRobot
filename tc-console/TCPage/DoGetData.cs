@@ -11,7 +11,7 @@ namespace TC.TCPage
     {
         public const string ResPattern = 
             @"""hoard"":" +
-            @"""(\d+):\d+\|(\d+):\d\|(\d+):\d+\|(\d+):(\d+)\|\d+""";
+            @"""(\d+):\d+\|(\d+):\d+\|(\d+):\d+\|(\d+):(\d+)\|\d+""";
 
         public const string MaxResPattern = @"""max_hoard"":""(\d+)\|(\d+)\|(\d+)\|(\d+)""";
 
@@ -19,13 +19,21 @@ namespace TC.TCPage
 
         public const string RequestString = "mod=get_data&op=do";
 
-        public DateTime BuildEndTime
+        public int BuildEndTimeHex
         {
             get
             {
                 var match = Regex.Match(this.RawPage, BuildTaskEndTimePattern);
-                var elapse = match.Success ? int.Parse(match.Groups[1].Value) : 0;
-                return DateTime.FromFileTimeUtc(elapse);
+                return match.Success ? int.Parse(match.Groups[1].Value) : 0;
+            }
+        }
+
+        public DateTime BuildEndTime
+        {
+            get
+            {
+                var elapse = this.BuildEndTimeHex;
+                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(elapse).ToLocalTime();
             }
         }
 

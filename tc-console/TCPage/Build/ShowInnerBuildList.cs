@@ -24,23 +24,24 @@ namespace TC.TCPage.Build
         public const string BuildUrl =
             @"index\.php\?mod=city/build&op=show&func=viewbuild&pid=(?<pid>\d+)&bt=(?<bt>\d+)&bid=\d+";
 
-        public const string BuildPattern = BuildIdPattern + ".*?" + EndurePattern + ".*?" + ResourcePattern;
+        public const string BuildPattern = BuildIdPattern + ".*?" + EndurePattern + ".*?" + ResourcePattern + ".*?" + BuildUrl;
+
+        public const string AbledBuildIdPattern = @"<li class=""build_(?<buildId>\d+) abled"">";
 
         public const string DisabledBuildIdPattern = @"<li class=""build_(?<buildId>\d+) disabled"">";
 
-        public const string DisabledBuildEndPattern = @"<div class=""name"">[[jslang('build_\d+')]] 等级0</div>";
+        public const string DisabledBuildEndPattern = @"<div class=""name"">\[\[jslang\('build_\d+'\)\]\] 等级\d+</div>";
 
-        public const string BuildPreCityPattern =
-            @"<h4>[[jslang('up_pre')]]</h4>" + @"<ul>"
-            + @"<li class=""red"">\[\[jslang\('city_lv'\)\]\] Lv\.(?<cityLevel>\d+)<li>";
+        public const string BuildPreCityPattern = @"\[\[jslang\('city_lv'\)\]\] Lv\.(?<cityLevel>\d+)<li>";
 
         public const string BuildPreBuildPattern =
-            @"<li>\[\[jslang\('build_(?<preBuildId>\d+)'\)\]\] "
-            + @"\[\[jslang\('level',(?<prdBuildLevel>\d+)\)\]\]</li>" + @"</ul>";
+            @"\[\[jslang\('build_(?<preBuildId>\d+)'\)\]\] \[\[jslang\('level',(?<preBuildLevel>\d+)\)\]\]";
 
         public const string DisabledBuildPattern = DisabledBuildIdPattern + "(?<content>.*?)" + DisabledBuildEndPattern;
 
-        public const string CityLevelPattern = @"mod:city/city|func:update_level|op:do|now_level:(?<cityLevel>\d+)";
+        public const string AbleBuildPattern = AbledBuildIdPattern + "(?<content>.*?)" + DisabledBuildEndPattern;
+
+        public const string CityLevelPattern = @"mod:city/city\|func:update_level\|op:do\|now_level:(?<cityLevel>\d+)";
 
         public ShowInnerBuildList(string page)
         {
@@ -85,7 +86,7 @@ namespace TC.TCPage.Build
         {
             get
             {
-                var matches = Regex.Matches(this.RawPage, DisabledBuildIdPattern, RegexOptions.Singleline);
+                var matches = Regex.Matches(this.RawPage, DisabledBuildPattern, RegexOptions.Singleline);
                 var buildList = from Match match in matches
                                 select new
                                 {
@@ -96,17 +97,21 @@ namespace TC.TCPage.Build
                 return buildList.Select(item =>
                 {
                     var cityPreMatch = Regex.Match(item.content, BuildPreCityPattern, RegexOptions.Singleline);
+                    var cityLevel = cityPreMatch.Success ? int.Parse(cityPreMatch.Groups["cityLevel"].Value) : 0;
                     var buildPreMatches = Regex.Matches(item.content, BuildPreBuildPattern, RegexOptions.Singleline);
+                    var preBuilds = (from Match match in buildPreMatches
+                                     select
+                                         new PreBuild
+                                             {
+                                                 PreBuildId = int.Parse(match.Groups["preBuildId"].Value),
+                                                 PreBuildLevel = int.Parse(match.Groups["preBuildLevel"].Value)
+                                             }).ToList();
+
                     return new DisabledBuild
                         {
                             BuildId = item.buildId,
-                            CityLevel = int.Parse(cityPreMatch.Groups["cityLevel"].Value),
-                            PreBuilds = from Match match in buildPreMatches
-                                        select new PreBuild
-                                        {
-                                            PreBuildId = int.Parse(match.Groups["preBuildId"].Value),
-                                            PreBuildLevel = int.Parse(match.Groups["preBuildLevel"].Value)
-                                        }
+                            CityLevel = cityLevel,
+                            PreBuilds = preBuilds
                         };
                 });
             }

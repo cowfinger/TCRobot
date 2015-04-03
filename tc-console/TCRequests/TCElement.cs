@@ -16,6 +16,8 @@ namespace TC
 
         cid,
 
+        city_id,
+
         from,
 
         from_address,

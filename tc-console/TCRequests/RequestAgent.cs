@@ -126,7 +126,12 @@ namespace TC
                 this.Account.Tid = int.Parse(match.Groups[1].Value);
                 // var uri = new Uri(string.Format("http://{0}/", this.Account.AccountType));
                 this.WebClient.Cookies.Add(
-                    new Cookie("tmp_mid", this.Account.Tid.ToString(), "/", this.Account.AccountType));
+                    new Cookie("tmp_mid", this.Account.Tid.ToString())
+                        {
+                            Domain = this.Account.AccountType
+                        });
+                // this.WebClient.Cookies.Add(
+                //     new Cookie("tmp_mid", this.Account.Tid.ToString(), "/", this.Account.AccountType));
             }
 
             return match.Success;

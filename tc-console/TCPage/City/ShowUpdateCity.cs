@@ -45,13 +45,14 @@ namespace TC.TCPage.City
             }
         }
 
-        public static ShowUpdateCity Open(RequestAgent agent)
+        public static ShowUpdateCity Open(RequestAgent agent, int cityId)
         {
             var url = agent.BuildUrl(
                 TCMod.city,
                 TCSubMod.city,
                 TCOperation.Show,
-                TCFunc.update_city);
+                TCFunc.update_city,
+                new TCRequestArgument(TCElement.city_id, cityId));
             return new ShowUpdateCity(agent.WebClient.OpenUrl(url));
         }
 
@@ -63,7 +64,7 @@ namespace TC.TCPage.City
                 this.RequiredBuildId = int.Parse(prerequisiteMatch.Groups["buildId"].Value);
                 this.RequiredBuildLevel = int.Parse(prerequisiteMatch.Groups["buildLevel"].Value);
                 this.RequiredScience = int.Parse(prerequisiteMatch.Groups["science"].Value);
-                this.RequiredCreditPoint = int.Parse(prerequisiteMatch.Groups["creditePoint"].Value);
+                this.RequiredCreditPoint = int.Parse(prerequisiteMatch.Groups["creditPoint"].Value);
             }
 
             var cityLevelMatch = Regex.Match(page, LevelPattern);
@@ -81,7 +82,7 @@ namespace TC.TCPage.City
                     let duration = FormMain.TimeStr2Sec(match.Groups[2].Value)
                     select new {heroId, duration};
                 var heroList = heroes.ToList();
-                heroList.Sort( (x, y) => y.duration.CompareTo(x));
+                heroList.Sort( (x, y) => y.duration.CompareTo(x.duration));
                 this.EfficientHeroId = heroList.First().heroId;
             }
         }

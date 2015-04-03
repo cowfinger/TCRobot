@@ -81,6 +81,8 @@
     <Compile Include="TCPage\Build\DoBuild.cs" />
     <Compile Include="TCPage\Build\ShowBuild.cs" />
     <Compile Include="TCPage\Build\ShowInnerBuildList.cs" />
+    <Compile Include="TCPage\City\DoUpdateCity.cs" />
+    <Compile Include="TCPage\City\ShowLoadCity.cs" />
     <Compile Include="TCPage\City\ShowUpdateCity.cs" />
     <Compile Include="TCPage\Depot\ShowMyDepot.cs" />
     <Compile Include="TCPage\DoGetData.cs" />

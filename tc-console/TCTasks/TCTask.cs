@@ -7,7 +7,7 @@
 
     internal abstract class TCTask
     {
-        private static readonly Random RandGen = new Random();
+        protected static readonly Random RandGen = new Random();
 
         private DateTime executionTime;
 

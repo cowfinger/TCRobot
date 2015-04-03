@@ -22,10 +22,10 @@ namespace TC.TCPage.UserInfo
         public static ShowUserSurvey Open(RequestAgent agent)
         {
             var url = agent.BuildUrl(
-                TCMod.city,
-                TCSubMod.attack,
+                TCMod.user_relation,
+                TCSubMod.user_info,
                 TCOperation.Show,
-                TCFunc.allow_prop);
+                TCFunc.user_survey);
             return new ShowUserSurvey(agent.WebClient.OpenUrl(url));
         }
 
