@@ -32,6 +32,8 @@ namespace TC
 
         influence_id,
 
+        is_re,
+
         join_attack_type,
 
         level,
@@ -40,9 +42,13 @@ namespace TC
 
         node_id,
 
+        now_level,
+
         page,
 
         pet_id,
+
+        pet_user_id,
 
         pid,
 

@@ -15,23 +15,26 @@
 
         private int GetAccountLevel(AccountInfo account)
         {
-            const string pattern = @"<h4>提升等级至(\d+)：</h4>";
-            var url = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.city,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.load_city,
-                new TCRequestArgument(TCElement.cid, account.Tid),
-                new TCRequestArgument(TCElement.mt, 1));
-            var page = this.HTTPRequest(url, account.UserName);
-            var match = Regex.Match(page, pattern);
-            if (match.Success)
-            {
-                return int.Parse(match.Groups[1].Value) - 1;
-            }
+            var page = TCPage.City.ShowUpdateCity.Open(account.WebAgent, account.Tid);
+            return page.CurrentLevel;
 
-            return -1;
+            // const string pattern = @"<h4>提升等级至(\d+)：</h4>";
+            // var url = RequestAgent.BuildUrl(
+            //     this.hostname,
+            //     TCMod.city,
+            //     TCSubMod.influence,
+            //     TCOperation.Show,
+            //     TCFunc.load_city,
+            //     new TCRequestArgument(TCElement.cid, account.Tid),
+            //     new TCRequestArgument(TCElement.mt, 1));
+            // var page = this.HTTPRequest(url, account.UserName);
+            // var match = Regex.Match(page, pattern);
+            // if (match.Success)
+            // {
+            //     return int.Parse(match.Groups[1].Value) - 1;
+            // }
+
+            // return -1;
         }
 
         private int QueryReliveQueueId(int tid, AccountInfo account)

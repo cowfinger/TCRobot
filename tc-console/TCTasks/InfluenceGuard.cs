@@ -12,9 +12,9 @@
     {
         private const int CheckInterval = 1 * 1000;
 
-        public List<string> RecentRequstUnionList = null;
+        public List<string> RecentRequstUnionList;
 
-        public Timer RefuseTimer = null;
+        public Timer RefuseTimer;
 
         public HashSet<int> UnionIdSet = new HashSet<int>();
 
@@ -34,7 +34,9 @@
                         unionIdList,
                         unionId =>
                             {
-                                DoCheckMember.Open(account.WebAgent, DoCheckMember.Action.refuse, unionId);
+                                DoCheckMember.Open(
+                                    account.WebAgent,
+                                    DoCheckMember.Action.refuse, unionId);
                             });
                 };
             this.RefuseTimer.Start();

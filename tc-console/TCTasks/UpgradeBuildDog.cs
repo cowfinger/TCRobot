@@ -5,6 +5,7 @@ using System.Text;
 using TC.TCPage;
 using TC.TCPage.Build;
 using TC.TCPage.City;
+using TC.TCPage.UserInfo;
 
 namespace TC.TCTasks
 {
@@ -19,40 +20,119 @@ namespace TC.TCTasks
 
         private string taskHint = "";
 
+        private readonly List<int> restPidList = new List<int>() { 15, 83, 79 };
+
         private enum DogAction
         {
             CollectResource,
             UpgradeBuild,
             UpgradeCity,
-            Completed
+            Completed,
+            Failed
         }
 
         private class BuildPack
         {
+            public BuildPack PrevPack;
+
             public DogAction Action = DogAction.Completed;
 
-            public int buildId = 0;
+            public int BuildId;
 
-            public int buildLevel = 0;
+            public int BuildLevel;
 
-            public List<int> requiredResource = null;
+            public List<int> RequiredResource;
 
-            public ShowInnerBuildList.Build actualBuild;
+            public ShowInnerBuildList.Build ActualBuild;
         }
 
-        private int buildId = 0;
+        private int buildId;
 
-        private int pid = 0;
+        private int buildLevel;
 
-        private int heroId = 0;
+        private int pid;
 
-        private List<int> requiredResource = null;
+        private int heroId;
 
-        private bool waiting = false;
+        private List<int> requiredResource;
+
+        private bool waiting;
 
         public int TargetBuildId { get; set; }
 
         public int TargetBuildLevel { get; set; }
+
+        private IEnumerable<ShowInnerBuildList.Build> outBuildsCache;
+
+        private ShowInnerBuildList buildPageCache;
+
+        private ShowUpdateCity cityPageCache;
+
+        private IEnumerable<ShowInnerBuildList.Build> OutBuilds
+        {
+            get
+            {
+                if (this.outBuildsCache == null)
+                {
+                    var pidBidList = ShowReBuild.PidBidPairs.SelectMany(
+                        item =>
+                        {
+                            var page = ShowReBuild.Open(this.Account.WebAgent, item.Pid, item.Bid);
+                            return page.ItemPidList;
+                        });
+
+                    this.outBuildsCache = pidBidList.Select(
+                        item =>
+                        {
+                            var page = ShowBuild.Open(this.Account.WebAgent, 1, item.Pid, 1, item.Bid, 1, 0);
+                            return new ShowInnerBuildList.Build()
+                            {
+                                Pid = item.Pid,
+                                Bt = 1,
+                                BuildId = item.Bid,
+                                BuildLevel = item.Level,
+                                UpgradeRequiredFood = page.BuildDetail.UpgradeRequiredFood,
+                                UpgradeRequiredWood = page.BuildDetail.UpgradeRequiredWood,
+                                UpgradeRequiredIron = page.BuildDetail.UpgradeRequiredIron,
+                                UpgradeRequiredMud = page.BuildDetail.UpgradeRequiredMud,
+                            };
+                        }).ToList();
+                }
+                return this.outBuildsCache;
+            }
+        }
+
+        private ShowInnerBuildList BuildPage
+        {
+            get
+            {
+                if (this.buildPageCache == null)
+                {
+                    this.buildPageCache = ShowInnerBuildList.Open(this.Account.WebAgent);
+                }
+                return this.buildPageCache;
+            }
+        }
+
+        private ShowUpdateCity CityPage
+        {
+            get
+            {
+                if (this.cityPageCache == null)
+                {
+                    this.cityPageCache = ShowUpdateCity.Open(this.Account.WebAgent, this.Account.Tid);
+                }
+                return this.cityPageCache;
+            }
+        }
+
+        private DoGetData DataPage
+        {
+            get
+            {
+                return DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+            }
+        }
 
         public UpgradeBuildDog(AccountInfo account)
             : base(account, DefaultInterval)
@@ -65,6 +145,12 @@ namespace TC.TCTasks
             set { throw new NotImplementedException(); }
         }
 
+        private void Verbose(string format, params object[] args)
+        {
+            var fmt = string.Format("BuildDog[{0}]:{1}", this.Account.UserName, format);
+            Logger.Verbose(fmt, args);
+        }
+
         public override string GetTaskHint()
         {
             return this.taskHint;
@@ -72,36 +158,59 @@ namespace TC.TCTasks
 
         public override void TaskWorker()
         {
-            var dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
-            if (dataPage.BuildEndTimeHex > 0)
+            if (this.DataPage.BuildEndTimeHex > 0)
             {
-                if (!this.waiting)
-                {
-                    Logger.Verbose("BuildDog:Wait {0}/{1}", dataPage.BuildEndTime, FormMain.RemoteTime);
-                    this.waiting = true;
-                }
+                if (this.waiting) return;
+                this.Verbose("Wait {0}", this.DataPage.BuildEndTime);
+                this.waiting = true;
                 return;
             }
 
             this.waiting = false;
 
             var dogTask = this.PickValidBuild();
+
+            // Clear cache.
+            this.cityPageCache = null;
+            this.outBuildsCache = null;
+            this.buildPageCache = null;
+
             switch (dogTask)
             {
                 case DogAction.CollectResource:
-                    Logger.Verbose("BuildDog:Action{0}, {1}", dogTask, string.Join("|", this.requiredResource));
-                    this.DoCollectBuildResource(this.requiredResource);
+                    this.Verbose("{0} Start:{1}/{2}",
+                        dogTask,
+                        string.Join("|", this.requiredResource),
+                        string.Join("|", this.DataPage.ResourceTabe));
+                    if (!this.DoCollectBuildResource(this.requiredResource))
+                    {
+                        this.Verbose("Canceled Since No Resource.");
+                        this.IsCompleted = true;
+                    }
                     break;
                 case DogAction.UpgradeBuild:
-                    Logger.Verbose("BuildDog:Action{0}, buildId={1},name={2}", dogTask, this.buildId, FormMain.KeyWordMap["build_" + this.buildId]);
-                    this.DoUpgradeBuild(this.buildId, this.pid, this.heroId);
+                    this.Verbose("{0}:{1}({2},{3})=>{4}",
+                        dogTask,
+                        FormMain.KeyWordMap["build_" + this.buildId],
+                        this.buildId,
+                        this.pid,
+                        this.buildLevel);
+                    if (!this.DoUpgradeBuild(this.buildId, this.pid, this.heroId))
+                    {
+                        this.Verbose("Canceled Since Upgrade Build Error.");
+                        this.IsCompleted = true;
+                    }
                     break;
                 case DogAction.UpgradeCity:
-                    Logger.Verbose("BuildDog:Action{0}", dogTask);
-                    this.DoUpgradeCity(this.heroId);
+                    this.Verbose("{0}", dogTask);
+                    if (!this.DoUpgradeCity(this.heroId, this.CityPage.CurrentLevel, this.Account.Tid))
+                    {
+                        this.Verbose("Canceled Since Upgrade City Error.");
+                        this.IsCompleted = true;
+                    }
                     break;
                 case DogAction.Completed:
-                    Logger.Verbose("BuildDog:Completed");
+                    this.Verbose("Completed");
                     this.IsCompleted = true;
                     break;
             }
@@ -109,18 +218,20 @@ namespace TC.TCTasks
 
         private DogAction PickValidBuild()
         {
-            var buildPage = ShowInnerBuildList.Open(this.Account.WebAgent);
-            // var cityLoadPage = ShowLoadCity.Open(this.Account.WebAgent, this.Account.Tid);
             var cityUpdatePage = ShowUpdateCity.Open(this.Account.WebAgent, this.Account.Tid);
-            var dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+            var userInfoPage = ShowUserSurvey.Open(this.Account.WebAgent);
+
+            this.Verbose("Resource:{0}, CreditPoint:{1}",
+                string.Join("|", this.DataPage.ResourceTabe),
+                userInfoPage.CreditPoint);
             var buildPack = new BuildPack()
             {
                 Action = DogAction.UpgradeBuild,
-                buildId = this.TargetBuildId,
-                buildLevel = this.TargetBuildLevel
+                BuildId = this.TargetBuildId,
+                BuildLevel = this.TargetBuildLevel
             };
 
-            var result = this.GetDepBuildPack(buildPack, buildPage, cityUpdatePage, dataPage);
+            var result = this.GetDepBuildPack(buildPack);
             if (result == null)
             {
                 return DogAction.Completed;
@@ -129,16 +240,29 @@ namespace TC.TCTasks
             switch (result.Action)
             {
                 case DogAction.CollectResource:
-                    this.requiredResource = result.requiredResource;
+                    this.requiredResource = result.RequiredResource;
                     break;
+
                 case DogAction.UpgradeBuild:
-                    this.buildId = result.buildId;
-                    var showBuildPage = ShowBuild.Open(this.Account.WebAgent, 1, result.buildId, this.buildId);
+                    this.buildId = result.BuildId;
+                    this.buildLevel = result.BuildLevel;
+                    this.pid = result.ActualBuild.Pid;
+
+                    var showBuildPage = ShowBuild.Open(
+                        this.Account.WebAgent,
+                        result.ActualBuild.Pid,
+                        result.ActualBuild.Bt,
+                        result.ActualBuild.BuildId);
                     var heroList = showBuildPage.HeroBuildTimes.ToList();
                     heroList.Sort((x, y) => y.BuildTimeInSeconds.CompareTo(x.BuildTimeInSeconds));
+                    if (!heroList.Any())
+                    {
+                        this.Verbose("Cannot find hero.");
+                        return DogAction.Failed;
+                    }
                     this.heroId = heroList.First().HeroId;
-                    this.pid = result.actualBuild.Pid;
                     break;
+
                 case DogAction.UpgradeCity:
                     this.heroId = cityUpdatePage.EfficientHeroId;
                     break;
@@ -146,100 +270,162 @@ namespace TC.TCTasks
             return result.Action;
         }
 
-        private BuildPack GetDepBuildPack(
-            BuildPack pack,
-            ShowInnerBuildList buildPage,
-            ShowUpdateCity cityPage,
-            DoGetData dataPage)
+        private static bool IsLoopedPack(BuildPack pack)
         {
+            var iterPack = pack.PrevPack;
+            while (iterPack != null)
+            {
+                if (iterPack.Action != pack.Action)
+                {
+                    iterPack = iterPack.PrevPack;
+                    continue;
+                }
+
+                switch (iterPack.Action)
+                {
+                    case DogAction.UpgradeCity:
+                        return true;
+                    case DogAction.CollectResource:
+                        if (CompareResourceTable(pack.RequiredResource, iterPack.RequiredResource))
+                        {
+                            return true;
+                        }
+                        break;
+                    case DogAction.UpgradeBuild:
+                        if (iterPack.BuildId == pack.BuildId && iterPack.BuildLevel == pack.BuildId)
+                        {
+                            return true;
+                        }
+                        break;
+                }
+                iterPack = iterPack.PrevPack;
+            }
+
+            return false;
+        }
+
+        private BuildPack GetDepBuildPack(BuildPack pack)
+        {
+            if (IsLoopedPack(pack))
+            {
+                return null;
+            }
+
             switch (pack.Action)
             {
                 case DogAction.UpgradeBuild:
-                    var buildList = buildPage.BuildList.ToList();
+                    var buildList = this.BuildPage.BuildList.Concat(this.OutBuilds);
 
-                    var targetBuilds = buildList.Where(b => b.BuildId == pack.buildId).ToList();
+                    var targetBuilds = buildList.Where(b => b.BuildId == pack.BuildId).ToList();
+                    targetBuilds.Sort((x, y) => x.BuildLevel.CompareTo(y.BuildLevel));
                     if (targetBuilds.Any())
                     {
                         var targetBuild = targetBuilds.First();
-                        if (targetBuild.BuildLevel >= pack.buildLevel)
+                        if (targetBuild.BuildLevel >= pack.BuildLevel)
                         {
-                            return null;
+                            return new BuildPack() { Action = DogAction.Completed };
                         }
 
                         var resPack = new BuildPack
                         {
                             Action = DogAction.CollectResource,
-                            requiredResource = targetBuild.RequiredResourceTable.ToList()
+                            RequiredResource = targetBuild.RequiredResourceTable.ToList(),
+                            PrevPack = pack
                         };
 
-                        var resPackResult = this.GetDepBuildPack(resPack, buildPage, cityPage, dataPage);
-                        if (resPackResult != null)
+                        var resPackResult = this.GetDepBuildPack(resPack);
+                        if (resPackResult == null)
+                        {
+                            return null;
+                        }
+                        if (resPackResult.Action != DogAction.Completed)
                         {
                             return resPackResult;
                         }
-                        pack.actualBuild = targetBuild;
+                        pack.ActualBuild = targetBuild;
                         return pack;
                     }
 
-                    var disabledBuilds = buildPage.DisabledBuildList.Where(b => b.BuildId == pack.buildId).ToList();
+                    var disabledBuilds = this.BuildPage.DisabledBuildList.Where(
+                        b => b.BuildId == pack.BuildId).ToList();
                     if (disabledBuilds.Any())
                     {
                         var targetBuild = disabledBuilds.First();
+                        var completedBuildNum = 0;
                         foreach (var preBuild in targetBuild.PreBuilds)
                         {
                             var preBuildPack = new BuildPack()
                             {
                                 Action = DogAction.UpgradeBuild,
-                                buildId = preBuild.PreBuildId,
-                                buildLevel = preBuild.PreBuildLevel
+                                BuildId = preBuild.PreBuildId,
+                                BuildLevel = preBuild.PreBuildLevel,
+                                PrevPack = pack
                             };
 
-                            var preBuildPackResult = this.GetDepBuildPack(preBuildPack, buildPage, cityPage, dataPage);
+                            var preBuildPackResult = this.GetDepBuildPack(preBuildPack);
                             if (preBuildPackResult != null)
                             {
-                                return preBuildPackResult;
+                                if (preBuildPackResult.Action == DogAction.Completed)
+                                {
+                                    ++completedBuildNum;
+                                }
+                                else
+                                {
+                                    return preBuildPackResult;
+                                }
                             }
                         }
 
-                        var cityPack = new BuildPack
+                        if (completedBuildNum < targetBuild.PreBuilds.Count())
                         {
-                            Action = DogAction.UpgradeCity
-                        };
-                        return this.GetDepBuildPack(cityPack, buildPage, cityPage, dataPage);
+                            var cityPack = new BuildPack
+                            {
+                                Action = DogAction.UpgradeCity,
+                                PrevPack = pack
+                            };
+                            return this.GetDepBuildPack(cityPack);
+                        }
                     }
 
-                    break;
+                    return null;
 
                 case DogAction.UpgradeCity:
                     var depPackBuild = new BuildPack
                     {
                         Action = DogAction.UpgradeBuild,
-                        buildId = cityPage.RequiredBuildId,
-                        buildLevel = cityPage.RequiredBuildLevel
+                        BuildId = this.CityPage.RequiredBuildId,
+                        BuildLevel = this.CityPage.RequiredBuildLevel,
+                        PrevPack = pack
                     };
 
-                    var depPackBuildResult = this.GetDepBuildPack(depPackBuild, buildPage, cityPage, dataPage);
+                    var depPackBuildResult = this.GetDepBuildPack(depPackBuild);
                     if (depPackBuildResult != null)
                     {
-                        return depPackBuildResult;
+                        if (depPackBuildResult.Action != DogAction.Completed)
+                        {
+                            return depPackBuildResult;
+                        }
                     }
 
-                    var userInfoPage = TCPage.UserInfo.ShowUserSurvey.Open(this.Account.WebAgent);
-                    if (cityPage.RequiredCreditPoint > userInfoPage.CreditPoint)
+                    var userInfoPage = ShowUserSurvey.Open(this.Account.WebAgent);
+                    if (this.CityPage.RequiredCreditPoint > userInfoPage.CreditPoint)
                     {
-                        foreach (var build in buildPage.BuildList)
+                        var candidateBuildList = this.BuildPage.BuildList.Concat(this.OutBuilds).ToList();
+                        candidateBuildList.Sort((x, y) => x.BuildLevel.CompareTo(y.BuildLevel));
+                        foreach (var build in candidateBuildList)
                         {
-                            var depPackBuild1 = new BuildPack
+                            var depPackPreBuild = new BuildPack
                             {
                                 Action = DogAction.UpgradeBuild,
-                                buildId = build.BuildId,
-                                buildLevel = build.BuildLevel + 1
+                                BuildId = build.BuildId,
+                                BuildLevel = build.BuildLevel + 1,
+                                PrevPack = pack
                             };
 
-                            var depPackBuildResult1 = this.GetDepBuildPack(depPackBuild1, buildPage, cityPage, dataPage);
-                            if (depPackBuildResult1 != null)
+                            var depPackPreBuildResult = this.GetDepBuildPack(depPackPreBuild);
+                            if (depPackPreBuildResult != null)
                             {
-                                return depPackBuildResult1;
+                                return depPackPreBuildResult;
                             }
                         }
                     }
@@ -247,58 +433,67 @@ namespace TC.TCTasks
                     var depPackResource = new BuildPack
                     {
                         Action = DogAction.CollectResource,
-                        requiredResource = cityPage.RequiredResourceTable.ToList()
+                        RequiredResource = this.CityPage.RequiredResourceTable.ToList(),
+                        PrevPack = pack
                     };
 
-                    var depPackResourceResult = this.GetDepBuildPack(depPackResource, buildPage, cityPage, dataPage);
-                    return depPackResourceResult ?? pack;
-
-                case DogAction.CollectResource:
-                    if (this.CompareResourceTable(pack.requiredResource, dataPage.ResourceTabe))
+                    var depResRet = this.GetDepBuildPack(depPackResource);
+                    if (depResRet == null)
                     {
                         return null;
                     }
 
-                    if (this.CompareResourceTable(pack.requiredResource, dataPage.MaxResourceTable))
+                    return depResRet.Action == DogAction.Completed ? pack : depPackResource;
+
+                case DogAction.CollectResource:
+                    if (CompareResourceTable(pack.RequiredResource, this.DataPage.ResourceTabe))
+                    {
+                        return new BuildPack { Action = DogAction.Completed };
+                    }
+
+                    if (CompareResourceTable(pack.RequiredResource, this.DataPage.MaxResourceTable))
                     {
                         return pack;
                     }
 
-                    var depPack = new BuildPack()
+                    var depPack = new BuildPack
                     {
                         Action = DogAction.UpgradeCity,
+                        PrevPack = pack
                     };
 
-                    var depPackResult = this.GetDepBuildPack(depPack, buildPage, cityPage, dataPage);
-                    return depPackResult ?? depPack;
+                    return this.GetDepBuildPack(depPack);
             }
 
-            return null;
+            return pack;
         }
 
-        private bool CompareResourceTable(IList<int> requiredRes, IList<int> resBox)
+        private static bool CompareResourceTable(
+            IEnumerable<int> requiredRes,
+            IEnumerable<int> haveRes)
         {
-            var resCheck = requiredRes.Zip(resBox, (x, y) => y - x);
+            var resCheck = requiredRes.Zip(haveRes, (x, y) => y - x);
             return !resCheck.Any(r => r < 0);
-        }
-
-        private bool HasOnlineTask()
-        {
-            var dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
-            return dataPage.BuildEndTimeHex > 0;
         }
 
         private bool DoCollectBuildResource(IList<int> requireRes)
         {
-            var dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
-            while (!this.CompareResourceTable(dataPage.ResourceTabe, requireRes))
+            var count = 0;
+            var tempData = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+            while (!CompareResourceTable(requireRes, tempData.ResourceTabe))
             {
-                if (!OpenResourceBox(this.Account))
+                ++count;
+                if (count > 100)
                 {
-                    break;
+                    return false;
                 }
 
-                dataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+                if (!OpenResourceBox(this.Account))
+                {
+                    return false;
+                }
+
+                tempData = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
             }
 
             return true;
@@ -319,19 +514,40 @@ namespace TC.TCTasks
             return true;
         }
 
-        private bool DoUpgradeBuild(int buildId, int pid, int heroId)
+        private bool DoUpgradeBuild(int buildId, int pid, int heroId, bool isRetry = false)
         {
-            if (pid == 0)
+            if (pid != 0)
             {
-                pid = RandGen.Next(0, 999);
+                var page = DoBuild.Open(this.Account.WebAgent, pid, buildId, heroId);
+
+                if (this.DataPage.BuildEndTimeHex == 0)
+                {
+                    if (!isRetry)
+                    {
+                        this.Verbose("UpgradeBuild Error:{0}", page.RawPage);
+                    }
+                    return false;
+                }
+                return true;
             }
-            var page = DoBuild.Open(this.Account.WebAgent, pid, buildId, heroId);
-            return page.Success;
+            else
+            {
+                foreach (var restPid in this.restPidList)
+                {
+                    if (this.DoUpgradeBuild(buildId, restPid, heroId, true))
+                    {
+                        return true;
+                    }
+                }
+
+                this.Verbose("UpgradeBuild Error" );
+                return false;
+            }
         }
 
-        private bool DoUpgradeCity(int heroId)
+        private bool DoUpgradeCity(int heroId, int nowLevel, int cityId)
         {
-            throw new NotImplementedException();
+            return DoUpdateLevel.Open(this.Account.WebAgent, nowLevel, heroId, cityId).Success;
         }
     }
 }

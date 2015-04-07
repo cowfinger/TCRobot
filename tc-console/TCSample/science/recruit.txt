@@ -1,0 +1,3 @@
+﻿POST /index.php?mod=science/science&op=do&func=recruit&r=0.3967628249911973 HTTP/1.1
+BODY 
+RESP javascript::wee.window.alert('成功招募中！');science.recruit_callback(9)<script type="text/javascript">wee.$( 'task_do' ).className = '' ;</script><script type="text/javascript">task.is_main_city= 1;task.task_type = 0; task.task_value = 0;</script><script type="text/javascript">task.delay( 11 );</script><script type="text/javascript">task.hide_float();task.hide_float1();task.hide_float2();</script>

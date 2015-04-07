@@ -18,6 +18,8 @@ namespace TC
 
         prop,
 
+        resource,
+
         science,
 
         union,

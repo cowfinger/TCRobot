@@ -1,0 +1,4 @@
+﻿Key	Value
+Request	POST /index.php?mod=city/city&op=do&func=update_level&now_level=1&r=0.23039100816626495 HTTP/1.1
+hid=2543775&city_id=82408344
+javascript::wee.window.alert('城池升级命令已下达。');wee.window.close('id_update_city');game.get_data( 'get_re(82408344);get_task(82408344, 1);' );task_window.show(true);

@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace TC.TCPage
 {
     class DoGetData : TCPage
     {
-        public const string ResPattern = 
-            @"""hoard"":" +
-            @"""(\d+):\d+\|(\d+):\d+\|(\d+):\d+\|(\d+):(\d+)\|\d+""";
+        public const string ResPattern =
+            @"""hoard"":""(\d+):\d+\|(\d+):\d+\|(\d+):\d+\|(\d+):(\d+)\|\d+""";
 
-        public const string MaxResPattern = @"""max_hoard"":""(\d+)\|(\d+)\|(\d+)\|(\d+)""";
+        public const string MaxResPattern =
+            @"""max_hoard"":""(\d+)\|(\d+)\|(\d+)\|(\d+)""";
 
         public const string BuildTaskEndTimePattern = @"""endtime"":(\d+)";
 

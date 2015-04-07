@@ -81,7 +81,8 @@
     <Compile Include="TCPage\Build\DoBuild.cs" />
     <Compile Include="TCPage\Build\ShowBuild.cs" />
     <Compile Include="TCPage\Build\ShowInnerBuildList.cs" />
-    <Compile Include="TCPage\City\DoUpdateCity.cs" />
+    <Compile Include="TCPage\Build\ShowReBuild.cs" />
+    <Compile Include="TCPage\City\DoUpdateLevel.cs" />
     <Compile Include="TCPage\City\ShowLoadCity.cs" />
     <Compile Include="TCPage\City\ShowUpdateCity.cs" />
     <Compile Include="TCPage\Depot\ShowMyDepot.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="TCPage\Politics\ShowDraft.cs" />
     <Compile Include="TCPage\Prop\DoUseProp.cs" />
     <Compile Include="TCPage\Prop\ShowAllowProp.cs" />
+    <Compile Include="TCPage\Resource\DoGetWarPoint.cs" />
     <Compile Include="TCPage\Science\ShowScience.cs" />
     <Compile Include="TCPage\TCPage.cs" />
     <Compile Include="TCPage\Union\DoApplyUnion.cs" />
@@ -124,7 +126,6 @@
     <Compile Include="TCTasks\InfluenceGuard.cs" />
     <Compile Include="TCTasks\SpyTask.cs" />
     <Compile Include="TCTasks\UpgradeBuildDog.cs" />
-    <Compile Include="TCUtility\CookieLite.cs" />
     <Compile Include="TCDataType\TroopInfo.cs" />
     <Compile Include="TCDataType\DepotItem.cs" />
     <Compile Include="TCUtility\DijstraHelper.cs" />

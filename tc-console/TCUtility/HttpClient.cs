@@ -1,4 +1,8 @@
-﻿namespace TC
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TC
 {
     using System;
     using System.IO;
@@ -24,6 +28,80 @@
         public string Location { get; private set; }
 
         public string Referer { get; set; }
+
+        public static IEnumerable<Cookie> GetAllCookies(CookieContainer cc)
+        {
+            var table = (Hashtable)cc.GetType().InvokeMember(
+                "m_domainTable",
+                System.Reflection.BindingFlags.NonPublic |
+                System.Reflection.BindingFlags.GetField |
+                System.Reflection.BindingFlags.Instance,
+                null, cc, new object[] { });
+
+            foreach (var pathList in table.Values)
+            {
+                var lstCookieCol = (SortedList)pathList.GetType().InvokeMember(
+                    "m_list",
+                    System.Reflection.BindingFlags.NonPublic |
+                    System.Reflection.BindingFlags.GetField |
+                    System.Reflection.BindingFlags.Instance,
+                    null, pathList, new object[] { });
+                foreach (var c in from CookieCollection colCookies in lstCookieCol.Values
+                                  from Cookie c in colCookies
+                                  select c)
+                {
+                    yield return c;
+                }
+            }
+        }
+
+        public static void SaveCookies(CookieContainer cookieContainer, string file)
+        {
+            var cookies = GetAllCookies(cookieContainer);
+            using (var stream = new StreamWriter(file))
+            {
+                foreach (var cookie in cookies)
+                {
+                    var line = string.Format("{0};{1};{2};{3};{4};{5}",
+                        cookie.Domain, cookie.Name, cookie.Path, cookie.Port,
+                        cookie.Secure.ToString(), cookie.Value);
+                    stream.WriteLine(line);
+                }
+            }
+        }
+
+        public static CookieContainer LoadCookies(string file)
+        {
+            var cookieContainer = new CookieContainer();
+            using (var stream = new StreamReader(file))
+            {
+                while (!stream.EndOfStream)
+                {
+                    var line = stream.ReadLine();
+                    if (string.IsNullOrEmpty(line))
+                    {
+                        continue;
+                    }
+
+                    var cc = line.Split(';');
+                    var ck = new Cookie
+                    {
+                        Discard = false,
+                        Domain = cc[0],
+                        Expired = true,
+                        HttpOnly = true,
+                        Name = cc[1],
+                        Path = cc[2],
+                        Port = cc[3],
+                        Secure = bool.Parse(cc[4]),
+                        Value = cc[5]
+                    };
+                    cookieContainer.Add(ck);
+                }
+            }
+
+            return cookieContainer;
+        }
 
         public string OpenUrl(string url, string body = null)
         {

@@ -595,6 +595,7 @@
         private void ToolStripMenuItemBatchLogin_Click(object sender, EventArgs e)
         {
             Task.Run(this.BatchLoginProc);
+            // Parallel.Dispatch(this.accountTable.Keys, this.LoginAccount);
         }
 
         private void ToolStripMenuItemScan_Click(object sender, EventArgs e)
@@ -1292,6 +1293,19 @@
                         stream.Flush();
                     }
                 });
+        }
+
+        private void getWarPointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                foreach (var account in this.accountTable.Values)
+                {
+                    var page = TCPage.Resource.DoGetWarPoint.Open(account.WebAgent);
+                    Logger.Verbose("GetWarPoint[{0}]:Total:{1}, Get{2}",
+                        account.UserName, page.TotalWarPoint, page.GetResultPoint);
+                }
+            });
         }
     }
 }

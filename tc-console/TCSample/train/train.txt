@@ -1,0 +1,3 @@
+﻿POST: http://yw1.tc.9wee.com/index.php?mod=military/train&op=do&func=develop&r=0.6427100291588779
+BODY: id=201&sub_develop=true
+RESP: javascript::wee.window.alert('研发成功！');train.do_develop_success('201', '82298661')<script type="text/javascript">wee.$( 'task_do' ).className = '' ;</script><script type="text/javascript">task.is_main_city= 1;task.task_type = 0; task.task_value = 0;</script>

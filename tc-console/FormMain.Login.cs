@@ -15,41 +15,43 @@
 
         private void LoginAccount(string account)
         {
-            this.loginLock.WaitOne();
+            //this.loginLock.WaitOne();
             {
                 this.activeAccount = account;
                 var accountInfo = this.accountTable[this.activeAccount];
 
-                // if (!string.IsNullOrEmpty(accountInfo.CookieStr))
-                // {
-                //     var homePage = this.RefreshHomePage(account);
-                //     if (homePage.Contains("wee.timer.set_time"))
-                //     {
-                //         accountInfo.LoginStatus = "on-line";
-                //         this.OnLoginCompleted(accountInfo);
-                //         this.loginLock.Set();
-                //         return;
-                //     }
-                // }
+                var fileName = Path.Combine(CookieFolder, account);
+                if (File.Exists(fileName))
+                {
+                    var cc = HttpClient.LoadCookies(fileName);
+                    accountInfo.WebAgent = new RequestAgent(accountInfo)
+                    {
+                        WebClient = { Cookies = cc }
+                    };
+
+                    var homePage = this.RefreshHomePage(account);
+                    if (homePage.Contains("wee.timer.set_time"))
+                    {
+                        accountInfo.LoginStatus = "on-line";
+                        this.OnLoginCompleted(accountInfo);
+                        // this.loginLock.Set();
+                        return;
+                    }
+                }
 
                 accountInfo.WebAgent = new RequestAgent(accountInfo);
                 if (accountInfo.WebAgent.Login())
                 {
                     accountInfo.LoginStatus = "on-line";
                     this.OnLoginCompleted(accountInfo);
-                    this.loginLock.Set();
+                    HttpClient.SaveCookies(accountInfo.WebAgent.WebClient.Cookies, fileName);
                 }
                 else
                 {
                     accountInfo.LoginStatus = "failed";
-                    this.loginLock.Set();
                 }
-                // accountInfo.LoginStatus = "in-login";
-                // var loginurl = this.multiLoginConf[accountInfo.AccountType].LoginURL;
 
-                // this.webBrowserMain.Navigate(loginurl);
-
-                // this.webBrowserMain.DocumentCompleted += this.webBrowserMain_DocumentCompleted;
+                // this.loginLock.Set();
             }
         }
 
@@ -76,12 +78,7 @@
                     var accountCityList = TCDataType.InfluenceMap.QueryCityList(account).ToList();
                     account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
                     account.InfluenceMap = TCDataType.InfluenceMap.BuildMap(accountCityList, account);
-
-                    if (accountCityList.Any())
-                    {
-                        account.MainCity = accountCityList.Single(cityInfo => cityInfo.CityId == 0);
-                        account.Level = this.GetAccountLevel(account);
-                    }
+                    account.Level = this.GetAccountLevel(account);
                 }).Then(
                         () =>
                         {
@@ -108,7 +105,7 @@
                 RemoteTime = this.QueryRemoteSysTime(this.accountTable.Keys.First()).ToLocalTime();
                 this.StartUITimeSyncTimer();
                 this.StartTaskTimer();
-                this.StartOnlineTaskCheckTimer();
+                // this.StartOnlineTaskCheckTimer();
                 // this.StartAuthTimer();
             }
 

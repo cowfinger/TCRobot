@@ -1,0 +1,81 @@
+﻿Key	Value
+Request	GET /index.php?mod=city/build&op=show&func=build&is_re=1&pid=6&bt=1&bid=1&tab_id=1&pet_user_id=0&r=0.7954360184501076 HTTP/1.1
+
+<div class="build_pro" id="build_update_window">
+	<div class="tab01">
+		<ul>
+			<li><a href="javascript:void(0)" class="on" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=build&is_re=1&pid=6&bt=1&bid=1&tab_id=1', 'id_re_build_info' )"><span>[[jslang('build_1')]]属性</span></a></li>
+					</ul>
+	</div>
+	<div class="conbody">
+		<div class="build_img">
+			<div class="img01"><img src="http://static.tc.9wee.com//build/build_thumb/1.gif" /></div>
+		</div>
+		<div class="txt01">
+			<div class="dec">[[jslang('build_1_intro')]]</div>
+			<div class="cl">
+				<span>产量：450/小时</span>
+				<span>耐久:0/0</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="build_up">
+	<div class="conhead"><h3><span>[[jslang('build_1')]]升级</span></h3></div>
+	<div class="conbody">
+				<div class="executor_hero">
+			<div class="hero">
+				<div id="smarty_hero_select" class="undis"><iframe src="" width="180" style="display:none"></iframe><div class="select_hero_box"><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="img01"><img hid="2543775" onclick="hero_select.obj['smarty_hero_select'].chose(this, 2543775,'smarty_hero_select');" class="on" src="http://static.tc.9wee.com/hero/3/1001.gif" titlecontent="jstitle::hero.hero_tip( ['\u7559\u6d93','1','13.5','13.6','13.4','13.2','13.5','C','C','C','C','C','3','3','1','5','',0,0,'2543775','858187','262','262.7','9','10135c'] )"/><p>[[jslang("hero_status_1")]]</p></div><div class="name"><span class="hero_score_1">留涓</span></div><div class="bold">00:00:15</div></td><td><div class="img01"><img hid="9571009" onclick="hero_select.obj['smarty_hero_select'].chose(this, 9571009,'smarty_hero_select');" src="http://static.tc.9wee.com/hero/3/1.gif" titlecontent="jstitle::hero.hero_tip( ['\u9b4f\u6c88','1','8.7','4.0','9.8','4.0','3.6','C','E','A','F','E','3','2','1','2','[{i:2004,s:0,w:2,e:[{j:2,v:2}]}]',0,0,'9571009','858187','157','157.4','1','bf211f'] )"/><p>[[jslang("hero_status_1")]]</p></div><div class="name"><span class="hero_score_1">魏沈</span></div><div class="bold">00:00:15</div></td></tr></table></div></div><div class="hero_select"><div class="pic"><div class="img01"><img onclick="hero_select.obj['smarty_hero_select'].show_list();" id="smarty_hero_select_img" src="http://static.tc.9wee.com/hero/3/1001.gif" titlecontent="jstitle::hero.hero_tip( ['\u7559\u6d93','1','13.5','13.6','13.4','13.2','13.5','C','C','C','C','C','3','3','1','5','',0,0,'2543775','858187','262','262.7','9','10135c'] )"/></div><div class="name button5"><a href="javascript:void(0);" onclick="hero_select.obj['smarty_hero_select'].show_list();"><span id="smarty_hero_select_name">留涓</span></a></div></div></div>
+			</div>
+		</div>
+		<div class="build_up_right">
+			<div class="itable">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+										<tr>
+						<td>升级信息</td>
+						<td>0级→1级</td>
+					</tr>
+										<tr>
+						<td width="26%">资源需求</td>
+						<td width="74%">
+							<div class="ziyuan">
+								<ul>
+									<li class="re_m" titleContent="[[jslang('m')]]"><span>280</span></li><li class="re_s" titleContent="[[jslang('s')]]"><span>360</span></li><li class="re_t" titleContent="[[jslang('t')]]"><span>280</span></li><li class="re_l" titleContent="[[jslang('l')]]"><span>80</span></li>
+								</ul>
+							</div>											
+						</td>
+					</tr>
+					<tr>
+						<td>前置需求</td>
+						<td>--						</td>
+					</tr>
+					<tr>
+						<td>升级时间</td>
+						<td><div class="time" id="repair_need_time"></div></td>	
+					</tr>
+					<tr>
+						<td>升级后属性变化</td>
+						<td>
+							<div class="con"><p><span class="dt">繁荣度</span><span class="change"><strong>↑</strong>15</span></p><p><span class="dt">耐久度</span><span class="change"><strong>↑</strong>300</span></p><p><span class="dt">产量</span><span class="change"><strong>↑</strong>150</span></p></div>									
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="button button2">
+												<a href="javascript:void(0);" onclick="build.do_build(6, 1);"><span>[[jslang('build_key','')]]</span></a>
+												<a href="javascript:void(0);" class="disabled"><span>拆除</span></a>
+												<a href="javascript:void(0);" onclick="wee.window.close();"><span>关闭</span></a>
+			</div>
+		</div>
+			</div>
+</div>
+<script type="text/javascript">
+hero_select.init( {"2543775":"00:00:15","9571009":"00:00:15"} );
+</script>
+
+<input type="hidden" id="_load_script_" value="build"/>
+<input type="hidden" id="_position_id_" value="6"/>
+<input type="hidden" id="_build_id_" value="1"/>
+<input type='hidden' id="pet_work_time" value=""/>
+<input type='hidden' id="_pet_user_id_" value=""/>
+<input type='hidden' id="tab_id" value="1"/>

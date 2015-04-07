@@ -1,0 +1,3 @@
+﻿POST /index.php?mod=city/city&op=do&func=newcity_step2&r=0.9782647726093603 HTTP/1.1
+BODY city_name=kknd001&city_type=2&city_id=82298661&res_type=1
+RESP javascript::wee.window.alert('开设军事型分城需求的城池等级至少为5级');

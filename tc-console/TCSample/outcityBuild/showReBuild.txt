@@ -1,0 +1,44 @@
+﻿Key	Value
+Request	GET /index.php?mod=city/build&op=show&func=re_build&pid=6&bt=1&bid=1&r=0.02967555685885137 HTTP/1.1
+
+<input type=hidden name='bid' id = 'bid' value ='1'>
+<div class="title" onmouseover="wee.window.set_drag(this)">[[jslang('build_1')]]</div>
+<div class="close"><a href="javascript:void(0);" onclick="wee.window.close();"></a></div>
+<div class="ocity_build" id = "task_ocity_build">
+
+	<!--<div class="ocity_build_tab out_box tc_task_wrapper">-->
+	<div class="ocity_build_tab out_box" id = "task_ocity_build_tab">
+		<div class="in_ibox">
+			<div class="pre"><a href="javascript:void(0);" onclick="build.scroll_re_list(-1);this.blur();"></a></div>
+			<ul class="tab04" id="id_ul_re_list">
+								<li><a pid=1 href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=build&is_re=1&pid=1&bt=1&bid=1&tab_id='+wee.$('tab_id').value, 'id_re_build_info' );this.blur();"><span><strong>[[jslang('build_1')]]</strong> <strong>等级1</strong></span></a></li>
+								<li><a pid=2 href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=build&is_re=1&pid=2&bt=1&bid=1&tab_id='+wee.$('tab_id').value, 'id_re_build_info' );this.blur();"><span><strong>[[jslang('build_1')]]</strong> <strong>等级0</strong></span></a></li>
+								<li><a pid=3 href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=build&is_re=1&pid=3&bt=1&bid=1&tab_id='+wee.$('tab_id').value, 'id_re_build_info' );this.blur();"><span><strong>[[jslang('build_1')]]</strong> <strong>等级0</strong></span></a></li>
+								<li><a pid=4 href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=build&is_re=1&pid=4&bt=1&bid=1&tab_id='+wee.$('tab_id').value, 'id_re_build_info' );this.blur();"><span><strong>[[jslang('build_1')]]</strong> <strong>等级0</strong></span></a></li>
+								<li><a pid=5 href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=build&is_re=1&pid=5&bt=1&bid=1&tab_id='+wee.$('tab_id').value, 'id_re_build_info' );this.blur();"><span><strong>[[jslang('build_1')]]</strong> <strong>等级0</strong></span></a></li>
+								<li><a pid=6 href="javascript:void(0);" onclick="wee.ajax.load( 'index.php?mod=city/build&op=show&func=build&is_re=1&pid=6&bt=1&bid=1&tab_id='+wee.$('tab_id').value, 'id_re_build_info' );this.blur();"><span><strong>[[jslang('build_1')]]</strong> <strong>等级0</strong></span></a></li>
+							</ul>
+			<div class="next"><a href="javascript:void(0);" onclick="build.scroll_re_list(1);this.blur();"></a></div>
+		</div>
+	</div>
+
+	<div class="ocity_build_con" id="id_re_build_info"></div>
+	<!--<div id="tc_task_guide_box1" class="undis" style="10000"></div>-->
+</div>
+<script type="text/javascript">
+build.load_default_re( 'build', 6, 1, 1,1,0 );
+
+var task_type = task.task_type;
+var task_value = task.task_value;
+//var bid = wee.$('bid').value;
+var bid = 1;
+var str = bid + ":";
+
+//wee.debug( 'bid:' + bid + '    ----    task_type:' + task_type + '    ----    task_value:' + task_value + '  --  Str=' + str );
+//wee.debug( "task_value is = " + task_value + "\n Ste is = " + str );
+if( task_value != 0 && task_value.indexOf( str ) === 0 ) {		//接到了该任务了
+	task.float_sub_task1('task_ocity_build','选择执行武将，政务越高，建造时间越短',0,6,90,275,0,0,0,0,0);						//打开建造提示
+	task.float_sub_task2('task_ocity_build','右边的建筑是可以<br>选择的',0,2,-120,155,0,0,0,0,0);		//打开左边资源提示
+	wee.$( 'task_ocity_build_tab' ).className = "ocity_build_tab out_box tc_task_wrapper";
+}
+</script>

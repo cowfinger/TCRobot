@@ -1,4 +1,5 @@
 ﻿using System.Security.Policy;
+using System.Windows.Forms;
 
 namespace TC.TCPage.Build
 {
@@ -8,40 +9,52 @@ namespace TC.TCPage.Build
 
     internal class ShowInnerBuildList
     {
-        public const string BuildIdPattern =
-            @"<h\d class=""build_name zb_color\d"">\[\[jslang\('build_(?<buildId>\d+)'\)\]\] "
-            + @"\[\[jslang\('level', (?<buildLevel>\d+)\)\]\]</h\d>";
-
-        public const string EndurePattern =
-            @"<span class=""dt"">" + @"\[\[jslang\(""endure""\)\]\]:</span>"
-            + @"<span class=""zb_color\d"">(?<endure>\d+)</span>" + @"<span class=""dt"">/(?<maxEndure>\d+)</span>";
-
-        public const string ResourcePattern =
-            @"<li class=""re_m""><span>(?<wood>\d+)</span></li>" + @"<li class=""re_s""><span>(?<mud>\d+)</span></li>"
-            + @"<li class=""re_t""><span>(?<iron>\d+)</span></li>"
-            + @"<li class=""re_l""><span>(?<food>\d+)</span></li>";
-
-        public const string BuildUrl =
-            @"index\.php\?mod=city/build&op=show&func=viewbuild&pid=(?<pid>\d+)&bt=(?<bt>\d+)&bid=\d+";
-
-        public const string BuildPattern = BuildIdPattern + ".*?" + EndurePattern + ".*?" + ResourcePattern + ".*?" + BuildUrl;
-
-        public const string AbledBuildIdPattern = @"<li class=""build_(?<buildId>\d+) abled"">";
+        public const string AbledBuildIdPattern = @"<li class=""build_(?<buildId>\d+) able"">";
 
         public const string DisabledBuildIdPattern = @"<li class=""build_(?<buildId>\d+) disabled"">";
 
-        public const string DisabledBuildEndPattern = @"<div class=""name"">\[\[jslang\('build_\d+'\)\]\] 等级\d+</div>";
+        public const string BuildIdPattern = @"<li class=""build_(?<buildId>\d+)"">";
+
+        public const string BuildLevelPattern =
+            @"\[\[jslang\('level', (?<buildLevel>\d+)\)\]\]";
+
+        public const string EndurePattern =
+            @"<span class=""dt"">" + @"\[\[jslang\(""endure""\)\]\]:</span>" +
+            @"<span class=""zb_color\d"">(?<endure>\d+)</span>" +
+            @"<span class=""dt"">/(?<maxEndure>\d+)</span>";
+
+        public const string ResourcePattern =
+            @"<li class=""re_m.*?""><span.*?>(?<wood>\d+)</span></li>" +
+            @"<li class=""re_s.*?""><span.*?>(?<mud>\d+)</span></li>" +
+            @"<li class=""re_t.*?""><span.*?>(?<iron>\d+)</span></li>" +
+            @"<li class=""re_l.*?""><span.*?>(?<food>\d+)</span></li>";
+
+        public const string BuildUrlPattern =
+            @"index\.php\?mod=city/build&op=show&func=viewbuild&pid=(?<pid>\d+)&bt=(?<bt>\d+)&bid=\d+";
 
         public const string BuildPreCityPattern = @"\[\[jslang\('city_lv'\)\]\] Lv\.(?<cityLevel>\d+)<li>";
 
         public const string BuildPreBuildPattern =
             @"\[\[jslang\('build_(?<preBuildId>\d+)'\)\]\] \[\[jslang\('level',(?<preBuildLevel>\d+)\)\]\]";
 
-        public const string DisabledBuildPattern = DisabledBuildIdPattern + "(?<content>.*?)" + DisabledBuildEndPattern;
-
-        public const string AbleBuildPattern = AbledBuildIdPattern + "(?<content>.*?)" + DisabledBuildEndPattern;
-
         public const string CityLevelPattern = @"mod:city/city\|func:update_level\|op:do\|now_level:(?<cityLevel>\d+)";
+
+        public const string BuildEndPattern = @"<div class=""name"">\[\[jslang\('build_\d+'\)\]\] 等级\d+</div>";
+
+        public const string BuildPattern =
+            BuildIdPattern + ".*?" +
+            BuildLevelPattern + ".*?" +
+            ResourcePattern + ".*?" +
+            BuildUrlPattern;
+
+        public const string AbleBuildPattern =
+            AbledBuildIdPattern + ".*?" +
+            BuildLevelPattern + ".*?" +
+            ResourcePattern + "(?<content>.*?)" + BuildEndPattern;
+
+        public const string DisabledBuildPattern =
+            DisabledBuildIdPattern + "(?<content>.*?)" + BuildEndPattern;
+
 
         public ShowInnerBuildList(string page)
         {
@@ -64,21 +77,44 @@ namespace TC.TCPage.Build
             get
             {
                 var matches = Regex.Matches(this.RawPage, BuildPattern, RegexOptions.Singleline);
-                return from Match match in matches
-                       select
-                           new Build
-                               {
-                                   Pid = int.Parse(match.Groups["pid"].Value),
-                                   Bt = int.Parse(match.Groups["bt"].Value),
-                                   BuildId = int.Parse(match.Groups["buildId"].Value),
-                                   BuildLevel = int.Parse(match.Groups["buildLevel"].Value),
-                                   Endure = int.Parse(match.Groups["endure"].Value),
-                                   MaxEndure = int.Parse(match.Groups["maxEndure"].Value),
-                                   UpgradeRequiredFood = int.Parse(match.Groups["food"].Value),
-                                   UpgradeRequiredWood = int.Parse(match.Groups["wood"].Value),
-                                   UpgradeRequiredIron = int.Parse(match.Groups["iron"].Value),
-                                   UpgradeRequiredMud = int.Parse(match.Groups["mud"].Value)
-                               };
+                var buildList = from Match match in matches
+                                select
+                                    new Build
+                                        {
+                                            Pid = int.Parse(match.Groups["pid"].Value),
+                                            Bt = int.Parse(match.Groups["bt"].Value),
+                                            BuildId = int.Parse(match.Groups["buildId"].Value),
+                                            BuildLevel = int.Parse(match.Groups["buildLevel"].Value),
+                                            UpgradeRequiredFood = int.Parse(match.Groups["food"].Value),
+                                            UpgradeRequiredWood = int.Parse(match.Groups["wood"].Value),
+                                            UpgradeRequiredIron = int.Parse(match.Groups["iron"].Value),
+                                            UpgradeRequiredMud = int.Parse(match.Groups["mud"].Value)
+                                        };
+                return this.AbleBuildList.Concat(buildList);
+            }
+        }
+
+        public IEnumerable<Build> AbleBuildList
+        {
+            get
+            {
+                var matches = Regex.Matches(this.RawPage, AbleBuildPattern, RegexOptions.Singleline);
+                var items = from Match match in matches
+                            let urlMatch = Regex.Match(match.Groups["content"].Value, BuildUrlPattern, RegexOptions.Singleline)
+                            select
+                                new Build
+                                    {
+                                        Pid = urlMatch.Success ? int.Parse(urlMatch.Groups["pid"].Value) : 0,
+                                        Bt = urlMatch.Success ? int.Parse(match.Groups["bt"].Value) : 2,
+                                        BuildId = int.Parse(match.Groups["buildId"].Value),
+                                        BuildLevel = int.Parse(match.Groups["buildLevel"].Value),
+                                        UpgradeRequiredFood = int.Parse(match.Groups["food"].Value),
+                                        UpgradeRequiredWood = int.Parse(match.Groups["wood"].Value),
+                                        UpgradeRequiredIron = int.Parse(match.Groups["iron"].Value),
+                                        UpgradeRequiredMud = int.Parse(match.Groups["mud"].Value)
+                                    };
+
+                return items;
             }
         }
 
@@ -138,10 +174,6 @@ namespace TC.TCPage.Build
             public int BuildId { get; set; }
 
             public int BuildLevel { get; set; }
-
-            public int Endure { get; set; }
-
-            public int MaxEndure { get; set; }
 
             public int UpgradeRequiredWood { get; set; }
 

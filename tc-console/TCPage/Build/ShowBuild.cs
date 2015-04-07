@@ -10,12 +10,28 @@
 
         public const string HeroBuildTimePairPattern = @"""(?<heroId>\d+)"":""(?<elapse>[0-9:]+)""";
 
+
         public ShowBuild(string page)
         {
             this.RawPage = page;
         }
 
         public string RawPage { get; private set; }
+
+        public ShowInnerBuildList.Build BuildDetail
+        {
+            get
+            {
+                var match = Regex.Match(this.RawPage, ShowInnerBuildList.ResourcePattern, RegexOptions.Singleline);
+                return new ShowInnerBuildList.Build
+                           {
+                               UpgradeRequiredFood = int.Parse(match.Groups["food"].Value),
+                               UpgradeRequiredWood = int.Parse(match.Groups["wood"].Value),
+                               UpgradeRequiredIron = int.Parse(match.Groups["iron"].Value),
+                               UpgradeRequiredMud = int.Parse(match.Groups["mud"].Value)
+                           };
+            }
+        }
 
         public IEnumerable<HeroBuildTime> HeroBuildTimes
         {
@@ -48,6 +64,22 @@
                 new TCRequestArgument(TCElement.pid, pid),
                 new TCRequestArgument(TCElement.bt, bt),
                 new TCRequestArgument(TCElement.bid, bid));
+            return new ShowBuild(agent.WebClient.OpenUrl(url));
+        }
+
+        public static ShowBuild Open(RequestAgent agent, int isRe, int pid, int bt, int bid, int tabId, int pedId)
+        {
+            var url = agent.BuildUrl(
+                TCMod.city,
+                TCSubMod.build,
+                TCOperation.Show,
+                TCFunc.build,
+                new TCRequestArgument(TCElement.is_re, isRe),
+                new TCRequestArgument(TCElement.pid, pid),
+                new TCRequestArgument(TCElement.bt, bt),
+                new TCRequestArgument(TCElement.bid, bid),
+                new TCRequestArgument(TCElement.tab_id, tabId),
+                new TCRequestArgument(TCElement.pet_user_id, pedId));
             return new ShowBuild(agent.WebClient.OpenUrl(url));
         }
 

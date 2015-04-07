@@ -34,6 +34,8 @@ namespace TC
 
         get_node,
 
+        get_warpoint,
+
         group_detail,
 
         influence_build,
@@ -68,6 +70,8 @@ namespace TC
 
         out_union,
 
+        re_build,
+
         relive_hero,
 
         reserve_army_info,
@@ -83,6 +87,8 @@ namespace TC
         union_member,
 
         update_city,
+
+        update_level,
 
         use_prop,
 
