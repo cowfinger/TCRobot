@@ -8,6 +8,7 @@ namespace TC
     using System.IO;
     using System.Net;
     using System.Text;
+    using System.Web;
 
     using TC.TCUtility;
 
@@ -110,7 +111,6 @@ namespace TC
                 var request = (HttpWebRequest)WebRequest.Create(url);
                 request.UserAgent = UserAgent;
                 request.Accept = "text/html, application/xhtml+xml, */*";
-                // request.Headers.Add("Accept-Encoding", "gzip, deflate");
                 request.Headers.Add("Accept-Language", "en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3");
                 request.Headers.Add("Cache-Control", "no-cache");
 

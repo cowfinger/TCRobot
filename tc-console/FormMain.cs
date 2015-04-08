@@ -1307,5 +1307,17 @@
                 }
             });
         }
+
+        private void developArmyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                foreach (var account in this.accountTable.Values)
+                {
+                    var page = TCPage.Train.DoDevelop.Open(account.WebAgent, 204);
+                    Logger.Verbose("Train:{0}", page.RawPage);
+                }
+            });
+        }
     }
 }

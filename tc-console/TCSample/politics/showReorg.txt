@@ -1,0 +1,45 @@
+﻿Key	Value
+Request	GET /index.php?mod=civil/politics&op=show&func=reorganize&r=0.43556067265394615 HTTP/1.1
+
+<div class="title" onmouseover="wee.window.set_drag(this)">整顿治安</div>
+<div class="close"><a href="javascript:void(0);" onclick="wee.window.close()"></a></div>
+<div class="mansion_order">
+	<div class="order_hero">
+		<div class="hero">
+		<div id="civil_reorganize_hero_select" class="undis"><iframe src="" width="180" style="display:none"></iframe><div class="select_hero_box"><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="img01"><img hid="2531965" onclick="hero_select.obj['civil_reorganize_hero_select'].chose(this, 2531965,'civil_reorganize_hero_select');" class="on" src="http://static.tc.9wee.com/hero/3/6.gif" titlecontent="jstitle::hero.hero_tip( ['\u7a0b\u718a','1','20.1','18.4','17.1','19.6','17.4','C','C','C','C','C','3','3','1','5','',0,0,'2531965','855153','364','364.2','16','35b276'] )"/><p>[[jslang("hero_status_1")]]</p></div><div class="name"><span class="hero_score_1">程熊</span></div></td></tr></table></div></div><div class="hero_select"><div class="pic"><div class="img01"><img onclick="hero_select.obj['civil_reorganize_hero_select'].show_list();" id="civil_reorganize_hero_select_img" src="http://static.tc.9wee.com/hero/3/6.gif" titlecontent="jstitle::hero.hero_tip( ['\u7a0b\u718a','1','20.1','18.4','17.1','19.6','17.4','C','C','C','C','C','3','3','1','5','',0,0,'2531965','855153','364','364.2','16','35b276'] )"/></div><div class="name button5"><a href="javascript:void(0);" onclick="hero_select.obj['civil_reorganize_hero_select'].show_list();"><span id="civil_reorganize_hero_select_name">程熊</span></a></div></div></div>
+		</div>
+	</div>
+	<div class="order_right">
+		<div class="itable">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<!--
+				<tr>
+					<td width="36%">需要资源</td>
+					<td width="64%">
+						<div class="ziyuan">
+							<ul>
+								smarty函数 need() 参数出错
+							</ul>
+						</div>
+					</td>
+				</tr>
+				-->
+				<tr>
+					<td>冷却时间</td>
+					<td id="repair_need_time"></td>
+				</tr>
+				<tr>
+					<td>影响</td>
+					<td>民忠度 <strong>+15</strong></td>	
+				</tr>
+			</table>
+		</div>
+		<div class="button button2">
+			<a href="javascript:void(0);" onclick="politics.go_ordinance('reorganize')"><span>确定</span></a>
+			<a href="javascript:void(0);" onclick="wee.window.close()"><span>取消</span></a>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+hero_select.init({"2531965":"1[[jslang('hour');]]"}, 'hero_select.build_call_back', 'civil_reorganize_hero_select');
+</script>

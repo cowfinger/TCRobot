@@ -56,7 +56,9 @@ namespace TC.TCTasks
 
         private List<int> requiredResource;
 
-        private bool waiting;
+        private bool buildingInProgress;
+
+        private int reorganizingElapse;
 
         public int TargetBuildId { get; set; }
 
@@ -158,23 +160,59 @@ namespace TC.TCTasks
 
         public override void TaskWorker()
         {
-            if (this.DataPage.BuildEndTimeHex > 0)
+            this.HandleReorganizeEvent();
+
+            this.HandleBuildEvent();
+        }
+
+        private void HandleReorganizeEvent()
+        {
+            if (this.reorganizingElapse > 0)
             {
-                if (this.waiting) return;
-                this.Verbose("Wait {0}", this.DataPage.BuildEndTime);
-                this.waiting = true;
+                this.reorganizingElapse -= 5;
+            }
+
+            var ordinancePage = TCPage.Politics.ShowOrdinance.Open(this.Account.WebAgent);
+            if (!ordinancePage.CanReOrg)
+            {
                 return;
             }
 
-            this.waiting = false;
+            var reOrgHeroId = TCPage.Politics.ShowReorganize.Open(this.Account.WebAgent).FirstHeroId;
+            if (reOrgHeroId == 0)
+            {
+                return;
+            }
 
-            var dogTask = this.PickValidBuild();
+            var doPage = TCPage.Politics.DoReorganize.Open(this.Account.WebAgent, reOrgHeroId);
+            if (!doPage.Success)
+            {
+                this.Verbose("ReOrg:Hero={0} failed:{1}", reOrgHeroId, doPage.RawPage);
+                return;
+            }
 
+            this.Verbose("ReOrg:Hero={0} Success", reOrgHeroId);
+            this.reorganizingElapse = 3600;
+        }
+
+        private void HandleBuildEvent()
+        {
             // Clear cache.
             this.cityPageCache = null;
             this.outBuildsCache = null;
             this.buildPageCache = null;
 
+            if (this.DataPage.BuildEndTimeHex > 0)
+            {
+                if (this.buildingInProgress) return;
+                this.Verbose("Wait {0}", this.DataPage.BuildEndTime);
+                this.buildingInProgress = true;
+                return;
+            }
+
+            this.buildingInProgress = false;
+
+            var dogTask = this.PickValidBuild();
             switch (dogTask)
             {
                 case DogAction.CollectResource:
@@ -250,7 +288,7 @@ namespace TC.TCTasks
 
                     var showBuildPage = ShowBuild.Open(
                         this.Account.WebAgent,
-                        result.ActualBuild.Pid,
+                        result.ActualBuild.Pid == 0 ? 1 : result.ActualBuild.Pid,
                         result.ActualBuild.Bt,
                         result.ActualBuild.BuildId);
                     var heroList = showBuildPage.HeroBuildTimes.ToList();

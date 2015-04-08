@@ -1,0 +1,6 @@
+﻿Key	Value
+Request	POST /index.php?mod=civil/politics&op=do&func=reorganize&r=0.879814976833736 HTTP/1.1
+
+hero_id=2531965
+
+javascript::wee.window.alert('整治成功！');politics.ordinance_callback('reorganize', 3600)

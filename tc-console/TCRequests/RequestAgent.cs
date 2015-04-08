@@ -104,10 +104,10 @@ namespace TC
         {
             const string redirectUrlPattern = "window.location = '(.*?)'";
             const string LoginUrl = "https://passport.9wee.com/login";
+            var userPassPair = string.Format("username={0}&password={1}", this.Account.UserName, this.Account.Password);
+            var userPassData = Uri.EscapeUriString(userPassPair);
             var loginBody = string.Format(
-                "_REFERER=http%3A%2F%2Fyw1.tc.9wee.com%2Findex.php%3Fmod%3Dlogin%26refresh&username={0}&password={1}",
-                this.Account.UserName,
-                this.Account.Password);
+                "_REFERER=http%3A%2F%2Fyw1.tc.9wee.com%2Findex.php%3Fmod%3Dlogin%26refresh&{0}", userPassData);
 
             this.WebClient.Referer = "http://yw1.tc.9wee.com/index.php?mod=login";
             var loginResp = this.WebClient.OpenUrl(LoginUrl, loginBody);

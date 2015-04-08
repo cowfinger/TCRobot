@@ -105,7 +105,7 @@ namespace TC.TCPage.Build
                                 new Build
                                     {
                                         Pid = urlMatch.Success ? int.Parse(urlMatch.Groups["pid"].Value) : 0,
-                                        Bt = urlMatch.Success ? int.Parse(match.Groups["bt"].Value) : 2,
+                                        Bt = urlMatch.Success ? int.Parse(urlMatch.Groups["bt"].Value) : 2,
                                         BuildId = int.Parse(match.Groups["buildId"].Value),
                                         BuildLevel = int.Parse(match.Groups["buildLevel"].Value),
                                         UpgradeRequiredFood = int.Parse(match.Groups["food"].Value),

@@ -1,0 +1,73 @@
+﻿Key	Value
+Request	GET /index.php?mod=civil/politics&op=show&func=ordinance&r=0.5470689354569924 HTTP/1.1
+
+<div class="mansion_3" style="width:554px;overflow:hidden;zoom:1;" id = "task_linshi_zhengbing">
+	<div class="mansion_3_list">
+		<div class="out_box dt">
+			<div class="in_box">整顿治安</div>
+		</div>
+		<div class="img01"><img src="http://static.tc.9wee.com//policy/reorganize.jpg" /></div>
+		<div class="dec out_box">
+			<div class="in_box">对紊乱的城池秩序进行改善，使民众获得安宁，从而提升民忠度。
+			<div class="time" id="civil_reorganize_endtime"></div></div>
+		</div>
+		<div class="button2"><a id="civil_reorganize_a" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=civil/politics&op=show&func=reorganize', 3, true, true, 'civil_ordinance_reorganize_panel')"><span id="civil_reorganize_span">执行</span></a></div>
+	</div>
+	<div class="mansion_3_list">
+		<div class="out_box dt">
+			<div class="in_box">举行庆典</div>
+		</div>
+		<div class="img01"><img src="http://static.tc.9wee.com//policy/celebrate.jpg" /></div>
+		<div class="dec out_box">
+			<div class="in_box">举办一次庆祝仪式，使民众感到快乐。需消耗一定的资源从而提升民忠度。
+			<div class="time" id="civil_celebrate_endtime"></div></div>
+		</div>
+		<div class="button2"><a id="civil_celebrate_a" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=civil/politics&op=show&func=celebrate', 3, true, true, 'civil_ordinance_celebrate_panel')"><span id="civil_celebrate_span">执行</span></a></div>
+	</div>
+	<div class="mansion_3_list">
+		<div class="out_box dt">
+			<div class="in_box">举行宴会</div>
+		</div>
+		<div class="img01"><img src="http://static.tc.9wee.com//policy/banquet.jpg" /></div>
+		<div class="dec out_box">
+			<div class="in_box">宴请自己麾下的将领把酒言欢，使将领的忠诚度获得提升。需消耗一定的资源。
+			<div class="time" id="civil_banquet_endtime"></div></div>
+		</div>
+		<div class="button2"><a id="civil_banquet_a" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=civil/politics&op=show&func=banquet', 3, true, true, 'civil_ordinance_banquet_panel')"><span id="civil_banquet_span">执行</span></a></div>
+	</div>
+	<div class="mansion_3_list">
+		<div class="out_box">
+			<div class="in_box dt">临时征兵</div>
+		</div>
+		<div class="img01"><img src="http://static.tc.9wee.com//policy/draft.jpg" /></div>
+		<div class="dec out_box">
+			<div class="in_box">临时强行招募壮丁组成军队。征得兵种数量与所有城池的兵营等级相关。
+			<div class="time" id="civil_draft_endtime"></div></div>
+		</div>
+		<div class="button2"><a id="civil_draft_a" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=civil/politics&op=show&func=draft', 3, true, true, 'civil_ordinance_draft_panel')"><span id="civil_draft_span">执行</span></a></div>
+	</div>
+	<div class="mansion_3_list">
+		<div class="out_box">
+			<div class="in_box dt">临时征税</div>
+		</div>
+		<div class="img01"><img src="http://static.tc.9wee.com//policy/levy.jpg" /></div>
+		<div class="dec out_box">
+			<div class="in_box">临时强行收缴百姓的资源。征得资源量与所有城池的资源田等级相关。
+			<div class="time" id="civil_levy_endtime"></div></div>
+		</div>
+		<div class="button2"><a id="civil_levy_a" href="javascript:void(0);" onclick="wee.window.fopen('index.php?mod=civil/politics&op=show&func=levy', 3, true, true, 'civil_ordinance_levy_panel')"><span id="civil_levy_span">执行</span></a></div>
+	</div>
+</div>
+<script type="text/javascript">
+if( task.task_value == 'mod:civil/politics|op:do|func:draft' ) {
+	//wee.debug( 'fuck' );
+	task.float_sub_task1('task_linshi_zhengbing','点击进入临时征兵',1,6,500,440,17,1,1,2,2);
+	
+}
+if( task.task_value == 'mod:civil/politics|op:do|func:levy' ) {
+	//wee.debug( 'fuck' );
+	task.float_sub_task1('task_linshi_zhengbing','点击进入临时征税',1,6,610,440,17,1,1,2,2);
+	
+}
+//wee.debug( task.task_value );
+</script>

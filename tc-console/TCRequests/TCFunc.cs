@@ -26,6 +26,8 @@ namespace TC
 
         create_team,
 
+        develop,
+
         disband_team,
 
         disband_group,
@@ -68,11 +70,15 @@ namespace TC
 
         my_heros,
 
+        ordinance,
+
         out_union,
 
         re_build,
 
         relive_hero,
+
+        reorganize,
 
         reserve_army_info,
 

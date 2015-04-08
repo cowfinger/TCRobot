@@ -102,12 +102,16 @@
     <Compile Include="TCPage\Influence\ShowInfluenceBuild.cs" />
     <Compile Include="TCPage\Influence\ShowInfluenceDonate.cs" />
     <Compile Include="TCPage\Politics\DoDraft.cs" />
+    <Compile Include="TCPage\Politics\DoReorganize.cs" />
     <Compile Include="TCPage\Politics\ShowDraft.cs" />
+    <Compile Include="TCPage\Politics\ShowOrdinance.cs" />
+    <Compile Include="TCPage\Politics\ShowReorganize.cs" />
     <Compile Include="TCPage\Prop\DoUseProp.cs" />
     <Compile Include="TCPage\Prop\ShowAllowProp.cs" />
     <Compile Include="TCPage\Resource\DoGetWarPoint.cs" />
     <Compile Include="TCPage\Science\ShowScience.cs" />
     <Compile Include="TCPage\TCPage.cs" />
+    <Compile Include="TCPage\Train\DoDevelop.cs" />
     <Compile Include="TCPage\Union\DoApplyUnion.cs" />
     <Compile Include="TCPage\Union\DoOutUnion.cs" />
     <Compile Include="TCPage\Union\ShowUnionMember.cs" />

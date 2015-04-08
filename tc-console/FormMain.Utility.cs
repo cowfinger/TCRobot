@@ -858,7 +858,7 @@ namespace TC
             var task = new UpgradeBuildDog(account)
             {
                 TargetBuildId = 20,
-                TargetBuildLevel = 5,
+                TargetBuildLevel = 20,
             };
         }
 

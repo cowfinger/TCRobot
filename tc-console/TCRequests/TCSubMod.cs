@@ -22,6 +22,8 @@ namespace TC
 
         science,
 
+        train,
+
         union,
 
         user_info,
