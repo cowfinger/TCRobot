@@ -8,7 +8,9 @@
     using System.Threading;
     using System.Windows.Forms;
 
+    using TC.TCPage.Depot;
     using TC.TCPage.Politics;
+    using TC.TCPage.Prop;
     using TC.TCPage.Union;
     using TC.TCPage.WorldWar;
     using TC.TCTasks;
@@ -698,6 +700,7 @@
                             return;
                         }
 
+                        Logger.Verbose("QuickReliveHero:{0}", toReliveHero.HeroId);
                         TCPage.Prop.DoUseProp.Open(
                             account.WebAgent,
                             reliveItem.PropertyId,
@@ -1316,6 +1319,32 @@
                 {
                     var page = TCPage.Train.DoDevelop.Open(account.WebAgent, 204);
                     Logger.Verbose("Train:{0}", page.RawPage);
+                }
+            });
+        }
+
+        private void contributeUnionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                foreach (var account in this.accountTable.Values)
+                {
+                    for (var i = 0; i < 10; ++i)
+                    {
+                        var dataPage = TCPage.DoGetData.Open(account.WebAgent, account.Tid, account.Tid);
+                        DoDonateRes.Open(account.WebAgent, dataPage.ResourceTabe);
+                        Logger.Verbose("Donate:{0}", string.Join("|", dataPage.ResourceTabe));
+
+                        var resBoxes = ShowMyDepot.EnumDepotItems(account.WebAgent)
+                                .Where(prop => prop.PropertyId == (int)DepotItem.PropId.ResourceBox)
+                                .ToList();
+                        if (!resBoxes.Any())
+                        {
+                            return;
+                        }
+                        var firstBox = resBoxes.First();
+                        DoUseProp.Open(account.WebAgent, firstBox.PropertyId, firstBox.UserPropertyId, 5);
+                    }
                 }
             });
         }

@@ -1,0 +1,6 @@
+﻿Key	Value
+Request	POST /index.php?mod=military/train&op=do&func=recruit&r=0.8893889943045831 HTTP/1.1
+
+id=204&num=15
+
+javascript::wee.window.alert('征募成功!');train.do_recruit_success('204', '82298526')<script type="text/javascript">wee.$( 'task_do' ).className = '' ;</script><script type="text/javascript">task.is_main_city= 1;task.task_type = 0; task.task_value = 0;</script>

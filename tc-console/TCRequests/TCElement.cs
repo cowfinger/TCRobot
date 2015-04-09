@@ -18,6 +18,8 @@ namespace TC
 
         city_id,
 
+        donate_res,
+
         from,
 
         from_address,

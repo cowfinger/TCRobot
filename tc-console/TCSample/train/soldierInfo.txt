@@ -1,81 +1,6 @@
 ﻿GET: /index.php?mod=military/train&op=show&func=info&id=204&r=0.8729087573445453 HTTP/1.1
 
-<!--藏兵-->
-<div class="barrack_1" id='task_train_show_info'>
-    <div class="total_soldier slider_track_i">
-        <div class="slider_track_ibox">
-            <div class="dt">军队总单位量上限：</div>
-            <div class="num">50/200000</div>
-            <div style="width: 0%;" class="per"></div>
-        </div>
-    </div>
-    <div class="soldier_list" id="_soldier_list_">
-        <ul>
-                    <li>
-                <a href="javascript:void(0);" >
-                					<img src="http://static.tc.9wee.com/train/confirm_none/203.gif" onclick="im.add(11, [203,1,0,1.75,1,42,21,17,0,'4','0df4bd']);train.show_info(203);" titleContent=
-"jstitle::train.tip([203,1,0,1.75,1,42,21,17,0,'4','0df4bd']);"/>
-				                    <span class="name" onclick="train.show_info(203);">[[jslang('soldier_203')]] 0</span>
-                </a>
-            </li>
-                    <li>
-                <a href="javascript:void(0);" class="on">
-                					<img src="http://static.tc.9wee.com/train/confirm_none/204.gif" onclick="im.add(11, [204,1,189,0,0,53,84,19,75,'4','aefbfb']);train.show_info(204);" titleContent=
-"jstitle::train.tip([204,1,189,0,0,53,84,19,75,'4','aefbfb']);"/>
-				                    <span class="name" onclick="train.show_info(204);">[[jslang('soldier_204')]] 0</span>
-                </a>
-            </li>
-                    <li>
-                <a href="javascript:void(0);" >
-                					<img src="http://static.tc.9wee.com/train/confirm_none/205.gif" onclick="im.add(11, [205,1,94.5,0,0,242,116,16,35,'4','5df670']);train.show_info(205);" titleContent=
-"jstitle::train.tip([205,1,94.5,0,0,242,116,16,35,'4','5df670']);"/>
-				                    <span class="name" onclick="train.show_info(205);">[[jslang('soldier_205')]] 0</span>
-                </a>
-            </li>
-                    <li>
-                <a href="javascript:void(0);" >
-                					<img src="http://static.tc.9wee.com/train/confirm_none/206.gif" onclick="im.add(11, [206,1,294,0,0,105,347,13,65,'6','e210ac']);train.show_info(206);" titleContent=
-"jstitle::train.tip([206,1,294,0,0,105,347,13,65,'6','e210ac']);"/>
-				                    <span class="name" onclick="train.show_info(206);">[[jslang('soldier_206')]] 0</span>
-                </a>
-            </li>
-                </ul>
-    </div>
-    <div class="soldier_infro" id="soldier_infro_">
-		<div class="table01 itable">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<th colspan="2"><div class="soldier_name">[[jslang('soldier_204')]]</div></th>
-			</tr>
-			<tr>
-				<td width="50%">当前兵力 0</td>
-				<td width="50%">所占单位 4</td>
-			</tr>
-			
-						<tr>
-				<td colspan="2">
-									<div class="soilder_lv">
-					<div class="dt">兵种等级</div>
-					<div class="lvbox">
-					<!--等级2为lv2以此类推-->
-					<div class="lv1" titleContent="等级: 1"></div>
-					</div>
-					<div class="button1">
-												<a class="disabled" ><span titleContent="未研发">升级</span></a>
-						   
-					</div>
-					</div>
-				 				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<div class="soilder_exp">
-						<div class="dt">兵种经验</div>
-						<div class="slider_track_i">
-							<div class="slider_track_ibox">
-                            									<div class="num">0/1120</div>
-								<div class="per" style="width:0%"></div>
-                                							</div>
+</div>
 						</div>
 					</div>
 				</td>
@@ -94,54 +19,48 @@
 			<tr>
 				<td>骑防 <span titleContent="84 + 0">84</span></td>
 				<td>
-									<span titleContent="未研发">停止生产</span>
-				                 
+															生产速度 00:09:44
+									                 
 				</td>
 			</tr>
 		</table>
 		</div>
 				<div class="table02 itable">
-		 <table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
-				<th colspan="2">
-					<div class="soldier_name">研发[[jslang('soldier_204')]]
-					<span class="rec_soilder green">							
-													研发需时 00:27:20 
-						 					</span>
-					</div>
-				</th>
+				<th colspan="2"><div class="soldier_name">招募[[jslang('soldier_204')]]</div></th>
 			</tr>
-
+			<tr>
+				<td width="50%">可征兵力 <span titleContent=
+"当前可供征募的预备兵量">0</span></td>
+				<td width="50%">兵营上限 <span titleContent=
+"兵营可以容纳的预备兵总量">6825</span></td>
+			</tr>
 			<tr>
 				<td colspan="2">
 				<div class="ziyuan">
-					<div class="dt">研发消耗</div>
+					<div class="dt">单兵消耗</div>
 					<ul>
-						<li class="re_m" titleContent="[[jslang('m')]]"><span>2180</span></li><li class="re_s" titleContent="[[jslang('s')]]"><span>2180</span></li><li class="re_t" titleContent="[[jslang('t')]]"><span>2180</span></li><li class="re_l" titleContent="[[jslang('l')]]"><span>2180</span></li>
+						<li class="re_m" titleContent="[[jslang('m')]]"><span>1019</span></li><li class="re_s" titleContent="[[jslang('s')]]"><span>1310</span></li><li class="re_t" titleContent="[[jslang('t')]]"><span>669</span></li><li class="re_l" titleContent="[[jslang('l')]]"><span>175</span></li>
 					</ul>
 				</div>									
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2"> 
-				 <div class="dt">研发前置</div>
-				 <div class="fl">
-				 <ul>
-				   						<li>[[jslang("build_8")]]：5级 (已达成)</li>
-				   				   						<li style="color:red">[[jslang("build_20")]]：3级 (未达成)</li>
-				   				</ul>
-				</div>
-			   </td>
-			</tr>
-			<tr>
-				<td>
-					<div class="button2">
-											<a class="disabled" href="javascript:void(0)"><span titleContent="前置条件未达成">研发</span></a>
-										
+				<td colspan="2">
+					<div class="rec_soilder">
+							招募数量 <input class="input01" style="width:60px;"  id="_train_soldier_num" onblur = "javascript:task.task_check_sol();"/> (<span onclick="train.init_train_soldier_num('0');" titleContent="本次可征募数量/预备兵数量" class="click">0/0</span>) 
 					</div>
 				</td>
 			</tr>
-		</table>           
+			<tr>
+				<td colspan="2">
+					<div class="button2">
+										<a id="task_zhaomu" href="javascript:void(0);" onclick="train.do_recruit(204);"><span>招募</span></a>
+										</div>
+				</td>
+			</tr>
+		</table>
 		</div>
 		    </div>
 </div>
@@ -186,63 +105,4 @@ if( task.task_value == 'mod:military/train|op:do|func:upgrade|id:1||mod:military
 		task.float_sub_task1('task_build_info','请选择下面的贪狼营，再点升级按钮',0,5,290,55,0,0,0,0,0);
 	} else {
 		if( soldier_id == 202 )
-			task.float_sub_task('task_build_info','升级兵种',1,4,480,315,15,0,1,2,1);
-		else
-			task.hide_float();
-		task.float_sub_task1('task_build_info','请选择下面的修罗，再点升级按钮',0,5,420,55,0,0,0,0,0);
-	}
-}
-if( task.task_value == 'mod:military/train|op:do|func:recruit' || task.task_value == '1:1|101:1|202:1' ) {
-	//wee.debug( 'Country:' + country + '\nSoldier_id:' + soldier_id );
-	if( country == 1 ) {
-		if( soldier_id == 1 )
-			task.float_sub_task('task_zhaomu','请输入要招募的数量',1,4,690,390,16,0,1,2,1);
-		else
-			task.hide_float();
-		task.float_sub_task1('task_build_info','请选择下面的青州军，再点招募按钮',0,5,290,55,0,0,0,0,0);	
-	}
-	else if ( country == 2 ) {
-		if( soldier_id == 101 )
-			task.float_sub_task('task_zhaomu','请输入要招募的数量',1,4,690,390,16,0,1,2,1);
-		else
-			task.hide_float();
-		task.float_sub_task1('task_build_info','请选择下面的贪狼营，再点招募按钮',0,5,290,55,0,0,0,0,0);
-	}
-	else if( country ==3 ) {
-		
-		if( soldier_id == 202 )
-			task.float_sub_task('task_zhaomu','请输入要招募的数量',1,4,690,390,16,0,1,2,1);
-		else
-			task.hide_float();
-		task.float_sub_task1('task_build_info','请选择下面的修罗，再点招募按钮',0,5,420,55,0,0,0,0,0);
-	}
-}
-
-if( task.task_value == 'mod:military/train|func:recruit|op:do' ) {
-	//wee.debug( 'Country:' + country + '\nSoldier_id:' + soldier_id );
-	if( country == 1 ) {
-		if( soldier_id == 2 )
-			task.float_sub_task('task_zhaomu','请输入要招募的数量',1,4,690,390,16,0,1,2,1);
-		else
-			task.hide_float();
-		task.float_sub_task1('task_build_info','请选择下面的禁卫甲士，再点招募按钮',0,5,390,55,0,0,0,0,0);	
-	}
-	else if ( country == 2 ) {
-		if( soldier_id == 102 )
-			task.float_sub_task('task_zhaomu','请输入要招募的数量',1,4,690,390,16,0,1,2,1);
-		else
-			task.hide_float();
-		task.float_sub_task1('task_build_info','请选择下面的麒麟卫，再点招募按钮',0,5,390,55,0,0,0,0,0);
-	}
-	else if( country ==3 ) {
-		if( soldier_id == 201 )
-			task.float_sub_task('task_zhaomu','请输入要招募的数量',1,4,690,390,16,0,1,2,1);
-		else
-			task.hide_float();
-		task.float_sub_task1('task_build_info','请选择下面的影卫，再点招募按钮',0,5,290,55,0,0,0,0,0);
-	}
-}
-if( task.task_value == 'mod:task/task|op:do|func:click|act:bubing' ) {
-	task.float_sub_task1('task_train_show_info','在这里你可以查看到每种步兵的详细信息。',0,9,115,-50,6,0,1,2,1);
-}
-</script><script type="text/javascript">wee.$( 'task_do' ).className = '' ;</script><script type="text/javascript">task.is_main_city= 1;task.task_type = 0; task.task_value = 0;</script>
+			task.float_sub_task('task_build_info','升级
