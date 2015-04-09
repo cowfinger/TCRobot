@@ -143,14 +143,16 @@ namespace TC.TCTasks
 
         public override string TaskId
         {
-            get { return "Upgrade Build Dog"; }
+            get { return "UpgradeBuildDog"; }
             set { throw new NotImplementedException(); }
         }
 
         private void Verbose(string format, params object[] args)
         {
             var fmt = string.Format("BuildDog[{0}]:{1}", this.Account.UserName, format);
-            Logger.Verbose(fmt, args);
+            var log = string.Format(fmt, args);
+            this.taskHint = log;
+            Logger.Verbose(log);
         }
 
         public override string GetTaskHint()

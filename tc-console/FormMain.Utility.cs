@@ -860,6 +860,10 @@ namespace TC
                 TargetBuildId = 20,
                 TargetBuildLevel = 20,
             };
+
+            var lvItemTask = new ListViewItem { Tag = task };
+            task.SyncToListViewItem(lvItemTask, RemoteTime);
+            this.listViewTasks.Items.Add(lvItemTask);
         }
 
         private void CreateSpyTask(AccountInfo account)

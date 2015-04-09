@@ -167,6 +167,8 @@
         {
             foreach (ListViewItem lvItemTask in this.listViewTasks.CheckedItems)
             {
+                var task = lvItemTask.Tag as TCTask;
+                task.Stop();
                 this.listViewTasks.Items.Remove(lvItemTask);
             }
         }

@@ -187,6 +187,12 @@
             }
         }
 
+        public void Stop()
+        {
+            this.IsCompleted = true;
+            this.timer.Stop();
+        }
+
         public abstract string GetTaskHint();
 
         public abstract void TaskWorker();

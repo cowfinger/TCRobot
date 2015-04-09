@@ -1120,12 +1120,13 @@
             var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
                                select new { Account = lvItem.Tag as AccountInfo, lvItem }).ToList();
 
-            Parallel.ForEach(
-                accountList,
-                account =>
+            Task.Run(() =>
                 {
-                    DoApplyUnion.Open(account.Account.WebAgent, unionId);
-                    this.Invoke(new DoSomething(() => { account.lvItem.SubItems[2].Text = unionId.ToString(); }));
+                    foreach (var account in accountList)
+                    {
+                        DoApplyUnion.Open(account.Account.WebAgent, unionId);
+                        this.Invoke(new DoSomething(() => { account.lvItem.SubItems[2].Text = unionId.ToString(); }));
+                    }
                 });
         }
 
@@ -1332,7 +1333,7 @@
             {
                 foreach (var account in accountList)
                 {
-                    Logger.Verbose("GetSoldier For {0}", account.UserName);
+                    Logger.Verbose("Hack Buy Soldier:{0}", account.UserName);
                     for (var i = 0; i < 1000; i++)
                     {
                         DoApplyUnion.Open(account.WebAgent, 22757);
@@ -1405,6 +1406,61 @@
                     }
                 }
             });
+        }
+
+        private void buildBrickToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var leadAccount = this.accountTable["clairchen001"];
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
+            Task.Run(() =>
+            {
+                foreach (var account in accountList)
+                {
+                    Logger.Verbose("Start Build Brick:{0}", account.UserName);
+                    if (DoOutUnion.Open(account.WebAgent).RawPage.Contains("才能退出"))
+                    {
+                        Logger.Verbose("Cannot out union");
+                        continue;
+                    }
+
+                    DoApplyUnion.Open(account.WebAgent, 22757);
+                    AcceptMemberRequest(leadAccount);
+
+                    TCPage.Build.DoBrick.Open(account.WebAgent, -1000);
+                    DoOutUnion.Open(account.WebAgent);
+
+                    DoApplyUnion.Open(account.WebAgent, 22757);
+                    AcceptMemberRequest(leadAccount);
+                    TCPage.Build.DoBrick.Open(account.WebAgent, 12);
+                }
+            });
+        }
+
+        private static void AcceptMemberRequest(AccountInfo leadAccount)
+        {
+            var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
+            var requestUsers = memberPage.RequestUsers.ToList();
+
+            foreach (var usrId in requestUsers)
+            {
+                var checkMemberPage = DoCheckMember.Open(
+                    leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
+                if (!checkMemberPage.Success)
+                {
+                    Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
+                }
+            }
+        }
+
+        private void trainAccountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
+            foreach (var account in this.accountTable.Values)
+            {
+                this.CreateBuildDogTask(account);
+            }
         }
     }
 }

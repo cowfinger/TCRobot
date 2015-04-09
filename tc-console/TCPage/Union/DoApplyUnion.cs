@@ -1,8 +1,8 @@
 ﻿namespace TC.TCPage.Union
 {
-    internal class DoApplyUnion
+    internal class DoApplyUnion : TCPage
     {
-        public DoApplyUnion(string page)
+        public DoApplyUnion(string page) : base(page)
         {
         }
 
