@@ -1,0 +1,11 @@
+﻿Key	Value
+Request	GET /index.php?mod=union/union&op=do&func=buy_soldier_from_union&soldier_info=202:1&soldier_level=1&r=0.0766440294138997 HTTP/1.1
+
+javascript::wee.window.alert('购买成功', wee.lang('yes'), 'wee.window.close(\'union_soldiers_\');wee.window.fopen( \'index.php?mod=union/union&op=show&func=union_info&display=donate&union_id=22757\', 2);game.get_data(\'get_re(82298521);\');');
+
+
+购买联盟士兵时想购买自己没有的兵种
+
+购买士兵口粮过多
+
+当前资源不够

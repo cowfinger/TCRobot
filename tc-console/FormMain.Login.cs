@@ -79,6 +79,8 @@
                     account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
                     account.InfluenceMap = TCDataType.InfluenceMap.BuildMap(accountCityList, account);
                     account.Level = this.GetAccountLevel(account);
+                    account.MainCity = accountCityList.Any() ?
+                        accountCityList.Single(cityInfo => cityInfo.CityId == 0) : null;
                 }).Then(
                         () =>
                         {

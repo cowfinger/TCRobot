@@ -1319,5 +1319,63 @@
                 }
             });
         }
+
+        private void hackGetSoldierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var leadAccount = this.accountTable["clairchen001"];
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
+            Task.Run(() =>
+            {
+                foreach (var account in accountList)
+                {
+                    Logger.Verbose("GetSoldier For {0}", account.UserName);
+                    for (var i = 0; i < 1000; i++)
+                    {
+                        DoApplyUnion.Open(account.WebAgent, 22757);
+
+                        var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
+                        var requestUsers = memberPage.RequestUsers.ToList();
+
+                        foreach (var usrId in requestUsers)
+                        {
+                            var checkMemberPage = DoCheckMember.Open(
+                                leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
+                            if (!checkMemberPage.Success)
+                            {
+                                Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
+                            }
+                        }
+
+                        TCPage.Build.DoBrick.Open(account.WebAgent, -1000);
+                        while (true)
+                        {
+                            var doPage = DoBuySoldierFromUnion.Open(account.WebAgent, 204, 30, 1);
+                            if (doPage.Success)
+                            {
+                                continue;
+                            }
+
+                            if (doPage.RawPage.Contains("当前资源不够"))
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                Logger.Verbose("Buy failed:{0}", doPage.RawPage);
+                                i = 1000;
+                                break;
+                            }
+                        }
+
+                        if (DoOutUnion.Open(account.WebAgent).RawPage.Contains("才能退出"))
+                        {
+                            Logger.Verbose("Cannot out union");
+                            break;
+                        }
+                    }
+                }
+            });
+        }
     }
 }

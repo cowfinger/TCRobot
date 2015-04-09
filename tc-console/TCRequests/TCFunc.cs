@@ -12,9 +12,13 @@ namespace TC
 
         attack_confirm,
 
+        brick,
+
         build,
 
         build_repair,
+
+        buy_soldier_from_union,
 
         cancel_apply_influence,
 

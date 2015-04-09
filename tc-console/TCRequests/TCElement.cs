@@ -40,6 +40,8 @@ namespace TC
 
         mt,
 
+        n,
+
         node_id,
 
         now_level,
@@ -61,6 +63,10 @@ namespace TC
         queue_id,
 
         res,
+
+        soldier_info,
+
+        soldier_level,
 
         tab_id,
 
