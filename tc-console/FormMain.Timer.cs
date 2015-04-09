@@ -240,6 +240,7 @@
                             }
                             var toReliveHero = deadHeroList.First();
                             TCPage.Hero.DoReliveHero.Open(account.WebAgent, toReliveHero.HeroId);
+                            Logger.Verbose("ReliveHero:{0}", toReliveHero.HeroId);
                         });
                 };
             this.reliveHeroTimer.Start();

@@ -116,6 +116,7 @@
     <Compile Include="TCPage\Union\DoApplyUnion.cs" />
     <Compile Include="TCPage\Union\DoBuySoldierFromUnion.cs" />
     <Compile Include="TCPage\Union\DoCheckMember.cs" />
+    <Compile Include="TCPage\Union\DoDonateRes.cs" />
     <Compile Include="TCPage\Union\DoOutUnion.cs" />
     <Compile Include="TCPage\Union\ShowUnionMember.cs" />
     <Compile Include="TCPage\UserInfo\ShowUserSurvey.cs" />

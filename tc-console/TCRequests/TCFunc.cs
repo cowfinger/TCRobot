@@ -36,6 +36,8 @@ namespace TC
 
         disband_group,
 
+        donate_res,
+
         draft,
 
         get_node,

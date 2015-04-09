@@ -1,0 +1,4 @@
+﻿Key	Value
+Request	GET /index.php?mod=union/union&op=do&func=donate_res&donate_res=37397|18204|60907|86606&r=0.3686614827754576 HTTP/1.1
+
+javascript::wee.window.alert('捐献资源成功', wee.lang('yes'), 'game.get_data( \'get_re(82298519);\');wee.ajax.load(\'index.php?mod=union/union&op=show&func=union_donate&union_id=22757\',\'_union_content_\');');
