@@ -9,12 +9,15 @@
     using System.Windows.Forms;
 
     using TC.TCPage.Depot;
+    using TC.TCPage.Influence;
     using TC.TCPage.Politics;
     using TC.TCPage.Prop;
     using TC.TCPage.Union;
     using TC.TCPage.WorldWar;
     using TC.TCTasks;
     using TC.TCUtility;
+
+    using DoCheckMember = TC.TCPage.Union.DoCheckMember;
 
     public partial class FormMain : Form
     {
@@ -1384,24 +1387,24 @@
                         continue;
                     }
 
+                    DoApplyUnion.Open(account.WebAgent, 22757);
+
+                    var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
+                    var requestUsers = memberPage.RequestUsers.ToList();
+
+                    foreach (var usrId in requestUsers)
+                    {
+                        var checkMemberPage = DoCheckMember.Open(
+                            leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
+                        if (!checkMemberPage.Success)
+                        {
+                            Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
+                        }
+                    }
+
                     for (var i = 0; i < 1000; i++)
                     {
-                        DoApplyUnion.Open(account.WebAgent, 22757);
-
-                        var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
-                        var requestUsers = memberPage.RequestUsers.ToList();
-
-                        foreach (var usrId in requestUsers)
-                        {
-                            var checkMemberPage = DoCheckMember.Open(
-                                leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
-                            if (!checkMemberPage.Success)
-                            {
-                                Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
-                            }
-                        }
-
-                        TCPage.Build.DoBrick.Open(account.WebAgent, -1000);
+                        TCPage.Build.DoBrick.Open(account.WebAgent, -100);
                         while (true)
                         {
                             var doPage = DoBuySoldierFromUnion.Open(account.WebAgent, 204, 30, 1);
@@ -1421,13 +1424,9 @@
                                 break;
                             }
                         }
-
-                        if (DoOutUnion.Open(account.WebAgent).RawPage.Contains("才能退出"))
-                        {
-                            Logger.Verbose("Cannot out union");
-                            break;
-                        }
                     }
+
+                    DoOutUnion.Open(account.WebAgent);
                 }
             });
         }
@@ -1517,7 +1516,7 @@
 
         private void debugToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var dlg = new FormDebug {Account = this.accountTable.Values.First()};
+            var dlg = new FormDebug { Account = this.accountTable.Values.First() };
             dlg.ShowDialog();
         }
 
@@ -1531,7 +1530,6 @@
 
         private void safeBuildBrickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var leadAccount = this.accountTable["clairchen001"];
             var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
                                select lvItem.Tag as AccountInfo).ToList();
             Task.Run(() =>
@@ -1543,7 +1541,7 @@
                     var dataPage = TCPage.DoGetData.Open(account.WebAgent, account.Tid, account.Tid);
                     var minRes = dataPage.ResourceTabe.Take(4).Min();
                     Logger.Verbose("Res:{0}=>{1}", string.Join("|", dataPage.ResourceTabe.Take(4)), minRes);
-                    var brickCount = minRes/7500;
+                    var brickCount = minRes / 7500;
                     if (brickCount <= 0)
                     {
                         continue;
@@ -1551,6 +1549,27 @@
 
                     Logger.Verbose("Safe Build Brick:{0}", brickCount);
                     TCPage.Build.DoBrick.Open(account.WebAgent, brickCount);
+                }
+            });
+        }
+
+        private void hackDonateInfluenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
+            Task.Run(() =>
+            {
+                foreach (var account in accountList)
+                {
+                    Logger.Verbose("Start HackDonateInfluence:{0}", account.UserName);
+
+                    TCPage.Build.DoBrick.Open(account.WebAgent, -100);
+                    var dataPage = TCPage.DoGetData.Open(account.WebAgent, account.Tid, account.Tid);
+                    var minRes = dataPage.ResourceTabe.Take(4).Min();
+                    Logger.Verbose("Res:{0}=>{1}", string.Join("|", dataPage.ResourceTabe.Take(4)), minRes);
+
+
+                    var resToContribute = CalculateDonations(resNeedTable, donatePage.ResourcsTable).ToList();
                 }
             });
         }

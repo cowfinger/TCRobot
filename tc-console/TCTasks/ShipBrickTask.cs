@@ -45,7 +45,7 @@ namespace TC.TCTasks
             var homeCity = account.InfluenceCityList.Values.First(city => city.CityId == 0);
             var targetCity = this.TargetCity;
 
-            RepairCityWall(this.TargetCity.CityId, this.Account);
+            //RepairCityWall(this.TargetCity.CityId, this.Account);
 
             var completedTasks = this.SubTasks.Where(t => t.IsCompleted).ToList();
             if (completedTasks.Any())
@@ -73,7 +73,9 @@ namespace TC.TCTasks
             else
             {
                 // Search bricks and move troop.
-                var newTasks = account.CityNameList.Select(
+                var candidateCities = account.CityNameList;
+                candidateCities.Add(account.MainCity.Name);
+                var newTasks = candidateCities.Select(
                     cityName =>
                     {
                         var cityInfo = account.InfluenceCityList[cityName];
@@ -157,8 +159,10 @@ namespace TC.TCTasks
                 return null;
             }
 
+            var task = new MoveTroopTask(this.Account, fromCity, toCity, troop, new List<string>(), carryBrickNum);
+            task.MoveTroop();
             Logger.Verbose("Move Brick {0}=>{1}: Task Created {2} Bricks.", fromCity.Name, toCity.Name, carryBrickNum);
-            return new MoveTroopTask(this.Account, fromCity, toCity, soldiers, new List<string>(), carryBrickNum);
+            return task;
         }
 
         private static bool RepairCityWall(int cityId, AccountInfo account)
