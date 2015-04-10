@@ -16,6 +16,8 @@ namespace TC
 
         prop,
 
+        science,
+
         union,
 
         user_relation,

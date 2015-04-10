@@ -167,6 +167,11 @@ namespace TC.TCTasks
             this.HandleBuildEvent();
         }
 
+        private void HandleScienceEvent()
+        {
+            
+        }
+
         private void HandleReorganizeEvent()
         {
             if (this.reorganizingElapse > 0)

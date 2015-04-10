@@ -1,0 +1,90 @@
+﻿
+
+Key	Value
+Request	GET /index.php HTTP/1.1
+
+_REFERER=http%3A%2F%2Fyw1.tc.9wee.com%2Findex.php%3Fmod%3Dlogin%26refresh&username=cupidchiu18&password=jIMMYHYY%23%23%24%243344
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="http://static.tc.9wee.com/style/main_v2.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+html body{background:#000;}
+img{vertical-align:top;}
+#left{background:url(http://static.tc.9wee.com/player/change_account/left.jpg) no-repeat right top scroll; height:801px; width:50%; position:absolute; z-index:-1; left:-500px; top:0;}
+#right{background:url(http://static.tc.9wee.com/player/change_account/right.jpg) no-repeat 499px top scroll; height:801px; width:50%; position:absolute; z-index:-1; right:0; top:0;}
+#main{width:1002px; margin:0 auto; position:relative; overflow:hidden;}
+#main .top{height:167px; background:url(http://static.tc.9wee.com/player/change_account/top1.jpg) 0 0 no-repeat;}
+#main .content{height:518px; color:#000; overflow:hidden; position:relative; background:url(http://static.tc.9wee.com/player/change_account/content1.jpg) no-repeat left top scroll;}
+#main .content .ad{width:602px;margin:58px 0 0 194px; height:300px; overflow:hidden; padding:18px 10px 0 10px; line-height:18px;}
+#main .content .btn{ width:189px; height:57px;width:100%;text-align:center; margin-left:5px;} 
+#main .content .btn a{background:url(http://static.tc.9wee.com/player/change_account/submit.jpg) 0 0 no-repeat; display:inline-block;width:189px; height:57px;}
+#main .content .sel_role{}
+#main .content .sel_role .role_info h3{background:url(http://static.tc.9wee.com/player/change_account/role_info.png) 0 0 no-repeat; width:309px; height:65px;_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.tc.9wee.com/player/change_account/role_info.png'); _background-image: none; /* IE6 */}
+#main .content .sel_role .explain h3{background:url(http://static.tc.9wee.com/player/change_account/explain.png) 0 0 no-repeat; wid
+                                    <li><a href="javascript:void(0);" id='_id_user_select_2201825'  title="选择该账号，点击确定按钮进入游戏" onclick="set_id(2201825)">学徒</a></li>
+                                </ul>
+            </div>
+            <!--角色列表结束-->
+        	<!--角色概况开始-->
+            <div class="role_info">
+                <h3></h3>
+                <div class="info_detail">
+                    <div class="city fl">
+                        <div class="img01 clearflow"><p id='id_city_name'>主城名字</p><img id='id_map_pic'  src="http://static.tc.9wee.com/map/90_90/user/1/5.jpg"/></div>
+                    </div>
+                    <div class="city_detail fr">
+                        <ul>
+                            <li>主&nbsp;&nbsp;&nbsp;公：<span class="det" id='id_nickname'>玩家昵称</span></li>
+                            <li>等&nbsp;&nbsp;&nbsp;级：<span class="det" id='id_city_level'>10</span></li>
+                            <li>所在地：<span class="det" id='id_place'>西川-梁川-剑阁</span></li>
+                            <li>联&nbsp;&nbsp;&nbsp;盟：<span class="det" id='id_union_name'>战火</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!--角色概况结束-->              	
+            <!--说明信息开始-->	
+            <div class="explain">
+            	<h3></h3>
+                <p>
+                    该角色为合服时您保留下来的角色，请在使用时遵守一机一号的规则。
+                </p>
+            </div>
+            <!--说明信息结束-->          
+        </div>
+        <div class="btn"><a href="javascript:document.getElementById('id_form_user_select').submit()"></a></div>
+    </div>
+</div>
+<form action="" method="post" style="display:none" id='id_form_user_select'>
+<input name="g_now_id" id='id_g_now_id' type="hidden" value="542909" />
+</form>
+<script type="text/javascript">
+var arr_user_info={"542909":{"user_id":"542909","map_id":"450751","user_nickname":"1\u53bb\u53bb\u53bb\u53bb","country":"1","union_name":"\u60c5\u8c0a\u65e0\u654c\u76df","city_level":"15","city_name":"\u71d5\u203b\u5723\u6bbf","map_pic":"http:\/\/static.tc.9wee.com\/map\/90_90\/user\/1\/5.jpg","place":"\u4e2d\u539f-\u5180\u5dde-\u5e38\u5c71"},"2201825":{"user_id":"2201825","map_id":"194218","user_nickname":"\u5b66\u5f92","country":"2","union_name":"","city_level":"11","city_name":"\u5b66\u5f92\u57ce","map_pic":"http:\/\/static.tc.9wee.com\/map\/90_90\/user\/2\/5.jpg","place":"\u897f\u5ddd-\u76ca\u5dde-\u6c5f\u5dde"}};
+var g_now_id=542909;
+function set_id(user_id){
+	obj=document.getElementById('_id_user_select_'+g_now_id);
+	obj.className='';
+	g_now_id=user_id;
+	obj=document.getElementById('_id_user_select_'+g_now_id);
+	obj.className='on';
+	document.getElementById('id_city_name').innerHTML=arr_user_info[user_id].city_name;
+	document.getElementById('id_nickname').innerHTML=arr_user_info[user_id].user_nickname;
+	document.getElementById('id_city_level').innerHTML=arr_user_info[user_id].city_level;
+	document.getElementById('id_place').innerHTML=arr_user_info[user_id].place;
+	document.getElementById('id_union_name').innerHTML=arr_user_info[user_id].union_name;
+	document.getElementById('id_map_pic').src=arr_user_info[user_id].map_pic;
+	document.getElementById('id_g_now_id').value=g_now_id;
+}
+function enter_in(){
+	
+}
+set_id(542909);
+</script>
+</body>
+</html>
+
+

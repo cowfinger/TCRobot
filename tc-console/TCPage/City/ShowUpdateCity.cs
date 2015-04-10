@@ -16,7 +16,7 @@ namespace TC.TCPage.City
             @"<span>科技水平：</span>.*?(?<science>\d+).*?" +
             @"<span>繁荣度：</span>.*?(?<creditPoint>\d+)";
 
-        public const string LevelPattern = @"\(等级(\d+) →　3\)";
+        public const string LevelPattern = @"\(等级(\d+) →　\d+\)";
 
         public const string RequiredResPattern = @"""\[\[jslang\('\w'\)\]\]""><span>(\d+)</span>";
 
@@ -58,6 +58,17 @@ namespace TC.TCPage.City
 
         protected ShowUpdateCity(string page) : base(page)
         {
+            var cityLevelMatch = Regex.Match(page, LevelPattern);
+            if (cityLevelMatch.Success)
+            {
+                this.CurrentLevel = int.Parse(cityLevelMatch.Groups[1].Value);
+            }
+            else if (page.Contains("已提升"))
+            {
+                this.CurrentLevel = 25;
+                return;
+            }
+
             var prerequisiteMatch = Regex.Match(page, PrerequsitePattern, RegexOptions.Singleline);
             if (prerequisiteMatch.Success)
             {
@@ -65,12 +76,6 @@ namespace TC.TCPage.City
                 this.RequiredBuildLevel = int.Parse(prerequisiteMatch.Groups["buildLevel"].Value);
                 this.RequiredScience = int.Parse(prerequisiteMatch.Groups["science"].Value);
                 this.RequiredCreditPoint = int.Parse(prerequisiteMatch.Groups["creditPoint"].Value);
-            }
-
-            var cityLevelMatch = Regex.Match(page, LevelPattern);
-            if (cityLevelMatch.Success)
-            {
-                this.CurrentLevel = int.Parse(cityLevelMatch.Groups[1].Value);
             }
 
             var heroSelectMatch = Regex.Match(page, HeroSelectPattern, RegexOptions.Singleline);

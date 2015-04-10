@@ -104,6 +104,7 @@ namespace TC
         {
             const string redirectUrlPattern = "window.location = '(.*?)'";
             const string LoginUrl = "https://passport.9wee.com/login";
+            const string MegeLoginUrl = "http://yw1.tc.9wee.com/index.php?mod=player/player&op=show&func=merge_login";
             var userPassPair = string.Format("username={0}&password={1}", this.Account.UserName, this.Account.Password);
             var userPassData = Uri.EscapeUriString(userPassPair);
             var loginBody = string.Format(
@@ -119,6 +120,25 @@ namespace TC
 
             var url = redirectUrlMatch.Groups[1].Value;
             var mainPage = this.WebClient.OpenUrl(url);
+
+            const string MergeLoginPattern = @"onclick=""set_id\((\d+)\)"">(.*?)</a></li>";
+            var matches = Regex.Matches(mainPage, MergeLoginPattern);
+            var subAccounts = (from Match subAccountMatch in matches
+                              let subId = int.Parse(subAccountMatch.Groups[1].Value)
+                              let name = subAccountMatch.Groups[2].Value
+                              select new {subId, name}).ToList();
+            if (subAccounts.Any())
+            {
+                var dlg = new FormChooseAccount();
+                foreach (var item in subAccounts)
+                {
+                    dlg.AddAccount(item.subId, item.name);
+                }
+                dlg.ShowDialog();
+
+                mainPage = this.WebClient.OpenUrl(
+                    MegeLoginUrl, string.Format("g_now_id={0}", dlg.TargetAccountId));
+            }
 
             const string MainCityPattern = @"game\.city_id = (\d+);";
             var match = Regex.Match(mainPage, MainCityPattern);

@@ -86,6 +86,11 @@
                             return;
                         }
 
+                        if (this.Disposing)
+                        {
+                            return;
+                        }
+
                         this.Invoke(
                             new DoSomething(
                                 () =>

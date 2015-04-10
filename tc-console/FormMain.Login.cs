@@ -13,14 +13,27 @@
     {
         private const string CookieFolder = @".\Cookie";
 
-        private void LoginAccount(string account)
+        private void LoginAccount(AccountInfo accountInfo)
         {
             //this.loginLock.WaitOne();
             {
-                this.activeAccount = account;
-                var accountInfo = this.accountTable[this.activeAccount];
 
-                var fileName = Path.Combine(CookieFolder, account);
+                this.Invoke(
+                    new DoSomething(
+                        () =>
+                        {
+                            foreach (ListViewItem lvItem in this.listViewAccounts.Items)
+                            {
+                                var tagAccount = lvItem.Tag as AccountInfo;
+                                if (tagAccount == accountInfo)
+                                {
+                                    lvItem.SubItems[1].Text = "登陆中";
+                                    break;
+                                }
+                            }
+                        }));
+
+                var fileName = Path.Combine(CookieFolder, accountInfo.UserName);
                 if (File.Exists(fileName))
                 {
                     var cc = HttpClient.LoadCookies(fileName);
@@ -29,7 +42,7 @@
                         WebClient = { Cookies = cc }
                     };
 
-                    var homePage = this.RefreshHomePage(account);
+                    var homePage = this.RefreshHomePage(accountInfo.UserName);
                     if (homePage.Contains("wee.timer.set_time"))
                     {
                         accountInfo.LoginStatus = "on-line";

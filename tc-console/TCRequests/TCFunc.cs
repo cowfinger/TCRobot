@@ -30,6 +30,8 @@ namespace TC
 
         create_team,
 
+        create_union,
+
         develop,
 
         disband_team,
@@ -85,6 +87,8 @@ namespace TC
         relive_hero,
 
         reorganize,
+
+        recruit,
 
         reserve_army_info,
 

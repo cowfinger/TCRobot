@@ -67,6 +67,18 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormChooseAccount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChooseAccount.Designer.cs">
+      <DependentUpon>FormChooseAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormDebug.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDebug.Designer.cs">
+      <DependentUpon>FormDebug.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormSelectCity.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +114,7 @@
     <Compile Include="TCPage\Influence\DoBuildRepair.cs" />
     <Compile Include="TCPage\Influence\ShowInfluenceBuild.cs" />
     <Compile Include="TCPage\Influence\ShowInfluenceDonate.cs" />
+    <Compile Include="TCPage\Player\ShowMergeLogin.cs" />
     <Compile Include="TCPage\Politics\DoDraft.cs" />
     <Compile Include="TCPage\Politics\DoReorganize.cs" />
     <Compile Include="TCPage\Politics\ShowDraft.cs" />
@@ -110,6 +123,7 @@
     <Compile Include="TCPage\Prop\DoUseProp.cs" />
     <Compile Include="TCPage\Prop\ShowAllowProp.cs" />
     <Compile Include="TCPage\Resource\DoGetWarPoint.cs" />
+    <Compile Include="TCPage\Science\ShowRecruit.cs" />
     <Compile Include="TCPage\Science\ShowScience.cs" />
     <Compile Include="TCPage\TCPage.cs" />
     <Compile Include="TCPage\Train\DoDevelop.cs" />
@@ -118,6 +132,7 @@
     <Compile Include="TCPage\Union\DoCheckMember.cs" />
     <Compile Include="TCPage\Union\DoDonateRes.cs" />
     <Compile Include="TCPage\Union\DoOutUnion.cs" />
+    <Compile Include="TCPage\Union\ShowCreateUnion.cs" />
     <Compile Include="TCPage\Union\ShowUnionMember.cs" />
     <Compile Include="TCPage\UserInfo\ShowUserSurvey.cs" />
     <Compile Include="TCPage\WorldWar\DoAttack.cs" />
@@ -190,8 +205,14 @@
     <Compile Include="TCRequests\TCSubMod.cs" />
     <Compile Include="TCTasks\TCTask.cs" />
     <Compile Include="TCPage\WorldWar\DoMoveArmy.cs" />
+    <EmbeddedResource Include="FormChooseAccount.resx">
+      <DependentUpon>FormChooseAccount.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormChooseTroopHead.resx">
       <DependentUpon>FormChooseTroopHead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDebug.resx">
+      <DependentUpon>FormDebug.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormJoinUnion.resx">
       <DependentUpon>FormJoinUnion.cs</DependentUpon>

@@ -37,8 +37,6 @@
 
         private readonly Random randGen = new Random(DateTime.Now.Millisecond);
 
-        private string activeAccount;
-
         private string hostname = "yw1.tc.9wee.com";
 
         public FormMain()
@@ -596,8 +594,19 @@
 
         private void ToolStripMenuItemBatchLogin_Click(object sender, EventArgs e)
         {
-            Task.Run(this.BatchLoginProc);
-            // Parallel.Dispatch(this.accountTable.Keys, this.LoginAccount);
+            // Task.Run(this.BatchLoginProc);
+            // var accounts = this.accountTable.Keys.ToList();
+            var accounts = (from ListViewItem item in this.listViewAccounts.Items
+                            select item.Tag as AccountInfo).ToList();
+            Task.Run(() =>
+            {
+                while (accounts.Any())
+                {
+                    var toAuthAccounts = accounts.Take(10).ToList();
+                    Parallel.ForEach(toAuthAccounts, this.LoginAccount);
+                    accounts.RemoveRange(0, toAuthAccounts.Count());
+                }
+            });
         }
 
         private void ToolStripMenuItemScan_Click(object sender, EventArgs e)
@@ -1156,18 +1165,18 @@
             }
 
             this.repairCityToolStripMenuItem.Enabled = false;
-            Parallel.Dispatch(
-                cityAccountGroups,
-                group =>
+            Task.Run(() =>
+            {
+                foreach (var group in cityAccountGroups)
                 {
                     string cityIdStr;
-                    if (!this.cityList.TryGetValue(@group.Key, out cityIdStr))
+                    if (!this.cityList.TryGetValue(group.Key, out cityIdStr))
                     {
                         return;
                     }
 
                     var cityId = int.Parse(cityIdStr);
-                    foreach (var account in @group)
+                    foreach (var account in group)
                     {
                         if (!RepairCityWall(cityId, account.account))
                         {
@@ -1175,20 +1184,23 @@
                         }
                         Thread.Sleep(1000);
                     }
-                }).Then(
-                        () =>
-                        {
-                            MessageBox.Show("所有城市修理完毕.");
-                            this.Invoke(new DoSomething(() => { this.repairCityToolStripMenuItem.Enabled = true; }));
-                        });
+
+                }
+            }).Then(() =>
+            {
+                MessageBox.Show("所有城市修理完毕.");
+                this.Invoke(new DoSomething(() => { this.repairCityToolStripMenuItem.Enabled = true; }));
+            });
         }
 
         private void enlistTroopToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
             Task.Run(
                 () =>
                 {
-                    foreach (var account in this.accountTable.Values)
+                    foreach (var account in accountList)
                     {
                         var infoPage = ShowDraft.Open(account.WebAgent);
                         if (infoPage.LeftTimes <= 0)
@@ -1301,9 +1313,11 @@
 
         private void getWarPointToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
             Task.Run(() =>
             {
-                foreach (var account in this.accountTable.Values)
+                foreach (var account in accountList)
                 {
                     var page = TCPage.Resource.DoGetWarPoint.Open(account.WebAgent);
                     Logger.Verbose("GetWarPoint[{0}]:Total:{1}, Get{2}",
@@ -1314,14 +1328,42 @@
 
         private void developArmyToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
             Task.Run(() =>
             {
-                foreach (var account in this.accountTable.Values)
+                foreach (var account in accountList)
                 {
-                    var page = TCPage.Train.DoDevelop.Open(account.WebAgent, 204);
-                    Logger.Verbose("Train:{0}", page.RawPage);
+                    var soldierId = CalcEffectiveSoldierId(account);
+                    if (soldierId == 0)
+                    {
+                        continue;
+                    }
+                    var page = TCPage.Train.DoDevelop.Open(account.WebAgent, soldierId);
+                    Logger.Verbose("{0} Train:{1}", account.UserName, page.RawPage);
                 }
             });
+        }
+
+        private static int CalcEffectiveSoldierId(AccountInfo account)
+        {
+            int soldierId = 0;
+            var infoPage = ShowDraft.Open(account.WebAgent);
+            var maxSpeed = 0;
+            foreach (var soldier in SoldierTable.Values)
+            {
+                if (!infoPage.SoldierIdSet.Contains(soldier.SoldierId))
+                {
+                    continue;
+                }
+
+                if (soldier.Speed > maxSpeed && soldier.Capacity > 0)
+                {
+                    maxSpeed = soldier.Speed;
+                    soldierId = soldier.SoldierId;
+                }
+            }
+            return soldierId;
         }
 
         private void hackGetSoldierToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1334,6 +1376,14 @@
                 foreach (var account in accountList)
                 {
                     Logger.Verbose("Hack Buy Soldier:{0}", account.UserName);
+
+                    var soldierId = CalcEffectiveSoldierId(account);
+                    if (soldierId == 0)
+                    {
+                        Logger.Verbose("Canceled Since No Valid Soldier");
+                        continue;
+                    }
+
                     for (var i = 0; i < 1000; i++)
                     {
                         DoApplyUnion.Open(account.WebAgent, 22757);
@@ -1384,9 +1434,11 @@
 
         private void contributeUnionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
             Task.Run(() =>
             {
-                foreach (var account in this.accountTable.Values)
+                foreach (var account in accountList)
                 {
                     for (var i = 0; i < 10; ++i)
                     {
@@ -1457,10 +1509,50 @@
         {
             var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
                                select lvItem.Tag as AccountInfo).ToList();
-            foreach (var account in this.accountTable.Values)
+            foreach (var account in accountList)
             {
                 this.CreateBuildDogTask(account);
             }
+        }
+
+        private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var dlg = new FormDebug {Account = this.accountTable.Values.First()};
+            dlg.ShowDialog();
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.taskTimer != null)
+            {
+                this.taskTimer.Stop();
+            }
+        }
+
+        private void safeBuildBrickToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var leadAccount = this.accountTable["clairchen001"];
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
+            Task.Run(() =>
+            {
+                foreach (var account in accountList)
+                {
+                    Logger.Verbose("Start Safe Build Brick:{0}", account.UserName);
+
+                    var dataPage = TCPage.DoGetData.Open(account.WebAgent, account.Tid, account.Tid);
+                    var minRes = dataPage.ResourceTabe.Take(4).Min();
+                    Logger.Verbose("Res:{0}=>{1}", string.Join("|", dataPage.ResourceTabe.Take(4)), minRes);
+                    var brickCount = minRes/7500;
+                    if (brickCount <= 0)
+                    {
+                        continue;
+                    }
+
+                    Logger.Verbose("Safe Build Brick:{0}", brickCount);
+                    TCPage.Build.DoBrick.Open(account.WebAgent, brickCount);
+                }
+            });
         }
     }
 }

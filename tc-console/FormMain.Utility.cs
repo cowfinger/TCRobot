@@ -355,14 +355,6 @@ namespace TC
             }
         }
 
-        private void BatchLoginProc()
-        {
-            foreach (var key in this.accountTable.Keys)
-            {
-                this.LoginAccount(key);
-            }
-        }
-
         private static string BuildSubHeroesString(ref List<string> heroList)
         {
             var validHeros = heroList.Where((hero, index) => index < 4);
