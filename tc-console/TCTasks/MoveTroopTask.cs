@@ -1,3 +1,5 @@
+using System;
+
 namespace TC.TCTasks
 {
     using System.Collections.Generic;
@@ -6,7 +8,6 @@ namespace TC.TCTasks
 
     using TC.TCPage.Influence;
     using TC.TCPage.WorldWar;
-    using TC.TCUtility;
 
     internal class MoveTroopTask : TCTask
     {
@@ -20,6 +21,8 @@ namespace TC.TCTasks
 
         public List<Soldier> SoldierList;
 
+        public bool CanMove { get; private set; }
+
         public MoveTroopTask(
             AccountInfo account,
             CityInfo fromCity,
@@ -32,8 +35,16 @@ namespace TC.TCTasks
             var initialHelper = new DijstraHelper(account.InfluenceMap) { Account = account };
 
             var initialPath = initialHelper.GetPath(fromCity.Name, toCity.Name, soldierList).ToList();
+
+            this.CanMove = initialPath.Any();
+            if (!this.CanMove)
+            {
+                this.Stop();
+                return;
+            }
+
             initialPath.Reverse();
-            var nextCity = account.InfluenceCityList[initialPath.First()];
+            var nextCity = account.InfluenceCityList[initialPath.First().Name];
 
             this.CurrentCity = fromCity;
             this.NextCity = nextCity;
@@ -41,7 +52,7 @@ namespace TC.TCTasks
             this.BrickNum = brickNum;
             this.SoldierList = soldierList;
             this.HeroIdList = heroList;
-            this.Path = initialPath;
+            this.Path = initialPath.Select(city => city.Name).ToList();
         }
 
         public CityInfo CurrentCity { get; set; }
@@ -74,22 +85,28 @@ namespace TC.TCTasks
                 return;
             }
 
-            Logger.Verbose("Troop Arrived: {0}.", this.NextCity.Name);
+            this.Verbose("Troop Arrived: {0}.", this.NextCity.Name);
 
             if (this.NextCity == this.TerminalCity)
             {
-                this.IsCompleted = true;
+                this.Stop();
                 return;
             }
 
-            var helper = new DijstraHelper(this.Account.InfluenceMap) { Account = this.Account};
+            var helper = new DijstraHelper(this.Account.InfluenceMap) { Account = this.Account };
 
-            var path = helper.GetPath(this.NextCity.Name, this.TerminalCity.Name, this.SoldierList).ToList();
+            var path = helper.GetPath(
+                this.NextCity.Name, this.TerminalCity.Name, this.SoldierList).ToList();
+
             path.Reverse();
 
-            this.Path = path;
+            var distance = path.Sum(n => n.Distance);
+
+            this.Path = path.Select(n => n.Name).ToList();
             this.CurrentCity = this.NextCity;
-            this.NextCity = this.Account.InfluenceCityList[path.First()];
+            this.NextCity = this.Account.InfluenceCityList[path.First().Name];
+
+            this.Verbose("ETA: {0} mins.", distance);
 
             this.MoveTroop();
         }
@@ -127,38 +144,57 @@ namespace TC.TCTasks
                     continue;
                 }
 
-                var thisMoveTask =
-                    newMoveArmyQueue.Items.Single(
-                        taskItem => !moveArmyQueue.Items.Select(item => item.TaskId).Contains(taskItem.TaskId));
+                var thisMoveTasks =
+                    newMoveArmyQueue.Items.Where(
+                        taskItem => !moveArmyQueue.Items.Select(item => item.TaskId).Contains(taskItem.TaskId)).ToList();
+
+                if (!thisMoveTasks.Any())
+                {
+                    continue;
+                }
+
+                var thisMoveTask = thisMoveTasks.First();
                 this.TaskId = thisMoveTask.TaskId.ToString();
                 this.ExecutionTime = thisMoveTask.Eta.AddSeconds(2);
-                Logger.Verbose(
-                    "Troop is moving: {0}=>{1}, ETA={2}.",
+                this.Verbose(
+                    "Troop is moving: {0}=>{1}=>...=>{2}, ETA={3}.",
                     this.CurrentCity.Name,
                     this.NextCity.Name,
+                    this.TerminalCity.Name,
                     thisMoveTask.Eta);
                 break;
             }
         }
+
         private bool HasTroopArrived()
         {
-            var cityNodeId = this.NextCity.CityId;
-            var fromCityId = this.NextCity.NodeId;
-            ShowInfluenceCityDetail.Open(this.Account.WebAgent, cityNodeId);
-            var moveArmyPage = ShowMoveArmy.Open(this.Account.WebAgent, fromCityId);
-
-            if (this.HeroIdList.Count > 0)
+            if (this.NextCity == null)
             {
-                var heroes = moveArmyPage.HeroList.Select(h => h.HeroId).ToList();
-                var heroMatchCount = this.HeroIdList.Sum(hero => heroes.Contains(int.Parse(hero)) ? 1 : 0);
-                if (heroMatchCount != this.HeroIdList.Count)
-                {
-                    return false;
-                }
+                this.Stop();
+                return false;
             }
 
-            if (this.SoldierList.Count > 0)
+            try
             {
+                var cityNodeId = this.NextCity.CityId;
+                var fromCityId = this.NextCity.NodeId;
+                ShowInfluenceCityDetail.Open(this.Account.WebAgent, cityNodeId);
+                var moveArmyPage = ShowMoveArmy.Open(this.Account.WebAgent, fromCityId);
+
+                if (this.HeroIdList.Count > 0)
+                {
+                    var heroes = moveArmyPage.HeroList.Select(h => h.HeroId).ToList();
+                    var heroMatchCount = this.HeroIdList.Sum(hero => heroes.Contains(int.Parse(hero)) ? 1 : 0);
+                    if (heroMatchCount != this.HeroIdList.Count)
+                    {
+                        return false;
+                    }
+                }
+
+                if (this.SoldierList.Count <= 0)
+                {
+                    return true;
+                }
                 var troop = moveArmyPage.Army.ToList();
                 foreach (var soldier in this.SoldierList)
                 {
@@ -173,9 +209,15 @@ namespace TC.TCTasks
                         return false;
                     }
                 }
-            }
 
-            return true;
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                this.Verbose("HasTroopArrived Exception:{0}", e.Message);
+                return false;
+            }
         }
     }
 }

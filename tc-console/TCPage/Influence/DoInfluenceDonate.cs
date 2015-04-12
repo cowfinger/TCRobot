@@ -12,14 +12,13 @@ namespace TC.TCPage.Influence
             get { return this.RawPage.Contains("成功"); }
         }
 
-        public static DoInfluenceDonate Open(RequestAgent agent, IList<long> resList)
+        public static DoInfluenceDonate Open(RequestAgent agent, IEnumerable<long> resList)
         {
-            var toContriRes = "".PadRight(6).Zip(resList, (x, y) => y).ToList();
+            var toContriRes = resList.ToList();
             var resValue = string.Join("|", toContriRes);
-            var padValue = string.Join("|", "".PadRight(6 - toContriRes.Count, '0'));
-            if (!string.IsNullOrEmpty(padValue))
+            for (var i = toContriRes.Count; i < 6; ++i)
             {
-                resValue += padValue;
+                resValue += "|0";
             }
 
             var url = agent.BuildUrl(

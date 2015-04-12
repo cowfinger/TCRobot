@@ -134,6 +134,11 @@
             const string SelectedCityPattern = "<option value=\"(?<nodeId>\\d+)\" selected\\s*>(?<name>[^<]+)</option>";
 
             var contentParts = content.Split(new[] { "目的地：" }, StringSplitOptions.RemoveEmptyEntries);
+            if (!contentParts.Any())
+            {
+                yield break;
+            }
+
             var fromCityMatches = Regex.Matches(contentParts[0], CityPattern);
             var selectedCityMatch = Regex.Match(contentParts[0], SelectedCityPattern);
 

@@ -40,7 +40,10 @@ namespace TC.TCDataType
                         var moveArmyPage = ShowMoveArmy.Open(accountInfo.WebAgent, cityInfo.NodeId);
                         foreach (var city in moveArmyPage.MoveTargetCityList)
                         {
-                            toSet.Add(city.Name);
+                            if (city.NodeId != 0)
+                            {
+                                toSet.Add(city.Name);
+                            }
                         }
                         GolalMap.Add(cityInfo.Name, toSet);
                     }

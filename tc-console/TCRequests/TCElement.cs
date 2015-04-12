@@ -66,6 +66,8 @@ namespace TC
 
         res,
 
+        science_id,
+
         soldier_info,
 
         soldier_level,

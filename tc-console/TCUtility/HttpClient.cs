@@ -122,7 +122,7 @@ namespace TC
                     this.Referer = "";
                 }
 
-                if (!string.IsNullOrEmpty(body))
+                if (body != null)
                 {
                     var codedBytes = Encoding.ASCII.GetBytes(body);
                     request.Method = "POST";

@@ -95,33 +95,40 @@
                             new DoSomething(
                                 () =>
                                 {
-                                    var toRemoveList = new List<ListViewItem>();
-                                    foreach (ListViewItem lvItem in this.listViewTasks.Items)
+                                    try
                                     {
-                                        var task = lvItem.Tag as TCTask;
-                                        if (task == null)
+                                        var toRemoveList = new List<ListViewItem>();
+                                        foreach (ListViewItem lvItem in this.listViewTasks.Items)
                                         {
-                                            continue;
+                                            var task = lvItem.Tag as TCTask;
+                                            if (task == null)
+                                            {
+                                                continue;
+                                            }
+
+                                            var timeLeft = (int)((task.ExecutionTime - remoteTimeSnapshot).TotalSeconds);
+                                            lvItem.SubItems[4].Text = Time2Str(timeLeft);
+
+                                            var hint = task.GetTaskHint();
+                                            if (lvItem.SubItems[5].Text != hint)
+                                            {
+                                                lvItem.SubItems[5].Text = hint;
+                                            }
+
+                                            if (task.IsCompleted)
+                                            {
+                                                toRemoveList.Add(lvItem);
+                                            }
                                         }
 
-                                        var timeLeft = (int)((task.ExecutionTime - remoteTimeSnapshot).TotalSeconds);
-                                        lvItem.SubItems[4].Text = Time2Str(timeLeft);
-
-                                        var hint = task.GetTaskHint();
-                                        if (lvItem.SubItems[5].Text != hint)
+                                        foreach (var lvItem in toRemoveList)
                                         {
-                                            lvItem.SubItems[5].Text = hint;
-                                        }
-
-                                        if (task.IsCompleted)
-                                        {
-                                            toRemoveList.Add(lvItem);
+                                            this.listViewTasks.Items.Remove(lvItem);
                                         }
                                     }
-
-                                    foreach (var lvItem in toRemoveList)
+                                    catch (Exception)
                                     {
-                                        this.listViewTasks.Items.Remove(lvItem);
+                                        // ignored
                                     }
                                 }));
                     }

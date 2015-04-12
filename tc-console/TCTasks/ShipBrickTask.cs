@@ -26,7 +26,7 @@ namespace TC.TCTasks
         {
             get
             {
-                return string.Format("{0}=>{1}", this.Account.UserName, this.TargetCity.Name);
+                return string.Format("ShipBrick");
             }
             set
             {
@@ -41,13 +41,31 @@ namespace TC.TCTasks
 
         public override void TaskWorker()
         {
+            this.ScheSubTasks();
+        }
+
+        public void TryScheSubTasks()
+        {
+            try
+            {
+                this.ScheSubTasks();
+            }
+            catch (Exception e)
+            {
+                this.Verbose("ShipBrickTask[{0}]:Schedule Sub Tasks Exception:{1}",
+                    this.Account.UserName, e.Message);
+            }
+        }
+
+        public void ScheSubTasks()
+        {
             var account = this.Account;
             var homeCity = account.InfluenceCityList.Values.First(city => city.CityId == 0);
             var targetCity = this.TargetCity;
 
-            //RepairCityWall(this.TargetCity.CityId, this.Account);
-
+            var runningTasks = this.SubTasks.Where(t => !t.IsCompleted).ToList();
             var completedTasks = this.SubTasks.Where(t => t.IsCompleted).ToList();
+
             if (completedTasks.Any())
             {
                 foreach (var subTask in completedTasks)
@@ -70,9 +88,12 @@ namespace TC.TCTasks
                     this.SubTasks.Add(this.ShipBrickCreateMoveTroopTask(account, targetCity, homeCity));
                 }
             }
-            else
+            else if (!runningTasks.Any())
             {
                 // Search bricks and move troop.
+                var cityArmyPage = ShowInfluenceCityArmy.Open(account.WebAgent);
+                account.CityNameList = cityArmyPage.Cities.ToList();
+
                 var candidateCities = account.CityNameList;
                 candidateCities.Add(account.MainCity.Name);
                 var newTasks = candidateCities.Select(
@@ -94,18 +115,33 @@ namespace TC.TCTasks
                         var brickNum = moveArmyPage.BrickNum;
 
                         return brickNum == 0
-                                   ? this.ShipBrickCreateMoveTroopTask(account, cityInfo, homeCity)
-                                   : this.ShipBrickCreateMoveBrickTask(account, cityInfo, targetCity);
+                            ? this.ShipBrickCreateMoveTroopTask(account, cityInfo, homeCity)
+                            : this.ShipBrickCreateMoveBrickTask(account, cityInfo, targetCity);
                     }).Where(t => t != null).ToList();
                 this.SubTasks.AddRange(newTasks);
             }
         }
+
         private MoveTroopTask ShipBrickCreateMoveTroopTask(AccountInfo account, CityInfo fromCity, CityInfo toCity)
         {
             var moveArmyPage = ShowMoveArmy.Open(account.WebAgent, fromCity.NodeId);
             var troop = moveArmyPage.Army.ToList();
+            if (troop.Sum(t => t.SoldierNumber) <= 0)
+            {
+                return null;
+            }
 
-            return new MoveTroopTask(this.Account, fromCity, toCity, troop, new List<string>(), 0);
+            var task = new MoveTroopTask(this.Account, fromCity, toCity, troop, new List<string>(), 0);
+            if (!task.CanMove)
+            {
+                this.Stop();
+                return null;
+            }
+
+            task.MoveTroop();
+
+            this.Verbose("Move Troop Home Task: {0}=>{1}=>{2}", fromCity.Name, task.NextCity.Name, toCity.Name);
+            return task;
         }
 
         private static int CalcCarryBrickNum(IEnumerable<Soldier> army)
@@ -118,11 +154,11 @@ namespace TC.TCTasks
             var soldierList = army.ToList();
             soldierList.Sort(
                 (x, y) =>
-                    {
-                        var indexX = FormMain.SoldierTable[x.SoldierType].Capacity * FormMain.SoldierTable[x.SoldierType].Speed;
-                        var indexY = FormMain.SoldierTable[y.SoldierType].Capacity * FormMain.SoldierTable[y.SoldierType].Speed;
-                        return indexX.CompareTo(indexY);
-                    });
+                {
+                    var indexX = FormMain.SoldierTable[x.SoldierType].Capacity * FormMain.SoldierTable[x.SoldierType].Speed;
+                    var indexY = FormMain.SoldierTable[y.SoldierType].Capacity * FormMain.SoldierTable[y.SoldierType].Speed;
+                    return indexX.CompareTo(indexY);
+                });
             soldierList.Reverse();
 
             var totalCap = brickNum * 50000;
@@ -155,17 +191,29 @@ namespace TC.TCTasks
             var troop = this.CalcCarryTroop(soldiers, carryBrickNum).ToList();
             if (carryBrickNum == 0)
             {
-                Logger.Verbose("Move Brick {0}=>{1}: Canceld: No Brick.", fromCity.Name, toCity.Name);
+                // this.Verbose("Move Brick [{2}]: {0}=>{1}: Canceled: Bricks:{3}/{4}",
+                //     fromCity.Name, toCity.Name, account.UserName, brickNum, carryBrickNum);
                 return null;
             }
 
+            this.Verbose("Move Brick: {0}=>{1}: Start Create Task: {2} Bricks.",
+                fromCity.Name, toCity.Name, carryBrickNum);
             var task = new MoveTroopTask(this.Account, fromCity, toCity, troop, new List<string>(), carryBrickNum);
+            if (!task.CanMove)
+            {
+                this.IsCompleted = true;
+                this.Stop();
+                this.Verbose("Cannot Move.");
+                return null;
+            }
+            this.Verbose("Move Brick: {0}=>{1}=>{2}: Task Created: {3} Bricks.",
+                fromCity.Name, task.NextCity.Name, toCity.Name, carryBrickNum);
+
             task.MoveTroop();
-            Logger.Verbose("Move Brick {0}=>{1}: Task Created {2} Bricks.", fromCity.Name, toCity.Name, carryBrickNum);
             return task;
         }
 
-        private static bool RepairCityWall(int cityId, AccountInfo account)
+        private bool RepairCityWall(int cityId, AccountInfo account)
         {
             ShowInfluenceCityDetail.Open(account.WebAgent, cityId);
 
@@ -174,12 +222,12 @@ namespace TC.TCTasks
             var cityRepairWallPage = ShowInfluenceBuild.Open(
                 account.WebAgent,
                 cityId,
-                (int)CityBuildId.Wall,
-                cityBuildPage.Wall.Level);
+                (int)CityBuildId.Fortress,
+                cityBuildPage.Fortress.Level);
 
             if (cityRepairWallPage.CompleteRepairNeeds == 0)
             {
-                Logger.Verbose("Repair Wall at {0} canceled: No Need.", cityBuildPage.CityName);
+                this.Verbose("Repair Wall at {0} canceled: No Need.", cityBuildPage.CityName);
                 return false;
             }
 
@@ -192,11 +240,11 @@ namespace TC.TCTasks
                     cityRepairWallPage.CityNodeId,
                     cityRepairWallPage.BuildId,
                     brickNumToUse);
-                Logger.Verbose("Repair Wall at {0} Ok", cityBuildPage.CityName);
+                this.Verbose("Repair Wall at {0} Ok", cityBuildPage.CityName);
             }
             else
             {
-                Logger.Verbose("Repair Wall at {0} canceled: No Brick.", cityBuildPage.CityName);
+                this.Verbose("Repair Wall at {0} canceled: No Brick.", cityBuildPage.CityName);
             }
 
             return true;

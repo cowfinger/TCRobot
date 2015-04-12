@@ -59,7 +59,6 @@ C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.Properties.Resource
 C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.csproj.GenerateResource.Cache
 C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.exe
 C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.pdb
-C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
 C:\Users\jackyw\workplane\TCRobot\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
 C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.FormChooseAccount.resources
 C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.FormDebug.resources

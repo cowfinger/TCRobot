@@ -60,9 +60,41 @@ namespace TC.TCTasks
 
         private int reorganizingElapse;
 
-        public int TargetBuildId { get; set; }
+        private int recruitCoolDown;
 
-        public int TargetBuildLevel { get; set; }
+        private int currentTargetCursor = 0;
+
+        private List<BuildPack> mileStones = new List<BuildPack>();
+
+        public int TargetBuildId
+        {
+            get
+            {
+                if (this.mileStones.Count <= this.currentTargetCursor)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return this.mileStones[this.currentTargetCursor].BuildId;
+                }
+            }
+        }
+
+        public int TargetBuildLevel
+        {
+            get
+            {
+                if (this.mileStones.Count <= this.currentTargetCursor)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return this.mileStones[this.currentTargetCursor].BuildLevel;
+                }
+            }
+        }
 
         private IEnumerable<ShowInnerBuildList.Build> outBuildsCache;
 
@@ -147,13 +179,23 @@ namespace TC.TCTasks
             set { throw new NotImplementedException(); }
         }
 
-        private void Verbose(string format, params object[] args)
+        public void AddMileStone(int buildId, int buildLevel)
         {
-            var fmt = string.Format("BuildDog[{0}]:{1}", this.Account.UserName, format);
-            var log = string.Format(fmt, args);
-            this.taskHint = log;
-            Logger.Verbose(log);
+            this.mileStones.Add(new BuildPack()
+            {
+                Action = DogAction.UpgradeBuild,
+                BuildId = buildId,
+                BuildLevel = buildLevel
+            });
         }
+
+        // private void Verbose(string format, params object[] args)
+        // {
+        //     var fmt = string.Format("BuildDog[{0}]:{1}", this.Account.UserName, format);
+        //     var log = string.Format(fmt, args);
+        //     this.taskHint = log;
+        //     Logger.Verbose(log);
+        // }
 
         public override string GetTaskHint()
         {
@@ -162,14 +204,88 @@ namespace TC.TCTasks
 
         public override void TaskWorker()
         {
+            this.HandleScienceEvent();
+
             this.HandleReorganizeEvent();
 
             this.HandleBuildEvent();
         }
 
+        private int CalcTargetScienceId()
+        {
+            var scienceMilestones = new List<int>() { 1, 5 };
+
+            var sciencePage = TCPage.Science.ShowScienceType.Open(this.Account.WebAgent, 1);
+            if (!sciencePage.ScienceList.Any())
+            {
+                return 0;
+            }
+
+            foreach (var scienceId in scienceMilestones)
+            {
+                var scienceInfoes = sciencePage.ScienceList.Where(
+                    s => s.ScienceTypeId == scienceId);
+                if (!scienceInfoes.Any())
+                {
+                    return 0;
+                }
+
+                if (scienceInfoes.First().ScienceLevel <= 5)
+                {
+                    return scienceId;
+                }
+            }
+
+            return 0;
+        }
+
         private void HandleScienceEvent()
         {
-            
+            if (this.recruitCoolDown > 0)
+            {
+                this.recruitCoolDown -= 5;
+                return;
+            }
+
+            var showRecruitPage = TCPage.Science.ShowRecruit.Open(this.Account.WebAgent);
+            this.recruitCoolDown = 0;
+
+            if (showRecruitPage.IdleCount > 0)
+            {
+                var targetScience = this.CalcTargetScienceId();
+                if (targetScience != 0)
+                {
+                    var upPage = TCPage.Science.ShowUp.Open(this.Account.WebAgent, targetScience);
+                    if (upPage.HeroId != 0)
+                    {
+                        var doUpPage = TCPage.Science.DoUp.Open(
+                            this.Account.WebAgent, targetScience, upPage.HeroId);
+                        this.Verbose("Up Science {0} : {1}", targetScience, doUpPage.RawPage);
+                    }
+                }
+            }
+
+            if (!showRecruitPage.CanRecruit)
+            {
+                return;
+            }
+
+            var doDataPage = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+            if (!CompareResourceTable(
+                showRecruitPage.RequiredResourceTable,
+                doDataPage.ResourceTabe
+                ))
+            {
+                this.DoCollectBuildResource(showRecruitPage.RequiredResourceTable);
+            }
+
+            this.recruitCoolDown = showRecruitPage.RecruitCoolDown;
+            var doRecruitPage = TCPage.Science.DoRecruit.Open(this.Account.WebAgent);
+            this.Verbose("Recruit:{0}", doRecruitPage.RawPage);
+            if (doRecruitPage.RawPage.Contains("请先"))
+            {
+                this.recruitCoolDown = 30*60;
+            }
         }
 
         private void HandleReorganizeEvent()
@@ -255,8 +371,18 @@ namespace TC.TCTasks
                     }
                     break;
                 case DogAction.Completed:
-                    this.Verbose("Completed");
-                    this.IsCompleted = true;
+                    this.Verbose("Completed Milestone {0}:build={1}({2}),level={3}",
+                        this.currentTargetCursor,
+                        FormMain.KeyWordMap["build_" + this.TargetBuildId.ToString()],
+                        this.TargetBuildId,
+                        this.TargetBuildLevel);
+
+                    ++this.currentTargetCursor;
+                    if (this.TargetBuildId == -1)
+                    {
+                        this.Stop();
+                        this.Verbose("Completed All Milestones");
+                    }
                     break;
             }
         }
@@ -523,25 +649,27 @@ namespace TC.TCTasks
 
         private bool DoCollectBuildResource(IList<int> requireRes)
         {
-            var count = 0;
-            var tempData = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
-            while (!CompareResourceTable(requireRes, tempData.ResourceTabe))
-            {
-                ++count;
-                if (count > 100)
-                {
-                    return false;
-                }
-
-                if (!OpenResourceBox(this.Account))
-                {
-                    return false;
-                }
-
-                tempData = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
-            }
-
+            DoBrick.Open(this.Account.WebAgent, -100);
             return true;
+            // var count = 0;
+            // var tempData = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+            // while (!CompareResourceTable(requireRes, tempData.ResourceTabe))
+            // {
+            //     ++count;
+            //     if (count > 100)
+            //     {
+            //         return false;
+            //     }
+
+            //     if (!OpenResourceBox(this.Account))
+            //     {
+            //         return false;
+            //     }
+
+            //     tempData = DoGetData.Open(this.Account.WebAgent, this.Account.Tid, this.Account.Tid);
+            // }
+
+            // return true;
         }
 
         public static bool OpenResourceBox(AccountInfo account)
@@ -585,7 +713,7 @@ namespace TC.TCTasks
                     }
                 }
 
-                this.Verbose("UpgradeBuild Error" );
+                this.Verbose("UpgradeBuild Error");
                 return false;
             }
         }

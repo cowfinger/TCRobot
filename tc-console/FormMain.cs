@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using System.Security.AccessControl;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -664,8 +666,11 @@
 
         private void ToolStripMenuItemQuickReliveHero_Click(object sender, EventArgs e)
         {
+            var accountList = from ListViewItem item in this.listViewAccounts.CheckedItems
+                              let account = item.Tag as AccountInfo
+                              select account;
             Parallel.Dispatch(
-                this.accountTable.Values,
+                accountList,
                 account =>
                 {
                     var heroPage = TCPage.Hero.ShowMyHeroes.Open(account.WebAgent);
@@ -703,8 +708,10 @@
                             TCPage.Hero.DoReliveHero.Open(account.WebAgent, toReliveHero.HeroId);
                         }
 
+                        Thread.Sleep(1000);
+
                         var reliveQueueId = this.QueryReliveQueueId(account.Tid, account);
-                        var allowPropPage = TCPage.Prop.ShowAllowProp.Open(account.WebAgent, account.Tid, reliveQueueId);
+                        var allowPropPage = ShowAllowProp.Open(account.WebAgent, account.Tid, reliveQueueId);
                         var reliveItem = allowPropPage.Item;
                         if (reliveItem == null)
                         {
@@ -712,14 +719,15 @@
                             return;
                         }
 
-                        Logger.Verbose("QuickReliveHero:{0}", toReliveHero.HeroId);
-                        TCPage.Prop.DoUseProp.Open(
+                        var page = DoUseProp.Open(
                             account.WebAgent,
                             reliveItem.PropertyId,
                             reliveItem.UserPropertyId,
                             toReliveHero.HeroId,
                             reliveQueueId,
                             account.Tid);
+                        Logger.Verbose("{1} : QuickReliveHero:{0} : {2}",
+                            toReliveHero.HeroId, account.UserName, page.RawPage);
                     }
                 }).Then(() => { MessageBox.Show(string.Format("复活武将完成")); });
         }
@@ -868,7 +876,7 @@
             this.listBoxMovePath.Items.Clear();
             foreach (var city in path)
             {
-                this.listBoxMovePath.Items.Add(city);
+                this.listBoxMovePath.Items.Add(city.Name);
             }
         }
 
@@ -1154,7 +1162,7 @@
                 return;
             }
 
-            var list = dlg.CityList;
+            var list = dlg.CheckedCityList;
             var accountList = this.accountTable.Values.ToList();
 
             var cityAccountTable = from city in list
@@ -1181,7 +1189,7 @@
                     var cityId = int.Parse(cityIdStr);
                     foreach (var account in group)
                     {
-                        if (!RepairCityWall(cityId, account.account))
+                        if (!RepairCityFortress(cityId, account.account))
                         {
                             return;
                         }
@@ -1374,9 +1382,11 @@
             var leadAccount = this.accountTable["clairchen001"];
             var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
                                select lvItem.Tag as AccountInfo).ToList();
-            Task.Run(() =>
-            {
-                foreach (var account in accountList)
+            //Task.Run(() =>
+            //{
+            //    foreach (var account in accountList)
+            Parallel.Dispatch(accountList,
+                account =>
                 {
                     Logger.Verbose("Hack Buy Soldier:{0}", account.UserName);
 
@@ -1384,7 +1394,8 @@
                     if (soldierId == 0)
                     {
                         Logger.Verbose("Canceled Since No Valid Soldier");
-                        continue;
+                        // continue;
+                        return;
                     }
 
                     DoApplyUnion.Open(account.WebAgent, 22757);
@@ -1427,8 +1438,8 @@
                     }
 
                     DoOutUnion.Open(account.WebAgent);
-                }
-            });
+                });
+            //});
         }
 
         private void contributeUnionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1559,17 +1570,60 @@
                                select lvItem.Tag as AccountInfo).ToList();
             Task.Run(() =>
             {
+                while (true)
+                {
+                    foreach (var account in accountList)
+                    {
+                        var resPage = TCPage.DoGetData.Open(account.WebAgent, account.Tid, account.Tid);
+                        var resToDonate = resPage.MaxResourceTable[0];
+                        for (var i = 0; i < 4; i++)
+                        {
+                            HackDonateOneRes(account, i, resToDonate);
+                        }
+                    }
+                    Thread.Sleep(10 * 60 * 1000);
+                }
+            });
+        }
+
+        private static void HackDonateOneRes(AccountInfo account, int resType, int resToDonate)
+        {
+            while (true)
+            {
+                Logger.Verbose("Start HackDonateInfluence:{0}:{1}-{2}", account.UserName, resType, resToDonate);
+                TCPage.Build.DoBrick.Open(account.WebAgent, -100);
+                var toDonateList = new List<long>() { 0, 0, 0, 0, 0, 0 };
+                toDonateList[resType] = resToDonate;
+                var donatePage = DoInfluenceDonate.Open(account.WebAgent, toDonateList);
+                Logger.Verbose("HackDonateInfluence:{0}", donatePage.RawPage);
+                if (!donatePage.Success && !donatePage.RawPage.Contains("资源不"))
+                {
+                    break;
+                }
+            }
+        }
+
+        private void returnHomeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
+                               select lvItem.Tag as AccountInfo).ToList();
+            Task.Run(() =>
+            {
                 foreach (var account in accountList)
                 {
-                    Logger.Verbose("Start HackDonateInfluence:{0}", account.UserName);
-
-                    TCPage.Build.DoBrick.Open(account.WebAgent, -100);
-                    var dataPage = TCPage.DoGetData.Open(account.WebAgent, account.Tid, account.Tid);
-                    var minRes = dataPage.ResourceTabe.Take(4).Min();
-                    Logger.Verbose("Res:{0}=>{1}", string.Join("|", dataPage.ResourceTabe.Take(4)), minRes);
-
-
-                    var resToContribute = CalculateDonations(resNeedTable, donatePage.ResourcsTable).ToList();
+                    Logger.Verbose("Start Return Home:{0}", account.UserName);
+                    foreach (var city in account.CityNameList)
+                    {
+                        var fromCity = account.InfluenceCityList[city];
+                        var moveArmyPage = ShowMoveArmy.Open(account.WebAgent, fromCity.NodeId);
+                        this.CreateMoveTroopTask(
+                            account,
+                            fromCity,
+                            account.MainCity,
+                            moveArmyPage.Army.ToList(),
+                            moveArmyPage.HeroList.Select(h => h.HeroId.ToString()).ToList(),
+                            0);
+                    }
                 }
             });
         }

@@ -1,8 +1,8 @@
 ﻿namespace TC.TCPage.Influence
 {
-    internal class DoBuildRepair
+    internal class DoBuildRepair : TCPage
     {
-        public DoBuildRepair(string page)
+        public DoBuildRepair(string page) : base(page)
         {
         }
 
@@ -13,8 +13,8 @@
                 TCSubMod.influence,
                 TCOperation.Do,
                 TCFunc.build_repair,
-                new TCRequestArgument(TCElement.build_id, cityId),
-                new TCRequestArgument(TCElement.node_id, buildId),
+                new TCRequestArgument(TCElement.build_id, buildId),
+                new TCRequestArgument(TCElement.node_id, cityId),
                 new TCRequestArgument(TCElement.brick_num, brickNum));
             var rawPage = agent.WebClient.OpenUrl(url);
             return new DoBuildRepair(rawPage);

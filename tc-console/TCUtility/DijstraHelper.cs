@@ -7,6 +7,7 @@
 
     internal class DijstraHelper
     {
+
         private readonly Dictionary<string, HashSet<string>> map;
 
         private readonly Dictionary<string, int> roadLevelCache = new Dictionary<string, int>();
@@ -39,14 +40,15 @@
             string fromCityIdValue;
             if (!FormMain.CityList.TryGetValue(from, out fromCityIdValue))
             {
-                return 2;
+                return 5;
             }
             var fromCityId = int.Parse(fromCityIdValue);
 
             string toCityIdValue;
             if (!FormMain.CityList.TryGetValue(to, out toCityIdValue))
             {
-                return 120;
+                var destVec = accountInfo.InfluenceMap[to];
+                return destVec.Contains(from) ? 5 : 120;
             }
 
             int roadLevel;
@@ -54,14 +56,22 @@
             {
                 ShowInfluenceCityDetail.Open(accountInfo.WebAgent, fromCityId);
                 var page = ShowCityBuild.Open(accountInfo.WebAgent, fromCityId);
-                roadLevelCache.Add(from, page.Road.Level);
-                roadLevel = page.Road.Level;
+
+                if (page.Road != null)
+                {
+                    roadLevelCache.Add(from, page.Road.Level);
+                    roadLevel = page.Road.Level;
+                }
+                else
+                {
+                    return 200;
+                }
             }
 
             return FormMain.RoadLevelToDistanceMap[roadLevel];
         }
 
-        public IEnumerable<string> GetPath(string from, string to, IEnumerable<Soldier> army)
+        public IEnumerable<NodeInfo> GetPath(string from, string to, IEnumerable<Soldier> army)
         {
             if (!this.map.ContainsKey(from) || !this.map.ContainsKey(to))
             {
@@ -82,12 +92,13 @@
             for (var cursor = 0; cursor < this.sNodeQueue.Count(); ++cursor)
             {
                 var curNode = this.sNodeQueue[cursor];
-                if (curNode.Name == to)
+                var subNodes = this.map[curNode.Name].ToList();
+
+                if (!FormMain.CityList.ContainsKey(to))
                 {
-                    break;
+                    subNodes.Add(to);
                 }
 
-                var subNodes = this.map[curNode.Name];
                 var subNodeGroups = subNodes.GroupBy(name => this.uNodes.Contains(name)).ToList();
 
                 foreach (var group in subNodeGroups)
@@ -96,7 +107,12 @@
                     {
                         foreach (var subNodeName in group)
                         {
-                            var subNodePos = this.sNodeMap[subNodeName];
+                            int subNodePos;
+                            if (!this.sNodeMap.TryGetValue(subNodeName, out subNodePos))
+                            {
+                                continue;
+                            }
+
                             if (subNodePos <= cursor)
                             {
                                 continue;
@@ -132,16 +148,21 @@
                 }
             }
 
+            if (!this.sNodeMap.ContainsKey(to))
+            {
+                yield break;
+            }
+
             var lastNodePos = this.sNodeMap[to];
             var iterNode = this.sNodeQueue[lastNodePos];
             while (iterNode.Prev != null)
             {
-                yield return iterNode.Name;
+                yield return iterNode;
                 iterNode = iterNode.Prev;
             }
         }
 
-        private class NodeInfo
+        public class NodeInfo
         {
             public int Distance;
 

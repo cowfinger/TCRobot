@@ -94,6 +94,8 @@ namespace TC
 
         science,
 
+        science_type,
+
         tab_id,
 
         team,
@@ -101,6 +103,8 @@ namespace TC
         team_detail,
 
         union_member,
+
+        up,
 
         update_city,
 

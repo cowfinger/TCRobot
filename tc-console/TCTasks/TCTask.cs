@@ -1,4 +1,6 @@
-﻿namespace TC.TCTasks
+﻿using TC.TCUtility;
+
+namespace TC.TCTasks
 {
     using System;
     using System.Windows.Forms;
@@ -191,6 +193,16 @@
         {
             this.IsCompleted = true;
             this.timer.Stop();
+        }
+
+        protected void Verbose(string format, params object[] args)
+        {
+            var fmt = string.Format("{0}[{1}]:{2}",
+                this.Account.UserName,
+                this.TaskId,
+                format);
+            var log = string.Format(fmt, args);
+            Logger.Verbose(log);
         }
 
         public abstract string GetTaskHint();

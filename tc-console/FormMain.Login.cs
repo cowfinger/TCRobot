@@ -1,4 +1,6 @@
-﻿namespace TC
+﻿using TC.TCUtility;
+
+namespace TC
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +17,6 @@
 
         private void LoginAccount(AccountInfo accountInfo)
         {
-            //this.loginLock.WaitOne();
             {
 
                 this.Invoke(
@@ -47,31 +48,36 @@
                     {
                         accountInfo.LoginStatus = "on-line";
                         this.OnLoginCompleted(accountInfo);
-                        // this.loginLock.Set();
                         return;
                     }
                 }
 
-                accountInfo.WebAgent = new RequestAgent(accountInfo);
-                if (accountInfo.WebAgent.Login())
+                try
                 {
-                    accountInfo.LoginStatus = "on-line";
-                    this.OnLoginCompleted(accountInfo);
-                    HttpClient.SaveCookies(accountInfo.WebAgent.WebClient.Cookies, fileName);
+                    accountInfo.WebAgent = new RequestAgent(accountInfo);
+                    if (accountInfo.WebAgent.Login())
+                    {
+                        accountInfo.LoginStatus = "on-line";
+                        this.OnLoginCompleted(accountInfo);
+                        HttpClient.SaveCookies(accountInfo.WebAgent.WebClient.Cookies, fileName);
+                    }
+                    else
+                    {
+                        accountInfo.LoginStatus = "failed";
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    accountInfo.LoginStatus = "failed";
+                    // ignored
+                    Logger.Verbose("Login: Exception:{0}", e.Message);
                 }
-
-                // this.loginLock.Set();
             }
         }
 
         private void OnLoginCompleted(AccountInfo account)
         {
-            var handledAccountNumber =
-                this.accountTable.Values.Sum(a => a.LoginStatus == "on-line" || a.LoginStatus == "login-failed" ? 1 : 0);
+            var handledAccountNumber = this.accountTable.Values.Sum(
+                a => a.LoginStatus == "on-line" || a.LoginStatus == "login-failed" ? 1 : 0);
 
             var mainPage = this.RefreshHomePage(account.UserName);
             account.UnionId = ParseUnionIdFromMainPage(mainPage);
@@ -84,16 +90,24 @@
             Task.Run(
                 () =>
                 {
-                    var cityArmyPage = TCPage.Influence.ShowInfluenceCityArmy.Open(account.WebAgent);
-                    account.CityNameList = cityArmyPage.Cities.ToList();
-                    account.CityIdList = account.CityNameList.Select(cityName => this.cityList[cityName]).ToList();
+                    try
+                    {
+                        var cityArmyPage = TCPage.Influence.ShowInfluenceCityArmy.Open(account.WebAgent);
+                        account.CityNameList = cityArmyPage.Cities.ToList();
+                        account.CityIdList = account.CityNameList.Select(cityName => this.cityList[cityName]).ToList();
 
-                    var accountCityList = TCDataType.InfluenceMap.QueryCityList(account).ToList();
-                    account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
-                    account.InfluenceMap = TCDataType.InfluenceMap.BuildMap(accountCityList, account);
-                    account.Level = this.GetAccountLevel(account);
-                    account.MainCity = accountCityList.Any() ?
-                        accountCityList.Single(cityInfo => cityInfo.CityId == 0) : null;
+                        var accountCityList = TCDataType.InfluenceMap.QueryCityList(account).ToList();
+                        account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
+                        account.InfluenceMap = TCDataType.InfluenceMap.BuildMap(accountCityList, account);
+                        account.Level = this.GetAccountLevel(account);
+                        account.MainCity = accountCityList.Any() ?
+                            accountCityList.Single(cityInfo => cityInfo.CityId == 0) : null;
+                    }
+                    catch (Exception e)
+                    {
+                        // ignored
+                        Logger.Verbose("OnLogin: Exception:{0}", e.Message);
+                    }
                 }).Then(
                         () =>
                         {
@@ -107,6 +121,7 @@
                                             if (tagAccount == account)
                                             {
                                                 lvItem.SubItems[3].Text = account.Level.ToString();
+                                                lvItem.SubItems[4].Text = string.Join("|", account.CityNameList);
                                                 break;
                                             }
                                         }
@@ -119,7 +134,7 @@
                 this.remoteTimeLastSync = DateTime.Now;
                 RemoteTime = this.QueryRemoteSysTime(this.accountTable.Keys.First()).ToLocalTime();
                 this.StartUITimeSyncTimer();
-                this.StartTaskTimer();
+                // this.StartTaskTimer();
                 // this.StartOnlineTaskCheckTimer();
                 // this.StartAuthTimer();
             }
