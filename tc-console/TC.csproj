@@ -101,6 +101,7 @@
     <Compile Include="TCPage\Depot\ShowMyDepot.cs" />
     <Compile Include="TCPage\DoGetData.cs" />
     <Compile Include="TCPage\Hero\DoReliveHero.cs" />
+    <Compile Include="TCPage\Hero\ShowHeroDetail.cs" />
     <Compile Include="TCPage\Hero\ShowMyHeroes.cs" />
     <Compile Include="TCPage\Influence\DoApplyInfluence.cs" />
     <Compile Include="TCPage\Influence\DoCancelApplyInfluence.cs" />
@@ -122,6 +123,8 @@
     <Compile Include="TCPage\Politics\ShowReorganize.cs" />
     <Compile Include="TCPage\Prop\DoUseProp.cs" />
     <Compile Include="TCPage\Prop\ShowAllowProp.cs" />
+    <Compile Include="TCPage\Pub\DoEmployHero.cs" />
+    <Compile Include="TCPage\Pub\ShowPubHeros.cs" />
     <Compile Include="TCPage\Resource\DoGetWarPoint.cs" />
     <Compile Include="TCPage\Science\DoRecruit.cs" />
     <Compile Include="TCPage\Science\DoUp.cs" />

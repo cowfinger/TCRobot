@@ -42,11 +42,15 @@ namespace TC
 
         draft,
 
+        employ_hero,
+
         get_node,
 
         get_warpoint,
 
         group_detail,
+
+        hero_detail,
 
         influence_build,
 
@@ -81,6 +85,8 @@ namespace TC
         ordinance,
 
         out_union,
+
+        pub_heros,
 
         re_build,
 

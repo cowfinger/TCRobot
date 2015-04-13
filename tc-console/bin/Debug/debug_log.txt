@@ -1,224 +1,411 @@
-4/12/2015 9:06:07 AM:cupidminxing47[UpgradeBuildDog]:ReOrg:Hero=2538959 Success
-4/12/2015 9:06:07 AM:cupidminxing50[UpgradeBuildDog]:ReOrg:Hero=2530945 Success
-4/12/2015 9:06:07 AM:cupidminxing49[UpgradeBuildDog]:ReOrg:Hero=2530944 Success
-4/12/2015 9:06:07 AM:cupidminxing48[UpgradeBuildDog]:ReOrg:Hero=2530943 Success
-4/12/2015 9:06:07 AM:cupidminxing47[UpgradeBuildDog]:Resource:12362|29483|26620|26591|1800, CreditPoint:510
-4/12/2015 9:06:07 AM:cupidminxing50[UpgradeBuildDog]:Resource:18204|21204|13299|23205|1800, CreditPoint:510
-4/12/2015 9:06:07 AM:cupidminxing49[UpgradeBuildDog]:Resource:21733|21733|21733|30602|4140, CreditPoint:510
-4/12/2015 9:06:07 AM:cupidminxing48[UpgradeBuildDog]:Resource:13751|19510|10772|25812|3600, CreditPoint:510
-4/12/2015 9:06:07 AM:cupidqiu59[UpgradeBuildDog]:ReOrg:Hero=2534431 Success
-4/12/2015 9:06:07 AM:cupidqiu59[UpgradeBuildDog]:Resource:16518|16686|22367|26497|1800, CreditPoint:476
-4/12/2015 9:06:07 AM:cupidminxing49[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:07 AM:cupidminxing47[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:07 AM:cupidminxing50[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:07 AM:cupidminxing46[UpgradeBuildDog]:ReOrg:Hero=2538657 Success
-4/12/2015 9:06:07 AM:cupidminxing48[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:09 AM:cupidminxing47[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:09 AM:cupidminxing47[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:09 AM:cupidminxing46[UpgradeBuildDog]:Resource:36133|36133|36133|40000|3600, CreditPoint:510
-4/12/2015 9:06:09 AM:cupidminxing44[UpgradeBuildDog]:ReOrg:Hero=2530936 Success
-4/12/2015 9:06:09 AM:cupidminxing43[UpgradeBuildDog]:ReOrg:Hero=2530935 Success
-4/12/2015 9:06:09 AM:cupidminxing45[UpgradeBuildDog]:ReOrg:Hero=2530937 Success
-4/12/2015 9:06:09 AM:cupidminxing42[UpgradeBuildDog]:ReOrg:Hero=2530933 Success
-4/12/2015 9:06:09 AM:cupidminxing44[UpgradeBuildDog]:Resource:27343|27343|27365|31815|3600, CreditPoint:506
-4/12/2015 9:06:09 AM:cupidminxing43[UpgradeBuildDog]:Resource:36733|15495|23150|18346|1800, CreditPoint:521
-4/12/2015 9:06:09 AM:cupidminxing45[UpgradeBuildDog]:Resource:24756|9417|18442|40000|3600, CreditPoint:510
-4/12/2015 9:06:09 AM:cupidminxing42[UpgradeBuildDog]:Resource:40000|9842|40000|40000|1800, CreditPoint:532
-4/12/2015 9:06:09 AM:cupidqiu59[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:10 AM:cupidminxing41[UpgradeBuildDog]:Resource:15177|12365|12365|35391|1800, CreditPoint:524
-4/12/2015 9:06:10 AM:cupidminxing40[UpgradeBuildDog]:Resource:17406|17406|17406|27012|3600, CreditPoint:466
-4/12/2015 9:06:11 AM:cupidminxing46[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:12 AM:cupidminxing39[UpgradeBuildDog]:Resource:474|11976|474|9246|1800, CreditPoint:466
-4/12/2015 9:06:12 AM:cupidminxing43[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:12 AM:cupidminxing38[UpgradeBuildDog]:Resource:9361|9361|20955|28953|1800, CreditPoint:466
-4/12/2015 9:06:12 AM:cupidminxing45[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:12 AM:cupidminxing44[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:12 AM:cupidminxing42[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:12 AM:cupidminxing45[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:12 AM:cupidminxing45[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:12 AM:cupidminxing37[UpgradeBuildDog]:ReOrg:Hero=2531185 Success
-4/12/2015 9:06:12 AM:cupidminxing36[UpgradeBuildDog]:ReOrg:Hero=2540276 Success
-4/12/2015 9:06:12 AM:cupidminxing34[UpgradeBuildDog]:ReOrg:Hero=2530922 Success
-4/12/2015 9:06:12 AM:cupidqiu58[UpgradeBuildDog]:ReOrg:Hero=2534424 Success
-4/12/2015 9:06:12 AM:cupidminxing35[UpgradeBuildDog]:ReOrg:Hero=2531184 Success
-4/12/2015 9:06:12 AM:cupidminxing34[UpgradeBuildDog]:Resource:34592|31932|31932|40000|3600, CreditPoint:500
-4/12/2015 9:06:12 AM:cupidminxing36[UpgradeBuildDog]:Resource:17641|13950|17641|21002|2437, CreditPoint:502
-4/12/2015 9:06:12 AM:cupidminxing37[UpgradeBuildDog]:Resource:28091|28091|31095|40000|3600, CreditPoint:466
-4/12/2015 9:06:12 AM:cupidminxing41[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:12 AM:cupidqiu58[UpgradeBuildDog]:Resource:27356|18855|23911|38999|3600, CreditPoint:483
-4/12/2015 9:06:12 AM:cupidminxing35[UpgradeBuildDog]:Resource:39936|28991|23001|61399|4140, CreditPoint:932
-4/12/2015 9:06:12 AM:cupidminxing33[UpgradeBuildDog]:ReOrg:Hero=2531180 Success
-4/12/2015 9:06:14 AM:cupidminxing40[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:14 AM:cupidminxing32[UpgradeBuildDog]:ReOrg:Hero=2530919 Success
-4/12/2015 9:06:14 AM:cupidminxing33[UpgradeBuildDog]:Resource:16361|9454|21996|29307|1800, CreditPoint:495
-4/12/2015 9:06:14 AM:cupidminxing48[UpgradeBuildDog]:Wait 4/12/2015 9:07:50 AM
-4/12/2015 9:06:14 AM:cupidminxing32[UpgradeBuildDog]:Resource:9339|36030|40000|34760|4140, CreditPoint:519
-4/12/2015 9:06:14 AM:cupidminxing39[UpgradeBuildDog]:CollectResource Start:600|440|250|110/474|11976|474|9246|1800
-4/12/2015 9:06:14 AM:cupidminxing31[UpgradeBuildDog]:ReOrg:Hero=2531177 Success
-4/12/2015 9:06:15 AM:cupidminxing38[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:15 AM:cupidminxing38[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:15 AM:cupidminxing38[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:15 AM:cupidminxing30[UpgradeBuildDog]:ReOrg:Hero=2535812 Success
-4/12/2015 9:06:15 AM:cupidminxing31[UpgradeBuildDog]:Resource:38715|26680|17860|13842|1800, CreditPoint:503
-4/12/2015 9:06:15 AM:cupidqiu59[UpgradeBuildDog]:Wait 4/12/2015 9:07:52 AM
-4/12/2015 9:06:15 AM:cupidminxing30[UpgradeBuildDog]:Resource:26151|26151|22190|40000|3600, CreditPoint:466
-4/12/2015 9:06:15 AM:cupidminxing29[UpgradeBuildDog]:ReOrg:Hero=2535785 Success
-4/12/2015 9:06:15 AM:cupidminxing36[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:15 AM:cupidqiu58[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:15 AM:cupidminxing37[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:15 AM:cupidminxing35[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:15 AM:cupidminxing34[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:17 AM:cupidminxing29[UpgradeBuildDog]:Resource:9760|31583|23961|40000|1800, CreditPoint:466
-4/12/2015 9:06:17 AM:cupidminxing46[UpgradeBuildDog]:Wait 4/12/2015 9:07:53 AM
-4/12/2015 9:06:17 AM:cupidminxing37[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:17 AM:cupidminxing37[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:17 AM:cupidminxing28[UpgradeBuildDog]:ReOrg:Hero=2530912 Success
-4/12/2015 9:06:17 AM:cupidminxing43[UpgradeBuildDog]:Wait 4/12/2015 9:08:54 AM
-4/12/2015 9:06:17 AM:cupidminxing26[UpgradeBuildDog]:ReOrg:Hero=2530909 Success
-4/12/2015 9:06:17 AM:cupidminxing25[UpgradeBuildDog]:ReOrg:Hero=2537919 Success
-4/12/2015 9:06:17 AM:cupidminxing27[UpgradeBuildDog]:ReOrg:Hero=2530911 Success
-4/12/2015 9:06:17 AM:cupidminxing33[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:17 AM:cupidminxing24[UpgradeBuildDog]:ReOrg:Hero=2537924 Success
-4/12/2015 9:06:17 AM:cupidminxing44[UpgradeBuildDog]:Wait 4/12/2015 9:07:54 AM
-4/12/2015 9:06:17 AM:cupidminxing28[UpgradeBuildDog]:Resource:35993|33336|31522|37842|4140, CreditPoint:466
-4/12/2015 9:06:17 AM:cupidminxing26[UpgradeBuildDog]:Resource:31318|26802|26802|40000|3600, CreditPoint:470
-4/12/2015 9:06:17 AM:cupidminxing32[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:17 AM:cupidminxing27[UpgradeBuildDog]:Resource:33877|33877|33877|40000|4320, CreditPoint:466
-4/12/2015 9:06:17 AM:cupidminxing25[UpgradeBuildDog]:Resource:27131|27131|29791|35999|3780, CreditPoint:470
-4/12/2015 9:06:17 AM:cupidminxing24[UpgradeBuildDog]:Resource:40000|40000|40000|40000|3600, CreditPoint:466
-4/12/2015 9:06:17 AM:cupidminxing23[UpgradeBuildDog]:ReOrg:Hero=2530904 Success
-4/12/2015 9:06:17 AM:cupidminxing42[UpgradeBuildDog]:Wait 4/12/2015 9:08:31 AM
-4/12/2015 9:06:19 AM:cupidminxing22[UpgradeBuildDog]:ReOrg:Hero=2530902 Success
-4/12/2015 9:06:19 AM:cupidminxing21[UpgradeBuildDog]:ReOrg:Hero=2530899 Success
-4/12/2015 9:06:19 AM:cupidminxing23[UpgradeBuildDog]:Resource:22664|24132|22664|33000|3600, CreditPoint:466
-4/12/2015 9:06:19 AM:cupidminxing31[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:19 AM:cupidminxing22[UpgradeBuildDog]:Resource:10547|21266|23925|25699|1800, CreditPoint:476
-4/12/2015 9:06:19 AM:cupidminxing31[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:19 AM:cupidminxing31[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:19 AM:cupidminxing21[UpgradeBuildDog]:Resource:34926|34926|37584|40000|3600, CreditPoint:466
-4/12/2015 9:06:19 AM:cupidminxing40[UpgradeBuildDog]:Wait 4/12/2015 9:07:55 AM
-4/12/2015 9:06:19 AM:cupidminxing30[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:19 AM:cupidminxing30[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:19 AM:cupidminxing30[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:19 AM:cupidminxing20[UpgradeBuildDog]:ReOrg:Hero=2530898 Success
-4/12/2015 9:06:19 AM:cupidminxing29[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:19 AM:cupidminxing39[UpgradeBuildDog]:Resource:40000|40000|40000|40000|1800, CreditPoint:466
-4/12/2015 9:06:19 AM:cupidminxing20[UpgradeBuildDog]:Resource:40000|9645|23074|40000|3600, CreditPoint:498
-4/12/2015 9:06:19 AM:cupidminxing19[UpgradeBuildDog]:ReOrg:Hero=2530897 Success
-4/12/2015 9:06:19 AM:cupidminxing27[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:19 AM:cupidminxing26[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:19 AM:cupidminxing28[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:19 AM:cupidminxing19[UpgradeBuildDog]:Resource:9530|14062|9530|22481|3600, CreditPoint:466
-4/12/2015 9:06:19 AM:cupidminxing25[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:19 AM:cupidminxing24[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:19 AM:cupidminxing18[UpgradeBuildDog]:ReOrg:Hero=2531166 Success
-4/12/2015 9:06:23 AM:cupidminxing36[UpgradeBuildDog]:Wait 4/12/2015 9:07:58 AM
-4/12/2015 9:06:23 AM:cupidminxing34[UpgradeBuildDog]:Wait 4/12/2015 9:07:58 AM
-4/12/2015 9:06:23 AM:cupidminxing17[UpgradeBuildDog]:ReOrg:Hero=2530894 Success
-4/12/2015 9:06:23 AM:cupidminxing16[UpgradeBuildDog]:ReOrg:Hero=2533522 Success
-4/12/2015 9:06:23 AM:cupidminxing23[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:23 AM:cupidminxing14[UpgradeBuildDog]:ReOrg:Hero=2531161 Success
-4/12/2015 9:06:23 AM:cupidminxing15[UpgradeBuildDog]:ReOrg:Hero=2530892 Success
-4/12/2015 9:06:23 AM:cupidminxing21[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:23 AM:cupidminxing33[UpgradeBuildDog]:Wait 4/12/2015 9:08:00 AM
-4/12/2015 9:06:23 AM:cupidminxing18[UpgradeBuildDog]:Resource:40000|40000|40000|40000|3600, CreditPoint:466
-4/12/2015 9:06:23 AM:cupidminxing22[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:23 AM:cupidminxing16[UpgradeBuildDog]:Resource:26925|26925|24265|32688|1800, CreditPoint:469
-4/12/2015 9:06:23 AM:cupidminxing17[UpgradeBuildDog]:Resource:37328|37328|37328|40000|3600, CreditPoint:469
-4/12/2015 9:06:23 AM:cupidminxing13[UpgradeBuildDog]:ReOrg:Hero=2530890 Success
-4/12/2015 9:06:23 AM:cupidminxing14[UpgradeBuildDog]:Resource:28387|28387|25728|34594|3600, CreditPoint:466
-4/12/2015 9:06:23 AM:cupidminxing15[UpgradeBuildDog]:Resource:13064|25205|22546|27019|3600, CreditPoint:474
-4/12/2015 9:06:24 AM:cupidminxing12[UpgradeBuildDog]:ReOrg:Hero=2540155 Success
-4/12/2015 9:06:24 AM:cupidminxing11[UpgradeBuildDog]:ReOrg:Hero=2532649 Success
-4/12/2015 9:06:24 AM:cupidminxing10[UpgradeBuildDog]:ReOrg:Hero=2540247 Success
-4/12/2015 9:06:24 AM:cupidminxing13[UpgradeBuildDog]:Resource:25221|24502|27863|32295|2340, CreditPoint:466
-4/12/2015 9:06:24 AM:cupidminxing12[UpgradeBuildDog]:Resource:29649|29649|19973|38151|4140, CreditPoint:469
-4/12/2015 9:06:24 AM:cupidminxing11[UpgradeBuildDog]:Resource:40000|40000|40000|40000|4320, CreditPoint:469
-4/12/2015 9:06:24 AM:cupidminxing10[UpgradeBuildDog]:Resource:40000|40000|40000|40000|3600, CreditPoint:472
-4/12/2015 9:06:24 AM:cupidminxing9[UpgradeBuildDog]:ReOrg:Hero=2531148 Success
-4/12/2015 9:06:24 AM:cupidminxing20[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:24 AM:cupidminxing39[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:24 AM:cupidminxing39[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:24 AM:cupidminxing39[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:26 AM:cupidminxing9[UpgradeBuildDog]:Resource:20082|20082|20082|37195|3600, CreditPoint:466
-4/12/2015 9:06:26 AM:cupidminxing29[UpgradeBuildDog]:Wait 4/12/2015 9:07:47 AM
-4/12/2015 9:06:27 AM:cupidminxing8[UpgradeBuildDog]:ReOrg:Hero=2530885 Success
-4/12/2015 9:06:27 AM:cupidminxing7[UpgradeBuildDog]:ReOrg:Hero=2539821 Success
-4/12/2015 9:06:27 AM:cupidminxing19[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:27 AM:cupidminxing6[UpgradeBuildDog]:ReOrg:Hero=2531145 Success
-4/12/2015 9:06:27 AM:cupidminxing7[UpgradeBuildDog]:Resource:40000|40000|40000|40000|3780, CreditPoint:466
-4/12/2015 9:06:27 AM:cupidminxing8[UpgradeBuildDog]:Resource:27687|27049|24403|36532|4140, CreditPoint:466
-4/12/2015 9:06:27 AM:cupidminxing24[UpgradeBuildDog]:Wait 4/12/2015 9:08:04 AM
-4/12/2015 9:06:27 AM:cupidminxing5[UpgradeBuildDog]:ReOrg:Hero=2530879 Success
-4/12/2015 9:06:27 AM:cupidminxing18[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:27 AM:cupidminxing6[UpgradeBuildDog]:Resource:17260|22528|17125|27292|3600, CreditPoint:483
-4/12/2015 9:06:27 AM:cupidminxing15[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:27 AM:cupidminxing17[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:27 AM:cupidminxing14[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:27 AM:cupidminxing16[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:27 AM:cupidminxing15[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:27 AM:cupidminxing15[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:27 AM:cupidminxing5[UpgradeBuildDog]:Resource:34874|34874|29219|40000|3600, CreditPoint:470
-4/12/2015 9:06:27 AM:cupidminxing4[UpgradeBuildDog]:ReOrg:Hero=2531389 Success
-4/12/2015 9:06:27 AM:cupidminxing21[UpgradeBuildDog]:Wait 4/12/2015 9:08:05 AM
-4/12/2015 9:06:30 AM:clairchen001[UpgradeBuildDog]:ReOrg:Hero=9571010 Success
-4/12/2015 9:06:30 AM:cupidminxing13[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:30 AM:cupidminxing1[UpgradeBuildDog]:ReOrg:Hero=2539138 Success
-4/12/2015 9:06:30 AM:cupidminxing12[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:30 AM:cupidqiu56[UpgradeBuildDog]:ReOrg:Hero=2534415 Success
-4/12/2015 9:06:30 AM:cupidqiu55[UpgradeBuildDog]:ReOrg:Hero=2534409 Success
-4/12/2015 9:06:30 AM:cupidminxing11[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:30 AM:cupidqiu57[UpgradeBuildDog]:ReOrg:Hero=2534419 Success
-4/12/2015 9:06:30 AM:cupidminxing4[UpgradeBuildDog]:Resource:33350|34536|31552|40000|3600, CreditPoint:477
-4/12/2015 9:06:30 AM:cupidminxing10[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:30 AM:clairchen001[UpgradeBuildDog]:Resource:64746|64455|64527|44128|7740, CreditPoint:1135
-4/12/2015 9:06:30 AM:cupidminxing1[UpgradeBuildDog]:Resource:18126|18126|18126|26992|3600, CreditPoint:486
-4/12/2015 9:06:30 AM:cupidqiu54[UpgradeBuildDog]:ReOrg:Hero=2534408 Success
-4/12/2015 9:06:30 AM:cupidminxing10[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:30 AM:cupidminxing10[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:30 AM:cupidminxing20[UpgradeBuildDog]:Wait 4/12/2015 9:08:07 AM
-4/12/2015 9:06:32 AM:cupidqiu56[UpgradeBuildDog]:Resource:11666|14326|11666|20089|1800, CreditPoint:483
-4/12/2015 9:06:32 AM:cupidqiu57[UpgradeBuildDog]:Resource:39991|37331|37331|40000|3600, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu55[UpgradeBuildDog]:Resource:0|8499|0|21556|2340, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu53[UpgradeBuildDog]:ReOrg:Hero=2534407 Success
-4/12/2015 9:06:32 AM:cupidminxing9[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:32 AM:cupidminxing9[UpgradeBuildDog]:UpgradeBuild Error:javascript::wee.window.alert('该将领已经死亡。');
-4/12/2015 9:06:32 AM:cupidminxing9[UpgradeBuildDog]:Canceled Since Upgrade Build Error.
-4/12/2015 9:06:32 AM:cupidqiu52[UpgradeBuildDog]:ReOrg:Hero=2534405 Success
-4/12/2015 9:06:32 AM:cupidqiu51[UpgradeBuildDog]:ReOrg:Hero=2534402 Success
-4/12/2015 9:06:32 AM:cupidqiu54[UpgradeBuildDog]:Resource:22934|22934|22934|31803|4140, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu50[UpgradeBuildDog]:ReOrg:Hero=2534399 Success
-4/12/2015 9:06:32 AM:cupidqiu49[UpgradeBuildDog]:ReOrg:Hero=2534397 Success
-4/12/2015 9:06:32 AM:cupidqiu53[UpgradeBuildDog]:Resource:18599|40000|33806|14454|1800, CreditPoint:490
-4/12/2015 9:06:32 AM:cupidqiu48[UpgradeBuildDog]:ReOrg:Hero=2534393 Success
-4/12/2015 9:06:32 AM:cupidqiu46[UpgradeBuildDog]:ReOrg:Hero=2534386 Success
-4/12/2015 9:06:32 AM:cupidminxing19[UpgradeBuildDog]:Wait 4/12/2015 9:07:54 AM
-4/12/2015 9:06:32 AM:cupidqiu44[UpgradeBuildDog]:ReOrg:Hero=2534382 Success
-4/12/2015 9:06:32 AM:cupidqiu47[UpgradeBuildDog]:ReOrg:Hero=2534390 Success
-4/12/2015 9:06:32 AM:cupidqiu42[UpgradeBuildDog]:ReOrg:Hero=2534375 Success
-4/12/2015 9:06:32 AM:cupidqiu45[UpgradeBuildDog]:ReOrg:Hero=2534383 Success
-4/12/2015 9:06:32 AM:cupidqiu39[UpgradeBuildDog]:ReOrg:Hero=2532116 Success
-4/12/2015 9:06:32 AM:cupidqiu43[UpgradeBuildDog]:ReOrg:Hero=2534379 Success
-4/12/2015 9:06:32 AM:cupidqiu41[UpgradeBuildDog]:ReOrg:Hero=2534371 Success
-4/12/2015 9:06:32 AM:cupidqiu51[UpgradeBuildDog]:Resource:20801|13360|20761|22646|4140, CreditPoint:482
-4/12/2015 9:06:32 AM:cupidqiu52[UpgradeBuildDog]:Resource:14065|14065|14065|22487|2340, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu50[UpgradeBuildDog]:Resource:26143|19817|26166|30615|3600, CreditPoint:516
-4/12/2015 9:06:32 AM:cupidminxing7[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:32 AM:cupidqiu42[UpgradeBuildDog]:Resource:22137|21009|15306|30500|1800, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu49[UpgradeBuildDog]:Resource:11664|14323|11664|16096|1800, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu38[UpgradeBuildDog]:ReOrg:Hero=2532115 Success
-4/12/2015 9:06:32 AM:cupidqiu48[UpgradeBuildDog]:Resource:28146|25509|25486|34433|3780, CreditPoint:495
-4/12/2015 9:06:32 AM:cupidqiu44[UpgradeBuildDog]:Resource:700|9199|3688|700|1800, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidminxing16[UpgradeBuildDog]:Wait 4/12/2015 9:07:56 AM
-4/12/2015 9:06:32 AM:cupidqiu46[UpgradeBuildDog]:Resource:18171|2182|11716|12281|1800, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu47[UpgradeBuildDog]:Resource:22922|9367|18128|13851|1800, CreditPoint:477
-4/12/2015 9:06:32 AM:cupidqiu45[UpgradeBuildDog]:Resource:14098|19868|19607|25697|1800, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu43[UpgradeBuildDog]:Resource:10158|10158|18657|18800|1800, CreditPoint:482
-4/12/2015 9:06:32 AM:cupidqiu41[UpgradeBuildDog]:Resource:17868|31514|9368|26602|2340, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu39[UpgradeBuildDog]:Resource:11925|11925|14066|18499|1800, CreditPoint:476
-4/12/2015 9:06:32 AM:cupidqiu37[UpgradeBuildDog]:ReOrg:Hero=2532112 Success
-4/12/2015 9:06:32 AM:cupidminxing8[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:32 AM:cupidqiu38[UpgradeBuildDog]:Resource:5826|2445|2688|9962|2340, CreditPoint:471
-4/12/2015 9:06:32 AM:cupidqiu36[UpgradeBuildDog]:ReOrg:Hero=2532111 Success
-4/12/2015 9:06:32 AM:cupidminxing6[UpgradeBuildDog]:UpgradeBuild:白虎节堂(8,451)=>5
-4/12/2015 9:06:32 AM:cupidminxing13[UpgradeBuildDog]:Wait 4/12/2015 9:08:12 AM
+1/1/0001 12:00:00 AM:HTTP Client Error:The operation has timed out
+1/1/0001 12:00:00 AM:HTTP Client Error:The operation has timed out
+1/1/0001 12:00:00 AM:HTTP Client Error:The operation has timed out
+1/1/0001 12:00:00 AM:HTTP Client Error:The operation has timed out
+1/1/0001 12:00:00 AM:HTTP Client Error:The operation has timed out
+1/1/0001 12:00:00 AM:HTTP Client Error:The operation has timed out
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen001
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen002
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen003
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen006
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen004
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen005
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen007
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen008
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen009
+4/13/2015 7:51:09 AM:Hack Buy Soldier:clairchen010
+4/13/2015 7:52:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:52:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:52:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:52:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:52:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:52:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:52:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:52:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:52:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen011
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen013
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen012
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen014
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen015
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen017
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen016
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen018
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen019
+4/13/2015 7:53:08 AM:Hack Buy Soldier:clairchen020
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen021
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen022
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen023
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen024
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen025
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen026
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen027
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen028
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen029
+4/13/2015 7:54:07 AM:Hack Buy Soldier:clairchen030
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:55:07 AM:Hack Buy Soldier:clairchen031
+4/13/2015 7:55:07 AM:Hack Buy Soldier:clairchen032
+4/13/2015 7:55:07 AM:Hack Buy Soldier:clairchen034
+4/13/2015 7:55:08 AM:Hack Buy Soldier:clairchen033
+4/13/2015 7:55:08 AM:Hack Buy Soldier:clairchen035
+4/13/2015 7:55:08 AM:Hack Buy Soldier:clairchen036
+4/13/2015 7:55:08 AM:Hack Buy Soldier:clairchen037
+4/13/2015 7:55:08 AM:Hack Buy Soldier:clairchen038
+4/13/2015 7:55:08 AM:Hack Buy Soldier:clairchen039
+4/13/2015 7:55:08 AM:Hack Buy Soldier:clairchen040
+4/13/2015 7:56:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:07 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:08 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen041
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen044
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen042
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen043
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen045
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen046
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen047
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen048
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen049
+4/13/2015 7:56:08 AM:Hack Buy Soldier:clairchen050
+4/13/2015 7:56:08 AM:Buy failed:javascript::wee.window.alert('clair043购买联盟士兵时想购买自己没有的兵种');
+4/13/2015 7:56:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:57:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:57:01 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:57:01 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:57:01 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:57:01 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:57:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:57:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:57:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen051
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen052
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen055
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen054
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen053
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen056
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen057
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen059
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen058
+4/13/2015 7:57:02 AM:Hack Buy Soldier:clairchen060
+4/13/2015 7:58:01 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen061
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen062
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen064
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen063
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen065
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen066
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen067
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen068
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen069
+4/13/2015 7:58:02 AM:Hack Buy Soldier:clairchen070
+4/13/2015 7:59:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:02 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:03 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:03 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:03 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen071
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen072
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen073
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen074
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen075
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen076
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen077
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen078
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen079
+4/13/2015 7:59:03 AM:Hack Buy Soldier:clairchen080
+4/13/2015 7:59:03 AM:Buy failed:javascript::wee.window.alert('clair076购买联盟士兵时想购买自己没有的兵种');
+4/13/2015 7:59:55 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:56 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen081
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen082
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen083
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen084
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen085
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen086
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen087
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen088
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen089
+4/13/2015 7:59:58 AM:Hack Buy Soldier:clairchen090
+4/13/2015 8:00:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen091
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen092
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen093
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen094
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen095
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen096
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen097
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen098
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen099
+4/13/2015 8:00:58 AM:Hack Buy Soldier:clairchen100
+4/13/2015 8:01:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairchen101
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairchen102
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairchen103
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairc1
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairc2
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairc3
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairc4
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairc5
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairc6
+4/13/2015 8:01:59 AM:Hack Buy Soldier:clairc7
+4/13/2015 8:02:00 AM:Buy failed:javascript::wee.window.alert('clairc06购买联盟士兵时想购买自己没有的兵种');
+4/13/2015 8:02:53 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:02:54 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:02:54 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:02:54 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:02:54 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:02:54 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:02:55 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:02:55 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:02:55 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc8
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc10
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc9
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc11
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc12
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc13
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc14
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc15
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc16
+4/13/2015 8:02:55 AM:Hack Buy Soldier:clairc17
+4/13/2015 8:03:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:03:58 AM:Hack Buy Soldier:clairc18
+4/13/2015 8:03:58 AM:Hack Buy Soldier:clairc19
+4/13/2015 8:03:58 AM:Hack Buy Soldier:clairc20
+4/13/2015 8:03:58 AM:Hack Buy Soldier:clairc21
+4/13/2015 8:03:58 AM:Hack Buy Soldier:clairc23
+4/13/2015 8:03:58 AM:Hack Buy Soldier:clairc22
+4/13/2015 8:03:58 AM:Hack Buy Soldier:clairc24
+4/13/2015 8:03:58 AM:Hack Buy Soldier:clairc25
+4/13/2015 8:03:58 AM:Hack Buy Soldier:clairc26
+4/13/2015 8:03:58 AM:Hack Buy Soldier:claric27
+4/13/2015 8:04:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:04:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:04:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:04:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:04:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:04:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:04:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:04:59 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:00 AM:Hack Buy Soldier:claric28
+4/13/2015 8:05:00 AM:Hack Buy Soldier:claric29
+4/13/2015 8:05:00 AM:Hack Buy Soldier:clairc30
+4/13/2015 8:05:00 AM:Hack Buy Soldier:clairc31
+4/13/2015 8:05:00 AM:Hack Buy Soldier:clairc32
+4/13/2015 8:05:00 AM:Hack Buy Soldier:clairc33
+4/13/2015 8:05:00 AM:Hack Buy Soldier:clairc34
+4/13/2015 8:05:00 AM:Hack Buy Soldier:clairc35
+4/13/2015 8:05:00 AM:Hack Buy Soldier:clairc36
+4/13/2015 8:05:00 AM:Hack Buy Soldier:clairc37
+4/13/2015 8:05:00 AM:Buy failed:javascript::wee.window.alert('clairc37购买联盟士兵时想购买自己没有的兵种');
+4/13/2015 8:05:56 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:57 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:58 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc38
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc39
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc41
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc40
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc42
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc43
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc44
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc45
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc47
+4/13/2015 8:05:58 AM:Hack Buy Soldier:clairc46
+4/13/2015 8:05:58 AM:Buy failed:javascript::wee.window.alert('clairc40购买联盟士兵时想购买自己没有的兵种');
+4/13/2015 8:06:54 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:06:55 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:06:55 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:06:55 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:06:55 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:06:56 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:06:56 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:06:56 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:06:56 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc48
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc49
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc52
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc50
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc51
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc53
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc55
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc54
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc56
+4/13/2015 8:06:56 AM:Hack Buy Soldier:clairc57
+4/13/2015 8:08:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:00 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:01 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc60
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc58
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc59
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc61
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc62
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc63
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc66
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc64
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc65
+4/13/2015 8:08:01 AM:Hack Buy Soldier:clairc67
+4/13/2015 8:09:05 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc68
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc69
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc70
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc71
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc72
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc73
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc74
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc75
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc76
+4/13/2015 8:09:06 AM:Hack Buy Soldier:clairc77
+4/13/2015 8:10:08 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc78
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc79
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc80
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc81
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc82
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc83
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc84
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc85
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc86
+4/13/2015 8:10:09 AM:Hack Buy Soldier:clairc87
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc90
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc88
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc89
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc93
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc91
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc92
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc94
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc95
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc96
+4/13/2015 8:11:12 AM:Hack Buy Soldier:clairc97
+4/13/2015 8:12:12 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:13 AM:Hack Buy Soldier:clairc98
+4/13/2015 8:12:13 AM:Hack Buy Soldier:clairc99
+4/13/2015 8:12:13 AM:Hack Buy Soldier:clairc100
+4/13/2015 8:12:34 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:34 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');
+4/13/2015 8:12:35 AM:Buy failed:javascript::wee.window.alert('购买士兵口粮过多');

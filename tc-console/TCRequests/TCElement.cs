@@ -72,6 +72,8 @@ namespace TC
 
         soldier_level,
 
+        sort,
+
         tab_id,
 
         team_id,

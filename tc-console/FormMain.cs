@@ -1345,11 +1345,12 @@ namespace TC
             {
                 foreach (var account in accountList)
                 {
-                    var soldierId = CalcEffectiveSoldierId(account);
-                    if (soldierId == 0)
-                    {
-                        continue;
-                    }
+                    // var soldierId = CalcEffectiveSoldierId(account);
+                    // if (soldierId == 0)
+                    // {
+                    //     continue;
+                    // }
+                    var soldierId = 204;
                     var page = TCPage.Train.DoDevelop.Open(account.WebAgent, soldierId);
                     Logger.Verbose("{0} Train:{1}", account.UserName, page.RawPage);
                 }
@@ -1382,64 +1383,67 @@ namespace TC
             var leadAccount = this.accountTable["clairchen001"];
             var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
                                select lvItem.Tag as AccountInfo).ToList();
-            //Task.Run(() =>
-            //{
-            //    foreach (var account in accountList)
-            Parallel.Dispatch(accountList,
-                account =>
+            Task.Run(() =>
+            {
+                while (accountList.Any())
                 {
-                    Logger.Verbose("Hack Buy Soldier:{0}", account.UserName);
-
-                    var soldierId = CalcEffectiveSoldierId(account);
-                    if (soldierId == 0)
+                    var toAuthAccounts = accountList.Take(10).ToList();
+                    Parallel.ForEach(toAuthAccounts, account =>
                     {
-                        Logger.Verbose("Canceled Since No Valid Soldier");
-                        // continue;
-                        return;
-                    }
+                        Logger.Verbose("Hack Buy Soldier:{0}", account.UserName);
 
-                    DoApplyUnion.Open(account.WebAgent, 22757);
-
-                    var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
-                    var requestUsers = memberPage.RequestUsers.ToList();
-
-                    foreach (var usrId in requestUsers)
-                    {
-                        var checkMemberPage = DoCheckMember.Open(
-                            leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
-                        if (!checkMemberPage.Success)
+                        var soldierId = CalcEffectiveSoldierId(account);
+                        if (soldierId == 0)
                         {
-                            Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
+                            Logger.Verbose("Canceled Since No Valid Soldier");
+                            // continue;
+                            return;
                         }
-                    }
 
-                    for (var i = 0; i < 1000; i++)
-                    {
-                        TCPage.Build.DoBrick.Open(account.WebAgent, -100);
-                        while (true)
+                        DoApplyUnion.Open(account.WebAgent, 22757);
+
+                        var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
+                        var requestUsers = memberPage.RequestUsers.ToList();
+
+                        foreach (var usrId in requestUsers)
                         {
-                            var doPage = DoBuySoldierFromUnion.Open(account.WebAgent, 204, 30, 1);
-                            if (doPage.Success)
+                            var checkMemberPage = DoCheckMember.Open(
+                                leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
+                            if (!checkMemberPage.Success)
                             {
-                                continue;
-                            }
-
-                            if (doPage.RawPage.Contains("当前资源不够"))
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                Logger.Verbose("Buy failed:{0}", doPage.RawPage);
-                                i = 1000;
-                                break;
+                                Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
                             }
                         }
-                    }
 
-                    DoOutUnion.Open(account.WebAgent);
-                });
-            //});
+                        for (var i = 0; i < 1000; i++)
+                        {
+                            TCPage.Build.DoBrick.Open(account.WebAgent, -100);
+                            while (true)
+                            {
+                                var doPage = DoBuySoldierFromUnion.Open(account.WebAgent, 204, 30, 1);
+                                if (doPage.Success)
+                                {
+                                    continue;
+                                }
+
+                                if (doPage.RawPage.Contains("当前资源不够"))
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    Logger.Verbose("Buy failed:{0}", doPage.RawPage);
+                                    i = 1000;
+                                    break;
+                                }
+                            }
+                        }
+
+                        DoOutUnion.Open(account.WebAgent);
+                    });
+                    accountList.RemoveRange(0, toAuthAccounts.Count());
+                }
+            });
         }
 
         private void contributeUnionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1519,10 +1523,14 @@ namespace TC
         {
             var accountList = (from ListViewItem lvItem in this.listViewAccounts.CheckedItems
                                select lvItem.Tag as AccountInfo).ToList();
-            foreach (var account in accountList)
+            Task.Run(() =>
             {
-                this.CreateBuildDogTask(account);
-            }
+                foreach (var account in accountList)
+                {
+                    this.CreateBuildDogTask(account);
+                    Thread.Sleep(1 * 1000);
+                }
+            });
         }
 
         private void debugToolStripMenuItem_Click(object sender, EventArgs e)

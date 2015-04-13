@@ -62,9 +62,11 @@ namespace TC.TCTasks
 
         private int recruitCoolDown;
 
+        private int hireHeroCoolDown;
+
         private int currentTargetCursor = 0;
 
-        private List<BuildPack> mileStones = new List<BuildPack>();
+        private readonly List<BuildPack> mileStones = new List<BuildPack>();
 
         public int TargetBuildId
         {
@@ -204,11 +206,33 @@ namespace TC.TCTasks
 
         public override void TaskWorker()
         {
+            this.HandleHeroEvent();
+
             this.HandleScienceEvent();
 
             this.HandleReorganizeEvent();
 
             this.HandleBuildEvent();
+        }
+
+        private void HandleHeroEvent()
+        {
+            if (this.hireHeroCoolDown > 0)
+            {
+                this.hireHeroCoolDown -= 5;
+                return;
+            }
+
+            var pubHeroPage = TCPage.Pub.ShowPubHeros.Open(this.Account.WebAgent);
+            this.Verbose("Start Check Hero: Cool Down={0}", pubHeroPage.RefreshCoolDown);
+            this.hireHeroCoolDown = pubHeroPage.RefreshCoolDown;
+            var valuableHeroes = pubHeroPage.Heroes.Where(h => h.Slot >= 2).ToList();
+            valuableHeroes.Sort((x, y) => y.IInc.CompareTo(y.IInc));
+            foreach (var hero in valuableHeroes)
+            {
+                var hirePage = TCPage.Pub.DoEmployHero.Open(this.Account.WebAgent, hero.Sort);
+                this.Verbose("Employ Hero:{0}", hirePage.Success);
+            }
         }
 
         private int CalcTargetScienceId()
@@ -284,7 +308,7 @@ namespace TC.TCTasks
             this.Verbose("Recruit:{0}", doRecruitPage.RawPage);
             if (doRecruitPage.RawPage.Contains("请先"))
             {
-                this.recruitCoolDown = 30*60;
+                this.recruitCoolDown = 30 * 60;
             }
         }
 
@@ -547,15 +571,12 @@ namespace TC.TCTasks
                             }
                         }
 
-                        if (completedBuildNum < targetBuild.PreBuilds.Count())
+                        var cityPack = new BuildPack
                         {
-                            var cityPack = new BuildPack
-                            {
-                                Action = DogAction.UpgradeCity,
-                                PrevPack = pack
-                            };
-                            return this.GetDepBuildPack(cityPack);
-                        }
+                            Action = DogAction.UpgradeCity,
+                            PrevPack = pack
+                        };
+                        return this.GetDepBuildPack(cityPack);
                     }
 
                     return null;
@@ -585,6 +606,11 @@ namespace TC.TCTasks
                         candidateBuildList.Sort((x, y) => x.BuildLevel.CompareTo(y.BuildLevel));
                         foreach (var build in candidateBuildList)
                         {
+                            if (build.BuildId == 17)
+                            {
+                                continue;
+                            }
+
                             var depPackPreBuild = new BuildPack
                             {
                                 Action = DogAction.UpgradeBuild,

@@ -640,7 +640,10 @@ namespace TC
 
             var lvItemTask = new ListViewItem { Tag = task };
             task.SyncToListViewItem(lvItemTask, RemoteTime);
-            this.listViewTasks.Items.Add(lvItemTask);
+            this.Invoke(new DoSomething(() =>
+            {
+                this.listViewTasks.Items.Add(lvItemTask);
+            }));
         }
 
         private void CreateSpyTask(AccountInfo account)

@@ -64,3 +64,4 @@ C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.FormChooseAccount.r
 C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.FormDebug.resources
 C:\Users\jackyw\workplane\TCRobot\tc-console\obj\Debug\TC.FormChooseAccount.resources
 C:\Users\jackyw\workplane\TCRobot\tc-console\obj\Debug\TC.FormDebug.resources
+C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
