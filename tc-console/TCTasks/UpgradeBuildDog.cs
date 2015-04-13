@@ -9,6 +9,7 @@ using TC.TCPage.UserInfo;
 
 namespace TC.TCTasks
 {
+    using TC.TCDataType;
     using TC.TCPage.Depot;
     using TC.TCPage.Prop;
     using TC.TCUtility;
@@ -65,6 +66,28 @@ namespace TC.TCTasks
         private int hireHeroCoolDown;
 
         private int currentTargetCursor = 0;
+
+        private int scienceTargetCursor = 0;
+
+        private List<CityScienceId> scienceMilestones = new List<CityScienceId>
+                                        {
+                                            new CityScienceId(1, 1),
+                                            new CityScienceId(1, 1),
+                                            new CityScienceId(1, 1),
+                                            new CityScienceId(1, 1),
+                                            new CityScienceId(1, 1),
+                                            new CityScienceId(1, 5),
+                                            new CityScienceId(1, 5),
+                                            new CityScienceId(1, 5),
+                                            new CityScienceId(1, 5),
+                                            new CityScienceId(1, 5),
+                                            new CityScienceId(3, 46),
+                                            new CityScienceId(3, 46),
+                                            new CityScienceId(3, 46),
+                                            new CityScienceId(3, 46),
+                                            new CityScienceId(3, 46),
+                                            new CityScienceId(3, 46),
+                                        };
 
         private readonly List<BuildPack> mileStones = new List<BuildPack>();
 
@@ -237,30 +260,28 @@ namespace TC.TCTasks
 
         private int CalcTargetScienceId()
         {
-            var scienceMilestones = new List<int>() { 1, 5 };
+            if (this.scienceTargetCursor >= this.scienceMilestones.Count)
+            {
+                return 0;
+            }
 
-            var sciencePage = TCPage.Science.ShowScienceType.Open(this.Account.WebAgent, 1);
+            var scienceId = this.scienceMilestones[this.scienceTargetCursor];
+            this.scienceTargetCursor++;
+
+            var sciencePage = TCPage.Science.ShowScienceType.Open(this.Account.WebAgent, scienceId.ScienceType);
             if (!sciencePage.ScienceList.Any())
             {
                 return 0;
             }
 
-            foreach (var scienceId in scienceMilestones)
+            var scienceInfoes = sciencePage.ScienceList.Where(
+                s => s.ScienceTypeId == scienceId.ScienceId).ToList();
+            if (!scienceInfoes.Any())
             {
-                var scienceInfoes = sciencePage.ScienceList.Where(
-                    s => s.ScienceTypeId == scienceId);
-                if (!scienceInfoes.Any())
-                {
-                    return 0;
-                }
-
-                if (scienceInfoes.First().ScienceLevel <= 5)
-                {
-                    return scienceId;
-                }
+                return 0;
             }
 
-            return 0;
+            return scienceId.ScienceId;
         }
 
         private void HandleScienceEvent()
@@ -272,19 +293,29 @@ namespace TC.TCTasks
             }
 
             var showRecruitPage = TCPage.Science.ShowRecruit.Open(this.Account.WebAgent);
-            this.recruitCoolDown = 0;
+            this.recruitCoolDown = showRecruitPage.RecruitCoolDown;
 
-            if (showRecruitPage.IdleCount > 0)
+            for (var i = 0; i < showRecruitPage.IdleCount; i++)
             {
-                var targetScience = this.CalcTargetScienceId();
-                if (targetScience != 0)
+                while (true)
                 {
-                    var upPage = TCPage.Science.ShowUp.Open(this.Account.WebAgent, targetScience);
-                    if (upPage.HeroId != 0)
+                    var targetScience = this.CalcTargetScienceId();
+                    if (targetScience == 0)
                     {
-                        var doUpPage = TCPage.Science.DoUp.Open(
-                            this.Account.WebAgent, targetScience, upPage.HeroId);
-                        this.Verbose("Up Science {0} : {1}", targetScience, doUpPage.RawPage);
+                        break;
+                    }
+
+                    var upPage = TCPage.Science.ShowUp.Open(this.Account.WebAgent, targetScience);
+                    if (upPage.HeroId == 0)
+                    {
+                        continue;
+                    }
+
+                    var doUpPage = TCPage.Science.DoUp.Open(this.Account.WebAgent, targetScience, upPage.HeroId);
+                    this.Verbose("Up Science {0} : {1}", targetScience, doUpPage.RawPage);
+                    if (doUpPage.Success)
+                    {
+                        break;
                     }
                 }
             }
@@ -303,7 +334,6 @@ namespace TC.TCTasks
                 this.DoCollectBuildResource(showRecruitPage.RequiredResourceTable);
             }
 
-            this.recruitCoolDown = showRecruitPage.RecruitCoolDown;
             var doRecruitPage = TCPage.Science.DoRecruit.Open(this.Account.WebAgent);
             this.Verbose("Recruit:{0}", doRecruitPage.RawPage);
             if (doRecruitPage.RawPage.Contains("请先"))
@@ -317,6 +347,7 @@ namespace TC.TCTasks
             if (this.reorganizingElapse > 0)
             {
                 this.reorganizingElapse -= 5;
+                return;
             }
 
             var ordinancePage = TCPage.Politics.ShowOrdinance.Open(this.Account.WebAgent);

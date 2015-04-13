@@ -89,6 +89,7 @@
     <Compile Include="TCDataType\AttackTask.cs" />
     <Compile Include="TCDataType\BigMapCity.cs" />
     <Compile Include="TCDataType\CityInfo.cs" />
+    <Compile Include="TCDataType\CityScienceId.cs" />
     <Compile Include="TCDataType\InfluenceMap.cs" />
     <Compile Include="TCPage\Build\DoBrick.cs" />
     <Compile Include="TCPage\Build\DoBuild.cs" />

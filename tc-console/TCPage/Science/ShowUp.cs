@@ -14,7 +14,7 @@ namespace TC.TCPage.Science
             {
                 const string heroBarPattern = @"id=""science_up_need_hero_attr"" value=""(.+?)"" />";
                 const string heroAttrPattern = @"""(?<id>\d+)"":" +
-                    @"\{""time"":""," +
+                    @"\{""time"":""""," +
                     @"""lead"":""(?<l>\d+\.\d+)""," +
                     @"""force"":""(?<f>\d+\.\d+)"","+
                     @"""intellect"":""(?<i>\d+\.\d+)""," +
