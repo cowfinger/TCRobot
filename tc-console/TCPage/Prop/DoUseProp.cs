@@ -9,7 +9,7 @@
         {
         }
 
-        public static DoUseProp Open(
+        public static DoUseProp OpenOnHero(
             RequestAgent agent,
             int propId,
             int userPropId,

@@ -366,6 +366,7 @@ namespace TC
 
             this.btnDismissTroop.Enabled = candidateTroopCount > 0;
             this.btnGroupTroop.Enabled = candidateTroopCount >= 2;
+            this.labelCheckedTroopCount.Text = string.Format("部队计数:{0}", candidateTroopCount);
         }
 
         private void checkBoxSelectAllTasks_CheckedChanged(object sender, EventArgs e)
@@ -719,7 +720,7 @@ namespace TC
                             return;
                         }
 
-                        var page = DoUseProp.Open(
+                        var page = DoUseProp.OpenOnHero(
                             account.WebAgent,
                             reliveItem.PropertyId,
                             reliveItem.UserPropertyId,
@@ -1400,27 +1401,27 @@ namespace TC
                             return;
                         }
 
-                        DoApplyUnion.Open(account.WebAgent, 22757);
+                        // DoApplyUnion.Open(account.WebAgent, 22757);
 
-                        var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
-                        var requestUsers = memberPage.RequestUsers.ToList();
+                        // var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
+                        // var requestUsers = memberPage.RequestUsers.ToList();
 
-                        foreach (var usrId in requestUsers)
-                        {
-                            var checkMemberPage = DoCheckMember.Open(
-                                leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
-                            if (!checkMemberPage.Success)
-                            {
-                                Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
-                            }
-                        }
+                        // foreach (var usrId in requestUsers)
+                        // {
+                        //     var checkMemberPage = DoCheckMember.Open(
+                        //         leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
+                        //     if (!checkMemberPage.Success)
+                        //     {
+                        //         Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
+                        //     }
+                        // }
 
                         for (var i = 0; i < 1000; i++)
                         {
                             TCPage.Build.DoBrick.Open(account.WebAgent, -100);
                             while (true)
                             {
-                                var doPage = DoBuySoldierFromUnion.Open(account.WebAgent, 204, 30, 1);
+                                var doPage = DoBuySoldierFromUnion.Open(account.WebAgent, soldierId, 30, 1);
                                 if (doPage.Success)
                                 {
                                     continue;
@@ -1439,7 +1440,7 @@ namespace TC
                             }
                         }
 
-                        DoOutUnion.Open(account.WebAgent);
+                        // DoOutUnion.Open(account.WebAgent);
                     });
                     accountList.RemoveRange(0, toAuthAccounts.Count());
                 }

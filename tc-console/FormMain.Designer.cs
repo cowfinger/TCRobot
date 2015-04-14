@@ -162,8 +162,9 @@
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.safeBuildBrickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hackDonateInfluenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.returnHomeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelCheckedTroopCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -435,6 +436,7 @@
             // 
             // listViewTasks
             // 
+            this.listViewTasks.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.listViewTasks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -451,7 +453,7 @@
             this.listViewTasks.Location = new System.Drawing.Point(4, 74);
             this.listViewTasks.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(1184, 477);
+            this.listViewTasks.Size = new System.Drawing.Size(1188, 475);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
@@ -834,6 +836,7 @@
             // 
             // tabPageAttack
             // 
+            this.tabPageAttack.Controls.Add(this.labelCheckedTroopCount);
             this.tabPageAttack.Controls.Add(this.listViewTroops);
             this.tabPageAttack.Controls.Add(this.label5);
             this.tabPageAttack.Controls.Add(this.checkBoxSelectAllTasks);
@@ -908,7 +911,7 @@
             this.tabPageMoveArmy.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageMoveArmy.Name = "tabPageMoveArmy";
             this.tabPageMoveArmy.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageMoveArmy.Size = new System.Drawing.Size(1184, 506);
+            this.tabPageMoveArmy.Size = new System.Drawing.Size(1182, 505);
             this.tabPageMoveArmy.TabIndex = 1;
             this.tabPageMoveArmy.Text = "移动部队";
             this.tabPageMoveArmy.UseVisualStyleBackColor = true;
@@ -1171,7 +1174,7 @@
             this.tabPageAccountTask.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageAccountTask.Name = "tabPageAccountTask";
             this.tabPageAccountTask.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageAccountTask.Size = new System.Drawing.Size(1184, 506);
+            this.tabPageAccountTask.Size = new System.Drawing.Size(1182, 505);
             this.tabPageAccountTask.TabIndex = 2;
             this.tabPageAccountTask.Text = "账号任务";
             this.tabPageAccountTask.UseVisualStyleBackColor = true;
@@ -1484,6 +1487,7 @@
             this.safeBuildBrickToolStripMenuItem,
             this.hackDonateInfluenceToolStripMenuItem,
             this.returnHomeToolStripMenuItem});
+            this.azureToolStripMenuItem.Enabled = false;
             this.azureToolStripMenuItem.Name = "azureToolStripMenuItem";
             this.azureToolStripMenuItem.Size = new System.Drawing.Size(74, 29);
             this.azureToolStripMenuItem.Text = "About";
@@ -1565,17 +1569,26 @@
             this.hackDonateInfluenceToolStripMenuItem.Text = "HackDonateInfluence";
             this.hackDonateInfluenceToolStripMenuItem.Click += new System.EventHandler(this.hackDonateInfluenceToolStripMenuItem_Click);
             // 
-            // flushToolStripMenuItem
-            // 
-            this.flushToolStripMenuItem.Name = "flushToolStripMenuItem";
-            this.flushToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
-            // 
             // returnHomeToolStripMenuItem
             // 
             this.returnHomeToolStripMenuItem.Name = "returnHomeToolStripMenuItem";
             this.returnHomeToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
             this.returnHomeToolStripMenuItem.Text = "ReturnHome";
             this.returnHomeToolStripMenuItem.Click += new System.EventHandler(this.returnHomeToolStripMenuItem_Click);
+            // 
+            // flushToolStripMenuItem
+            // 
+            this.flushToolStripMenuItem.Name = "flushToolStripMenuItem";
+            this.flushToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            // 
+            // labelCheckedTroopCount
+            // 
+            this.labelCheckedTroopCount.AutoSize = true;
+            this.labelCheckedTroopCount.Location = new System.Drawing.Point(98, 227);
+            this.labelCheckedTroopCount.Name = "labelCheckedTroopCount";
+            this.labelCheckedTroopCount.Size = new System.Drawing.Size(80, 18);
+            this.labelCheckedTroopCount.TabIndex = 53;
+            this.labelCheckedTroopCount.Text = "部队计数";
             // 
             // FormMain
             // 
@@ -1764,6 +1777,7 @@
         private System.Windows.Forms.ToolStripMenuItem hackDonateInfluenceToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ToolStripMenuItem returnHomeToolStripMenuItem;
+        private System.Windows.Forms.Label labelCheckedTroopCount;
     }
 }
 

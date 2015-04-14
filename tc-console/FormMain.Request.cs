@@ -41,7 +41,7 @@
         {
             var url = RequestAgent.BuildUrl(this.hostname, "mod=get_data&op=do");
             var body = string.Format("module=%7B%22task%22%3A%5B{0}%2C2%5D%7D", tid);
-            var taskData = this.HTTPRequest(url, account.UserName, body);
+            var taskData = account.WebAgent.WebClient.OpenUrl(url, body);
 
             const string taskPattern = "\"tid\":(?<tid>\\d+)";
             var taskIdMatch = Regex.Match(taskData, taskPattern);

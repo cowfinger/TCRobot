@@ -21,7 +21,7 @@ namespace TC.TCTasks
 
         private string taskHint = "";
 
-        private readonly List<int> restPidList = new List<int>() { 15, 83, 79 };
+        private readonly List<int> restPidList = new List<int>() { 15, 83, 79, 491, 555 };
 
         private enum DogAction
         {
@@ -249,7 +249,7 @@ namespace TC.TCTasks
             var pubHeroPage = TCPage.Pub.ShowPubHeros.Open(this.Account.WebAgent);
             this.Verbose("Start Check Hero: Cool Down={0}", pubHeroPage.RefreshCoolDown);
             this.hireHeroCoolDown = pubHeroPage.RefreshCoolDown;
-            var valuableHeroes = pubHeroPage.Heroes.Where(h => h.Slot >= 2).ToList();
+            var valuableHeroes = pubHeroPage.Heroes.Where(h => h.Slot >= 2 && h.IInc >= 5).ToList();
             valuableHeroes.Sort((x, y) => y.IInc.CompareTo(y.IInc));
             foreach (var hero in valuableHeroes)
             {
@@ -295,30 +295,30 @@ namespace TC.TCTasks
             var showRecruitPage = TCPage.Science.ShowRecruit.Open(this.Account.WebAgent);
             this.recruitCoolDown = showRecruitPage.RecruitCoolDown;
 
-            for (var i = 0; i < showRecruitPage.IdleCount; i++)
-            {
-                while (true)
-                {
-                    var targetScience = this.CalcTargetScienceId();
-                    if (targetScience == 0)
-                    {
-                        break;
-                    }
+            // for (var i = 0; i < showRecruitPage.IdleCount; i++)
+            // {
+            //     while (true)
+            //     {
+            //         var targetScience = this.CalcTargetScienceId();
+            //         if (targetScience == 0)
+            //         {
+            //             break;
+            //         }
 
-                    var upPage = TCPage.Science.ShowUp.Open(this.Account.WebAgent, targetScience);
-                    if (upPage.HeroId == 0)
-                    {
-                        continue;
-                    }
+            //         var upPage = TCPage.Science.ShowUp.Open(this.Account.WebAgent, targetScience);
+            //         if (upPage.HeroId == 0)
+            //         {
+            //             continue;
+            //         }
 
-                    var doUpPage = TCPage.Science.DoUp.Open(this.Account.WebAgent, targetScience, upPage.HeroId);
-                    this.Verbose("Up Science {0} : {1}", targetScience, doUpPage.RawPage);
-                    if (doUpPage.Success)
-                    {
-                        break;
-                    }
-                }
-            }
+            //         var doUpPage = TCPage.Science.DoUp.Open(this.Account.WebAgent, targetScience, upPage.HeroId);
+            //         this.Verbose("Up Science {0} : {1}", targetScience, doUpPage.RawPage);
+            //         if (doUpPage.Success)
+            //         {
+            //             break;
+            //         }
+            //     }
+            // }
 
             if (!showRecruitPage.CanRecruit)
             {
