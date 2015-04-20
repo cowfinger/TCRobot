@@ -426,7 +426,7 @@ namespace TC
                 }).Then(
                         resultSet =>
                         {
-                            if (resultSet != null && resultSet.Sum(r => r ? 0 : 1) > 0)
+                            if (resultSet != null && resultSet.Any(r=> r))
                             {
                                 MessageBox.Show("您占领出发地不足24小时，不能出征");
                                 return 0;
@@ -461,9 +461,9 @@ namespace TC
             if (maxDuration > diff.TotalSeconds)
             {
                 var minArrivalTime = RemoteTime.AddSeconds(maxDuration);
-                var result =
-                    MessageBox.Show(
-                        string.Format("建议到达时间必须晚于{0}", minArrivalTime.AddSeconds(SendTroopTask.OpenAttackPageTime)),
+                var result = MessageBox.Show(
+                        string.Format("建议到达时间必须晚于{0}",
+                        minArrivalTime.AddSeconds(SendTroopTask.OpenAttackPageTime)),
                         "是否使用建议时间",
                         MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
@@ -606,12 +606,13 @@ namespace TC
                             select item.Tag as AccountInfo).ToList();
             Task.Run(() =>
             {
-                while (accounts.Any())
-                {
-                    var toAuthAccounts = accounts.Take(10).ToList();
-                    Parallel.ForEach(toAuthAccounts, this.LoginAccount);
-                    accounts.RemoveRange(0, toAuthAccounts.Count());
-                }
+                Parallel.ForEach(accounts, 5, this.LoginAccount);
+                // while (accounts.Any())
+                // {
+                //     var toAuthAccounts = accounts.Take(10).ToList();
+                //     Parallel.ForEach(toAuthAccounts, this.LoginAccount);
+                //     accounts.RemoveRange(0, toAuthAccounts.Count());
+                // }
             });
         }
 
@@ -864,21 +865,21 @@ namespace TC
 
         private void comboBoxToCity_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var fromCity = this.comboBoxFromCity.Text;
-            var toCity = this.comboBoxToCity.Text;
-            var accountName = this.comboBoxAccount.Text;
-            var account = this.accountTable[accountName];
+            // var fromCity = this.comboBoxFromCity.Text;
+            // var toCity = this.comboBoxToCity.Text;
+            // var accountName = this.comboBoxAccount.Text;
+            // var account = this.accountTable[accountName];
 
-            var helper = new DijstraHelper(account.InfluenceMap) { Account = account };
+            //var helper = new DijstraHelper(account.InfluenceMap) { Account = account };
 
-            var path = helper.GetPath(fromCity, toCity, null).ToList();
-            path.Reverse();
+            //var path = helper.GetPath(fromCity, toCity, null).ToList();
+            //path.Reverse();
 
-            this.listBoxMovePath.Items.Clear();
-            foreach (var city in path)
-            {
-                this.listBoxMovePath.Items.Add(city.Name);
-            }
+            //this.listBoxMovePath.Items.Clear();
+            //foreach (var city in path)
+            //{
+            //    this.listBoxMovePath.Items.Add(city.Name);
+            //}
         }
 
         private void buttonConfirmMove_Click(object sender, EventArgs e)
@@ -912,13 +913,16 @@ namespace TC
             var fromCity = accountInfo.InfluenceCityList[fromCityName];
             var toCity = accountInfo.InfluenceCityList[toCityName];
 
-            this.CreateMoveTroopTask(
-                accountInfo,
-                fromCity,
-                toCity,
-                soldierList,
-                heroList,
-                (int)this.numericUpDownBrickNum.Value);
+            Task.Run(() =>
+            {
+                this.CreateMoveTroopTask(
+                    accountInfo,
+                    fromCity,
+                    toCity,
+                    soldierList,
+                    heroList,
+                    (int)this.numericUpDownBrickNum.Value);
+            });
 
             this.comboBoxFromCity.Text = "";
             this.comboBoxAccount.Text = "";
@@ -1386,64 +1390,59 @@ namespace TC
                                select lvItem.Tag as AccountInfo).ToList();
             Task.Run(() =>
             {
-                while (accountList.Any())
+                Parallel.ForEach(accountList, 10, account =>
                 {
-                    var toAuthAccounts = accountList.Take(10).ToList();
-                    Parallel.ForEach(toAuthAccounts, account =>
+                    Logger.Verbose("Hack Buy Soldier:{0}", account.UserName);
+
+                    var soldierId = CalcEffectiveSoldierId(account);
+                    if (soldierId == 0)
                     {
-                        Logger.Verbose("Hack Buy Soldier:{0}", account.UserName);
+                        Logger.Verbose("Canceled Since No Valid Soldier");
+                        // continue;
+                        return;
+                    }
 
-                        var soldierId = CalcEffectiveSoldierId(account);
-                        if (soldierId == 0)
+                    // DoApplyUnion.Open(account.WebAgent, 22757);
+
+                    // var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
+                    // var requestUsers = memberPage.RequestUsers.ToList();
+
+                    // foreach (var usrId in requestUsers)
+                    // {
+                    //     var checkMemberPage = DoCheckMember.Open(
+                    //         leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
+                    //     if (!checkMemberPage.Success)
+                    //     {
+                    //         Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
+                    //     }
+                    // }
+
+                    for (var i = 0; i < 1000; i++)
+                    {
+                        TCPage.Build.DoBrick.Open(account.WebAgent, -100);
+                        while (true)
                         {
-                            Logger.Verbose("Canceled Since No Valid Soldier");
-                            // continue;
-                            return;
-                        }
-
-                        // DoApplyUnion.Open(account.WebAgent, 22757);
-
-                        // var memberPage = ShowUnionMember.Open(leadAccount.WebAgent, 22757);
-                        // var requestUsers = memberPage.RequestUsers.ToList();
-
-                        // foreach (var usrId in requestUsers)
-                        // {
-                        //     var checkMemberPage = DoCheckMember.Open(
-                        //         leadAccount.WebAgent, usrId, DoCheckMember.Result.pass);
-                        //     if (!checkMemberPage.Success)
-                        //     {
-                        //         Logger.Verbose("Check Member{0} Failed:{1}", usrId, checkMemberPage.RawPage);
-                        //     }
-                        // }
-
-                        for (var i = 0; i < 1000; i++)
-                        {
-                            TCPage.Build.DoBrick.Open(account.WebAgent, -100);
-                            while (true)
+                            var doPage = DoBuySoldierFromUnion.Open(account.WebAgent, soldierId, 30, 1);
+                            if (doPage.Success)
                             {
-                                var doPage = DoBuySoldierFromUnion.Open(account.WebAgent, soldierId, 30, 1);
-                                if (doPage.Success)
-                                {
-                                    continue;
-                                }
+                                continue;
+                            }
 
-                                if (doPage.RawPage.Contains("当前资源不够"))
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    Logger.Verbose("Buy failed:{0}", doPage.RawPage);
-                                    i = 1000;
-                                    break;
-                                }
+                            if (doPage.RawPage.Contains("当前资源不够"))
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                Logger.Verbose("Buy failed:{0}", doPage.RawPage);
+                                i = 1000;
+                                break;
                             }
                         }
+                    }
 
-                        // DoOutUnion.Open(account.WebAgent);
-                    });
-                    accountList.RemoveRange(0, toAuthAccounts.Count());
-                }
+                    // DoOutUnion.Open(account.WebAgent);
+                });
             });
         }
 

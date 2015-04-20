@@ -17,60 +17,76 @@ namespace TC
 
         private void LoginAccount(AccountInfo accountInfo)
         {
+            if (accountInfo.LoginStatus == "on-line")
             {
+                return;
+            }
 
-                this.Invoke(
-                    new DoSomething(
-                        () =>
+            this.Invoke(
+                new DoSomething(
+                    () =>
+                    {
+                        foreach (ListViewItem lvItem in this.listViewAccounts.Items)
                         {
-                            foreach (ListViewItem lvItem in this.listViewAccounts.Items)
+                            var tagAccount = lvItem.Tag as AccountInfo;
+                            if (tagAccount == accountInfo)
                             {
-                                var tagAccount = lvItem.Tag as AccountInfo;
-                                if (tagAccount == accountInfo)
-                                {
-                                    lvItem.SubItems[1].Text = "登陆中";
-                                    break;
-                                }
+                                lvItem.SubItems[1].Text = "登陆中";
+                                break;
                             }
-                        }));
+                        }
+                    }));
 
-                var fileName = Path.Combine(CookieFolder, accountInfo.UserName);
-                if (File.Exists(fileName))
+            var fileName = Path.Combine(CookieFolder, accountInfo.UserName);
+            if (File.Exists(fileName))
+            {
+                var cc = HttpClient.LoadCookies(fileName);
+                accountInfo.WebAgent = new RequestAgent(accountInfo)
                 {
-                    var cc = HttpClient.LoadCookies(fileName);
-                    accountInfo.WebAgent = new RequestAgent(accountInfo)
-                    {
-                        WebClient = { Cookies = cc }
-                    };
+                    WebClient = { Cookies = cc }
+                };
 
-                    var homePage = this.RefreshHomePage(accountInfo.UserName);
-                    if (homePage.Contains("wee.timer.set_time"))
-                    {
-                        accountInfo.LoginStatus = "on-line";
-                        this.OnLoginCompleted(accountInfo);
-                        return;
-                    }
+                var homePage = this.RefreshHomePage(accountInfo.UserName);
+                if (homePage.Contains("wee.timer.set_time"))
+                {
+                    accountInfo.LoginStatus = "on-line";
+                    this.OnLoginCompleted(accountInfo);
+                    return;
                 }
+            }
 
-                try
+            try
+            {
+                accountInfo.WebAgent = new RequestAgent(accountInfo);
+                if (accountInfo.WebAgent.Login())
                 {
-                    accountInfo.WebAgent = new RequestAgent(accountInfo);
-                    if (accountInfo.WebAgent.Login())
-                    {
-                        accountInfo.LoginStatus = "on-line";
-                        this.OnLoginCompleted(accountInfo);
-                        HttpClient.SaveCookies(accountInfo.WebAgent.WebClient.Cookies, fileName);
-                    }
-                    else
-                    {
-                        accountInfo.LoginStatus = "failed";
-                    }
+                    accountInfo.LoginStatus = "on-line";
+                    this.OnLoginCompleted(accountInfo);
+                    HttpClient.SaveCookies(accountInfo.WebAgent.WebClient.Cookies, fileName);
                 }
-                catch (Exception e)
+                else
                 {
-                    // ignored
-                    Logger.Verbose("Login: Exception:{0}", e.Message);
+                    accountInfo.LoginStatus = "failed";
+                    this.Invoke(
+                        new DoSomething(
+                            () =>
+                            {
+                                foreach (ListViewItem lvItem in this.listViewAccounts.Items)
+                                {
+                                    var tagAccount = lvItem.Tag as AccountInfo;
+                                    if (tagAccount == accountInfo)
+                                    {
+                                        lvItem.SubItems[1].Text = "登陆失败";
+                                        break;
+                                    }
+                                }
+                            }));
                 }
+            }
+            catch (Exception e)
+            {
+                Logger.Verbose("Login: Exception:{0}", e.Message);
+                accountInfo.LoginStatus = "login-failed";
             }
         }
 
@@ -134,7 +150,7 @@ namespace TC
                 this.remoteTimeLastSync = DateTime.Now;
                 RemoteTime = this.QueryRemoteSysTime(this.accountTable.Keys.First()).ToLocalTime();
                 this.StartUITimeSyncTimer();
-                // this.StartTaskTimer();
+                this.StartTaskTimer();
                 // this.StartOnlineTaskCheckTimer();
                 // this.StartAuthTimer();
             }

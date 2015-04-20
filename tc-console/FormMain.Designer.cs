@@ -93,6 +93,7 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tabControlTask = new System.Windows.Forms.TabControl();
             this.tabPageAttack = new System.Windows.Forms.TabPage();
+            this.labelCheckedTroopCount = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxMaxTroopNumber = new System.Windows.Forms.TextBox();
             this.tabPageMoveArmy = new System.Windows.Forms.TabPage();
@@ -164,7 +165,6 @@
             this.hackDonateInfluenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.returnHomeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelCheckedTroopCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -453,7 +453,7 @@
             this.listViewTasks.Location = new System.Drawing.Point(4, 74);
             this.listViewTasks.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(1188, 475);
+            this.listViewTasks.Size = new System.Drawing.Size(1188, 469);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
@@ -461,6 +461,7 @@
             // colHeaderTaskType
             // 
             this.colHeaderTaskType.Text = "任务类型";
+            this.colHeaderTaskType.Width = 106;
             // 
             // colHeaderAccount
             // 
@@ -865,6 +866,15 @@
             this.tabPageAttack.Text = "压秒";
             this.tabPageAttack.UseVisualStyleBackColor = true;
             // 
+            // labelCheckedTroopCount
+            // 
+            this.labelCheckedTroopCount.AutoSize = true;
+            this.labelCheckedTroopCount.Location = new System.Drawing.Point(98, 227);
+            this.labelCheckedTroopCount.Name = "labelCheckedTroopCount";
+            this.labelCheckedTroopCount.Size = new System.Drawing.Size(80, 18);
+            this.labelCheckedTroopCount.TabIndex = 53;
+            this.labelCheckedTroopCount.Text = "部队计数";
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -1029,7 +1039,7 @@
             this.listViewAccountArmy.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountArmy.MultiSelect = false;
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(486, 387);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(486, 390);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -1063,7 +1073,7 @@
             this.listViewMoveHero.Location = new System.Drawing.Point(12, 105);
             this.listViewMoveHero.Margin = new System.Windows.Forms.Padding(4);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(253, 388);
+            this.listViewMoveHero.Size = new System.Drawing.Size(253, 391);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1300,7 +1310,7 @@
             this.listViewAccountActiveTask.Location = new System.Drawing.Point(466, 28);
             this.listViewAccountActiveTask.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountActiveTask.Name = "listViewAccountActiveTask";
-            this.listViewAccountActiveTask.Size = new System.Drawing.Size(724, 466);
+            this.listViewAccountActiveTask.Size = new System.Drawing.Size(730, 469);
             this.listViewAccountActiveTask.TabIndex = 2;
             this.listViewAccountActiveTask.UseCompatibleStateImageBehavior = false;
             this.listViewAccountActiveTask.View = System.Windows.Forms.View.Details;
@@ -1347,7 +1357,7 @@
             this.listViewTaskIdleAccount.Location = new System.Drawing.Point(0, 28);
             this.listViewTaskIdleAccount.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTaskIdleAccount.Name = "listViewTaskIdleAccount";
-            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(301, 470);
+            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(301, 473);
             this.listViewTaskIdleAccount.TabIndex = 0;
             this.listViewTaskIdleAccount.UseCompatibleStateImageBehavior = false;
             this.listViewTaskIdleAccount.View = System.Windows.Forms.View.Details;
@@ -1487,7 +1497,6 @@
             this.safeBuildBrickToolStripMenuItem,
             this.hackDonateInfluenceToolStripMenuItem,
             this.returnHomeToolStripMenuItem});
-            this.azureToolStripMenuItem.Enabled = false;
             this.azureToolStripMenuItem.Name = "azureToolStripMenuItem";
             this.azureToolStripMenuItem.Size = new System.Drawing.Size(74, 29);
             this.azureToolStripMenuItem.Text = "About";
@@ -1580,15 +1589,6 @@
             // 
             this.flushToolStripMenuItem.Name = "flushToolStripMenuItem";
             this.flushToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
-            // 
-            // labelCheckedTroopCount
-            // 
-            this.labelCheckedTroopCount.AutoSize = true;
-            this.labelCheckedTroopCount.Location = new System.Drawing.Point(98, 227);
-            this.labelCheckedTroopCount.Name = "labelCheckedTroopCount";
-            this.labelCheckedTroopCount.Size = new System.Drawing.Size(80, 18);
-            this.labelCheckedTroopCount.TabIndex = 53;
-            this.labelCheckedTroopCount.Text = "部队计数";
             // 
             // FormMain
             // 

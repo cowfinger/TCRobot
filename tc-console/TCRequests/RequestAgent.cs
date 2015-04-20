@@ -105,6 +105,7 @@ namespace TC
             const string redirectUrlPattern = "window.location = '(.*?)'";
             const string LoginUrl = "https://passport.9wee.com/login";
             const string MegeLoginUrl = "http://yw1.tc.9wee.com/index.php?mod=player/player&op=show&func=merge_login";
+
             var userPassPair = string.Format("username={0}&password={1}", this.Account.UserName, this.Account.Password);
             var userPassData = Uri.EscapeUriString(userPassPair);
             var loginBody = string.Format(

@@ -177,11 +177,21 @@
 
         private void StopSendTroopTasks()
         {
+            var toRemoveItems = new List<ListViewItem>();
             foreach (ListViewItem lvItemTask in this.listViewTasks.CheckedItems)
             {
                 var task = lvItemTask.Tag as TCTask;
-                task.Stop();
-                this.listViewTasks.Items.Remove(lvItemTask);
+                if (task != null)
+                {
+                    task.Stop();
+                }
+
+                toRemoveItems.Add(lvItemTask);
+            }
+
+            foreach (var item in toRemoveItems)
+            {
+                this.listViewTasks.Items.Remove(item);
             }
         }
 
