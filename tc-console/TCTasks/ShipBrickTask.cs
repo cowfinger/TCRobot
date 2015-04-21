@@ -63,6 +63,8 @@ namespace TC.TCTasks
             var homeCity = account.InfluenceCityList.Values.First(city => city.CityId == 0);
             var targetCity = this.TargetCity;
 
+            TryRepairCityFortress(targetCity.NodeId, account);
+
             var runningTasks = this.SubTasks.Where(t => !t.IsCompleted).ToList();
             var completedTasks = this.SubTasks.Where(t => t.IsCompleted).ToList();
 
@@ -191,8 +193,6 @@ namespace TC.TCTasks
             var troop = this.CalcCarryTroop(soldiers, carryBrickNum).ToList();
             if (carryBrickNum == 0)
             {
-                // this.Verbose("Move Brick [{2}]: {0}=>{1}: Canceled: Bricks:{3}/{4}",
-                //     fromCity.Name, toCity.Name, account.UserName, brickNum, carryBrickNum);
                 return null;
             }
 
@@ -213,7 +213,7 @@ namespace TC.TCTasks
             return task;
         }
 
-        private bool RepairCityWall(int cityId, AccountInfo account)
+        private bool TryRepairCityFortress(int cityId, AccountInfo account)
         {
             ShowInfluenceCityDetail.Open(account.WebAgent, cityId);
 
@@ -227,7 +227,7 @@ namespace TC.TCTasks
 
             if (cityRepairWallPage.CompleteRepairNeeds == 0)
             {
-                this.Verbose("Repair Wall at {0} canceled: No Need.", cityBuildPage.CityName);
+                this.Verbose("Repair Fortress at {0} canceled: No Need.", cityBuildPage.CityName);
                 return false;
             }
 
@@ -240,11 +240,11 @@ namespace TC.TCTasks
                     cityRepairWallPage.CityNodeId,
                     cityRepairWallPage.BuildId,
                     brickNumToUse);
-                this.Verbose("Repair Wall at {0} Ok", cityBuildPage.CityName);
+                this.Verbose("Repair Fortress at {0} Ok", cityBuildPage.CityName);
             }
             else
             {
-                this.Verbose("Repair Wall at {0} canceled: No Brick.", cityBuildPage.CityName);
+                this.Verbose("Repair Fortress at {0} canceled: No Brick.", cityBuildPage.CityName);
             }
 
             return true;
