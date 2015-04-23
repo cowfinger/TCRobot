@@ -1,0 +1,4 @@
+﻿game.country = 2;
+game.city_level = 9;
+game_im.nick_name = '雪冰';
+game_im.join_channel( 'U', 4442 );
