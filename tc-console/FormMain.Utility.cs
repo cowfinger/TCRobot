@@ -99,7 +99,7 @@ namespace TC
         {
             if (team.isGroupTroop)
             {
-                return "群组";
+                return string.Format("群组:{0}", team.GroupName);
             }
 
             if (team.isDefendTroop)

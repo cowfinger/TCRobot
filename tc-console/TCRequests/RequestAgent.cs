@@ -142,10 +142,27 @@ namespace TC
             }
 
             const string MainCityPattern = @"game\.city_id = (\d+);";
+            const string NickNamePattern = @"game_im\.nick_name = '(.*?)';";
+            const string CityLevelPattern = @"game\.city_level = (\d+);";
+            const string UnionIdPattern = @"game_im\.join_channel\( 'U', (\d+) \);";
+            const string CountryIdPattern = @"game\.country = (\d);";
             var match = Regex.Match(mainPage, MainCityPattern);
             if (match.Success)
             {
                 this.Account.Tid = int.Parse(match.Groups[1].Value);
+
+                var nickNameMatch = Regex.Match(mainPage, NickNamePattern);
+                this.Account.NickName = nickNameMatch.Success ? nickNameMatch.Groups[1].Value : "N/A";
+
+                var cityLevelMatch = Regex.Match(mainPage, CityLevelPattern);
+                this.Account.Level = cityLevelMatch.Success ? int.Parse(cityLevelMatch.Groups[1].Value) : -1;
+
+                var unionIdMatch  = Regex.Match(mainPage, UnionIdPattern);
+                this.Account.UnionId = unionIdMatch.Success ? int.Parse(unionIdMatch.Groups[1].Value) : -1;
+
+                var countryIdMatch  = Regex.Match(mainPage, CountryIdPattern);
+                this.Account.CountryId = countryIdMatch.Success ? int.Parse(countryIdMatch.Groups[1].Value) : -1;
+
                 this.WebClient.Cookies.Add(
                     new Cookie("tmp_mid", this.Account.Tid.ToString())
                         {

@@ -8,8 +8,8 @@ namespace TC
     using System.Linq;
     using System.Text;
     using System.Threading;
+    using System.Web;
     using System.Windows.Forms;
-
     using TC.TCPage.Depot;
     using TC.TCPage.Influence;
     using TC.TCPage.Politics;
@@ -18,7 +18,6 @@ namespace TC
     using TC.TCPage.WorldWar;
     using TC.TCTasks;
     using TC.TCUtility;
-
     using DoCheckMember = TC.TCPage.Union.DoCheckMember;
 
     public partial class FormMain : Form
@@ -117,8 +116,10 @@ namespace TC
                 maxSoilderNumber = 20000;
             }
 
+            var relatedAccount = this.accountTable.Where(a => a.Value.CityIdList.Contains(cityId));
+
             Parallel.Dispatch(
-                this.accountTable,
+                relatedAccount,
                 account =>
                 {
                     if (!account.Value.CityIdList.Contains(cityId))
@@ -152,11 +153,12 @@ namespace TC
                     }
                     else
                     {
+                        var soldierNum = int.Parse(this.textBoxMaxTroopNumber.Text);
                         foreach (var hero in heroList)
                         {
                             var soldierString = BuildSoldierString(
                                 ref soldierList,
-                                this.radioButtonSmallTroop.Checked ? 1000 : 0);
+                                this.radioButtonSmallTroop.Checked ? soldierNum : 0);
                             this.CreateTeam(
                                 hero,
                                 "",
@@ -165,6 +167,21 @@ namespace TC
                                 account.Key);
                         }
                     }
+
+                    if (this.checkBoxAutoGroup.Checked)
+                    {
+                        var singleAttackTeams = this.GetActiveTroopInfo(cityId, "1", account.Key);
+                        foreach (var team in singleAttackTeams)
+                        {
+                            var groupNameSuffix = this.randGen.Next(100, 999);
+                            var groupName = string.Format("{0}{1}", account.Value.NickName, groupNameSuffix);
+                            var groupNameEscape = HttpUtility.UrlEncode(HttpUtility.UrlEncode(groupName, Encoding.UTF8));
+
+                            TCPage.WorldWar.DoCreateGroup.Open(
+                                account.Value.WebAgent, team.TroopId, groupNameEscape);
+                        }
+                    }
+
                 }).Then(
                         () =>
                         {
@@ -304,6 +321,18 @@ namespace TC
                 return;
             }
 
+            var cityName = this.listBoxSrcCities.SelectedItem as string;
+            if (string.IsNullOrEmpty(cityName))
+            {
+                return;
+            }
+
+            string cityId;
+            if (!this.cityList.TryGetValue(cityName, out cityId))
+            {
+                return;
+            }
+
             this.btnDismissTroop.Enabled = false;
             this.listViewTroops.Enabled = false;
 
@@ -340,10 +369,13 @@ namespace TC
                                 }));
                     }
 
+                    var troopList = this.QueryCityTroops(cityId);
+
                     this.Invoke(
                         new DoSomething(
                             () =>
                             {
+                                this.RefreshTroopInfoToUi(troopList);
                                 this.btnDismissTroop.Enabled = true;
                                 this.listViewTroops.Enabled = true;
                             }));
@@ -426,7 +458,7 @@ namespace TC
                 }).Then(
                         resultSet =>
                         {
-                            if (resultSet != null && resultSet.Any(r=> r))
+                            if (resultSet != null && resultSet.Any(r => r))
                             {
                                 MessageBox.Show("您占领出发地不足24小时，不能出征");
                                 return 0;

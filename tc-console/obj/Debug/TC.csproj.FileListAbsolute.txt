@@ -65,3 +65,17 @@ C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.FormDebug.resources
 C:\Users\jackyw\workplane\TCRobot\tc-console\obj\Debug\TC.FormChooseAccount.resources
 C:\Users\jackyw\workplane\TCRobot\tc-console\obj\Debug\TC.FormDebug.resources
 C:\Users\wingforce\Workplane\TCRobot\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\bin\Debug\TC.exe.config
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\bin\Debug\TC.exe
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\bin\Debug\TC.pdb
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.csprojResolveAssemblyReference.cache
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.FormChooseAccount.resources
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.FormChooseTroopHead.resources
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.FormDebug.resources
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.FormJoinUnion.resources
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.FormMain.resources
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.FormSelectCity.resources
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.Properties.Resources.resources
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.csproj.GenerateResource.Cache
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.exe
+C:\Users\jackyw\workplane\TCRobotMain\tc-console\obj\Debug\TC.pdb

@@ -58,6 +58,11 @@ namespace TC
 
         public static void SaveCookies(CookieContainer cookieContainer, string file)
         {
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+
             var cookies = GetAllCookies(cookieContainer);
             using (var stream = new StreamWriter(file))
             {

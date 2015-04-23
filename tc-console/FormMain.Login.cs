@@ -95,8 +95,7 @@ namespace TC
             var handledAccountNumber = this.accountTable.Values.Sum(
                 a => a.LoginStatus == "on-line" || a.LoginStatus == "login-failed" ? 1 : 0);
 
-            var mainPage = this.RefreshHomePage(account.UserName);
-            account.UnionId = ParseUnionIdFromMainPage(mainPage);
+            // var mainPage = this.RefreshHomePage(account.UserName);
 
             if (account.WebAgent == null)
             {
@@ -115,7 +114,6 @@ namespace TC
                         var accountCityList = TCDataType.InfluenceMap.QueryCityList(account).ToList();
                         account.InfluenceCityList = accountCityList.ToDictionary(city => city.Name);
                         account.InfluenceMap = TCDataType.InfluenceMap.BuildMap(accountCityList, account);
-                        account.Level = this.GetAccountLevel(account);
                         account.MainCity = accountCityList.Any() ?
                             accountCityList.Single(cityInfo => cityInfo.CityId == 0) : null;
                     }
@@ -136,6 +134,9 @@ namespace TC
                                             var tagAccount = lvItem.Tag as AccountInfo;
                                             if (tagAccount == account)
                                             {
+                                                lvItem.SubItems[0].Text = account.UserName;
+                                                lvItem.SubItems[1].Text = ConvertStatusStr(account.LoginStatus);
+                                                lvItem.SubItems[2].Text = account.HintString;
                                                 lvItem.SubItems[3].Text = account.Level.ToString();
                                                 lvItem.SubItems[4].Text = string.Join("|", account.CityNameList);
                                                 break;
@@ -159,24 +160,17 @@ namespace TC
                 new DoSomething(
                     () =>
                     {
-                        foreach (ListViewItem lvItem in this.listViewAccounts.Items)
-                        {
-                            var tagAccount = lvItem.Tag as AccountInfo;
-                            if (tagAccount == account)
-                            {
-                                lvItem.SubItems[1].Text = ConvertStatusStr(account.LoginStatus);
-                                lvItem.SubItems[2].Text = account.UnionId.ToString();
-                                lvItem.SubItems[3].Text = account.Level.ToString();
-                                break;
-                            }
-                        }
-
                         if (handledAccountNumber >= this.accountTable.Keys.Count)
                         {
                             this.btnAutoAttack.Enabled = true;
                             this.btnQuickCreateTroop.Enabled = true;
                             this.ToolStripMenuItemFunctions.Enabled = true;
                             this.ToolStripMenuItemScan.Enabled = true;
+                        }
+
+                        if (account.UnionId == 22757)
+                        {
+                            this.azureToolStripMenuItem.Enabled = true;
                         }
                     }));
         }

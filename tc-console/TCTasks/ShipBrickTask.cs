@@ -63,7 +63,7 @@ namespace TC.TCTasks
             var homeCity = account.InfluenceCityList.Values.First(city => city.CityId == 0);
             var targetCity = this.TargetCity;
 
-            TryRepairCityFortress(targetCity.NodeId, account);
+            TryRepairCityFortress(targetCity.CityId, account);
 
             var runningTasks = this.SubTasks.Where(t => !t.IsCompleted).ToList();
             var completedTasks = this.SubTasks.Where(t => t.IsCompleted).ToList();

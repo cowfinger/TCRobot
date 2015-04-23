@@ -18,6 +18,8 @@
 
         public string Name = "";
 
+        public string GroupName = "";
+
         public int PowerIndex = 0;
 
         public string ToCityNodeId;

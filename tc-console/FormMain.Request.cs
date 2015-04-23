@@ -237,22 +237,22 @@
 
         private string OpenGroupTeamListPage(string srccityid, string account)
         {
-            var url0 = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.world,
-                TCSubMod.world,
-                TCOperation.Show,
-                TCFunc.get_node);
-            this.HTTPRequest(url0, account);
+            // var url0 = RequestAgent.BuildUrl(
+            //     this.hostname,
+            //     TCMod.world,
+            //     TCSubMod.world,
+            //     TCOperation.Show,
+            //     TCFunc.get_node);
+            // this.HTTPRequest(url0, account);
 
-            var url1 = RequestAgent.BuildUrl(
-                this.hostname,
-                TCMod.influence,
-                TCSubMod.influence,
-                TCOperation.Show,
-                TCFunc.influence_city_detail,
-                new TCRequestArgument(TCElement.node_id, srccityid));
-            this.HTTPRequest(url1, account);
+            // var url1 = RequestAgent.BuildUrl(
+            //     this.hostname,
+            //     TCMod.influence,
+            //     TCSubMod.influence,
+            //     TCOperation.Show,
+            //     TCFunc.influence_city_detail,
+            //     new TCRequestArgument(TCElement.node_id, srccityid));
+            // this.HTTPRequest(url1, account);
 
             var url = RequestAgent.BuildUrl(
                 this.hostname,

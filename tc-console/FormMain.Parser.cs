@@ -99,16 +99,21 @@
         {
             const string teamIdPattern = @"worldWarClass\.showTeamDetail\((\d+),\d+\)";
             const string groupIdPattern = @"worldWarClass\.doDisbandGroup\((\d+),\d+\)";
+            const string groupNamePattern = @"<td>小队名称</td>.*?<td>(.*?)</td>";
             var matches = Regex.Matches(content, groupIdPattern);
             foreach (Match match in matches)
             {
                 var groupId = match.Groups[1].Value;
                 var teamId = "组成员";
+                var teamName = "";
                 if (isHead)
                 {
                     var detailPage = this.OpenGroupTeamDetailPage(groupId, account);
                     var teamIdMatch = Regex.Match(detailPage, teamIdPattern);
                     teamId = teamIdMatch.Success ? teamIdMatch.Groups[1].Value : "";
+
+                    var teamNameMatch = Regex.Match(detailPage, groupNamePattern, RegexOptions.Singleline);
+                    teamName = teamNameMatch.Success ? teamNameMatch.Groups[1].Value : "";
                 }
 
                 yield return
@@ -120,6 +125,7 @@
                             IsGroupHead = isHead,
                             isDefendTroop = false,
                             Name = match.Groups[2].Value,
+                            GroupName = teamName,
                             AccountName = account
                         };
             }

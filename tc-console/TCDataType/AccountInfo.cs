@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 
 namespace TC
 {
     using System.Collections.Generic;
+    using System.Text;
 
     public class AccountInfo
     {
@@ -34,11 +35,32 @@ namespace TC
 
         public int Tid { get; set; }
 
-        public string NickName
+        public string NickName { get; set; }
+
+        public int CountryId { get; set; }
+
+        public string CountryName
         {
             get
             {
-                return "";
+                switch (this.CountryId)
+                {
+                    case 1: return "魏";
+                    case 2: return "蜀";
+                    case 3: return "吴";
+                }
+                return "N/A";
+            }
+        }
+
+        public string HintString
+        {
+            get
+            {
+                var hintBuilder = new StringBuilder();
+                hintBuilder.AppendFormat("{0}:", this.NickName);
+                hintBuilder.AppendFormat("{0},", this.CountryName);
+                return hintBuilder.ToString();
             }
         }
 
