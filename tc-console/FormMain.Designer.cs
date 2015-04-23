@@ -165,6 +165,7 @@
             this.hackDonateInfluenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.returnHomeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBoxAutoGroup = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -204,7 +205,7 @@
             // btnAutoAttack
             // 
             this.btnAutoAttack.Enabled = false;
-            this.btnAutoAttack.Location = new System.Drawing.Point(368, 105);
+            this.btnAutoAttack.Location = new System.Drawing.Point(185, 218);
             this.btnAutoAttack.Margin = new System.Windows.Forms.Padding(4);
             this.btnAutoAttack.Name = "btnAutoAttack";
             this.btnAutoAttack.Size = new System.Drawing.Size(112, 32);
@@ -273,7 +274,7 @@
             // btnConfirmMainTroops
             // 
             this.btnConfirmMainTroops.Enabled = false;
-            this.btnConfirmMainTroops.Location = new System.Drawing.Point(489, 105);
+            this.btnConfirmMainTroops.Location = new System.Drawing.Point(307, 218);
             this.btnConfirmMainTroops.Margin = new System.Windows.Forms.Padding(4);
             this.btnConfirmMainTroops.Name = "btnConfirmMainTroops";
             this.btnConfirmMainTroops.Size = new System.Drawing.Size(112, 32);
@@ -413,19 +414,19 @@
             // btnQuickCreateTroop
             // 
             this.btnQuickCreateTroop.Enabled = false;
-            this.btnQuickCreateTroop.Location = new System.Drawing.Point(610, 62);
+            this.btnQuickCreateTroop.Location = new System.Drawing.Point(488, 62);
             this.btnQuickCreateTroop.Margin = new System.Windows.Forms.Padding(4);
             this.btnQuickCreateTroop.Name = "btnQuickCreateTroop";
             this.btnQuickCreateTroop.Size = new System.Drawing.Size(112, 35);
             this.btnQuickCreateTroop.TabIndex = 38;
-            this.btnQuickCreateTroop.Text = "快速部队";
+            this.btnQuickCreateTroop.Text = "组建部队";
             this.btnQuickCreateTroop.UseVisualStyleBackColor = true;
             this.btnQuickCreateTroop.Click += new System.EventHandler(this.btnQuickCreateTroop_Click);
             // 
             // btnDismissTroop
             // 
             this.btnDismissTroop.Enabled = false;
-            this.btnDismissTroop.Location = new System.Drawing.Point(489, 62);
+            this.btnDismissTroop.Location = new System.Drawing.Point(608, 62);
             this.btnDismissTroop.Margin = new System.Windows.Forms.Padding(4);
             this.btnDismissTroop.Name = "btnDismissTroop";
             this.btnDismissTroop.Size = new System.Drawing.Size(112, 35);
@@ -453,7 +454,7 @@
             this.listViewTasks.Location = new System.Drawing.Point(4, 74);
             this.listViewTasks.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTasks.Name = "listViewTasks";
-            this.listViewTasks.Size = new System.Drawing.Size(1188, 469);
+            this.listViewTasks.Size = new System.Drawing.Size(1188, 467);
             this.listViewTasks.TabIndex = 40;
             this.listViewTasks.UseCompatibleStateImageBehavior = false;
             this.listViewTasks.View = System.Windows.Forms.View.Details;
@@ -502,7 +503,7 @@
             // checkBoxDefend
             // 
             this.checkBoxDefend.AutoSize = true;
-            this.checkBoxDefend.Location = new System.Drawing.Point(732, 66);
+            this.checkBoxDefend.Location = new System.Drawing.Point(369, 136);
             this.checkBoxDefend.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxDefend.Name = "checkBoxDefend";
             this.checkBoxDefend.Size = new System.Drawing.Size(106, 22);
@@ -525,7 +526,7 @@
             // radioButtonCenturion
             // 
             this.radioButtonCenturion.AutoSize = true;
-            this.radioButtonCenturion.Location = new System.Drawing.Point(369, 141);
+            this.radioButtonCenturion.Location = new System.Drawing.Point(369, 105);
             this.radioButtonCenturion.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonCenturion.Name = "radioButtonCenturion";
             this.radioButtonCenturion.Size = new System.Drawing.Size(69, 22);
@@ -537,19 +538,20 @@
             // 
             this.radioButtonSmallTroop.AutoSize = true;
             this.radioButtonSmallTroop.Checked = true;
-            this.radioButtonSmallTroop.Location = new System.Drawing.Point(442, 141);
+            this.radioButtonSmallTroop.Location = new System.Drawing.Point(442, 105);
             this.radioButtonSmallTroop.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonSmallTroop.Name = "radioButtonSmallTroop";
-            this.radioButtonSmallTroop.Size = new System.Drawing.Size(69, 22);
+            this.radioButtonSmallTroop.Size = new System.Drawing.Size(87, 22);
             this.radioButtonSmallTroop.TabIndex = 49;
             this.radioButtonSmallTroop.TabStop = true;
-            this.radioButtonSmallTroop.Text = "千人";
+            this.radioButtonSmallTroop.Text = "小部队";
             this.radioButtonSmallTroop.UseVisualStyleBackColor = true;
+            this.radioButtonSmallTroop.CheckedChanged += new System.EventHandler(this.radioButtonSmallTroop_CheckedChanged);
             // 
             // radioButtonFullTroop
             // 
             this.radioButtonFullTroop.AutoSize = true;
-            this.radioButtonFullTroop.Location = new System.Drawing.Point(518, 141);
+            this.radioButtonFullTroop.Location = new System.Drawing.Point(528, 105);
             this.radioButtonFullTroop.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonFullTroop.Name = "radioButtonFullTroop";
             this.radioButtonFullTroop.Size = new System.Drawing.Size(69, 22);
@@ -557,6 +559,7 @@
             this.radioButtonFullTroop.TabStop = true;
             this.radioButtonFullTroop.Text = "全力";
             this.radioButtonFullTroop.UseVisualStyleBackColor = true;
+            this.radioButtonFullTroop.CheckedChanged += new System.EventHandler(this.radioButtonFullTroop_CheckedChanged);
             // 
             // btnCancelTasks
             // 
@@ -837,6 +840,7 @@
             // 
             // tabPageAttack
             // 
+            this.tabPageAttack.Controls.Add(this.checkBoxAutoGroup);
             this.tabPageAttack.Controls.Add(this.labelCheckedTroopCount);
             this.tabPageAttack.Controls.Add(this.listViewTroops);
             this.tabPageAttack.Controls.Add(this.label5);
@@ -878,23 +882,23 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(598, 141);
+            this.label5.Location = new System.Drawing.Point(601, 107);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(89, 18);
+            this.label5.Size = new System.Drawing.Size(53, 18);
             this.label5.TabIndex = 52;
-            this.label5.Text = "最大兵力:";
+            this.label5.Text = "兵力:";
             // 
             // textBoxMaxTroopNumber
             // 
             this.textBoxMaxTroopNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxMaxTroopNumber.Location = new System.Drawing.Point(687, 136);
+            this.textBoxMaxTroopNumber.Location = new System.Drawing.Point(655, 104);
             this.textBoxMaxTroopNumber.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxMaxTroopNumber.Name = "textBoxMaxTroopNumber";
             this.textBoxMaxTroopNumber.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.textBoxMaxTroopNumber.Size = new System.Drawing.Size(68, 28);
+            this.textBoxMaxTroopNumber.Size = new System.Drawing.Size(61, 28);
             this.textBoxMaxTroopNumber.TabIndex = 51;
-            this.textBoxMaxTroopNumber.Text = "20000";
+            this.textBoxMaxTroopNumber.Text = "1000";
             this.textBoxMaxTroopNumber.WordWrap = false;
             // 
             // tabPageMoveArmy
@@ -1039,7 +1043,7 @@
             this.listViewAccountArmy.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountArmy.MultiSelect = false;
             this.listViewAccountArmy.Name = "listViewAccountArmy";
-            this.listViewAccountArmy.Size = new System.Drawing.Size(486, 390);
+            this.listViewAccountArmy.Size = new System.Drawing.Size(486, 391);
             this.listViewAccountArmy.TabIndex = 21;
             this.listViewAccountArmy.UseCompatibleStateImageBehavior = false;
             this.listViewAccountArmy.View = System.Windows.Forms.View.Details;
@@ -1073,7 +1077,7 @@
             this.listViewMoveHero.Location = new System.Drawing.Point(12, 105);
             this.listViewMoveHero.Margin = new System.Windows.Forms.Padding(4);
             this.listViewMoveHero.Name = "listViewMoveHero";
-            this.listViewMoveHero.Size = new System.Drawing.Size(253, 391);
+            this.listViewMoveHero.Size = new System.Drawing.Size(253, 392);
             this.listViewMoveHero.TabIndex = 20;
             this.listViewMoveHero.UseCompatibleStateImageBehavior = false;
             this.listViewMoveHero.View = System.Windows.Forms.View.Details;
@@ -1184,7 +1188,7 @@
             this.tabPageAccountTask.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageAccountTask.Name = "tabPageAccountTask";
             this.tabPageAccountTask.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageAccountTask.Size = new System.Drawing.Size(1182, 505);
+            this.tabPageAccountTask.Size = new System.Drawing.Size(1184, 506);
             this.tabPageAccountTask.TabIndex = 2;
             this.tabPageAccountTask.Text = "账号任务";
             this.tabPageAccountTask.UseVisualStyleBackColor = true;
@@ -1310,7 +1314,7 @@
             this.listViewAccountActiveTask.Location = new System.Drawing.Point(466, 28);
             this.listViewAccountActiveTask.Margin = new System.Windows.Forms.Padding(4);
             this.listViewAccountActiveTask.Name = "listViewAccountActiveTask";
-            this.listViewAccountActiveTask.Size = new System.Drawing.Size(730, 469);
+            this.listViewAccountActiveTask.Size = new System.Drawing.Size(734, 471);
             this.listViewAccountActiveTask.TabIndex = 2;
             this.listViewAccountActiveTask.UseCompatibleStateImageBehavior = false;
             this.listViewAccountActiveTask.View = System.Windows.Forms.View.Details;
@@ -1357,7 +1361,7 @@
             this.listViewTaskIdleAccount.Location = new System.Drawing.Point(0, 28);
             this.listViewTaskIdleAccount.Margin = new System.Windows.Forms.Padding(4);
             this.listViewTaskIdleAccount.Name = "listViewTaskIdleAccount";
-            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(301, 473);
+            this.listViewTaskIdleAccount.Size = new System.Drawing.Size(301, 475);
             this.listViewTaskIdleAccount.TabIndex = 0;
             this.listViewTaskIdleAccount.UseCompatibleStateImageBehavior = false;
             this.listViewTaskIdleAccount.View = System.Windows.Forms.View.Details;
@@ -1497,6 +1501,7 @@
             this.safeBuildBrickToolStripMenuItem,
             this.hackDonateInfluenceToolStripMenuItem,
             this.returnHomeToolStripMenuItem});
+            this.azureToolStripMenuItem.Enabled = false;
             this.azureToolStripMenuItem.Name = "azureToolStripMenuItem";
             this.azureToolStripMenuItem.Size = new System.Drawing.Size(74, 29);
             this.azureToolStripMenuItem.Text = "About";
@@ -1589,6 +1594,16 @@
             // 
             this.flushToolStripMenuItem.Name = "flushToolStripMenuItem";
             this.flushToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            // 
+            // checkBoxAutoGroup
+            // 
+            this.checkBoxAutoGroup.AutoSize = true;
+            this.checkBoxAutoGroup.Location = new System.Drawing.Point(482, 136);
+            this.checkBoxAutoGroup.Name = "checkBoxAutoGroup";
+            this.checkBoxAutoGroup.Size = new System.Drawing.Size(106, 22);
+            this.checkBoxAutoGroup.TabIndex = 54;
+            this.checkBoxAutoGroup.Text = "组建车头";
+            this.checkBoxAutoGroup.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 
@@ -1778,6 +1793,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ToolStripMenuItem returnHomeToolStripMenuItem;
         private System.Windows.Forms.Label labelCheckedTroopCount;
+        private System.Windows.Forms.CheckBox checkBoxAutoGroup;
     }
 }
 

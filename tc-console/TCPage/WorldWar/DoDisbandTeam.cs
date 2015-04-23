@@ -18,7 +18,7 @@ namespace TC.TCPage.WorldWar
                 TCSubMod.world_war,
                 TCOperation.Do,
                 TCFunc.disband_team);
-            var body = string.Format("team_id={0}&from_address={1}&detail_flag={2}", teamId);
+            var body = string.Format("team_id={0}&from_address={1}&detail_flag={2}", teamId, fromAddress, detailFlag);
             return new DoDisbandTeam(agent.WebClient.OpenUrl(url, body));
         }
 

@@ -33,5 +33,14 @@ namespace TC
         public RequestAgent WebAgent { get; set; }
 
         public int Tid { get; set; }
+
+        public string NickName
+        {
+            get
+            {
+                return "";
+            }
+        }
+
     }
 }

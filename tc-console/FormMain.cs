@@ -1635,5 +1635,29 @@ namespace TC
                 }
             });
         }
+
+        private void radioButtonSmallTroop_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonSmallTroop.Checked)
+            {
+                this.textBoxMaxTroopNumber.Text = "1000";
+            }
+            else if (radioButtonFullTroop.Checked)
+            {
+                this.textBoxMaxTroopNumber.Text = "20000";
+            }
+        }
+
+        private void radioButtonFullTroop_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonSmallTroop.Checked)
+            {
+                this.textBoxMaxTroopNumber.Text = "1000";
+            }
+            else if (radioButtonFullTroop.Checked)
+            {
+                this.textBoxMaxTroopNumber.Text = "20000";
+            }
+        }
     }
 }
